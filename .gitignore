@@ -1,0 +1,6 @@
+.env
+node_modules/
+trdstore.sublime-project
+trdstore.sublime-workspace
+uploads/
+public/
