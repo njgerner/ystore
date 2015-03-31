@@ -1,0 +1,42 @@
+<div class="product"> 
+  <div ng-hide="loading" class="container product-content">
+
+  	<div class="col-md-5">
+      <product-img-dir pn="product.productnumber"></product-img-dir>        
+      <div class="row">
+        <p class="product-description">{{product.description}}  <a href="https://www.allerganbrandbox.com/Juvederm/assets/learning-center.aspx">Learn more</a></p>
+      </div>
+  	</div>
+    
+    <div class="col-md-4">
+  	<!-- <div class="col-md-4 col-md-offset-1"> -->
+      <div ng-if="added" class="alert alert-dismissable alert-success">
+        <button type="button" class="close" data-dismiss="alert" ng-click="reset()">×</button>
+        <strong>Item Added!</strong> View it and the rest of your items in the cart to the right.
+      </div>  
+      <div ng-if="error" class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert" ng-click="reset()">×</button>
+        <strong>Whoops!</strong> {{error}}
+      </div>
+  		<div class="well">
+  			<h5> {{product.name}} </h4>
+  			<h6> ${{product.price}} </h5>
+        <div ng-hide="added" class="row">
+          <div class="col-md-6 quantity">
+            <input ng-show="product.attributes.increment > 1" type="text" class="form-control" ng-model="quantity" placeholder="Qty (multiple of {{product.attributes.increment}})" style="padding-right: 15px" required/>
+            <input ng-hide="product.attributes.increment > 1" type="text" class="form-control" ng-model="quantity" placeholder="Qty" style="padding-right: 15px" required/>
+          </div>
+          <div class="col-md-2"></div>
+          <div class="col-md-4">
+          <!-- <span > -->
+            <button class="btn btn-default btn-sm pull-right" type="button" ng-click="addToCart()">Add to Cart 
+                <i class="fa fa-shopping-cart"></i>
+            </button>
+          </div>
+          <!-- </span> -->
+        </div>
+  		<!-- </div> -->
+  	</div>
+  </div>
+</div>
+

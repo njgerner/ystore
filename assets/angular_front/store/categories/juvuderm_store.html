@@ -1,0 +1,7 @@
+<div ng-repeat="product in productsByCategory['juvuderm'] track by $index" class="col-md-4 clickable product-container" ng-click="goToProduct(product.productnumber)">
+    <a>
+      <img ng-if="product.img" class="product-img" ng-src="{{product.img}}">
+    </a>
+    <p class="productname"> {{product.name}} </p>
+    <p class="productprice"> ${{product.price}} </p>
+</div>

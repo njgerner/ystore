@@ -1,0 +1,239 @@
+//===============ANGULAR==================//
+var trdApp = angular.module('trdApp', [
+  'ngRoute',
+  'ngAnimate',
+  'ui.router',
+  'trdApp.services',
+  'trdApp.directives',
+  'trdApp.controllers',
+  'ui.slider',
+  'ngTagsInput',
+  'angularFileUpload' //https://github.com/nervgh/angular-file-upload
+  // 'uiGmapgoogle-maps'
+]);
+
+trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'authService', // watch these params in bin/www
+    function ($rootScope, $state, $stateParams, $cookies, $location, authService) {
+      $rootScope.$state = $state;
+      $rootScope.$stateParams = $stateParams;
+      $rootScope.isVisible = false;
+
+      $rootScope.$on('$stateChangeStart', 
+        function(event, toState, toParams, fromState, fromParams){
+
+          var isExceptionalState = function() {
+            var exceptionalState = ["locations"];
+            return exceptionalState.indexOf(toState.name) >= 0;
+          }
+
+          var isUnauthorizedState = function () {
+            var unauthedStates = ["login", "login_by_token", "email_sent", "email_taken", "resend_email", "new_password", "terms", "reset_password"];
+            return unauthedStates.indexOf(toState.name) >= 0;
+          };
+
+          if (authService.authorizationReceived) {
+
+            if (isExceptionalState()) {
+              return;
+            } else if (!authService.authorized && !isUnauthorizedState()) { // don't want non signed in people going to store, tools, etc...
+              event.preventDefault();
+              $state.go("login");
+            } else if (authService.authorized && isUnauthorizedState()) { // don't want signed in people going to login, pass reset, etc....
+              event.preventDefault();
+              $state.go("profile");
+            } else { // non authorized can go to non authorized states
+              return;
+            }
+
+          } else {
+            event.preventDefault();
+            authService.getAuthorization(function(authorized) {
+
+              if (isExceptionalState()) {
+                $state.go(toState.name, toParams);
+              } else if (!authService.authorized && !isUnauthorizedState()) { // don't want non signed in people going to store, tools, etc...
+                $state.go("login");
+              } else if (authService.authorized && isUnauthorizedState()) { // don't want signed in people going to login, pass reset, etc....
+                $state.go("profile");
+              } else { // non authorized can go to non authorized states
+                $state.go(toState.name, toParams);
+              }
+            });
+          }
+      });
+
+
+      $rootScope.toggleVisible = function(callback) {
+        this.isVisible = !this.isVisible;
+        $rootScope.$broadcast('cartviewchange', this.isVisible);
+        callback(this.isVisible);
+      }
+
+      $rootScope.hideCart = function(callback) {
+        this.isVisible = false;
+        $rootScope.$broadcast('cartviewchange', this.isVisible);
+        callback(this.isVisible);
+      }
+
+      $rootScope.showCart = function(callback) {
+        this.isVisible = true;
+        $rootScope.$broadcast('cartviewchange', this.isVisible);
+        callback(this.isVisible);
+      }
+
+}]);
+
+trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
+  function($httpProvider, $stateProvider, $urlRouterProvider) {
+    $httpProvider.interceptors.push('trdInterceptor');
+    $urlRouterProvider.otherwise("/login");
+    
+    $stateProvider
+    .state('login', {
+      url: "/login",
+      templateUrl: "/partials/login.html",
+      controller: "LoginCtrl"
+    })
+    .state('logout', {
+      url: "/logout",
+      templateUrl: "/partials/logout.html",
+      controller: "LogoutCtrl"
+    })
+    .state('order', {
+      url: "/order/:orderid",
+      templateUrl: "/partials/order.html",
+      controller: "OrderCtrl"
+    })
+    .state('orders', {
+      url: "/orders/:orderid",
+      templateUrl: "/partials/orders.html",
+      controller: "OrdersCtrl"
+    })
+    .state('limit_orders', {
+      url: "/orders/:orderid/:limit",
+      templateUrl: "/partials/limit_orders.html",
+      controller: "OrdersCtrl"
+    })
+    // .state('locations', {
+    //   url: "/locations",
+    //   templateUrl: "/partials/locations.html",
+    //   controller: "LocationsCtrl"
+    // })
+    .state('store', {
+      url:"/store",
+      templateUrl:"/partials/store.html",
+      controller: "StoreCtrl"
+    })
+    .state('store.product', {
+      url:"/product/:productnumber",
+      templateUrl:"/partials/product.html",
+      controller: "ProductCtrl"
+    })
+    // .state('store.juvuderm', {
+    //   url:"/juvuderm",
+    //   templateUrl:"/partials/juvuderm_store.html",
+    //   controller: "JuvudermCtrl"
+    // })
+    // .state('store.botox', {
+    //   url:"/botox",
+    //   templateUrl:"/partials/botox_store.html",
+    //   controller: "BotoxCtrl"
+    // })
+    // .state('store.ygear', {
+    //   url:"/ygear",
+    //   templateUrl:"/partials/ygear_store.html",
+    //   controller: "YgearCtrl"
+    // })
+    // .state('store.supplies', {
+    //   url:"/supplies",
+    //   templateUrl:"/partials/supplies_store.html",
+    //   controller: "SuppliesCtrl"
+    // })
+    // .state('store.marketing', {
+    //   url:"/marketing",
+    //   templateUrl:"/partials/marketing_store.html",
+    //   controller: "MarketingCtrl"
+    // })
+    // .state('store.lasers', {
+    //   url:"/lasers",
+    //   templateUrl:"/partials/lasers_store.html",
+    //   controller: "LasersCtrl"
+    // })
+    .state('store.search', {
+      url:"/store",
+      templateUrl:"/partials/search_store.html",
+      controller: "SearchStoreCtrl"
+    })
+    .state('profile', {
+      url:"/profile",
+      templateUrl: "/partials/profile.html",
+      controller: "ProfileCtrl"
+    })
+    // .state('refer', {
+    //   url:"/refer",
+    //   templateUrl: "/partials/refer.html",
+    //   controller: "ReferCtrl"
+    // })
+    .state('reset_password', {
+      url:"/reset_password/:resettoken",
+      templateUrl: "/partials/reset_password.html",
+      controller: "ResetPasswordCtrl"
+    })
+    .state('settings', {
+      abstract: true,
+      url:"/settings",
+      templateUrl: "/partials/settings.html",
+      controller: "SettingsCtrl"
+    })
+    .state('settings.profile', {
+      url:"/profile",
+      templateUrl: "/partials/settings_profile.html",
+      controller: "SettingsProfileCtrl"
+    })
+    .state('settings.store', {
+      url:"/store",
+      templateUrl: "/partials/settings_store.html",
+      controller: "SettingsStoreCtrl"
+    })
+    .state('settings.notifications', {
+      url:"/notifications",
+      templateUrl: "/partials/settings_notifications.html",
+      controller: "SettingsNotificationsCtrl"
+    })
+    .state('settings.scheduling', {
+      url:"/scheduling",
+      templateUrl: "/partials/settings_scheduling.html",
+      controller: "SettingsSchedulingCtrl"
+    })
+    // .state('training', {
+    //   url:"/training",
+    //   templateUrl: "/partials/training.html",
+    //   controller: "TrainingCtrl"
+    // })
+    .state('terms', {
+      url:"/terms",
+      templateUrl: "/partials/terms.html",
+      controller: "TermsCtrl"
+    })
+    .state('checkout', {
+      url: "/checkout",
+      views: {
+        '': {
+          templateUrl: "/partials/checkout.html",
+          controller: "CheckoutCtrl"
+        },
+        'shipping@checkout': {
+          templateUrl: "/partials/checkout_shipping.html",
+          controller: "CheckoutShippingCtrl"
+        }, 
+        'billing@checkout': {
+          templateUrl: "/partials/checkout_billing.html",
+          controller: "CheckoutBillingCtrl"
+        },
+        'review@checkout': {
+          templateUrl: "/partials/checkout_review.html",
+          controller: "CheckoutReviewCtrl"
+        }
+      }
+    });
+}]);

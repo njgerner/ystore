@@ -1,0 +1,18 @@
+<div class="col-md-10 col-md-offset-1 product-cart-item">
+	<div class="row">
+		<strong>{{product.name}}  </strong>
+         <i class="fa fa-times-circle text-danger pull-right" ng-click="removeItemFromCart()"></i>
+	</div>
+	<div class="row">
+		<div class="col-md-4">
+			<img ng-if="product.img" class="product-cart-img" ng-src="{{product.img}}" style="width:100%"/>	
+		</div>
+		<div class="col-md-5">
+			<p><i class="fa fa-plus-circle" ng-click="addTen()"></i><strong>  QTY</strong> {{qty}}   <i class="fa fa-minus-circle" ng-click="minusTen()"></i></p>
+			<!-- <p><strong>QTY</strong><span class="change-quantity" ng-click="addTen()">+</span> {{qty}} <span class="change-quantity" ng-click="minusTen()">-</span></p> -->
+		</div>
+		<div class="col-md-3">
+			<p>${{total}}</p>
+		</div>
+	</div>
+</div>

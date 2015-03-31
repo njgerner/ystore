@@ -1,0 +1,37 @@
+<div class="store"> 
+  <div ng-hide="loading" class="container store-content">
+    <div class="row-offcanvas row-offcanvas-left">
+
+      <!-- sidebar -->
+      <div id="sidebar" class="sidebar-offcanvas">
+        <div class="col-md-12">
+          <h5> Show results for</h5>
+          <ul class="nav nav-pills nav-stacked">
+            <li class="store-pill clickable" ng-class="{active:isActive('/store/juvuderm')}"><a ui-sref="store.juvuderm">Juvederm</a></li>
+            <li class="store-pill clickable" ng-class="{active:isActive('/store/botox')}"><a ui-sref="store.botox">Botox</a></li>
+            <li class="store-pill clickable" ng-class="{active:isActive('/store/supplies')}"><a ui-sref="store.supplies">Procedure Supplies</a></li>
+            <li class="store-pill clickable" ng-class="{active:isActive('/store/ygear')}"><a ui-sref="store.ygear">Y Gear</a></li>
+            <li class="store-pill clickable" ng-class="{active:isActive('/store/marketing')}"><a ui-sref="store.marketing">Marketing Materials</a></li>
+            <li class="store-pill clickable" ng-class="{active:isActive('/store/lasers')}"><a ui-sref="store.lasers">Lasers</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="main">
+          <div class="col-md-12">
+              <p class="visible-xs">
+                <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas"><i class="glyphicon glyphicon-chevron-left"></i></button>
+              </p>
+              <div class="input-group search-bar">
+                <input ng-change="search()" ng-model="searchQuery" type="text" class="form-control" placeholder="Botox, Juvuderm, YLift Supplies, etc...">
+                <span class="input-group-btn">
+                  <button class="btn ylift-brand" type="button" ng-click="search()">Search</button>
+                </span>
+              </div>
+              <div ui-view></div>
+          </div>
+      </div>
+
+    </div>
+  </div>
+</div>

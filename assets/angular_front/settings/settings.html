@@ -1,0 +1,22 @@
+<div class="container">
+  <div class="col-md-10 col-md-offset-1">  
+    <h3><i class="fa fa-user-md"></i> Account Settings</h3>
+    <ul class="nav nav-tabs nav-settings">
+      <li ng-click="goToState('profile')" ng-class="{'active': isSettingsState('profile')}"><a>Profile</a></li>
+      <li ng-click="goToState('store')" ng-class="{'active': isSettingsState('store')}"><a>Store</a></li>
+      <li ng-click="goToState('notifications')" ng-class="{'active': isSettingsState('notifications')}"><a>Notifications (Disabled)</a></li>
+      <li ng-click="goToState('scheduling')" ng-class="{'active': isSettingsState('scheduling')}"><a>Scheduling (Disabled)</a></li>
+    <!--   <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+          Dropdown <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a href="#dropdown1" data-toggle="tab">Action</a></li>
+          <li class="divider"></li>
+          <li><a href="#dropdown2" data-toggle="tab">Another action</a></li>
+        </ul>
+      </li> -->
+    </ul>
+    <div ui-view class="settings-content"></div>
+  </div>
+</div>

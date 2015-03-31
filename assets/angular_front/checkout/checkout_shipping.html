@@ -1,0 +1,62 @@
+<div class="row">
+	<div class="col-md-6 col-md-offset-3" style="text-align: center;">
+		<!-- <i class="fa fa-truck fa-3x"></i> -->
+		<h3><strong>Shipping<strong></h3>
+	</div>	
+</div>
+<div class="row">
+	<div class="col-md-10 col-md-offset-1">
+		<h5 class="pull-left">Select an office to ship to</h5>
+        <i class="fa text-ylift pull-right fa-2x clickable" style="padding-top:10px;" ng-class="{'fa-plus-square-o': addOfficeView, 'fa-plus-square':!addOfficeView}" ng-click="toggleAddOffice()"></i>
+	</div>
+  <ul class="list-group">
+    <li class="list-group-item col-md-8 col-md-offset-2" ng-repeat="office in offices" ng-click="selectOffice($index)" ng-class="{'list-group-item-success':isOfficeSelected($index)}">
+    	<i ng-hide="isOfficeSelected($index)" class="fa fa-circle-o"></i>
+    	<i ng-show="isOfficeSelected($index)" class="fa fa-check-circle"></i>
+    	Office: {{office.name}}
+    </li>	
+  </ul>
+</div>
+<div ng-show="addOfficeView" class="row" style="padding-top: 15px;">
+  <form class="form-horizontal col-md-10 col-md-offset-1">
+    <div class="form-group">
+        <input type="text" class="form-control" ng-model="officename" placeholder="Office Name"/>
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" ng-model="address1" placeholder="Office Address" required/>
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" ng-model="address2" placeholder="Suite # (If relevant)"/>
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" ng-model="city" placeholder="City" required/>
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" ng-model="state" placeholder="State" required/>
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" ng-model="zip" placeholder="Zip" required/>
+    </div>
+    <div class="form-group">
+        <div class="checkbox pull-left">
+          <label>
+            <input ng-model="isYlift" type="checkbox"> Is this is a Y LIFT location?
+          </label>
+        </div>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-block ylift-brand" ng-click="addOffice()">
+            <span ng-hide="updatingOffice">Add Office</span>
+            <span ng-show="updatingOffice"><i class="fa fa-spinner fa-pulse"></i> Adding...</span>
+        </button>
+    </div>
+  </form>
+</div>
+<div ng-hide="addOfficeView" class="row next-control">
+    <div class="col-md-10 col-md-offset-1" style="">
+        <button type="submit" class="btn btn-block ylift-brand" ng-class="{'btn-success':checkoutState != 'shipping'}" ng-click="nextState()" ng-disabled="!officeShipTo">
+            <span ng-show="checkoutState == 'shipping'">Next</span>
+            <span ng-hide="checkoutState == 'shipping'"><i class="fa fa-check-circle"></i> Done!</span>
+        </button>
+    </div>
+</div>

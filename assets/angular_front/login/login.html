@@ -1,0 +1,166 @@
+<div class="login-container">
+  <div class="row login-header">
+    <img class="logo" src="/img/logo.png"/>
+    <h3 ng-hide="loginState == 'register'"class="welcome">Welcome to the Y LIFT Network</h3>
+    <h3 ng-show="loginState == 'register'"class="welcome"> Y LIFT Registration</h3>
+  </div>
+
+  <div style="padding-top:5%" class="login-body">
+
+    <div ng-show="pass_reset" class="row">
+        <div class="col-md-2 col-md-offset-5 well"> An email has been sent to {{email}} with further instructions. </div>
+    </div>
+
+    <div class="row">
+      <div ng-show="loginState == 'signin'" class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
+        <div style="width:80%;position:absolute;left:10%" class="panel panel-default"> 
+          <div class="panel-body">    
+            <form ng-model="signinform" class="form-horizontal col-md-10 col-md-offset-1" novalidate>
+              <p ng-if="failedMessage" style="color: red">{{failedMessage}}</p>
+              <div style="padding-top:8px" class="form-group">
+                  <input ng-model="email" type="text" class="form-control" placeholder="Email" autofocus required/>
+              </div>
+              <div class="form-group">
+                  <input ng-model="password" type="password" class="form-control" placeholder="Password" required/>
+              </div>
+              <div style="margin-bottom:0;background-color:$ylift" class="form-group">
+                  <input style="margin-right:10%" type="submit" class="btn ylift-brand btn-sm" ng-click="login()" value="Log In"/>
+                  <span> <a ng-click="showForgotPass()" role="button"> Forgot Password? </a> </span>
+                  <span class="pull-right"> <button class="btn btn-sm ylift-brand" ng-click="showReg()"> Register </button> </span>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div ng-show="loginState == 'register'" class="col-md-4 col-md-offset-4">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <form ng-model="regform" class="form-horizontal col-md-10 col-md-offset-1">
+              <legend ng-click="showSignin()"><i class="fa fa-chevron-left clickable"></i>   Go back</legend>
+              <p ng-if="failedMessage" style="color: red">{{failedMessage}}</p>
+              <div class="row form-group">
+                <div class="reg-icon-col col-md-1">
+                    <i class="reg-icon-valid fa fa-check-circle-o fa-2x" ng-show="regform.email.$dirty && regform.email.$valid"></i>
+                    <i class="reg-icon-invalid fa fa-times-circle-o fa-2x" ng-show="regform.email.$dirty && regform.email.$invalid"c></i>
+                </div>
+                <div style="padding:0"class="col-md-10">
+                  <input title="Please enter a valid email" class="form-control" name="email" ng-model="email" placeholder="Email" required/>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="reg-icon-col col-md-1">
+                    <i class="reg-icon-valid fa fa-check-circle-o fa-2x" ng-show="regform.password.$dirty && regform.password.$valid"></i>
+                    <i class="reg-icon-invalid fa fa-times-circle-o fa-2x" ng-show="regform.password.$dirty && regform.password.$invalid"c></i>
+                </div>
+                <div style="padding:0"class="col-md-10">
+                  <input title="Must be at least 8 characters" type="password" class="form-control" name="password" ng-model="password" ng-minlength="8" placeholder="Password" required/>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="reg-icon-col col-md-1">
+                    <i class="reg-icon-valid fa fa-check-circle-o fa-2x" ng-show="regform.regkey.$dirty && regform.regkey.$valid"></i>
+                    <i class="reg-icon-invalid fa fa-times-circle-o fa-2x" ng-show="regform.regkey.$dirty && regform.regkey.$invalid"></i>
+                </div>
+                <div style="padding:0"class="col-md-10">
+                  <input type="text" class="form-control" name="regkey" ng-model="regkey" placeholder="YLift Registration Key" required/>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="reg-icon-col col-md-1">
+                    <i class="reg-icon-valid fa fa-check-circle-o fa-2x" ng-show="regform.allerganacct.$dirty && regform.allerganacct.$valid"></i>
+                    <i class="reg-icon-invalid fa fa-times-circle-o fa-2x" ng-show="regform.allerganacct.$dirty && regform.allerganacct.$invalid"></i>
+                </div>
+                <div style="padding:0; display:none"class="col-md-10">
+                  <input type="text" class="form-control" name="allerganacct" ng-model="allerganacct" placeholder="Allergan Account # (If applicable)"/>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="reg-icon-col col-md-1">
+                    <i class="reg-icon-valid fa fa-check-circle-o fa-2x" ng-show="regform.firstname.$dirty && regform.firstname.$valid"></i>
+                    <i class="reg-icon-invalid fa fa-times-circle-o fa-2x" ng-show="regform.firstname.$dirty && regform.firstname.$invalid"></i>
+                </div>
+                <div style="padding:0"class="col-md-10">
+                  <input type="text" class="form-control" name="firstname" ng-model="firstname" ng-minlength="1" placeholder="First Name" required/>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="reg-icon-col col-md-1">
+                    <i class="reg-icon-valid fa fa-check-circle-o fa-2x" ng-show="regform.lastname.$dirty && regform.lastname.$valid"></i>
+                    <i class="reg-icon-invalid fa fa-times-circle-o fa-2x" ng-show="regform.lastname.$dirty && regform.lastname.$invalid"></i>
+                </div>
+                <div style="padding:0"class="col-md-10">
+                  <input type="text" class="form-control" name="lastname" ng-model="lastname" ng-minlength="1" placeholder="Last Name" required/>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="reg-icon-col col-md-1">
+                    <i class="reg-icon-valid fa fa-check-circle-o fa-2x" ng-show="regform.officename.$dirty && regform.officename.$valid"></i>
+                    <i class="reg-icon-invalid fa fa-times-circle-o fa-2x" ng-show="regform.officename.$dirty && regform.officename.$invalid"></i>
+                </div>
+                <div style="padding:0"class="col-md-10">
+                  <input type="text" class="form-control" name="officename" ng-model="officename" ng-minlength="1" placeholder="Office Name" required/>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="reg-icon-col col-md-1">
+                    <i class="reg-icon-valid fa fa-check-circle-o fa-2x" ng-show="regform.address1.$dirty && regform.address1.$valid"></i>
+                    <i class="reg-icon-invalid fa fa-times-circle-o fa-2x" ng-show="regform.address1.$dirty && regform.address1.$invalid"></i>
+                </div>
+                <div style="padding:0"class="col-md-10">
+                  <input type="text" class="form-control" name="address1" ng-model="address1" placeholder="Office Address" required/>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="reg-icon-col col-md-1">
+                    <i class="reg-icon-valid fa fa-check-circle-o fa-2x" ng-show="regform.address2.$dirty && regform.address2.$valid"></i>
+                    <i class="reg-icon-invalid fa fa-times-circle-o fa-2x" ng-show="regform.address2.$dirty && regform.address2.$invalid"></i>
+                </div>
+                <div style="padding:0"class="col-md-10">
+                  <input type="text" class="form-control" name="address2" ng-model="address2" placeholder="Suite # (If relevant)"/>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="reg-icon-col col-md-1">
+                    <i class="reg-icon-valid fa fa-check-circle-o fa-2x" ng-show="regform.city.$dirty && regform.city.$valid"></i>
+                    <i class="reg-icon-invalid fa fa-times-circle-o fa-2x" ng-show="regform.city.$dirty && regform.city.$invalid"></i>
+                </div>
+                <div style="padding:0"class="col-md-10">
+                  <input type="text" class="form-control" name="city" ng-model="city" ng-minlength="1" placeholder="City" required/>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="reg-icon-col col-md-1">
+                    <i class="reg-icon-valid fa fa-check-circle-o fa-2x" ng-show="regform.state.$dirty && regform.state.$valid"></i>
+                    <i class="reg-icon-invalid fa fa-times-circle-o fa-2x" ng-show="regform.state.$dirty && regform.state.$invalid"></i>
+                </div>
+                <div style="padding:0"class="col-md-10">
+                  <input type="text" class="form-control" name="state" ng-model="state" ng-minlength="1" placeholder="State" required/>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="reg-icon-col col-md-1">
+                    <i class="reg-icon-valid fa fa-check-circle-o fa-2x" ng-show="regform.zip.$dirty && regform.zip.$valid"></i>
+                    <i class="reg-icon-invalid fa fa-times-circle-o fa-2x"ng-show="regform.zip.$dirty && regform.zip.$invalid"></i>
+                </div>
+                <div style="padding:0"class="col-md-10">
+                  <input type="text" class="form-control" name="zip" ng-model="zip" placeholder="Zip" ng-pattern="/^(\d{5}-\d{4}|\d{5})$/" required/>
+                </div>
+              </div>
+              <div class="form-group">
+                  <input ng-active="regform.$valid" type="submit" class="btn ylift-brand btn-sm" value="Register" ng-click="register()"/>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div ng:show="loginState == 'forgot_password'" class="col-md-2 col-md-offset-5">
+      <form class="form-login" name="resetPassForm" novalidate>
+        <input style="width:100%" ng:model="email" type="email" placeholder="you@youremail.com" id="focus_forgot_password" required/>
+        <button style="margin-top:5%;background-color:$ylift" class="btn btn-block ylift-brand" ng-disabled="resetPassForm.$invalid" ng-click="requestPasswordReset()">Reset My Password</button>
+      </form>
+    </div>
+  </div>
+</div>

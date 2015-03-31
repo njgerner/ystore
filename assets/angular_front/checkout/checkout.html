@@ -1,0 +1,3 @@
+<div ng-click="isCheckoutState('shipping') ? return : goToState('shipping')" class="col-md-4 checkout" ng-class="{ 'focused': isCheckoutState('shipping'), 'clickable': isEditable('shipping') }" ui-view="shipping" ></div>
+<div ng-click="isCheckoutState('billing') ? return : goToState('billing')" class="col-md-4 checkout" ng-class="{ 'focused': isCheckoutState('billing'), 'clickable': isEditable('billing') }" ui-view="billing"></div>
+<div ng-click="isCheckoutState('review') ? return : goToState('review')" class="col-md-4 checkout" ng-class="{ 'focused': isCheckoutState('review'), 'clickable': isEditable('review') }" ui-view="review"></div>

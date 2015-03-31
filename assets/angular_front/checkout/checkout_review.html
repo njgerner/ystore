@@ -1,0 +1,35 @@
+<div>
+	<div class="row">
+		<div class="col-md-6 col-md-offset-3" style="text-align: center;">
+			<!-- <i class="fa fa-truck fa-3x"></i> -->
+			<h3><strong>Review<strong></h3>
+		</div>	
+	</div>
+	<div ng-if="orderError" class="val-error">
+		<p class="text-danger">{{orderError}}</p>
+	</div>
+	<div class="row" ng-click="toggleItems()">
+		<strong>{{cart.products.length}}</strong> Items 
+		<i ng-hide="showItems" class="fa fa-arrow-circle-right"></i>
+		<i ng-show="showItems" class="fa fa-arrow-circle-down"></i>
+		<ul ng-show="showItems" style="list-style-type: none;">
+			<li class="" ng-repeat="product in cart.products">
+				<product-cart-dir pn="product.productnumber" qty="product.quantity"></product-cart-dir>
+			</li>
+		</ul>
+	</div>
+	<div class="row">
+		<div class="col-md-4">Shipping</div>
+		<div class="col-md-4"></div>
+		<div class="col-md-4">${{shippingCost}}</div>
+	</div>	
+	<div class="row">
+		<div class="col-md-4"><strong>Total</strong></div>
+		<div class="col-md-4"></div>
+		<div class="col-md-4">${{total}}</div>
+	</div>	
+	<button class="btn btn-block ylift-brand" ng-class="{'btn-success':orderSubmitted}"ng-click="submitOrder()">
+		<span ng-hide="orderSubmitted">Submit Order</span>
+		<span ng-show="orderSubmitted"><i class="fa fa-spinner fa-pulse"></i> Processing...</span>
+	</button>
+</div>
