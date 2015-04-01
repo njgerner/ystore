@@ -1,5 +1,5 @@
-appDirectives.directive('navBarDir', [ 'authService', 'awsService', '$state', '$location', '$rootScope', '$window', '$cookieStore', '$cookies', 'yliftInterceptor', 'storeService',
-	function(authService, awsService, $state, $location, $rootScope, $window, $cookieStore, $cookies, yliftInterceptor, storeService) {
+appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$rootScope', '$window', '$cookieStore', '$cookies', 'storeService',
+	function(authService, $state, $location, $rootScope, $window, $cookieStore, $cookies, storeService) {
 	return {
 		restrict: 'E',
 		scope: {

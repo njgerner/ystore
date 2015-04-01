@@ -6,6 +6,7 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 		this.clearAuthorization = function() {
 			this.authorizationReceived = false;
 			this.authorized = false;
+			this.stripePubKey = null;
 			this.userid = null;
 			this.profile = null;
 			this.isAdmin = null;
@@ -24,6 +25,9 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 				var internalThis = this;
 				$http({method: 'GET', url: "/authorized"}).
 				    success(function(data, status, headers, config) {
+				    	if (data && data.stripePubKey) {
+				    		internalThis.stripePubKey = data.stripePubKey;
+				    	}
 				    	if (!data || !data.user || !data.profile) {
 				    		// something's wrong, not authorized
 				    		internalThis.authorizationReceived = true;

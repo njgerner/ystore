@@ -20,14 +20,20 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
 
       $rootScope.$on('$stateChangeStart', 
         function(event, toState, toParams, fromState, fromParams){
-
+          console.log('to::', toState.name);
+          console.log('from::', fromState.name);
           var isExceptionalState = function() {
-            var exceptionalState = ["locations"];
+            var exceptionalState = ["terms", "store", "store.search", "checkout"];
             return exceptionalState.indexOf(toState.name) >= 0;
           }
 
+          var isAuthorizedState = function() {
+            var authStates = ["order", "orders", "profile", "settings", "settings.profile", "settings.store", "settings.notifications"];
+            return authStates.indexOf(toState.name) >= 0;
+          }
+
           var isUnauthorizedState = function () {
-            var unauthedStates = ["login", "login_by_token", "email_sent", "email_taken", "resend_email", "new_password", "terms", "reset_password"];
+            var unauthedStates = ["login", "login_by_token", "email_sent", "email_taken", "resend_email", "new_password", "reset_password"];
             return unauthedStates.indexOf(toState.name) >= 0;
           };
 
@@ -35,12 +41,12 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
 
             if (isExceptionalState()) {
               return;
-            } else if (!authService.authorized && !isUnauthorizedState()) { // don't want non signed in people going to store, tools, etc...
+            } else if (!authService.authorized && isAuthorizedState()) { // don't want non signed in people going to profile, settings, etc...
               event.preventDefault();
               $state.go("login");
             } else if (authService.authorized && isUnauthorizedState()) { // don't want signed in people going to login, pass reset, etc....
               event.preventDefault();
-              $state.go("profile");
+              $state.go("store");
             } else { // non authorized can go to non authorized states
               return;
             }
@@ -51,10 +57,10 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
 
               if (isExceptionalState()) {
                 $state.go(toState.name, toParams);
-              } else if (!authService.authorized && !isUnauthorizedState()) { // don't want non signed in people going to store, tools, etc...
+              } else if (!authService.authorized && isAuthorizedState()) { // don't want non signed in people going to profile, settings, etc...
                 $state.go("login");
               } else if (authService.authorized && isUnauthorizedState()) { // don't want signed in people going to login, pass reset, etc....
-                $state.go("profile");
+                $state.go("store");
               } else { // non authorized can go to non authorized states
                 $state.go(toState.name, toParams);
               }
@@ -86,7 +92,7 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
 trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
   function($httpProvider, $stateProvider, $urlRouterProvider) {
     $httpProvider.interceptors.push('trdInterceptor');
-    $urlRouterProvider.otherwise("/login");
+    $urlRouterProvider.otherwise("/store");
     
     $stateProvider
     .state('login', {
@@ -200,11 +206,11 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
       templateUrl: "/partials/settings_notifications.html",
       controller: "SettingsNotificationsCtrl"
     })
-    .state('settings.scheduling', {
-      url:"/scheduling",
-      templateUrl: "/partials/settings_scheduling.html",
-      controller: "SettingsSchedulingCtrl"
-    })
+    // .state('settings.scheduling', {
+    //   url:"/scheduling",
+    //   templateUrl: "/partials/settings_scheduling.html",
+    //   controller: "SettingsSchedulingCtrl"
+    // })
     // .state('training', {
     //   url:"/training",
     //   templateUrl: "/partials/training.html",
