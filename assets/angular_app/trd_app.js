@@ -26,8 +26,13 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
             return exceptionalState.indexOf(toState.name) >= 0;
           }
 
+          var isAuthorizedState = function() {
+            var authStates = ["order", "orders", "profile", "settings", "settings.profile", "settings.store"];
+            return authStates.indexOf(toState.name) >= 0;
+          }
+
           var isUnauthorizedState = function () {
-            var unauthedStates = ["login", "login_by_token", "email_sent", "email_taken", "resend_email", "new_password", "terms", "reset_password"];
+            var unauthedStates = ["login", "login_by_token", "email_sent", "email_taken", "resend_email", "new_password", "reset_password"];
             return unauthedStates.indexOf(toState.name) >= 0;
           };
 
@@ -35,10 +40,10 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
 
             if (isExceptionalState()) {
               return;
-            } else if (!authService.authorized && !isUnauthorizedState()) { // don't want non signed in people going to store, tools, etc...
+            } else if (!authService.authorized && isAuthorizedState()) { // don't want non signed in people going to profile, settings, etc...
               event.preventDefault();
               $state.go("login");
-            } else if (authService.authorized && isUnauthorizedState()) { // don't want signed in people going to login, pass reset, etc....
+            } else if (authService.authorized && !isAuthorizedState()) { // don't want signed in people going to login, pass reset, etc....
               event.preventDefault();
               $state.go("profile");
             } else { // non authorized can go to non authorized states
@@ -51,7 +56,7 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
 
               if (isExceptionalState()) {
                 $state.go(toState.name, toParams);
-              } else if (!authService.authorized && !isUnauthorizedState()) { // don't want non signed in people going to store, tools, etc...
+              } else if (!authService.authorized && !isUnauthorizedState()) { // don't want non signed in people going to profile, settings, etc...
                 $state.go("login");
               } else if (authService.authorized && isUnauthorizedState()) { // don't want signed in people going to login, pass reset, etc....
                 $state.go("profile");
