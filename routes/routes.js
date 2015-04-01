@@ -177,7 +177,7 @@ passport.use('bearer', new BearerStrategy(
       .then(function (profile) {
         orchHelper.findUserByID(req.user.id)
           .then(function (user) {
-            res.send({user:user, profile:profile, isAdmin:user.isAdmin}); //eliminate the user doc ASAP
+            res.send({user:user, profile:profile, isAdmin:user.isAdmin, stripePubKey:config[stripeEnv].PUBLISH}); //eliminate the user doc ASAP
           })
           .fail(function (err) {
             console.log('need to decide what data to pass back on err', err);

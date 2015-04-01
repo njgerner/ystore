@@ -1,5 +1,5 @@
-appDirectives.directive('footerDir', [ 'authService', 'awsService', '$state', '$location', '$rootScope', '$window', '$cookieStore', '$cookies', 'yliftInterceptor', 'storeService',
-	function(authService, awsService, $state, $location, $rootScope, $window, $cookieStore, $cookies, yliftInterceptor, storeService) {
+appDirectives.directive('footerDir', [ 'authService', '$state',
+	function(authService, $state) {
 	return {
 		restrict: 'E',
 		scope: {

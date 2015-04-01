@@ -2,9 +2,10 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
     function ($rootScope, $http, $cookieStore, authService) {
 
       this.token = null;
-    	this.card = null;
-    	this.customer = {};
-    	this.customerReceived = false;
+      this.card = null;
+      this.customer = {};
+      this.customerReceived = false;
+      Stripe.setPublishableKey(authService.stripePubKey);
 
     	this.setToken = function(token) {
     		this.token = token;
@@ -142,7 +143,5 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
             });
         }
       }
-
-    	Stripe.setPublishableKey('pk_test_gRzGeisehoTh9lf9kwSnJuE5'); // test key figure out config for this
 
 }]);

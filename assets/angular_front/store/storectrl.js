@@ -50,7 +50,6 @@ superApp.controller('StoreCtrl',
         }
       });
     }
-
     storeService.getAllProducts(function(result) {$scope.onProductsLoaded(result);});
 
 }]);

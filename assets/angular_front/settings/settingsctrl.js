@@ -1,8 +1,8 @@
 superApp.controller('SettingsCtrl',
   ['$rootScope', '$scope', '$state', 'authService', 'profileService', '$location', '$stateParams', '$timeout', 
-  'storeService', 'awsService', 'FileUploader', '$window',
+  'storeService', 'FileUploader', '$window',
   function($rootScope, $scope, $state, authService, profileService, $location, $stateParams, $timeout, 
-  	storeService, awsService, FileUploader, $window) {
+  	storeService, FileUploader, $window) {
   
   	$scope.profile = authService.profile;
     $scope.offices = $scope.profile.offices;
