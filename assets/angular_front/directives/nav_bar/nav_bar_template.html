@@ -1,58 +1,65 @@
-<nav class="navbar navbar-default"> 
-<div style="padding:0" class="container">
-  <div class="navbar-header">
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
-      <span class="sr-only">Toggle navigation</span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
-  </div>
-  <div class="navbar-collapse collapse" id="navbar">
-    <ul class="nav navbar-nav">
-      <li class="navbar-li clickable"><a class="navbar-brand" href="/">YLift Portal</a></li>
-      <li class="navbar-li clickable" ng-class="{philactive:isActive('/training')}" ng:click="goToPage('training')">
-          <a style="padding-right:15px"><p>Training & Tools</p></a>  
-      </li>
-      <li class="navbar-li clickable" ng-class="{philactive:isActive('/store')}" ng:click="goToPage('store')">
-          <a><p>Order Supplies</p></a>
-      </li>
-      <li class="navbar-li clickable" ng-class="{philactive:isActive('/locations')}" ng:click="goToPage('locations')">
-          <a><p>Locations</p></a>
-      </li>
-    </ul>
+<div class="row">
+  <div class="large-12 columns">
 
-    <ul class="nav navbar-nav">
-      <a class="navbar-logo" href="#">
-        <img style="height:65px" src="/img/logo.png">    
-      </a>
-    </ul> 
-   <ul class="nav navbar-nav navbar-right">
-      <li style="padding-top:10px" class="navbar-li clickable" id="cart-logo" ng-class="{active:showCartRight}" ng-click="toggleCart()">
-        <div>
-          <i style="font-size:2.5em" class="fa fa-shopping-cart fa-2x clickable">
-            <p id="itemcount" ng-if="itemCount > 0">{{itemCount}}</p>
-          </i>
-        </div>
-      </li>
-      <li class="navbar-li clickable">
-        <div style="padding-top:18px" class="btn-group">
-          <a style="color:#666666; text-decoration:none" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="padding-top:18px">
-            <img ng-if="profileid" ng-src="/image/profiles/{{profileid}}" width="30" height="30"/> 
-            {{name}}
-          </a>
-          <ul class="dropdown-menu nav-dropdown" role="menu">
-            <li><a ui-sref="profile">Profile</a></li>
-            <li><a ui-sref="settings.profile">Settings</a></li>
-            <li><a ui-sref="refer">Refer A Doctor</a></li>
-            <li class="divider"></li>
-            <li><a ng:click="logoutNow()">Log Out</a></li>
-          </ul>
-        </div>
-      </li>
-    </ul>
+    <nav class="top-bar" data-topbar>
+      <ul class="title-area">
+         
+        <li class="name">
+          <h1>
+            <a href="#">
+              Top Bar Title
+            </a>
+          </h1>
+        </li>
+        <li class="toggle-topbar menu-icon"><a href="#"><span>menu</span></a></li>
+      </ul>
+   
+      <section class="top-bar-section">
+         
+        <ul class="right">
+          <li class="divider"></li>
+          <li class="has-dropdown">
+            <a href="#">Main Item 1</a>
+            <ul class="dropdown">
+              <li><label>Section Name</label></li>
+              <li class="has-dropdown">
+                <a href="#" class="">Has Dropdown, Level 1</a>
+                <ul class="dropdown">
+                  <li><a href="#">Dropdown Options</a></li>
+                  <li><a href="#">Dropdown Options</a></li>
+                  <li><a href="#">Level 2</a></li>
+                  <li><a href="#">Subdropdown Option</a></li>
+                  <li><a href="#">Subdropdown Option</a></li>
+                  <li><a href="#">Subdropdown Option</a></li>
+                </ul>
+              </li>
+              <li><a href="#">Dropdown Option</a></li>
+              <li><a href="#">Dropdown Option</a></li>
+              <li class="divider"></li>
+              <li><label>Section Name</label></li>
+              <li><a href="#">Dropdown Option</a></li>
+              <li><a href="#">Dropdown Option</a></li>
+              <li><a href="#">Dropdown Option</a></li>
+              <li class="divider"></li>
+              <li><a href="#">See all →</a></li>
+            </ul>
+          </li>
+          <li class="divider"></li>
+          <li><a href="#">Main Item 2</a></li>
+          <li class="divider"></li>
+          <li class="has-dropdown">
+            <a href="#">Main Item 3</a>
+            <ul class="dropdown">
+              <li><a href="#">Dropdown Option</a></li>
+              <li><a href="#">Dropdown Option</a></li>
+              <li><a href="#">Dropdown Option</a></li>
+              <li class="divider"></li>
+              <li><a href="#">See all →</a></li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+    </nav>
+     
   </div>
 </div>
-</nav>
-
-

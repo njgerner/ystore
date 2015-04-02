@@ -146,7 +146,7 @@ passport.use('bearer', new BearerStrategy(
   // GET /appcss
   var appcss = function(req, res) {
     if (process.env.ENV == "DEV") {
-      res.sendFile('public/css/trdapp.min.css', { root: __dirname });
+      res.sendFile('public/css/trdapp.css', { root: __dirname });
     } else {
       res.sendFile('public/css/trdapp.min.css', { root: __dirname });
     }

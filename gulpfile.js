@@ -26,10 +26,7 @@ var paths = {
 		bowerRoot + 'foundation/js/foundation.js'
 	],
 	scss: [
-		'assets/scss/mitch.css',
-		'assets/scss/partials/*.scss',
-		'assets/scss/animate.css',
-		bowerRoot + 'foundation/scss/foundation.scss'
+		'assets/scss/mitch.scss'
 	],
 	html_src_and_dest: [
 		{src:'assets/angular_front/directives/**/*.html', dest:'public/directives/'},

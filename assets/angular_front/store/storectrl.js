@@ -6,7 +6,7 @@ superApp.controller('StoreCtrl',
     $scope.products = [];
     $scope.productsByCategory = []
     $scope.loading = true;
-    $scope.defaultCategory = 'juvuderm';
+    $scope.defaultCategory = 'ygear';
 
     $scope.onProductsLoaded = function(result) {
       $scope.products = result;
@@ -50,6 +50,6 @@ superApp.controller('StoreCtrl',
         }
       });
     }
-    storeService.getAllProducts(function(result) {$scope.onProductsLoaded(result);});
+    // storeService.getAllProducts(function(result) {$scope.onProductsLoaded(result);});
 
 }]);
