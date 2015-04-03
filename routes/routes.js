@@ -560,14 +560,14 @@ passport.use('bearer', new BearerStrategy(
     app.get('/appcss', appcss);
 
     app.get('/all_orders/:profileid', ensureAuthenticated, get_all_orders);
-    app.get('/all_products', ensureAuthenticated, all_products);
+    app.get('/all_products', all_products);
     app.get('/all_profiles', all_profiles);
     app.get('/authorized', ensureAuthenticated, authorized);
     app.get('/cart/:userid', ensureAuthenticated, get_cart_by_user_id);
     app.get('/get_customer/:customerid', ensureAuthenticated, stripeRoutes.get_customer);
-    app.get('/get_product_by_id/:productnumber', ensureAuthenticated, get_product_by_id);
+    app.get('/get_product_by_id/:productnumber', get_product_by_id);
     app.get('/login', login);
-    app.get('/order/:orderid', ensureAuthenticated, get_order_by_id);
+    app.get('/order/:orderid', get_order_by_id);
     app.get('/request_pass_reset/:email', request_pass_reset);
     app.get('/reset_password/:userid', reset_password);
     // app.get('/training', adminRoutes.training);
@@ -575,17 +575,17 @@ passport.use('bearer', new BearerStrategy(
     // -- START POST Routes
     ///////////////////////////////////////////////////////////////
     app.post('/add_customer/:profileid', ensureAuthenticated, stripeRoutes.add_customer);
-    app.post('/add_item_to_cart', ensureAuthenticated, add_item_to_cart);
+    app.post('/add_item_to_cart', add_item_to_cart);
     app.post('/add_token_to_customer/:profileid/:customerid', ensureAuthenticated, stripeRoutes.add_token_to_customer, stripeRoutes.update_customer);
-    app.post('/empty_cart', ensureAuthenticated, empty_cart);
+    app.post('/empty_cart', empty_cart);
     app.post('/get_products_by_category/:category', get_products_by_category);
     app.post('/login', loginHelper);
     app.post('/process_transaction/:profileid', ensureAuthenticated, stripeRoutes.process_transaction);
     app.post('/register', register);
     app.post('/remove_card_from_customer/:profileid/:customerid', ensureAuthenticated, stripeRoutes.remove_card_from_customer, stripeRoutes.update_customer);
-    app.post('/update_cart', ensureAuthenticated, update_cart);
+    app.post('/update_cart', update_cart);
     app.post('/update_customer/:profileid', ensureAuthenticated, stripeRoutes.update_customer);
-    app.post('/update_password', ensureAuthenticated, update_password);
+    app.post('/update_password', update_password);
     app.post('/update_user', ensureAuthenticated, update_user);
     // -- START Profile Routes
     ///////////////////////////////////////////////////////////////

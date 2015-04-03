@@ -8,26 +8,14 @@ superApp.controller('StoreCtrl',
     $scope.loading = true;
     $scope.defaultCategory = 'ygear';
 
-    $scope.onProductsLoaded = function(result) {
-      $scope.products = result;
-      $scope.productsByCategory = storeService.productsByCategory;
-      var stateUrl = $location.path().split("/");
-      if (stateUrl.indexOf("product") >= 0) {
-        var ind = stateUrl.indexOf("product");
-        $scope.goToProduct(stateUrl[++ind]);
-      } else { // TODO need and else if for categories
-        $scope.goToCategory($scope.defaultCategory);
-      }
-      $scope.loading = false;
-    }
 
     $scope.goToProduct = function(productnumber) {
       $state.go('store.product', {productnumber: productnumber});
     }
 
-    $scope.goToCategory = function(category) {
-      $state.go('store.' + category);
-    }
+    // $scope.goToCategory = function(category) {
+    //   $state.go('store.' + category);
+    // }
 
     $scope.isActive = function(route) {
       return route == $location.path();
@@ -50,6 +38,21 @@ superApp.controller('StoreCtrl',
         }
       });
     }
-    // storeService.getAllProducts(function(result) {$scope.onProductsLoaded(result);});
+
+    function onProductsLoaded (result) {
+      $scope.products = result;
+      $scope.productsByCategory = storeService.productsByCategory;
+      var stateUrl = $location.path().split("/");
+      if (stateUrl.indexOf("product") >= 0) {
+        var ind = stateUrl.indexOf("product");
+        $scope.goToProduct(stateUrl[++ind]);
+      }
+      // } else { // TODO need and else if for categories
+      //   $scope.goToCategory($scope.defaultCategory);
+      // }
+      $scope.loading = false;
+    }
+
+    storeService.getAllProducts(onProductsLoaded);
 
 }]);

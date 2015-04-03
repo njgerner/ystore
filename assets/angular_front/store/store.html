@@ -1,37 +1,125 @@
-<div class="store"> 
-  <div ng-hide="loading" class="container store-content">
-    <div class="row-offcanvas row-offcanvas-left">
+<div class="row">
+  <div class="large-12 columns">
 
-      <!-- sidebar -->
-      <div id="sidebar" class="sidebar-offcanvas">
-        <div class="col-md-12">
-          <h5> Show results for</h5>
-          <ul class="nav nav-pills nav-stacked">
-            <li class="store-pill clickable" ng-class="{active:isActive('/store/juvuderm')}"><a ui-sref="store.juvuderm">Juvederm</a></li>
-            <li class="store-pill clickable" ng-class="{active:isActive('/store/botox')}"><a ui-sref="store.botox">Botox</a></li>
-            <li class="store-pill clickable" ng-class="{active:isActive('/store/supplies')}"><a ui-sref="store.supplies">Procedure Supplies</a></li>
-            <li class="store-pill clickable" ng-class="{active:isActive('/store/ygear')}"><a ui-sref="store.ygear">Y Gear</a></li>
-            <li class="store-pill clickable" ng-class="{active:isActive('/store/marketing')}"><a ui-sref="store.marketing">Marketing Materials</a></li>
-            <li class="store-pill clickable" ng-class="{active:isActive('/store/lasers')}"><a ui-sref="store.lasers">Lasers</a></li>
-          </ul>
+   
+
+    <div class="row">
+      <div class="large-12 hide-for-small">
+
+        <p><img src="http://placehold.it/1000x400&text=[banner img ftb]"/></p>
+
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="large-12 columns show-for-small">
+
+      <img src="http://placehold.it/1200x700&text=Mobile Header">
+
+    </div>
+  </div><br>
+<div class="row">
+  <div class="large-4 small-12 columns">
+
+    <img src="http://placehold.it/500x500&text=Promo">
+
+    <div class="hide-for-small panel">
+      <h3>Header</h3>
+      <h5 class="subheader">Risus ligula, aliquam nec fermentum vitae, sollicitudin eget urna. Donec dignissim nibh fermentum odio ornare sagittis.
+      </h5>
+    </div>
+
+    <a href="#">
+    <div class="panel callout radius">
+      <h6>99  items in your cart</h6>
+    </div>
+    </a>
+
+  </div>
+  <div class="large-8 columns">
+    <div class="row">
+
+      <div class="large-4 small-6 columns" ng-repeat="p in products" ng-click="goToProduct(p.productnumber)">
+        <!-- <img ng-src="{{p.img}}" style="height"> -->
+        <img src="http://placehold.it/1000x1000&text=Thumbnail">
+        <div class="panel">
+          <h5>{{p.name}}</h5>
+          <h6 class="subheader">${{p.price}}</h6>
         </div>
       </div>
 
-      <div id="main">
-          <div class="col-md-12">
-              <p class="visible-xs">
-                <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas"><i class="glyphicon glyphicon-chevron-left"></i></button>
-              </p>
-              <div class="input-group search-bar">
-                <input ng-change="search()" ng-model="searchQuery" type="text" class="form-control" placeholder="Botox, Juvuderm, YLift Supplies, etc...">
-                <span class="input-group-btn">
-                  <button class="btn ylift-brand" type="button" ng-click="search()">Search</button>
-                </span>
-              </div>
-              <div ui-view></div>
-          </div>
+<!--       <div class="large-4 small-6 columns">
+        <img src="http://placehold.it/1000x1000&text=Thumbnail">
+
+        <div class="panel">
+          <h5>Item Name</h5>
+          <h6 class="subheader">$000.00</h6>
+        </div>
       </div>
 
+      <div class="large-4 small-6 columns">
+        <img src="http://placehold.it/500x500&text=Thumbnail">
+
+        <div class="panel">
+          <h5>Item Name</h5>
+          <h6 class="subheader">$000.00</h6>
+        </div>
+      </div>
+
+      <div class="large-4 small-6 columns">
+        <img src="http://placehold.it/500x500&text=Thumbnail">
+
+        <div class="panel">
+          <h5>Item Name</h5>
+          <h6 class="subheader">$000.00</h6>
+        </div>
+      </div>
+
+      <div class="large-4 small-6 columns">
+        <img src="http://placehold.it/500x500&text=Thumbnail">
+
+        <div class="panel">
+          <h5>Item Name</h5>
+          <h6 class="subheader">$000.00</h6>
+        </div>
+      </div>
+
+      <div class="large-4 small-6 columns">
+        <img src="http://placehold.it/500x500&text=Thumbnail">
+
+        <div class="panel">
+          <h5>Item Name</h5>
+          <h6 class="subheader">$000.00</h6>
+        </div>
+      </div>
+
+      <div class="large-4 small-6 columns">
+        <img src="http://placehold.it/500x500&text=Thumbnail">
+
+        <div class="panel">
+          <h5>Item Name</h5>
+          <h6 class="subheader">$000.00</h6>
+        </div>
+      </div> -->
+    </div>
+    <div class="row">
+      <div class="large-12 columns">
+        <div class="panel">
+          <div class="row">
+
+            <div class="large-2 small-6 columns">
+              <img src="http://placehold.it/300x300&text=Promo">
+            </div>
+
+            <div class="large-10 small-6 columns">
+              <strong>Some promotional shit<hr/></strong>
+
+              Risus ligula, aliquam nec fermentum vitae, sollicitudin eget urna. Donec dignissim nibh fermentum odio ornare sagittis
+            </div>
+
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
