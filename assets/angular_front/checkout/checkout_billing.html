@@ -1,18 +1,18 @@
 <div class="row">
-	<div class="col-md-6 col-md-offset-3" style="text-align: center;">
+	<div style="text-align: center;padding-top:15px;">
 		<!-- <i class="fa fa-truck fa-3x"></i> -->
 		<h3><strong>Billing<strong></h3>
 	</div>	
 </div>
 <div class="row">
 	<div ng-show="customerLoading || customerUpdating" class="locations-loading"><i class="fa fa-spinner fa-pulse fa-5x"></i></div>
-	<div ng-hide="customerLoading" class="row" style="padding-bottom: 20px;">
+	<div ng-show="!customerLoading && cards.length > 0">
 		<div class="col-md-10 col-md-offset-1">
 			<h5 class="pull-left">Select a payment method</h5>
 			<i class="fa text-ylift pull-right fa-2x clickable" style="padding-top:10px;" ng-class="{'fa-plus-square-o': addPaymentView, 'fa-plus-square':!addPaymentView}" ng-click="toggleAddPayment()"></i> 
 		</div>
 	  <ul class="list-group">
-	    <li class="list-group-item col-md-8 col-md-offset-2" ng-repeat="card in cards" ng-click="selectPayment($index)" ng-class="{'list-group-item-success':isCardSelected($index)}">
+	    <li class="large-10 large-offset-1 columns" ng-repeat="card in cards" ng-click="selectPayment($index)" ng-class="{'list-group-item-success':isCardSelected($index)}">
 	    	<i class="fa" ng-class="{'fa-cc-{{card.brand.toLowerCase()}}':card.brand}"></i> {{card.brand}}   ending in <strong>{{card.last4}}</strong>
 	    </li>	
 	  </ul>
@@ -21,55 +21,70 @@
 		<p class="text-danger">{{error}}</p>
 	</div>
 </div>
-<div class="row">
-	<form ng-show="addPaymentView" class="form-horizontal col-md-10 col-md-offset-1">
-		<legend>Credit Card Info</legend>
-			<div class="form-group" ng-class="{'has-success':namecard.length > 0, 'has-error':namecard.length == 0}">
-	        <input type="text" class="form-control" ng-model="namecard" placeholder="Name on Card" required/>
-	    </div>
-	    <div class="form-group" ng-class="{'has-success':validCCNum(), 'has-error':!validCCNum()}">
-	        <input type="text" class="form-control" ng-model="ccnum" placeholder="Credit Card Number" required/>
-	    </div>
-	    <div class="form-group" ng-class="{'has-success':validCVC(), 'has-error':!validCVC()}">
-	        <input type="text" class="form-control" ng-model="cvc" placeholder="CVC Code" required/>
-	    </div>
-	    <div class="form-group" ng-class="{'has-success':validExpDate(), 'has-error':!validExpDate()}">
-	        <input type="text" class="form-control" ng-model="exp" placeholder="Expiration (MM/YYYY)" ng-keyup="formatExp(exp)" required/>
-	    </div>
-		<div ng-show="creditCardFieldsComplete()">
-			<legend>Billing Address Info</legend>
-		    <div class="form-group" ng-class="{'has-success':billingname.length > 0, 'has-error':billingname.length == 0}">
-		    		<input type="text" class="form-control" ng-model="billingname" placeholder="Name" required/>
-		    </div>
-		    <div class="form-group" ng-class="{'has-success':billingaddress1.length > 0, 'has-error':billingaddress1.length == 0}">
-		        <input type="text" class="form-control" ng-model="billingaddress1" placeholder="Address" required/>
-		    </div>
-		    <div class="form-group" ng-class="{'has-success':billingaddress1.length > 0, 'has-error':billingaddress1.length == 0}">
-		        <input type="text" class="form-control" ng-model="billingaddress2" placeholder="Suite # (If relevant)"/>
-		    </div>
-		    <div class="form-group" ng-class="{'has-success':billingcity.length > 0, 'has-error':billingcity.length == 0}">
-		        <input type="text" class="form-control" ng-model="billingcity" placeholder="City" required/>
-		    </div>
-		    <div class="form-group" ng-class="{'has-success':billingstate.length > 0, 'has-error':billingstate.length == 0}">
-		        <input type="text" class="form-control" ng-model="billingstate" placeholder="State" required/>
-		    </div>
-		    <div class="form-group" ng-class="{'has-success':billingzip.length == 5, 'has-error':billingzip.length == 0}">
-		        <input type="text" class="form-control" ng-model="billingzip" placeholder="Zip" required/>
-		    </div>
-		    <div class="form-group">
-              <button ng-show="addPaymentView" type="submit" class="btn ylift-brand" value="Add Payment Option" ng-disabled="!creditCardFieldsComplete() || !billingFieldsComplete()" ng-click="addPayment()"/>
-                <span ng-hide="customerUpdating">Add Payment Option</span>
-                <span ng-show="customerUpdating" ><i class="fa fa-spinner fa-pulse"></i> Updating...</span>
-              </button>
-          </div>
-		</div>
-  	</form>
+<div ng-show="addPaymentView" class="row">
+	<div class="large-10 large-offset-1 columns">
+		<form name="ccForm">
+			<fieldset>
+				<legend>Credit Card Info</legend>
+				<div class="input-wrapper">
+			        <input type="text" ng-model="namecard" placeholder="Name on Card" ng-minlength="2" required/>
+			        <small ng-show="ccForm.namecard.$invalid && ccForm.namecard.$dirty" class="error">Enter name as it appears on the credit card</small>
+			    </div>
+			    <div class="input-wrapper">
+			        <input type="text" ng-model="ccnum" placeholder="Credit Card Number" required/>
+			        <small ng-show="!validCCNum() && ccForm.ccnum.$dirty" class="error">Please enter a valid credit card number</small>
+			    </div>
+			    <div class="input-wrapper">
+			        <input type="text" ng-model="cvc" placeholder="CVC Code" required/>
+			        <small ng-show="!validCVC() && ccForm.cvc.$dirty" class="error">Invalid CVC code</small>
+			    </div>
+			    <div class="input-wrapper">
+			        <input type="text" ng-model="exp" placeholder="Expiration (MM/YYYY)" ng-keyup="formatExp(exp)" required/>
+			        <small ng-show="!validExpDate() && ccForm.exp.$dirty" class="error">Invalid expiration date</small>
+			    </div>
+			</fieldset>
+		</form>
+		<form name="billingForm" ng-show="creditCardFieldsComplete()">
+			<fieldset>
+				<legend>Billing Address Info</legend>
+			    <div class="input-wrapper">
+			    	<input type="text" ng-model="billingname" placeholder="Name" ng-minlength="2" required/>
+		        	<small ng-show="billingForm.billingname.$error" class="error">Enter a billing name</small>
+			    </div>
+			    <div class="input-wrapper">
+			        <input type="text" ng-model="billingaddress1" placeholder="Address" ng-minlength="2" required/>
+		        	<small ng-show="billingForm.billingaddress1.$error" class="error">Enter the billing address</small>
+			    </div>
+			    <div class="input-wrapper">
+			        <input type="text" ng-model="billingaddress2" placeholder="Suite # (If relevant)"/>
+			    </div>
+			    <div class="input-wrapper">
+			        <input type="text" ng-model="billingcity" placeholder="City" ng-minlength="2" required/>
+		        	<small ng-show="billingForm.billingcity.$error" class="error">Enter a city</small>
+			    </div>
+			    <div class="input-wrapper">
+			        <input type="text" ng-model="billingstate" placeholder="State" ng-minlength="2" required/>
+		        	<small ng-show="billingForm.billingstate.$error" class="error">Enter a state</small>
+			    </div>
+			    <div class="input-wrapper">
+			        <input type="text" ng-model="billingzip" placeholder="Zip" ng-minlength="5" ng-maxlength="5" required/>
+		        	<small ng-show="billingForm.billingzip.$error" class="error">Enter billing zip code</small>
+			    </div>
+			    <div>
+		          <button ng-show="addPaymentView" type="submit" value="Add Payment Option" ng-disabled="!creditCardFieldsComplete() || !billingFieldsComplete()" ng-click="addPayment()"/>
+		            <span ng-hide="customerUpdating">Add Payment Option</span>
+		            <span ng-show="customerUpdating" ><div class="throbber">Updating...</div></span>
+		          </button>
+		      	</div>
+			</fieldset>
+	  	</form>
+  	</div>
 </div>
 <div ng-show="checkoutState == 'billing' || checkoutState == 'review'" class="row next-control">
-	<div class="col-md-10 col-md-offset-1" style="">
-		<button type="submit" class="btn btn-block ylift-brand" ng-class="{'btn-success':checkoutState != 'billing'}" ng-click="goToSummary()" ng-disabled="!paymentMethod">
+	<div class="large-10 large-offset-1 columns" style="">
+		<button type="submit" ng-click="goToSummary()" ng-disabled="!paymentMethod">
 			<span ng-show="checkoutState == 'billing'">Next</span>
-			<span ng-hide="checkoutState == 'billing'"><i class="fa fa-check-circle"></i> Done!</span>
+			<span ng-hide="checkoutState == 'billing'"><i class="i-check-circle-filled"></i> Done!</span>
 		</button>
 	</div>
 </div>

@@ -67,69 +67,105 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
         }
     }
 
-    this.addItemToCart = function(userid, productnumber, quantity, callback) {
-        var internalThis = this;
-        internalThis.cartReceived = false;
-        $http({method: 'POST', url: "/add_item_to_cart", data: {userid:userid, productnumber:productnumber,quantity:quantity}})
-            .success(function(data, status, headers, config) {
-                internalThis.cartReceived = true;
-                internalThis.cart = data.cart;
-                internalThis.updateProductsInCartCookie(internalThis.cart.products);
-                callback(data.cart);
-            })
-            .error(function(data, status, headers, config) {
-                internalThis.cartReceived = false;
-                callback(data);
-            });
+    this.addItemToCart = function(profileid, productnumber, quantity, callback) {
+        if (profileid) {
+            var internalThis = this;
+            internalThis.cartReceived = false;
+            $http({method: 'POST', url: "/add_item_to_cart", data: {profileid:profileid, productnumber:productnumber,quantity:quantity}})
+                .success(function(data, status, headers, config) {
+                    internalThis.cartReceived = true;
+                    internalThis.cart = data.cart;
+                    internalThis.updateProductsInCartCookie(internalThis.cart.products);
+                    callback(data.cart);
+                })
+                .error(function(data, status, headers, config) {
+                    internalThis.cartReceived = false;
+                    callback(data);
+                });
+        } else {
+            var pInCart = $cookieStore.get('pInCart') || [];
+            var pInCartObj = {
+                "productnumber": productnumber,
+                "quantity": quantity
+            };
+            pInCart.push(pInCartObj);
+            console.log('setting products in cart', pInCart);
+            this.updateProductsInCartCookie(pInCart);
+            callback();
+        }
     }
     
-    this.updateCart = function(userid, productnumbers, quantities, callback) {
-        var internalThis = this;
-        internalThis.cartReceived = false;
-        $http({method: 'POST', url: "/update_cart", data:{userid:userid, productnumbers:productnumbers, quantities:quantities}})
-            .success(function(data, status, headers, config) {
-                internalThis.cartReceived = true;
-                internalThis.cart = data.cart;
-                internalThis.updateProductsInCartCookie(internalThis.cart.products);
-                callback(data.cart);
-            })
-            .error(function(data, status, headers, config) {
-                internalThis.cartReceived = false;
-                callback(data);
+    this.updateCart = function(profileid, productnumbers, quantities, callback) {
+        if (profileid) {
+            var internalThis = this;
+            internalThis.cartReceived = false;
+            $http({method: 'POST', url: "/update_cart", data:{profileid:profileid, productnumbers:productnumbers, quantities:quantities}})
+                .success(function(data, status, headers, config) {
+                    internalThis.cartReceived = true;
+                    internalThis.cart = data.cart;
+                    internalThis.updateProductsInCartCookie(internalThis.cart.products);
+                    callback(data.cart);
+                })
+                .error(function(data, status, headers, config) {
+                    internalThis.cartReceived = false;
+                    callback(data);
+                });
+        } else {
+            var pInCart = [];
+            productnumbers.forEach(function (num, index) {
+                var pInCartObj = {
+                    "productnumber": num,
+                    "quantity": quantities[index]
+                };
+                pInCart.push(pInCartObj);
             });
+            console.log('updating pInCart', pInCart);          
+            this.updateProductsInCartCookie(pInCart);
+            callback();
+        }
     }
 
-    this.emptyCart = function(userid, callback) {
-        var internalThis = this;
-        internalThis.cartReceived = false;
-        $http({method: 'POST', url: "/empty_cart", data:{userid:userid}})
-            .success(function(data, status, headers, config) {
-                internalThis.cartReceived = true;
-                internalThis.cart = data.cart;
-                internalThis.updateProductsInCartCookie(internalThis.cart.products);
-                callback(data.cart);
-            })
-            .error(function(data, status, headers, config) {
-                internalThis.cartReceived = false;
-                callback();
-            });
+    this.emptyCart = function(profileid, callback) {
+        if (profileid) {
+            var internalThis = this;
+            internalThis.cartReceived = false;
+            $http({method: 'POST', url: "/empty_cart", data:{profileid:profileid}})
+                .success(function(data, status, headers, config) {
+                    internalThis.cartReceived = true;
+                    internalThis.cart = data.cart;
+                    internalThis.updateProductsInCartCookie(internalThis.cart.products);
+                    callback(data.cart);
+                })
+                .error(function(data, status, headers, config) {
+                    internalThis.cartReceived = false;
+                    callback();
+                });
+        } else {
+            this.updateProductsInCartCookie();
+            callback();
+        }
     }
 
-    this.getCartByUserID = function(userid, callback) {
-        var internalThis = this;
-        $http({method: 'GET', url: "/cart/" + userid})
-            .success(function(data, status, headers, config) {
-                internalThis.cartReceived = true;
-                internalThis.cart = data.cart;
-                internalThis.updateProductsInCartCookie(internalThis.cart.products);
-                callback(data.cart);
-                $rootScope.$broadcast('cartloaded', internalThis.cart);
+    this.getProductsInCart = function(profileid, callback) {
+        if (profileid) {
+            var internalThis = this;
+            $http({method: 'GET', url: "/cart/" + profileid})
+                .success(function(data, status, headers, config) {
+                    internalThis.cartReceived = true;
+                    internalThis.cart = data.cart;
+                    internalThis.updateProductsInCartCookie(internalThis.cart.products);
+                    callback(data.cart);
+                    $rootScope.$broadcast('cartloaded', internalThis.cart);
 
-            })
-            .error(function(data, status, headers, config) {
-                internalThis.cartReceived = false;
-                callback(data);
-            });
+                })
+                .error(function(data, status, headers, config) {
+                    internalThis.cartReceived = false;
+                    callback(data);
+                });
+        } else {
+            console.log('sending pInCart cookie');
+            callback($cookieStore.get('pInCart') || []);
+        }
     }
 
     this.getOrderByID = function(orderid, callback) {

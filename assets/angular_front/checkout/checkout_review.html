@@ -1,35 +1,42 @@
-<div>
-	<div class="row">
-		<div class="col-md-6 col-md-offset-3" style="text-align: center;">
-			<!-- <i class="fa fa-truck fa-3x"></i> -->
-			<h3><strong>Review<strong></h3>
-		</div>	
-	</div>
-	<div ng-if="orderError" class="val-error">
-		<p class="text-danger">{{orderError}}</p>
-	</div>
-	<div class="row" ng-click="toggleItems()">
-		<strong>{{cart.products.length}}</strong> Items 
-		<i ng-hide="showItems" class="fa fa-arrow-circle-right"></i>
-		<i ng-show="showItems" class="fa fa-arrow-circle-down"></i>
-		<ul ng-show="showItems" style="list-style-type: none;">
-			<li class="" ng-repeat="product in cart.products">
-				<product-cart-dir pn="product.productnumber" qty="product.quantity"></product-cart-dir>
-			</li>
-		</ul>
-	</div>
-	<div class="row">
-		<div class="col-md-4">Shipping</div>
-		<div class="col-md-4"></div>
-		<div class="col-md-4">${{shippingCost}}</div>
+<div class="row">
+	<div style="text-align: center;padding-top:15px;">
+		<!-- <i class="fa fa-truck fa-3x"></i> -->
+		<h3><strong>Review<strong></h3>
 	</div>	
-	<div class="row">
-		<div class="col-md-4"><strong>Total</strong></div>
-		<div class="col-md-4"></div>
-		<div class="col-md-4">${{total}}</div>
-	</div>	
-	<button class="btn btn-block ylift-brand" ng-class="{'btn-success':orderSubmitted}"ng-click="submitOrder()">
-		<span ng-hide="orderSubmitted">Submit Order</span>
-		<span ng-show="orderSubmitted"><i class="fa fa-spinner fa-pulse"></i> Processing...</span>
-	</button>
+	<div ng-if="orderError">
+		<small class="error">{{orderError}}</small>
+	</div>
 </div>
+<div class="row" ng-click="toggleItems()">
+	<div class="large-7 columns">
+		<span ng-hide="showItems" class="i-arrow-right"></span>
+		<span ng-show="showItems" class="i-arrow-down"></span>
+		<span>{{productsInCart.length}} Items</span>
+	</div>
+	<div ng-show="showItems" class="large-2 columns">Price</div>
+	<div ng-show="showItems" class="large-2 columns">Quantity</div>
+	<div ng-show="showItems" class="large-1 columns"></div>
+</div>
+<div class="row">
+	<i ng-hide="showItems" class="fa fa-arrow-circle-right"></i>
+	<i ng-show="showItems" class="fa fa-arrow-circle-down"></i>
+	<ul ng-show="showItems" style="list-style-type: none;">
+		<li class="" ng-repeat="product in productsInCart">
+			<product-cart-dir ind="$index" pn="product.productnumber" edit="false"></product-cart-dir>
+		</li>
+	</ul>
+</div>
+<div class="row checkout-cost-text">
+	<div class="large-6 columns">
+		Shipping
+	</div>
+	<div class="large-6 columns">${{shippingCost}}</div>
+</div>	
+<div class="row checkout-cost-text">
+	<span class="large-6 columns"><strong>Total</strong></span>
+	<span class="large-6 columns">${{total}}</span>
+</div>	
+<button class="btn btn-block ylift-brand" ng-class="{'btn-success':orderSubmitted}"ng-click="submitOrder()">
+	<span ng-hide="orderSubmitted">Submit Order</span>
+	<span ng-show="orderSubmitted"><i class="fa fa-spinner fa-pulse"></i> Processing...</span>
+</button>

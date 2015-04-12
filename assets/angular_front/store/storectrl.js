@@ -1,33 +1,22 @@
 superApp.controller('StoreCtrl',
   ['$rootScope', '$scope', '$window', '$location', '$state', '$stateParams', 'storeService',
-  function($rootScope, $scope, $window, $location, $state, $stateParams, storeService) {
+   'authService',
+  function($rootScope, $scope, $window, $location, $state, $stateParams, storeService,
+    authService) {
 
     $scope.filteredProducts = [];
     $scope.products = [];
+    $scope.productsInCart = [];
     $scope.productsByCategory = []
     $scope.loading = true;
-    $scope.defaultCategory = 'juvuderm';
-
-    $scope.onProductsLoaded = function(result) {
-      $scope.products = result;
-      $scope.productsByCategory = storeService.productsByCategory;
-      var stateUrl = $location.path().split("/");
-      if (stateUrl.indexOf("product") >= 0) {
-        var ind = stateUrl.indexOf("product");
-        $scope.goToProduct(stateUrl[++ind]);
-      } else { // TODO need and else if for categories
-        $scope.goToCategory($scope.defaultCategory);
-      }
-      $scope.loading = false;
-    }
 
     $scope.goToProduct = function(productnumber) {
-      $state.go('store.product', {productnumber: productnumber});
+      $state.go('product', {productnumber: productnumber});
     }
 
-    $scope.goToCategory = function(category) {
-      $state.go('store.' + category);
-    }
+    // $scope.goToCategory = function(category) {
+    //   $state.go('store.' + category);
+    // }
 
     $scope.isActive = function(route) {
       return route == $location.path();
@@ -50,6 +39,31 @@ superApp.controller('StoreCtrl',
         }
       });
     }
-    storeService.getAllProducts(function(result) {$scope.onProductsLoaded(result);});
+
+    $scope.openCart = function() {
+      $rootScope.showCart(function(isVisible) {$scope.showCart = isVisible});
+    };
+
+    function onProductsInCartReceived (result) {
+      console.log('result from pIn', result);
+      $scope.productsInCart = result;
+    }
+
+    function onProductsLoaded (result) {
+      $scope.products = result;
+      $scope.productsByCategory = storeService.productsByCategory;
+      storeService.getProductsInCart(authService.profileid, onProductsInCartReceived);
+      var stateUrl = $location.path().split("/");
+      if (stateUrl.indexOf("product") >= 0) {
+        var ind = stateUrl.indexOf("product");
+        $scope.goToProduct(stateUrl[++ind]);
+      }
+      // } else { // TODO need and else if for categories
+      //   $scope.goToCategory($scope.defaultCategory);
+      // }
+      $scope.loading = false;
+    }
+
+    storeService.getAllProducts(onProductsLoaded);
 
 }]);

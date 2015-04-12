@@ -26,16 +26,13 @@ var paths = {
 		bowerRoot + 'foundation/js/foundation.js'
 	],
 	scss: [
-		'assets/scss/mitch.css',
-		'assets/scss/partials/*.scss',
-		'assets/scss/animate.css',
-		bowerRoot + 'foundation/scss/foundation.scss'
+		'assets/scss/mitch.scss'
 	],
 	html_src_and_dest: [
 		{src:'assets/angular_front/directives/**/*.html', dest:'public/directives/'},
 		{src:'assets/angular_front/**/*.html', dest:'public/partials/'},
 	],
-	watch_scss: 'src/scss/**/*.scss'
+	watch_scss: 'assets/scss/**/*.scss'
 };
 
 gulp.task('clean:css', function(cb) {
@@ -112,7 +109,7 @@ gulp.task('copy', function() {
 
 gulp.task('watch', function() {
 	gulp.watch(paths.app_js, ['handle-app-js']);
-	gulp.watch(paths.scss, ['handle-scss']);
+	gulp.watch(paths.watch_scss, ['handle-scss']);
 	for (var i = 0; i < paths.html_src_and_dest.length; i++) {
 		gulp.watch(paths.html_src_and_dest[i].src, ['copy']);
 	};

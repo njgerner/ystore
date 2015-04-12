@@ -20,8 +20,9 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
 
       $rootScope.$on('$stateChangeStart', 
         function(event, toState, toParams, fromState, fromParams){
-          console.log('to::', toState.name);
-          console.log('from::', fromState.name);
+          console.log('to::' + toState.name, 'from:: ' + fromState.name);
+          console.log('authorized', authService.authorized);
+
           var isExceptionalState = function() {
             var exceptionalState = ["terms", "store", "store.search", "checkout"];
             return exceptionalState.indexOf(toState.name) >= 0;
@@ -36,7 +37,7 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
             var unauthedStates = ["login", "login_by_token", "email_sent", "email_taken", "resend_email", "new_password", "reset_password"];
             return unauthedStates.indexOf(toState.name) >= 0;
           };
-
+          
           if (authService.authorizationReceived) {
 
             if (isExceptionalState()) {
@@ -69,21 +70,25 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
       });
 
 
-      $rootScope.toggleVisible = function(callback) {
-        this.isVisible = !this.isVisible;
-        $rootScope.$broadcast('cartviewchange', this.isVisible);
-        callback(this.isVisible);
-      }
+      // $rootScope.toggleVisible = function(callback) {
+      //   this.isVisible = !this.isVisible;
+      //   $rootScope.$broadcast('cartviewchange', this.isVisible);
+      //   callback(this.isVisible);
+      // }
 
       $rootScope.hideCart = function(callback) {
+        $('#cart').foundation('reveal', 'close');
+        console.log('hiding some shit');
         this.isVisible = false;
-        $rootScope.$broadcast('cartviewchange', this.isVisible);
+        // $rootScope.$broadcast('cartviewchange', this.isVisible);
         callback(this.isVisible);
       }
 
       $rootScope.showCart = function(callback) {
+        $('#cart').foundation('reveal', 'open');
+        console.log('showing some shit!');
         this.isVisible = true;
-        $rootScope.$broadcast('cartviewchange', this.isVisible);
+        // $rootScope.$broadcast('cartviewchange', this.isVisible);
         callback(this.isVisible);
       }
 
@@ -130,7 +135,12 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
       templateUrl:"/partials/store.html",
       controller: "StoreCtrl"
     })
-    .state('store.product', {
+    .state('store.search', {
+      url:"/store",
+      templateUrl:"/partials/search_store.html",
+      controller: "SearchStoreCtrl"
+    })
+    .state('product', {
       url:"/product/:productnumber",
       templateUrl:"/partials/product.html",
       controller: "ProductCtrl"
@@ -142,7 +152,7 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
     // })
     // .state('store.botox', {
     //   url:"/botox",
-    //   templateUrl:"/partials/botox_store.html",
+    //   templateUrl:"/partials/botox_store.html", 
     //   controller: "BotoxCtrl"
     // })
     // .state('store.ygear', {
@@ -165,11 +175,6 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
     //   templateUrl:"/partials/lasers_store.html",
     //   controller: "LasersCtrl"
     // })
-    .state('store.search', {
-      url:"/store",
-      templateUrl:"/partials/search_store.html",
-      controller: "SearchStoreCtrl"
-    })
     .state('profile', {
       url:"/profile",
       templateUrl: "/partials/profile.html",
