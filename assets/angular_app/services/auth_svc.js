@@ -9,6 +9,7 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 			this.stripePubKey = null;
 			this.userid = null;
 			this.profile = null;
+			this.profileid = null;
 			this.isAdmin = null;
 		};
 
@@ -20,7 +21,6 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 				this.authorized = false;
 				callback(this.authorized);
 			} else {
-
 				// if auth has not been received, and we have a token, check authorization
 				var internalThis = this;
 				$http({method: 'GET', url: "/authorized"}).
@@ -39,6 +39,7 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 					      	internalThis.email = usr.email;
 					      	internalThis.isAdmin = data.isAdmin;
 					      	internalThis.profile = data.profile;
+					      	internalThis.profileid = data.profile.id;
 					      	internalThis.authorizationReceived = true;
 					      	internalThis.authorized = true;
 					      	internalThis.loggedin = true;

@@ -7,8 +7,6 @@ superApp.controller('ProfileCtrl',
     $scope.orders = [];
     //nick is a mean person :( // you're damn right
     $scope.createdAt = moment($scope.profile.createdAt).format("MMMM Do, YYYY");
-    authService.loggedin = true;
-    $rootScope.$broadcast('loggedin');
 
     $scope.onOrdersLoaded = function(orders) {
       if (Array.isArray(orders)) { // dumb orchestrate return issue, a good intern problem to fix
@@ -24,7 +22,7 @@ superApp.controller('ProfileCtrl',
     }
 
      // load the cart on login
-    storeService.getCartByUserID(authService.userid, function(cart) {});
+    storeService.getProductsInCart(authService.profile.id, function(cart) {});
     storeService.getOrdersByUserID(authService.profile.id, function(orders) { $scope.onOrdersLoaded(orders); });
 
 }]);

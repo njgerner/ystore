@@ -1,26 +1,9 @@
-
-<div ng-if="!cartProductsLoading">
-  <div class="cart-header">
-    <div style="padding-left:25x;padding-top:5px;"class="col-md-3">
-      <i class="fa fa-chevron-right clickable" ng-click="toggleShow()"></i>
-    </div>
-    <div class="col-md-9">
-      <h3 style="position:absolute;left:25px;margin-top:6.5%"class="header-text"> Your Cart </h3>
-    </div>
-	</div>
-  <div style="position:absolute;top:87px;" class="cart-content">
-    <ul class="list-group" style="list-style-type: none;">
-      <li ng-repeat="product in productsInCart">
-        <product-cart-dir ind="$index" pn="product.productnumber" qty="product.quantity" cb="removeItemFromCart()" t="updateTotal()"></product-cart-dir>
-      </li>
-    </ul> 
+<div ng-if="!cartProductsLoading" class="reveal-modal small" id="cart" data-reveal>
+  <div class="row">
+    <div class="large-2 large-offset-8 columns">Price</div>
+    <div class="large-2 columns">Quantity</div>
   </div>
-  <div style="width:100%;position:absolute;bottom:80px"class="cart-total">
-      <div class="col-md-4"><h5 style="font-weight:bold;position:absolute;left:20px;">Total</h5></div>
-      <div class="col-md-4"></div>
-      <div class="col-md-4"><h5 style="font-weight:bold;text-align:right;padding-right:5px;">${{cartTotal}}</h5></div>
-  </div>
-  <div class="cart-checkout">
-    <button class="checkout-button col-md-12 btn btn-lg" value="Checkout" ng-click="goToCheckout()">Checkout</button>
-  </div>
+  <product-cart-dir ng-repeat="product in productsInCart" ind="$index" pn="product.productnumber" edit="'true'"></product-cart-dir>
+  <button class="button tiny" ng-click="goToCheckout()">Checkout</button>
+  <button class="button tiny" ng-click="hide()">Close</button>
 </div>

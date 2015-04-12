@@ -18,17 +18,18 @@ superApp.controller('MainCtrl',
     $scope.handleLoaded = function() {
       $scope.authorized = authService.authorized;
       $scope.isAdmin = authService.isAdmin;
-      $scope.userid = authService.userid; //not sure if we still need this
       $scope.loggedin = authService.loggedin;
+    };
+      
+    $scope.hideCart = function() {
+      console.log('hiding cart');
+      $rootScope.hideCart(function() {  }); 
     };
 
     $scope.cartViewFun = $rootScope.$on('cartviewchange', function(evt, args) { // this is really important don't delete
-      $scope.showCartRight = $rootScope.isVisible;
+      $scope.showCart = $rootScope.isVisible;
+      console.log('cartviewchange', $scope.showCart);
     });
-
-    $scope.hideCart = function() {
-      $rootScope.hideCart(function() {  }); 
-    };
 
     $scope.$on('loggedin', function(evt, args) {
       $scope.loggedin = true;

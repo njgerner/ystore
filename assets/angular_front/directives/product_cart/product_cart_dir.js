@@ -5,43 +5,38 @@ appDirectives.directive('productCartDir', [ '$state', '$rootScope', '$window', '
 		scope: {
 			ind: '=',
 			pn: '=',
-			qty: '=',
-			cb: '&',
-			t: '&'
+			edit: '='
 		},
 		templateUrl: 'directives/product_cart_template.html',
-		// replace: true, // Replace with the template below
-		// transclude: true, // we want to insert custom content inside the directive
 		link: function(scope, element) {
 
+			console.log('in product cart dir', scope.pn, scope.qty, storeService.productsByID, scope.edit);
 			scope.product = storeService.productsByID[scope.pn];
-			scope.total = scope.product.price * scope.qty;
+			scope.qty = scope.$parent.productsInCart[scope.ind].quantity;
+			console.log('$parent pInCar', scope.$parent.productsInCart);
 
 			scope.updateQuantity = function(quantity) {
-				scope.qty = quantity;
-				scope.$apply();
-				scope.total = scope.product.price * scope.qty;
-				scope.t();
+				scope.$parent.productsInCart[scope.ind].quantity = quantity;
+				scope.$parent.updateTotal();
 			}
 
-			scope.addTen = function() {
-				scope.qty = parseInt(scope.qty) + 10;
-				scope.$apply();
-				scope.total = scope.product.price * scope.qty;
-				scope.t();
+			scope.addOne = function() {
+				scope.$parent.productsInCart[scope.ind].quantity++;
+				scope.$parent.updateTotal();
+				console.log('added one');
 			} 
 
-			scope.minusTen = function() {
-				scope.qty = parseInt(scope.qty) - 10;
-				scope.$apply();
-				scope.total = scope.product.price * scope.qty;
-				scope.t();
+			scope.minusOne = function() {
+				if (scope.$parent.productsInCart[scope.ind].quantity > 0) {
+					scope.$parent.productsInCart[scope.ind].quantity--;
+				} else {
+					scope.removeItemFromCart();
+				}
+				scope.$parent.updateTotal();
 			} 
 
 			scope.removeItemFromCart = function() {
-				scope.cb(scope.ind);
-				scope.t();
-				scope.updateQuantity(0);
+				scope.$parent.removeItemFromCart();
 			}
 		}
 	}

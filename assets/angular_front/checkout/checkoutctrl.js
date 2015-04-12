@@ -3,13 +3,11 @@ superApp.controller('CheckoutCtrl',
   function($rootScope, $scope, $state, $stateParams, $timeout, storeService, authService, stripeService) {
 
     // office vars
-    $scope.profile = authService.profile;
-    $scope.offices = $scope.profile.offices;
     $scope.shippingCost = 10; // flat fee for now
     $scope.total = $scope.shippingCost;
     $scope.addOfficeView = false;
     $scope.officeShipTo = null;
-    $scope.cart = {};
+    $scope.productsInCart = [];
     $scope.products = [];
     $scope.checkoutState = 'shipping';
     $scope.orderError = null;
@@ -27,6 +25,11 @@ superApp.controller('CheckoutCtrl',
         editable: false
       }
     };
+
+    if (authService.authorized) {
+      $scope.profileid = authService.profile.id;
+      $scope.offices = $scope.profile.offices;
+    }
 
     $scope.nextState = function() {
       var nextState = $scope.states[$scope.checkoutState].next;
@@ -52,23 +55,25 @@ superApp.controller('CheckoutCtrl',
 
     $scope.onProductsLoaded = function() {
       $scope.products = storeService.productsByID;
-      $scope.cart = storeService.cart;
-      for (var i = 0; i < $scope.cart.products.length; i++) {
-        $scope.total += ( $scope.products[$scope.cart.products[i].productnumber].price * $scope.cart.products[i].quantity );
-      }
+      storeService.getProductsInCart($scope.profileid, function (products) { 
+        $scope.productsInCart = products;
+        for (var i = 0; i < $scope.productsInCart.length; i++) {
+          $scope.total += ( $scope.products[$scope.productsInCart[i].productnumber].price * $scope.productsInCart[i].quantity );
+        }
+        console.log('products loaded cart/total', $scope.productsInCart, $scope.total);
+      });
     }
 
     $scope.submitOrder = function() {
       $scope.orderSubmitted = true;
-      $scope.cart.shipping = $scope.shippingCost;
-      $scope.cart.total = $scope.total;
-      stripeService.submitOrder($scope.officeShipTo, $scope.cart, function(err, result) {
+      // NEED TO CHANGE THIS SO THAT IT USES PRODUCTS IN CART
+      stripeService.submitOrder($scope.officeShipTo, $scope.productsInCart, $scope.shipping, $scope.total, function(err, result) {
         if (err) {
           $scope.orderError = err.message;
           $scope.orderSubmitted = false;
         } else {
           $state.go("order", {orderid: result.id});
-          storeService.emptyCart(authService.userid, function(cart) {});
+          storeService.emptyCart($scope.profileid, function(cart) {});
         }
       });
     }

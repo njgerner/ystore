@@ -430,7 +430,7 @@ passport.use('bearer', new BearerStrategy(
 
   // POST add_item_to_cart
   var add_item_to_cart = function(req, res) {
-    orchHelper.addItemToUserCart(req.body.userid, req.body.productnumber, req.body.quantity)
+    orchHelper.addItemToUserCart(req.body.profileid, req.body.productnumber, req.body.quantity)
       .then(function (cart) {
         res.status(201).json({cart:cart}); // does this work??
       })
@@ -441,7 +441,7 @@ passport.use('bearer', new BearerStrategy(
 
   // POST update_cart/:userid
   var update_cart = function(req, res) {
-    orchHelper.updateUserCart(req.body.userid, req.body.productnumbers, req.body.quantities)
+    orchHelper.updateUserCart(req.body.profileid, req.body.productnumbers, req.body.quantities)
       .then(function (cart) {
         res.send({cart:cart});
       })
@@ -452,7 +452,7 @@ passport.use('bearer', new BearerStrategy(
 
   // POST empty_cart/:userid
   var empty_cart = function(req, res) {
-    orchHelper.emptyUserCart(req.body.userid)
+    orchHelper.emptyUserCart(req.body.profileid)
       .then(function (cart) {
         console.log('then result', cart);
         res.status(200).json({cart:cart});
@@ -563,7 +563,7 @@ passport.use('bearer', new BearerStrategy(
     app.get('/all_products', all_products);
     app.get('/all_profiles', all_profiles);
     app.get('/authorized', ensureAuthenticated, authorized);
-    app.get('/cart/:userid', ensureAuthenticated, get_cart_by_user_id);
+    app.get('/cart/:profileid', ensureAuthenticated, get_cart_by_user_id);
     app.get('/get_customer/:customerid', ensureAuthenticated, stripeRoutes.get_customer);
     app.get('/get_product_by_id/:productnumber', get_product_by_id);
     app.get('/login', login);

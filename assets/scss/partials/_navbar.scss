@@ -1,0 +1,15 @@
+.top-bar input [type="search"] {
+	min-width: 300px;
+}
+
+.top-bar {
+	.cart {
+		a {
+			display: flex;
+		}
+
+		.i-cart {
+			margin: 0 10px;
+		}
+	}
+}

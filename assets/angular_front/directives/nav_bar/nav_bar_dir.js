@@ -14,7 +14,7 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 			scope.name = "";
 			scope.profileid = null;
 			scope.isAdmin = false;
-			scope.showCartRight = $rootScope.isVisible;
+			// scope.showCart = $rootScope.isVisible;
 			scope.productsInCart = [];
 			scope.itemCount = 0;
 			scope.cart = {}; 
@@ -33,8 +33,9 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 	  			$state.go("logout");
 	  		};
 
-	  		scope.toggleCart = function() {
-	  			$rootScope.toggleVisible(function(isVisible) {scope.showCartRight = isVisible});
+	  		scope.openCart = function() {
+	  			// $rootScope.toggleVisible(function(isVisible) {scope.showCart = isVisible});
+	  			$rootScope.showCart(function(isVisible) {scope.showCart = isVisible});
 	  		};
 
 	  		scope.handleLoaded = function() {

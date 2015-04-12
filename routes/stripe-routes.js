@@ -144,11 +144,13 @@ module.exports = function(express, app, __dirname) {
 		var transaction = req.body;
 		var profileid = req.params.profileid;
 		var card = transaction.card;
-		var cart = transaction.cart;
+		var productsInCart = transaction.productsInCart;
+		var total = transaction.total;
+		var shipping = transaction.shipping;
 		var shipTo = transaction.officeShipTo;
 		var customer = transaction.customer;
 		var charge = {
-			amount: cart.total * 100, // stripe processes in the smallest denomination so for USD it is cents!!! <-- why was i so excited about this?
+			amount: total * 100, // stripe processes in the smallest denomination so for USD it is cents!!! <-- why was i so excited about this?
 			source: card.id,
 			currency: "USD",
 			customer: transaction.customer.id,
@@ -163,9 +165,9 @@ module.exports = function(express, app, __dirname) {
 				var order = {
 					id: crypto.randomBytes(5).toString('hex'),
 					charge: charge,
-					total: cart.total,
-					shipping: cart.shipping,
-					products: cart.products,
+					total: total,
+					shipping: shipping,
+					products: productsInCart,
 					shipTo: shipTo,
 					profile: profileid,
 					createdAt: new Date(),

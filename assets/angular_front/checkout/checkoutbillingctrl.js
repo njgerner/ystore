@@ -67,23 +67,7 @@ superApp.controller('CheckoutBillingCtrl',
       $scope.nextState();
    	}
 
-    $scope.onCustomerLoaded = function (customer) {
-      $scope.customer = customer;
-      $scope.cards = $scope.customer.cards.data;
-      $scope.loadingCustomer = false;
-    }
-
-    $scope.onPaymentAdded = function(customer, error) {
-      if (error) {
-        $scope.error = error;
-      } else {
-        $scope.onCustomerLoaded(customer);
-        $scope.customerUpdating = false;
-        $scope.toggleAddPayment();
-      }
-    }
-
-   	$scope.addPayment = function() {
+    $scope.addPayment = function() {
       $scope.customerUpdating = true;
       if ($scope.creditCardFieldsComplete) {
         var exp = $scope.exp.split("/");
@@ -101,13 +85,34 @@ superApp.controller('CheckoutBillingCtrl',
           address_state: $scope.billingstate,
           address_zip: $scope.billingzip
         };
-        stripeService.addCard($scope.card, $scope.billing, $scope.onPaymentAdded);
+        stripeService.addCard($scope.card, $scope.billing, onPaymentAdded);
       } else {
         $scope.error = "Please fill out all credit card information";
         $scope.customerUpdating = false;
       }
     }
 
-    stripeService.getCustomer(authService.profile.customerid, $scope.onCustomerLoaded);
+    function onPaymentAdded (customer, error) {
+      if (error) {
+        $scope.error = error;
+      } else {
+        $scope.onCustomerLoaded(customer);
+        $scope.customerUpdating = false;
+        $scope.toggleAddPayment();
+      }
+    }
+
+    function onCustomerLoaded (customer) {
+      $scope.customer = customer;
+      $scope.cards = $scope.customer.cards.data;
+      $scope.loadingCustomer = false;
+    }
+
+    if ($scope.profile) {
+      stripeService.getCustomer($scope.profile.customerid, $scope.onCustomerLoaded);
+    } else {
+      $scope.loadingCustomer = false;
+      $scope.toggleAddPayment();
+    }
 
 }]);
