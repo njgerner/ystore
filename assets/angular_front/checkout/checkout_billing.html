@@ -27,19 +27,19 @@
 			<fieldset>
 				<legend>Credit Card Info</legend>
 				<div class="input-wrapper">
-			        <input type="text" ng-model="namecard" placeholder="Name on Card" ng-minlength="2" required/>
+			        <input type="text" name="namecard" ng-model="namecard" placeholder="Name on Card" ng-minlength="2" required/>
 			        <small ng-show="ccForm.namecard.$invalid && ccForm.namecard.$dirty" class="error">Enter name as it appears on the credit card</small>
 			    </div>
 			    <div class="input-wrapper">
-			        <input type="text" ng-model="ccnum" placeholder="Credit Card Number" required/>
+			        <input type="text" name="ccnum" ng-model="ccnum" placeholder="Credit Card Number" required/>
 			        <small ng-show="!validCCNum() && ccForm.ccnum.$dirty" class="error">Please enter a valid credit card number</small>
 			    </div>
 			    <div class="input-wrapper">
-			        <input type="text" ng-model="cvc" placeholder="CVC Code" required/>
+			        <input type="text" name="cvc" ng-model="cvc" placeholder="CVC Code" required/>
 			        <small ng-show="!validCVC() && ccForm.cvc.$dirty" class="error">Invalid CVC code</small>
 			    </div>
 			    <div class="input-wrapper">
-			        <input type="text" ng-model="exp" placeholder="Expiration (MM/YYYY)" ng-keyup="formatExp(exp)" required/>
+			        <input type="text" name="exp" ng-model="exp" placeholder="Expiration (MM/YYYY)" ng-keyup="formatExp(exp)" required/>
 			        <small ng-show="!validExpDate() && ccForm.exp.$dirty" class="error">Invalid expiration date</small>
 			    </div>
 			</fieldset>
@@ -48,27 +48,27 @@
 			<fieldset>
 				<legend>Billing Address Info</legend>
 			    <div class="input-wrapper">
-			    	<input type="text" ng-model="billingname" placeholder="Name" ng-minlength="2" required/>
-		        	<small ng-show="billingForm.billingname.$error" class="error">Enter a billing name</small>
+			    	<input type="text" name="billingname" ng-model="billingname" placeholder="Name" ng-minlength="2" required/>
+		        	<small ng-show="billingForm.billingname.$invalid && billingForm.billingname.$dirty" class="error">Enter the correct billing name</small>
 			    </div>
 			    <div class="input-wrapper">
-			        <input type="text" ng-model="billingaddress1" placeholder="Address" ng-minlength="2" required/>
-		        	<small ng-show="billingForm.billingaddress1.$error" class="error">Enter the billing address</small>
+			        <input type="text" name="billingaddress1" ng-model="billingaddress1" placeholder="Address" ng-minlength="2" required/>
+		        	<small ng-show="billingForm.billingaddress1.$invalid && billingForm.billingaddress1.$dirty" class="error">Enter the billing address</small>
 			    </div>
 			    <div class="input-wrapper">
-			        <input type="text" ng-model="billingaddress2" placeholder="Suite # (If relevant)"/>
+			        <input type="text" name="billingaddress2" ng-model="billingaddress2" placeholder="Suite # (If relevant)"/>
 			    </div>
 			    <div class="input-wrapper">
-			        <input type="text" ng-model="billingcity" placeholder="City" ng-minlength="2" required/>
-		        	<small ng-show="billingForm.billingcity.$error" class="error">Enter a city</small>
+			        <input type="text" name="billingcity" ng-model="billingcity" placeholder="City" ng-minlength="2" required/>
+		        	<small ng-show="billingForm.billingcity.$invalid && billingForm.billingcity.$dirty" class="error">Enter a city</small>
 			    </div>
 			    <div class="input-wrapper">
-			        <input type="text" ng-model="billingstate" placeholder="State" ng-minlength="2" required/>
-		        	<small ng-show="billingForm.billingstate.$error" class="error">Enter a state</small>
+			        <input type="text" name="billingstate" ng-model="billingstate" placeholder="State" ng-minlength="2" required/>
+		        	<small ng-show="billingForm.billingstate.$invalid && billingForm.billingstate.$dirty" class="error">Enter a state</small>
 			    </div>
 			    <div class="input-wrapper">
-			        <input type="text" ng-model="billingzip" placeholder="Zip" ng-minlength="5" ng-maxlength="5" required/>
-		        	<small ng-show="billingForm.billingzip.$error" class="error">Enter billing zip code</small>
+			        <input type="text" name="billingzip" ng-model="billingzip" placeholder="Zip" ng-minlength="5" ng-maxlength="5" required/>
+		        	<small ng-show="billingForm.billingzip.$invalid && billingForm.billingzip.$dirty" class="error">Enter billing zip code</small>
 			    </div>
 			    <div>
 		          <button ng-show="addPaymentView" type="submit" value="Add Payment Option" ng-disabled="!creditCardFieldsComplete() || !billingFieldsComplete()" ng-click="addPayment()"/>

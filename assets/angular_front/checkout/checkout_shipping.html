@@ -18,29 +18,34 @@
   </ul>
 </div>
 <div ng-show="addAddressView" class="row">
-  <form class="large-10 large-offset-1 columns">
+  <form name="shipForm" class="large-10 large-offset-1 columns" ng-submit="addAddress()">
     <fieldset>
         <legend>Enter Address</legend>
-        <div>
-            <input type="text" ng-model="name" placeholder="Give this address a name"/>
+        <div class="input-wrapper">
+            <input type="text" name="name" ng-model="name" placeholder="Give this address a name" ng-minlength="2" required/>
+            <small ng-show="shipForm.name.$error.minlength" class="error">Please enter a name to remember this address</small>
+        </div>
+        <div class="input-wrapper">
+            <input type="text" name="address1" ng-model="address1" placeholder="Street" ng-minlength="2" required/>
+            <small ng-show="shipForm.address1.$invalid && shipForm.address1.$dirty" class="error">Please enter an address</small>
+        </div>
+        <div class="input-wrapper">
+            <input type="text" name="address2" ng-model="address2" placeholder="Apartment # (If relevant)"/>
+        </div>
+        <div class="input-wrapper">
+            <input type="text" name="city" ng-model="city" placeholder="City" ng-minlength="2" required/>
+            <small ng-show="shipForm.city.$invalid && shipForm.city.$dirty" class="error">Please enter a city</small>
+        </div>
+        <div class="input-wrapper">
+            <input type="text" name="state" ng-model="state" placeholder="State" ng-minlength="2" required/>
+            <small ng-show="shipForm.state.$invalid && shipForm.state.$dirty" class="error">Please enter a state</small>
         </div>
         <div>
-            <input type="text" ng-model="address1" placeholder="Street" required/>
+            <input type="text" name="zip" ng-model="zip" placeholder="Zip" ng-minlength="5" ng-maxlength="5" required/>
+            <small ng-show="shipForm.zip.$invalid && shipForm.zip.$dirty" class="error">Please enter a zip code</small>
         </div>
         <div>
-            <input type="text" ng-model="address2" placeholder="Apartment # (If relevant)"/>
-        </div>
-        <div>
-            <input type="text" ng-model="city" placeholder="City" required/>
-        </div>
-        <div>
-            <input type="text" ng-model="state" placeholder="State" required/>
-        </div>
-        <div>
-            <input type="text" ng-model="zip" placeholder="Zip" required/>
-        </div>
-        <div>
-            <button type="submit" ng-click="addAddress()">
+            <button type="submit" ng-disabled="shipForm.$invalid">
                 <span ng-hide="updatingAddress">Add Shipping</span>
                 <span ng-show="updatingAddress"><div class="throbber">Adding...</div></span>
             </button>
@@ -48,9 +53,9 @@
     </fieldset>
   </form>
 </div>
-<div ng-hide="addAddressView" class="row next-control">
+<div ng-hide="addAddressView" class="row">
     <div class="large-10 large-offset-1 columns">
-        <button type="submit" class="btn btn-block ylift-brand" ng-class="{'btn-success':checkoutState != 'shipping'}" ng-click="nextState()" ng-disabled="!addressShipTo">
+        <button type="submit" ng-click="nextState()" ng-disabled="!$parent.addressShipTo">
             <span ng-show="checkoutState == 'shipping'">Next</span>
             <span ng-hide="checkoutState == 'shipping'"><i class="fa fa-check-circle"></i> Done!</span>
         </button>

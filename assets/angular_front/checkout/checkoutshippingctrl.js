@@ -7,15 +7,15 @@ superApp.controller('CheckoutShippingCtrl',
     };
 
     $scope.selectAddress = function(index) {
-      if ($scope.addressShipTo == $scope.addresses[index]) {
-        $scope.addressShipTo = null;
+      if ($scope.$parent.addressShipTo == $scope.addresses[index]) {
+        $scope.$parent.addressShipTo = null;
       } else {
-        $scope.addressShipTo = $scope.addresses[index];
+        $scope.$parent.addressShipTo = $scope.addresses[index];
       }
     };
 
     $scope.isAddressSelected = function(index) {
-      return $scope.addressShipTo == $scope.addresses[index];
+      return $scope.$parent.addressShipTo == $scope.addresses[index];
     };
 
     $scope.clearAddress = function() {
@@ -32,7 +32,7 @@ superApp.controller('CheckoutShippingCtrl',
 
     $scope.addAddress = function() {
       var address = {
-        "name": $scope.addressname,
+        "name": $scope.name,
         "address1": $scope.address1,
         "address2": $scope.address2,
         "city": $scope.city,
@@ -41,15 +41,16 @@ superApp.controller('CheckoutShippingCtrl',
       };
       if ($scope.addresses.length == 0) {
         address.default = true;
-        $scope.addressShipTo = address;
+        $scope.$parent.addressShipTo = address;
       }
       $scope.addresses.push(address);
-      $scope.profile.addresses = $scope.addresses;
-      console.log('saving profile!', $scope.profile);
-      $scope.updateProfile();
+      if (authService.authorized) {      
+        $scope.profile.addresses = $scope.addresses;
+        $scope.updateProfile();
+      }
       $scope.addAddressView = false;
       $scope.clearAddress();
-    }
+    };
 
     $scope.updateProfile = function(callback) {
       $scope.addingAddress = true;
@@ -62,10 +63,11 @@ superApp.controller('CheckoutShippingCtrl',
     if (authService.authorized) {
       for (var i = 0; i < $scope.addresses.length; i++) {
         if ($scope.addresses[i].default) {
-          $scope.addressShipTo == $scope.addresses[i];
+          $scope.$parent.addressShipTo == $scope.addresses[i];
         }
       }
     } else {
+      $scope.addresses = [];
       $scope.toggleAddAddress();
     }
 
