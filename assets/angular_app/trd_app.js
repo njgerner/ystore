@@ -24,12 +24,12 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
           console.log('authorized', authService.authorized);
 
           var isExceptionalState = function() {
-            var exceptionalState = ["terms", "store", "store.search", "checkout"];
+            var exceptionalState = ["terms", "store", "store.search", "checkout", "order"];
             return exceptionalState.indexOf(toState.name) >= 0;
           }
 
           var isAuthorizedState = function() {
-            var authStates = ["order", "orders", "profile", "settings", "settings.profile", "settings.store", "settings.notifications"];
+            var authStates = ["profile", "settings", "settings.profile", "settings.store", "settings.notifications", "orders"];
             return authStates.indexOf(toState.name) >= 0;
           }
 

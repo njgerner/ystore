@@ -14,7 +14,7 @@ module.exports = function(express, app, __dirname) {
 			stripe 					= require('stripe')(config[stripeEnv].SECRET);
 
 	StripeRoutes.add_customer = function(req, res) {
-		var profileid = req.params.profileid;
+		var profileid = req.query.profileid;
 		console.log('profileid', profileid);
 		var transaction = req.body;
 		var card = transaction.card;
@@ -61,6 +61,30 @@ module.exports = function(express, app, __dirname) {
 		.then(function (customer) {
 			console.log('sending customer back', customer);
 			res.status(201).json({customer:customer, message:"Customer created"});
+		}, function (err) {
+			console.log('error creating stripe customer', err.message);
+			res.status(500).json({err:err.body, message:"Charge create error"});
+		});
+	};
+
+	StripeRoutes.add_guest_customer = function(req, res) {
+		var card = req.body.card;
+		stripe.customers.create({
+			card: card.id,
+			description: "trd guest customer"
+		}, function(err, customer) {
+			if (err) {
+				return Q.fcall(function () {
+					console.log('error creating stripe customer', err);
+				  throw new Error(err);
+				});
+			} else {
+				return orchHelper.addCustomer(customer);
+			}
+		})
+		.then(function (customer) {
+			console.log('sending guest customer back', customer);
+			res.status(201).json({customer:customer, message:"Guest customer created"});
 		}, function (err) {
 			console.log('error creating stripe customer', err.message);
 			res.status(500).json({err:err.body, message:"Charge create error"});
@@ -170,6 +194,7 @@ module.exports = function(express, app, __dirname) {
 					products: productsInCart,
 					shipTo: shipTo,
 					profile: profileid,
+					customer: customer.id,
 					createdAt: new Date(),
 					updatedAt: new Date(),
 					status: 'PROCESSING',
@@ -177,6 +202,7 @@ module.exports = function(express, app, __dirname) {
 				};
 				orchHelper.addOrder(order)
 					.then(function (result) {
+						if (profileid) {
 						console.log('single order successfully added! Moving to add order.');
 						orchHelper.addOrderToUser(profileid, order)
 							.then(function (result) {
@@ -187,6 +213,9 @@ module.exports = function(express, app, __dirname) {
 								console.log('error adding user order', err);
 								res.status(500).json({err:err, message:"Put User Order Error"});
 							});
+						} else {
+							res.status(200).json({order:order, success:result});
+						}
 					})
 					.fail(function (err) {
 						console.log('error adding single order', err);

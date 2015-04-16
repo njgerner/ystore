@@ -22,8 +22,10 @@ superApp.controller('CheckoutBillingCtrl',
     $scope.selectPayment = function(index) {
       if ($scope.paymentMethod == $scope.cards[index]) {
         $scope.paymentMethod = null;
+        stripeService.setCard(null);
       } else {
         $scope.paymentMethod = $scope.cards[index];
+        stripeService.setCard($scope.paymentMethod);
       }
     };
 
@@ -96,20 +98,21 @@ superApp.controller('CheckoutBillingCtrl',
       if (error) {
         $scope.error = error;
       } else {
-        $scope.onCustomerLoaded(customer);
+        onCustomerLoaded(customer);
         $scope.customerUpdating = false;
         $scope.toggleAddPayment();
       }
     }
 
     function onCustomerLoaded (customer) {
+      console.log('customer created/loaded', customer);
       $scope.customer = customer;
-      $scope.cards = $scope.customer.cards.data;
+      $scope.cards = $scope.customer.sources.data;
       $scope.loadingCustomer = false;
     }
 
     if ($scope.profile) {
-      stripeService.getCustomer($scope.profile.customerid, $scope.onCustomerLoaded);
+      stripeService.getCustomer($scope.profile.customerid, onCustomerLoaded);
     } else {
       $scope.loadingCustomer = false;
       $scope.toggleAddPayment();

@@ -7,10 +7,13 @@ superApp.controller('OrderCtrl',
     $scope.goToProfile = function() {
       $state.go("profile");
     }
+
+    $scope.displayCreatedAt = function(time) {
+      return moment(time).format("MMMM Do, YYYY")
+    }
     
     storeService.getOrderByID($scope.orderid, function(order) {
       $scope.order = order;
-      $scope.order.createdAt = moment($scope.order.createdAt).format("MMMM Do, YYYY");
       $scope.loading = false;
     });
 }]);

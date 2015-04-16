@@ -14,7 +14,6 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 		};
 
 		this.getAuthorization = function(callback) {
-
 			if (!trdInterceptor.getToken()) {
 				// if there's no token, then it can't be authorized
 				this.authorizationReceived = true;
@@ -25,9 +24,7 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 				var internalThis = this;
 				$http({method: 'GET', url: "/authorized"}).
 				    success(function(data, status, headers, config) {
-				    	if (data && data.stripePubKey) {
-				    		internalThis.stripePubKey = data.stripePubKey;
-				    	}
+				    	console.log("AUTH DATA", data);
 				    	if (!data || !data.user || !data.profile) {
 				    		// something's wrong, not authorized
 				    		internalThis.authorizationReceived = true;

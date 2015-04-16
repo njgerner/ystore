@@ -5,7 +5,7 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
       this.card = null;
       this.customer = {};
       this.customerReceived = false;
-      Stripe.setPublishableKey(authService.stripePubKey);
+      Stripe.setPublishableKey("pk_test_8LwfnHnZaS9JT7OFYUhsnT4J");
 
     	this.setToken = function(token) {
     		this.token = token;
@@ -27,12 +27,7 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
         return this.card;
       }
 
-      this.getCustomer = function() {
-        return this.customer;
-      }
-
     	this.addCard = function(data, billing, callback) {
-        console.log('creating card token', data, billing);
         var inThis = this;
         Stripe.card.createToken({
           number: data.number,
@@ -46,8 +41,11 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
           address_state: billing.address_state,
           address_zip: billing.address_zip
 				}, function (status, response) {
+          console.log('response from addCard', response);
           if (status.error) {
             callback(status.error);
+          } else if (!authService.authorized) {
+            inThis.addGuestCustomer(response, callback);
           } else {
             $http({method: 'POST', url: "/add_token_to_customer/" + authService.profile.id + "/" + inThis.customer.id, data: {token:response.id}})
             .success(function(data, status, headers, config) {
@@ -108,6 +106,20 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
           });
     	};
 
+      this.addGuestCustomer = function(card, callback) {
+        var internalThis = this;
+        $http({method: 'POST', url: "/add_guest_customer",
+          data:{card:card}})
+          .success(function(data, status, headers, config) {
+            internalThis.customerReceived = true;
+            internalThis.customer = data.customer;
+            callback(data.customer);
+          })
+          .error(function(data, status, headers, config) {
+            callback(null, data);
+          });
+      };
+
       this.updateCustomer = function(props) {
         var inThis = this;
         Stripe.customer.update(this.customer.id, props, function(err, customer) { 
@@ -133,7 +145,7 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
            callback({message: "Invalid credit card info, please check that the information provided is correct and try again." }, null);
         } else { // i need a dolla dolla, a dolla is all i neeeeeeed
           var inThis = this;
-          $http({method: 'POST', url: "/process_transaction/" + authService.profile.id,
+          $http({method: 'POST', url: "/process_transaction?" + authService.profileid,
         		data:{card:inThis.card, customer:inThis.customer, officeShipTo:officeShipTo, productsInCart:productsInCart,
                   total:total, shipping:shipping}})
             .success(function(data, status, headers, config) {
