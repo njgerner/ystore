@@ -1,6 +1,6 @@
 <div class="row">
   <div ng-show="loginState == 'signin'"class="small-8 large-4 small-centered columns">
-    <form>
+    <form ng-submit="login()">
       <fieldset>
         <legend>Sign In</legend>
         <div class="email-field">
@@ -11,15 +11,15 @@
         <label>Password
           <div class="row collapse postfix-round">
             <div class="small-10 columns">
-              <input type="text" placeholder="Enter your password">
+              <input type="password" ng-model="password" placeholder="Enter your password">
             </div>
             <div class="small-2 columns">
               <a ng-click="showForgotPass()" class="button postfix"><span data-tooltip aria-haspopup="true" class="has-tip" title="Click here if you forgot your password">?</span></a>
             </div>
           </div>
         </label>
-        <a class="button tiny left" ng-click="login()">Log me in</a>
-        <a class="button tiny right" ng-click="showReg()">Register</a>
+        <button class="button tiny left" type="submit">Log me in</button>
+        <button class="button tiny right" ng-click="showReg()">Register</button>
       </fieldset>
     </form>
   </div>
@@ -32,30 +32,34 @@
             <input type="text" placeholder="Enter your email" ng-model="email" required>
           </label>
         </div>
-        <a class="button tiny left" ng-click="requestPasswordReset()">Continue</a>
-        <a class="button tiny right" ng-click="showSignin()">Go Back</a>
+        <button class="button tiny left" ng-click="requestPasswordReset()">Continue</button>
+        <button class="button tiny right" ng-click="showSignin()">Go Back</button>
       </fieldset>
     </form>
   </div>
   <div ng-show="loginState == 'register'"class="small-8 large-4 small-centered columns">
-    <form>
+    <form name="loginForm" ng-submit="register()">
       <fieldset>
         <legend>Register</legend>
-        <div class="email-field">
+        <div class="input-wrapper">
           <label>Email
-            <input type="text" placeholder="Enter your email" ng-model="email" required>
+            <input type="text" name="email" placeholder="Enter your email" ng-model="email" required>
+          </label>
+          <small ng-show="loginForm.email.$invalid && loginForm.email.$dirty" class="error">Please enter a valid email address</small>
+        </div>
+        <div class="input-wrapper">
+          <label>Password
+            <input type="password" name="password" placeholder="Enter your password" ng-model="password" required>
           </label>
         </div>
-        <label>Password
-          <input type="password" placeholder="Enter your password" ng-model="password" required>
-          <small ng-show="failedMessage" class="error">{{failedMessage}}</small>
-        </label>
+        <div class="input-wrapper">
         <label>Confirm Password
-          <input type="password" placeholder="Enter your password" ng-model="password" required>
+          <input type="password" name="confirmpassword" placeholder="Confirm your password" ng-model="confirmpassword" required>
+          </label>
           <small ng-show="failedMessage" class="error">{{failedMessage}}</small>
-        </label>
-        <a class="button tiny left" ng-click="register()">Register</a>
-        <a class="button tiny right" ng-click="showSignin()">Go To Login</a>
+        </div>
+        <button type="submit" class="button tiny left">Register</button>
+        <button class="button tiny right" ng-click="showSignin()">Back To Login</button>
       </fieldset>
     </form>
   </div>

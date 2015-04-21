@@ -18,7 +18,6 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 			scope.productsInCart = [];
 			scope.itemCount = 0;
 			scope.cart = {}; 
-			//scope.hasPic = authService.profile.picture;
 
 			scope.goToPage = function(page) {
 	  			$state.go(page);

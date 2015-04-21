@@ -1,5 +1,5 @@
 module.exports = {
-	newUser: function(email, name, password) {
+	newUser: function(email, password) {
 		var bcrypt = require('bcryptjs'),
     		crypto = require('crypto'),
     		hash = bcrypt.hashSync(password, 8),
@@ -12,8 +12,7 @@ module.exports = {
 			"hash": hash,
 			"tempPwd" : false,
 			"token": token,
-			"name": name,
-			"regkey": null,
+			"name": null,
 			"isAdmin": false,
 			"jsonType": "user",
 			"createdAt": new Date(),

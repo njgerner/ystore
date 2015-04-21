@@ -1,9 +1,9 @@
 superApp.controller('LogoutCtrl',
-  ['$rootScope', '$scope', '$state', '$cookies', 'authService', 'yliftInterceptor',
-  function($rootScope, $scope, $state, $cookies, authService, yliftInterceptor) {
+  ['$rootScope', '$scope', '$state', '$cookies', 'authService', 'trdInterceptor',
+  function($rootScope, $scope, $state, $cookies, authService, trdInterceptor) {
 
 		$scope.clearCookies = function() {
-		  delete $cookies.yliftTkn; // logout token
+		  delete $cookies.trdTkn; // logout token
 		  delete $cookies.pInCart; // products in cart
 		  delete $cookies.profileUserProfile;
 		  delete $cookies.selectedUser;
@@ -12,7 +12,7 @@ superApp.controller('LogoutCtrl',
 		  delete $cookies.trackingUser;
 		};
 
-	  yliftInterceptor.setToken(null);
+	  trdInterceptor.setToken(null);
 	  $scope.clearCookies();
 	  authService.clearAuthorization();
 	  authService.loggedin = false;

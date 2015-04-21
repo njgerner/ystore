@@ -2,7 +2,6 @@ superApp.controller('LoginCtrl',
   ['$rootScope', '$scope', '$state', 'authService', '$location', '$stateParams', '$timeout',
   function($rootScope, $scope, $state, authService, $location, $stateParams, $timeout) {
     $scope.name = "";
-    $scope.office = {};
   	$scope.loginState = "signin";
     $scope.loginToken = $stateParams.token;
     $scope.failedMessage = '';
@@ -51,7 +50,7 @@ superApp.controller('LoginCtrl',
           if (successMessage == "temp_password") {
             $state.go('pass_reset');
           } else {
-            $state.go("profile");
+            $state.go("store");
           }
   			} else {
   				console.log('login failed', failedMessage);
@@ -72,20 +71,17 @@ superApp.controller('LoginCtrl',
     };
 
   	$scope.register = function() {
-      $scope.name = $scope.firstname + ' ' + $scope.lastname;
-      $scope.office = {
-        name: $scope.officename,
-        address1: $scope.address1,
-        address2: $scope.address2,
-        city: $scope.city,
-        state: $scope.state,
-        zip: $scope.zip
-      };
-  		authService.register($scope.email, $scope.password, $scope.name, $scope.office, $scope.regkey, $scope.allerganacct, function(err, status) {
+      $scope.failedMessage = null;
+      if ($scope.password !== $scope.confirmpassword) {
+        $scope.failedMessage = "Passwords must match!";
+        return;
+      }
+  		authService.register($scope.email, $scope.password, function(err, status) {
+        console.log("loginctrl err/status", err, status);
   			if (err) {
+          console.log('error register', err);
           $scope.failedMessage = status;
         } else {
-  				$scope.loginState = "in";
   				$state.go(status);
         }
   		});
