@@ -65,8 +65,9 @@ passport.use('local-signup', new LocalStrategy(
     passwordField: 'password',
     passReqToCallback : true }, //allows us to pass back the request to the callback
   function(req, username, password, done) {
-    orchHelper.localReg(req.body.email, req.body.password, req.body.regkey, req.body.name, req.body.office, req.body.allerganacct)
+    orchHelper.localReg(req.body.email, req.body.password)
       .then(function (user) {
+        console.log('localReg ran', user);
         if (user) {
           if (!user.error) {
               mailOptions.to = user.email;
@@ -104,14 +105,14 @@ passport.use('bearer', new BearerStrategy(
       try {
       // asynchronous validation, for effect..
         var decoded = jwt.decode(token, app.get("jwtTokenSecret"));
-        if (!decoded.usr || !decoded.expires) {
+        if (!decoded.user || !decoded.expires) {
           return done(null, false, { message: "missing user or expiration" });
         } else {
           var now = moment();
           if (decoded.expires <= now) {
             return done(null, false, { message: "token expired" });
           } else {
-            orchHelper.findUserByID(decoded.usr)
+            orchHelper.findUserByID(decoded.user)
               .then(function (user) {
                 if (user) {
                   return done(null, user);
@@ -172,7 +173,6 @@ passport.use('bearer', new BearerStrategy(
 
     delete req.user.hash;
     delete req.user.salt;
-
     orchHelper.findProfileByID(req.user.profile)
       .then(function (profile) {
         orchHelper.findUserByID(req.user.id)
@@ -305,14 +305,13 @@ passport.use('bearer', new BearerStrategy(
   //POST /register
   ///////////////////////////////////////////////////////////////
   var register = function(req, res) {
-    console.log('params and body', req.params, req.body);
     return passport.authenticate('local-signup', function(err, user) { 
-      if (err) { return res.json({err: "there was an error", status:err }); } //TODO: make this better
-      if (!user) { return res.json({err:"login helper, no user error", message:"what the fuck is this for, how did we get here", failed:true}); }
-      var payload = { usr: user._id, expires: moment().add(4, 'days') };
+      if (err) { return res.json({err: "there was an error", status:"error registering, please try again" }); } //TODO: make this better
+      if (!user) { return res.json({err:"login helper, no user error", message:"registered, but there was an error creating a user profile", failed:true}); }
+      var payload = { user: user.id, expires: moment().add(4, 'days') };
       var secret = app.get("jwtTokenSecret");
       var token = jwt.encode(payload, secret);
-      return res.json({tkn:token, status:"profile"});
+      return res.json({tkn:token, status:"store"});
     })(req, res);
   };
 
@@ -359,8 +358,8 @@ passport.use('bearer', new BearerStrategy(
       });
   };
 
-  var get_cart_by_user_id = function(req, res) {
-    orchHelper.getCartByUserID(req.params.userid)
+  var get_cart = function(req, res) {
+    orchHelper.getCartByID(req.params.profileid)
       .then(function (result) {
         if (result) {
           res.send({cart: result});
@@ -563,7 +562,7 @@ passport.use('bearer', new BearerStrategy(
     app.get('/all_products', all_products);
     app.get('/all_profiles', all_profiles);
     app.get('/authorized', ensureAuthenticated, authorized);
-    app.get('/cart/:profileid', ensureAuthenticated, get_cart_by_user_id);
+    app.get('/cart/:profileid', ensureAuthenticated, get_cart);
     app.get('/get_customer/:customerid', ensureAuthenticated, stripeRoutes.get_customer);
     app.get('/get_product_by_id/:productnumber', get_product_by_id);
     app.get('/login', login);

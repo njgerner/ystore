@@ -171,7 +171,7 @@ module.exports = function(express, app, __dirname) {
 		var productsInCart = transaction.productsInCart;
 		var total = transaction.total;
 		var shipping = transaction.shipping;
-		var shipTo = transaction.officeShipTo;
+		var shipTo = transaction.addressShipTo;
 		var customer = transaction.customer;
 		var charge = {
 			amount: total * 100, // stripe processes in the smallest denomination so for USD it is cents!!! <-- why was i so excited about this?
@@ -179,7 +179,7 @@ module.exports = function(express, app, __dirname) {
 			currency: "USD",
 			customer: transaction.customer.id,
 			receipt_email: transaction.customer.email,
-			description: 'Thank you for your order from YLift. You will be notified of any changes in your order status.'
+			description: 'Thank you for your order from the YLIFT Store. You will be notified of any changes in your order status.'
 		};
 
 		stripe.charges.create(charge, function(err, charge) {
@@ -202,7 +202,7 @@ module.exports = function(express, app, __dirname) {
 				};
 				orchHelper.addOrder(order)
 					.then(function (result) {
-						if (profileid) {
+						if (profileid !== undefined) {
 						console.log('single order successfully added! Moving to add order.');
 						orchHelper.addOrderToUser(profileid, order)
 							.then(function (result) {

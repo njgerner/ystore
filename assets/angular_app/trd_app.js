@@ -8,6 +8,7 @@ var trdApp = angular.module('trdApp', [
   'trdApp.controllers',
   'ui.slider',
   'ngTagsInput',
+  'mm.foundation',
   'angularFileUpload' //https://github.com/nervgh/angular-file-upload
   // 'uiGmapgoogle-maps'
 ]);
@@ -69,26 +70,15 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
           }
       });
 
-
-      // $rootScope.toggleVisible = function(callback) {
-      //   this.isVisible = !this.isVisible;
-      //   $rootScope.$broadcast('cartviewchange', this.isVisible);
-      //   callback(this.isVisible);
-      // }
-
       $rootScope.hideCart = function(callback) {
         $('#cart').foundation('reveal', 'close');
-        console.log('hiding some shit');
         this.isVisible = false;
-        // $rootScope.$broadcast('cartviewchange', this.isVisible);
         callback(this.isVisible);
       }
 
       $rootScope.showCart = function(callback) {
         $('#cart').foundation('reveal', 'open');
-        console.log('showing some shit!');
         this.isVisible = true;
-        // $rootScope.$broadcast('cartviewchange', this.isVisible);
         callback(this.isVisible);
       }
 

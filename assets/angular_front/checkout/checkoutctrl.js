@@ -29,7 +29,7 @@ superApp.controller('CheckoutCtrl',
 
     if (authService.authorized) {
       $scope.profileid = authService.profile.id;
-      $scope.addresses = $scope.profile.addresses;
+      $scope.addresses = authService.profile.addresses;
     }
 
     $scope.nextState = function() {

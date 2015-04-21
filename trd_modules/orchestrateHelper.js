@@ -128,95 +128,64 @@ exports.changePassword = function(id, password) {
 };
 
 //used in local-signup strategy
-exports.localReg = function (email, password, regkey, name, office, allerganacct) {
+exports.localReg = function (email, password) {
+  console.log('in local reg', email, password);
   var deferred = Q.defer();
-  var user = User.newUser(email, name, password);
-  var profile = Profile.newProfile(email, name, office);
-  var registration = RegKey.newRegKey(regkey);
-  var cart = Cart.newCart(user.id);
-  if (!User.validPassword(password)) {
-    user.error = 'Your password is incorrect, please try again.';
-    deferred.resolve(user);
-  } else if (!User.validRegKey(regkey)) {
-    user.error = 'The registration key entered is not valid';
-    deferred.resolve(user);
-  } else { 
-    user.regkey = regkey;
+  var user = User.newUser(email, password);
+  var profile = Profile.newProfile(email);
+  var cart = Cart.newCart();
     //check if email is already assigned in our database
-    db.search('local-users', email)
-    .then(function (result) {
-      if (result.body.count > 0) {
-        user.error = 'That email is already registered, please login.';
-        deferred.resolve(user); //email already exists
-      } else {
-        db.get('registration-keys', regkey)
-        .then(function (result) {
-          if (!result.body.isActive) {
-            user.cart = cart.id;
-            user.profile = profile.id;
-            db.put('local-users', user.id, user) // create user 
-            .then(function (result) {
-              console.log("USER INSERTED");
-              registration.isActive = true;
-              registration.user = user.id;
-              registration.activationDate = new Date();
-              db.put('registration-keys', regkey, registration) // update reg key w/ user
-              .then(function () {
-                console.log("REGKEY INSERTED");
-                profile.allerganacct = allerganacct; // if applicable
-                profile.cart = cart.id;
-                db.put('local-profiles', profile.id, profile) // create profile
-                .then(function (result) {
-                  console.log("PROFILE CREATED");
-                  db.put('carts', user.id, cart) // create user cart 
-                  .then(function (result) {
-                    console.log("CART CREATED");
-                    sendWelcome(user.email);
-                    deferred.resolve(user); //user has been registered
-                  })
-                  .fail(function (err) {
-                    console.log("CART PUT FAIL: " + err.body);
-                    deferred.reject(new Error(err.body)); 
-                  });
-                })
-                .fail(function (err) {
-                  console.log("PROFILE PUT FAIL: " + err.body);
-                  deferred.reject(new Error(err.body)); 
-                });
-              })
-              .fail(function (err) {
-                console.log("REGKEY PUT FAIL:" + err.body);
-                deferred.reject(new Error(err.body));
-              });
-            })
-            .fail(function (err) {
-              console.log(err.body.message); //mitch is a fucking pussy
-              deferred.reject(new Error(err.body));
-            });
-          } else {
-            console.log('REGISTRATION KEY HAS ALREADY BEEN USED.');
-            user.error = 'That registration key has already been registered.';
-            deferred.resolve(user); //registration key has already been used
-          }
-        })
-        .fail(function (err) {
-          if (err.body.message == 'The requested items could not be found.') {
-            console.log('COULD NOT FIND REGISTRATION KEY IN DB.');
-            user.error = 'The registration key entered is not valid, please make sure you are using the correct key.';
-            deferred.resolve(user);
-          } else {
-            console.log(err.body);
-            deferred.reject(new Error(err.body));
-          }
-        });
-      }
-    })
-    .fail(function (err) {
-      console.log(err.body);
-      deferred.reject(new Error(err.body));
+  return db.search('local-users', user.email)
+  .then(function (result) {
+      console.log('result 1', result.body);
+    if (result.body.count > 0) {
+        throw new Error('That email is already registered, please login.');
+    } else {
+      user.profile = profile.id;
+      return db.put('local-users', user.id, user)
+      .then(function (result) {
+        console.log('result 2', result.body);
+        return user;
+      }, function (err) {
+        console.log('err 1', err);
+        throw new Error(err.body);
+      });
+    }
+  })
+  .then(function (user) {
+    console.log('user result', user);
+    profile.cart = cart.id;
+    return db.put('local-profiles', profile.id, profile)
+    .then (function (result) {
+      return profile;
+    }, function (err) {
+      console.log('err 2', err.body);
+      throw new Error(err.body);
     });
-  }
-  return deferred.promise;
+  }, function (err) {
+      console.log('err 3', err.body);
+      throw new Error(err.body);
+  })
+  .then(function (profile) {
+    console.log('profile result', profile);
+    return db.put('carts', profile.id, cart)
+    .then(function (result) {
+      console.log('overall result/user', result.body, user);
+      // sendWelcome(user.email);
+      return user;
+    }, function (err) {
+      console.log('err 4', err.body);
+      throw new Error(err.body);
+    });
+  }, function (err) {
+    console.log('err 5', err.body);
+    throw new Error(err.body);
+  })
+  .fail(function (err) {
+    console.log('err 6', err);
+    user.error = err;
+    return user.error;
+  });
 };
 
 exports.localAuth = function (email, password) {
@@ -466,9 +435,9 @@ exports.addItemToUserCart = function(userid, productnumber, quantity) {
   return deferred.promise;
 };
 
-exports.getCartByUserID = function(userid) {
+exports.getCartByID = function(profileid) {
   var deferred = Q.defer();
-  db.get('carts', userid)
+  db.get('carts', profileid)
   .then(function (result) {
     console.log("FOUND CART");
     deferred.resolve(result.body);

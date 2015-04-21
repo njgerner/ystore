@@ -36,7 +36,6 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 			}
 
 			scope.updateTotal = function() {
-				console.log('updating total');
 				scope.cartTotal = 0;
 				for (var i = 0; i < scope.productsInCart.length; i++) {
   				scope.cartTotal += ( scope.products[scope.productsInCart[i].productnumber].price * scope.productsInCart[i].quantity );
@@ -67,7 +66,6 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 
   		var productsInCartWatch = null;
 			productsInCartWatch = scope.$watch('productsInCart', function(newValue, oldValue) {
-				console.log('watching productsInCart', newValue, oldValue);
 				if (!newValue) {
 					scope.updateTotal();
 					scope.updatePInCartCookie();

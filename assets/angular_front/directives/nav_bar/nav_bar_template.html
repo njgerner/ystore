@@ -1,55 +1,52 @@
-<div class="sticky">
-  <nav class="top-bar" data-topbar role="navigation">
-    <ul class="title-area">
-      <li class="name">
-        <h1>
-          <a href="/">
-            YLIFT Store
-          </a>
-        </h1>
+<top-bar>
+  <ul class="title-area">
+    <li class="name">
+      <h1>
+        <a ui-sref="store">
+          YLIFT Store
+        </a>
+      </h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a><span>menu</span></a></li>
+  </ul>
+
+  <top-bar-section>
+    <ul class="search">
+      <li class="has-form">
+        <div class="row collapse">
+          <div class="large-8 small-9 columns">
+            <input type="search" placeholder="Find Stuff">
+          </div>
+          <div class="large-4 small-3 columns">
+            <a href="#" class="button expand">Search</a>
+          </div>
+        </div>
       </li>
-      <li class="toggle-topbar menu-icon"><a href="#"><span>menu</span></a></li>
     </ul>
 
-    <section class="top-bar-section">
-
-      <ul class="search">
-        <li class="has-form">
-          <div class="row collapse">
-            <div class="large-8 small-9 columns">
-              <input type="search" placeholder="Find Stuff">
-            </div>
-            <div class="large-4 small-3 columns">
-              <a href="#" class="button expand">Search</a>
-            </div>
-          </div>
-        </li>
-      </ul>
-
-      <ul class="right">
-        <li class="cart">
-          <a ng-click="openCart()">
-          <div class="i-cart"></div>
-          My Cart ({{itemCount}})
-          </a>
-        </li>
-        <li class="divider"></li>
-        <li ng-class="{'has-dropdown':profileid}">
-          <a ng-hide="profileid" ui-sref="login">Login | Signup</a>
-          <a ng-if="profileid">
-            <img ng-src="/image/profiles/{{profileid}}" width="30" height="30"/> 
-            {{name}}
-          </a>
-          <ul ng-show="profileid" class="dropdown">
-            <li><a ui-sref="profile">Profile</a></li>
-            <li><a ui-sref="settings.profile">Settings</a></li>
-            <li class="divider"></li>
-            <li><a ng-click="logoutNow()">Log Out</a></li>
-          </ul>
-        </li>
-        <li class="divider"></li>
-      </ul>
-
-    </section>
-  </nav>
-</div>
+    <ul class="right">
+      <li class="cart">
+        <a ng-click="openCart()">
+        <div class="i-cart"></div>
+        My Cart ({{itemCount}})
+        </a>
+      </li>
+      <li class="divider"></li>
+      <li ng-hide="profileid">
+        <a ui-sref="login">Login or Signup</a>
+      </li>
+      <li ng-show="profileid" has-dropdown>
+        <a>
+          {{name || 'My Account'}}
+        </a>
+        <ul top-bar-dropdown>
+          <li><a ui-sref="profile">Profile</a></li>
+          <li><a ui-sref="settings.profile">Settings</a></li>
+          <li class="divider"></li>
+          <li><a ng-click="logoutNow()">Log Out</a></li>
+        </ul>
+      </li>
+      <li class="divider"></li>
+    </ul>
+  </top-bar-section>
+</top-bar>
