@@ -89,7 +89,6 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
                 "quantity": quantity
             };
             pInCart.push(pInCartObj);
-            console.log('setting products in cart', pInCart);
             this.updateProductsInCartCookie(pInCart);
             callback();
         }
@@ -119,7 +118,6 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
                 };
                 pInCart.push(pInCartObj);
             });
-            console.log('updating pInCart', pInCart);          
             this.updateProductsInCartCookie(pInCart);
             callback();
         }
@@ -163,7 +161,6 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
                     callback(data);
                 });
         } else {
-            console.log('sending pInCart cookie');
             callback($cookieStore.get('pInCart') || []);
         }
     }

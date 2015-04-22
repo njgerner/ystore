@@ -22,13 +22,11 @@ superApp.controller('MainCtrl',
     };
       
     $scope.hideCart = function() {
-      console.log('hiding cart');
       $rootScope.hideCart(function() {  }); 
     };
 
     $scope.cartViewFun = $rootScope.$on('cartviewchange', function(evt, args) { // this is really important don't delete
       $scope.showCart = $rootScope.isVisible;
-      console.log('cartviewchange', $scope.showCart);
     });
 
     $scope.$on('loggedin', function(evt, args) {

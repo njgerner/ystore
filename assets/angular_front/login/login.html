@@ -12,6 +12,7 @@
           <div class="row collapse postfix-round">
             <div class="small-10 columns">
               <input type="password" ng-model="password" placeholder="Enter your password">
+              <small ng-show="failedMessage" class="error">{{failedMessage}}</small>
             </div>
             <div class="small-2 columns">
               <a ng-click="showForgotPass()" class="button postfix"><span data-tooltip aria-haspopup="true" class="has-tip" title="Click here if you forgot your password">?</span></a>
