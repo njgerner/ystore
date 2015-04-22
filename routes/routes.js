@@ -100,11 +100,11 @@ passport.use('local-signup', new LocalStrategy(
 passport.use('bearer', new BearerStrategy(
 
   function(token, done) { // is req necessary?
-
     process.nextTick(function () {
       try {
       // asynchronous validation, for effect..
         var decoded = jwt.decode(token, app.get("jwtTokenSecret"));
+        console.log('BEARER', decoded);
         if (!decoded.user || !decoded.expires) {
           return done(null, false, { message: "missing user or expiration" });
         } else {
@@ -170,7 +170,7 @@ passport.use('bearer', new BearerStrategy(
   ///////////////////////////////////////////////////////////////
   var authorized = function(req, res){
     res.type('application/json');
-
+    console.log('req things body/user', req.body, req.user);
     delete req.user.hash;
     delete req.user.salt;
     orchHelper.findProfileByID(req.user.profile)
@@ -227,7 +227,7 @@ passport.use('bearer', new BearerStrategy(
       if (err) { return next(err); }
       if (!user) { return res.json({err:"login helper, no user error", message:info.message, failed:true}); }
       // no sessions, don't bother logging in...
-      var payload = { usr: user.id, expires: moment().add(4, 'days') };
+      var payload = { user: user.id, expires: moment().add(4, 'days') };
       var secret = app.get("jwtTokenSecret");
 
 

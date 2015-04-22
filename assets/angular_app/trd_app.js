@@ -22,7 +22,7 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
       $rootScope.$on('$stateChangeStart', 
         function(event, toState, toParams, fromState, fromParams){
           console.log('to::' + toState.name, 'from:: ' + fromState.name);
-          console.log('authorized', authService.authorized);
+          console.log('authorized / received', authService.authorized, authService.authorizationReceived);
 
           var isExceptionalState = function() {
             var exceptionalState = ["terms", "store", "store.search", "checkout", "order"];
