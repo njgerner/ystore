@@ -46,6 +46,18 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
             callback(status.error);
           } else if (!authService.authorized) {
             inThis.addGuestCustomer(response, callback);
+          } else if (!authService.profile.customerid) {
+            $http({method: 'POST', url: "/add_customer/" + authService.profile.id, data: {card:response.id,email:authService.profile.email}})
+            .success(function(data, status, headers, config) {
+              console.log('data returned from add_customer', data);
+              inThis.customerReceived = true;
+              inThis.customer = data.customer;
+              inThis.card = data.customer.default_source;
+              callback(inThis.customer);
+            })
+            .error(function(data, status, headers, config) {
+              callback(null, data.err);
+            });
           } else {
             $http({method: 'POST', url: "/add_token_to_customer/" + authService.profile.id + "/" + inThis.customer.id, data: {token:response.id}})
             .success(function(data, status, headers, config) {
@@ -81,6 +93,7 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
         var inThis = this;
         $http({method: 'GET', url: "/get_customer/" + customerid})
           .success(function(data, status, headers, config) {
+            console.log('result from get_customer', data);
             inThis.customerReceived = true;
             inThis.customer = data.customer;
             callback(data.customer);
@@ -140,13 +153,13 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
         })
       };
 
-    	this.submitOrder = function(officeShipTo, productsInCart, shipping, total, callback) {
+    	this.submitOrder = function(addressShipTo, productsInCart, shipping, total, callback) {
         if (!this.card) {
            callback({message: "Invalid credit card info, please check that the information provided is correct and try again." }, null);
         } else { // i need a dolla dolla, a dolla is all i neeeeeeed
           var inThis = this;
           $http({method: 'POST', url: "/process_transaction?" + authService.profileid,
-        		data:{card:inThis.card, customer:inThis.customer, officeShipTo:officeShipTo, productsInCart:productsInCart,
+        		data:{card:inThis.card, customer:inThis.customer, addressShipTo:addressShipTo, productsInCart:productsInCart,
                   total:total, shipping:shipping}})
             .success(function(data, status, headers, config) {
                 callback(null, {id: data.order.id, success: data.success});

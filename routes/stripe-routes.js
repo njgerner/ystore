@@ -14,7 +14,7 @@ module.exports = function(express, app, __dirname) {
 			stripe 					= require('stripe')(config[stripeEnv].SECRET);
 
 	StripeRoutes.add_customer = function(req, res) {
-		var profileid = req.query.profileid;
+		var profileid = req.params.profileid;
 		console.log('profileid', profileid);
 		var transaction = req.body;
 		var card = transaction.card;
@@ -159,6 +159,7 @@ module.exports = function(express, app, __dirname) {
 				res.status(200).json({customer:customer});
 			})
 			.fail(function (err) {
+				res.status(500).json({err:err, message:"Error retrieving customer information"});
 			});
 	};
 
