@@ -15,7 +15,6 @@ module.exports = function(express, app, __dirname) {
 
 	StripeRoutes.add_customer = function(req, res) {
 		var profileid = req.params.profileid;
-		console.log('profileid', profileid);
 		var transaction = req.body;
 		var card = transaction.card;
 		var email = transaction.email;
@@ -34,19 +33,15 @@ module.exports = function(express, app, __dirname) {
 			}
 		})
 		.then(function (customer) {
-			console.log('created customer', customer);
 			return orchHelper.getProfile(profileid)
 				.then(function (profile) {
-					console.log('got profile', profile);
 					profile.customerid = customer.id;
 					profile.updatedAt = new Date();
 					return orchHelper.updateProfile(profile.id, profile)
 						.then(function (result) {
-							console.log('profile updated', result);
 							return customer;
 						})
 						.fail(function (err) {
-							console.log('errorrrrrrrrrrr', err);
 							return new Error(err.body);
 						});
 				})
@@ -59,7 +54,6 @@ module.exports = function(express, app, __dirname) {
 			return new Error(err);
 		})
 		.then(function (customer) {
-			console.log('sending customer back', customer);
 			res.status(201).json({customer:customer, message:"Customer created"});
 		}, function (err) {
 			console.log('error creating stripe customer', err.message);
@@ -163,11 +157,10 @@ module.exports = function(express, app, __dirname) {
 			});
 	};
 
-	// POST /stripe
+	// POST /process_transaction?profile=
 	StripeRoutes.process_transaction = function(req, res) {
-
 		var transaction = req.body;
-		var profileid = req.params.profileid;
+		var profileid = req.query.profile;
 		var card = transaction.card;
 		var productsInCart = transaction.productsInCart;
 		var total = transaction.total;
