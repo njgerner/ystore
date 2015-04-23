@@ -13,14 +13,16 @@
   <top-bar-section>
     <ul class="search">
       <li class="has-form">
-        <div class="row collapse">
-          <div class="large-8 small-9 columns">
-            <input type="search" placeholder="Find Stuff">
+        <form ng-submit="search(searchQuery)">
+          <div class="row collapse">
+            <div class="large-8 small-9 columns">
+              <input type="text" ng-model="searchQuery" typeahead="name for name in productNames | filter:$viewValue | limitTo:6" class="form-control" placeholder="Find Stuff">
+            </div>
+            <div class="large-4 small-3 columns">
+              <button type="submit" class="button expand">Search</button>
+            </div>
           </div>
-          <div class="large-4 small-3 columns">
-            <a href="#" class="button expand">Search</a>
-          </div>
-        </div>
+        </form>
       </li>
     </ul>
 

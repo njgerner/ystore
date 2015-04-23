@@ -17,7 +17,9 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 			// scope.showCart = $rootScope.isVisible;
 			scope.productsInCart = [];
 			scope.itemCount = 0;
-			scope.cart = {}; 
+			scope.searchQuery = "balls";
+			scope.cart = {};
+			scope.productNames = [];
 
 			scope.goToPage = function(page) {
 	  			$state.go(page);
@@ -36,6 +38,10 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 	  			// $rootScope.toggleVisible(function(isVisible) {scope.showCart = isVisible});
 	  			$rootScope.showCart(function(isVisible) {scope.showCart = isVisible});
 	  		};
+
+	  		scope.search = function(query) {
+	  			$state.go("search_results", {'query' : query});
+	  		}
 
 	  		scope.handleLoaded = function() {
 	  			if (authService.authorized) {
@@ -62,6 +68,12 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 			        scope.loadedFun();
 	  			});
 			}
+
+			storeService.getAllProducts(function(products) {
+				products.forEach(function(product, index) {
+		            scope.productNames.push(product.name);
+		        });
+			})
 
 			scope.$watch(function() { return $cookies.pInCart; }, function(newCart, oldCart) { // this makes me hard ... me too
 				if (newCart) {
