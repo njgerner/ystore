@@ -41,7 +41,6 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
           address_state: billing.address_state,
           address_zip: billing.address_zip
 				}, function (status, response) {
-          console.log('response from addCard', response);
           if (status.error) {
             callback(status.error);
           } else if (!authService.authorized) {
@@ -49,7 +48,6 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
           } else if (!authService.profile.customerid) {
             $http({method: 'POST', url: "/add_customer/" + authService.profile.id, data: {card:response.id,email:authService.profile.email}})
             .success(function(data, status, headers, config) {
-              console.log('data returned from add_customer', data);
               inThis.customerReceived = true;
               inThis.customer = data.customer;
               inThis.card = data.customer.default_source;
@@ -93,7 +91,6 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
         var inThis = this;
         $http({method: 'GET', url: "/get_customer/" + customerid})
           .success(function(data, status, headers, config) {
-            console.log('result from get_customer', data);
             inThis.customerReceived = true;
             inThis.customer = data.customer;
             callback(data.customer);

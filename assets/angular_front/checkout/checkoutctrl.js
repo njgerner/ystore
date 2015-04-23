@@ -68,8 +68,6 @@ superApp.controller('CheckoutCtrl',
 
     $scope.submitOrder = function() {
       $scope.orderSubmitted = true;
-      console.log('submitting order w/ props', $scope.addressShipTo, $scope.productsInCart, $scope.shippingCost, $scope.total);
-      // NEED TO CHANGE THIS SO THAT IT USES PRODUCTS IN CART
       stripeService.submitOrder($scope.addresseshipTo, $scope.productsInCart, $scope.shippingCost, $scope.total, function(err, result) {
         if (err) {
           $scope.orderError = err.message;

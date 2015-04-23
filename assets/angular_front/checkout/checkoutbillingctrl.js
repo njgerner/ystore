@@ -105,7 +105,6 @@ superApp.controller('CheckoutBillingCtrl',
     }
 
     function onCustomerLoaded (customer) {
-      console.log('customer created/loaded', customer);
       $scope.customer = customer;
       $scope.cards = $scope.customer.sources.data;
       $scope.loadingCustomer = false;
