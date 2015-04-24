@@ -1,0 +1,40 @@
+<div class="row support-box">
+	<div class="small-7 small-centered columns">
+	<h2><i class="i-support"></i>  YLIFT Support</h2>
+	<h5>Please fill out the form below to open up a support ticket with our technical department.</h5>
+	<div class="panel">
+		<form ng-submit="sendRequest()">
+			<div class="row">
+				<div class="large-12 columns">
+					<input type="text" ng-model="subject" placeholder="Subject (or select topic below)"/>
+				</div>
+			</div>
+			<div class="row">
+		    <div class="large-12 columns">
+		      <label>Support Area
+		        <select ng-model="topic">
+		          <option value="returns">Returns</option>
+		          <option value="feedback">Feedback</option>
+		          <option value="general">General Inquiry</option>
+		          <option value="sell">Sell on YLIFT</option>
+		        </select>
+		      </label>
+		    </div>
+		  </div>
+		  <div ng-show="topic == 'returns'" class="row">
+				<div class="large-12 columns">
+					<input type="text" ng-model="orderid" placeholder="Enter the order number (if possible)"/>
+				</div>
+			</div>
+		  <div class="row">
+		    <div class="large-12 columns">
+		      <label>Message Area
+		        <textarea rows="8" ng-model="message" placeholder="Leave a message regarding your inquiry to provide any relevant information"></textarea>
+		      </label>
+		    </div>
+		  </div>
+		  <button type="submit" class="button expand">Submit Inquiry</button>
+		</form>
+	</div>
+	</div>
+</div>
