@@ -3,10 +3,9 @@ superApp.controller('CheckoutCtrl',
   function($rootScope, $scope, $state, $stateParams, $timeout, storeService, authService, stripeService) {
 
     // address vars
-    $scope.shippingCost = 10; // flat fee for now
+    $scope.shippingCost = 5; // flat fee for now
     $scope.total = $scope.shippingCost;
     $scope.addAddressView = false;
-    // $scope.addressShipTo = null;
     $scope.addresseshipTo = null;
     $scope.productsInCart = [];
     $scope.products = [];
@@ -28,8 +27,11 @@ superApp.controller('CheckoutCtrl',
     };
 
     if (authService.authorized) {
+      $scope.profile = authService.profile;
       $scope.profileid = authService.profile.id;
       $scope.addresses = authService.profile.addresses;
+    } else {
+      $scope.addresses = [];
     }
 
     $scope.nextState = function() {
@@ -61,14 +63,11 @@ superApp.controller('CheckoutCtrl',
         for (var i = 0; i < $scope.productsInCart.length; i++) {
           $scope.total += ( $scope.products[$scope.productsInCart[i].productnumber].price * $scope.productsInCart[i].quantity );
         }
-        console.log('products loaded cart/total', $scope.productsInCart, $scope.total);
       });
     }
 
     $scope.submitOrder = function() {
       $scope.orderSubmitted = true;
-      console.log('submitting order w/ props', $scope.addressShipTo, $scope.productsInCart, $scope.shippingCost, $scope.total);
-      // NEED TO CHANGE THIS SO THAT IT USES PRODUCTS IN CART
       stripeService.submitOrder($scope.addresseshipTo, $scope.productsInCart, $scope.shippingCost, $scope.total, function(err, result) {
         if (err) {
           $scope.orderError = err.message;

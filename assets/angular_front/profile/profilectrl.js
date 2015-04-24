@@ -5,7 +5,6 @@ superApp.controller('ProfileCtrl',
   	$scope.profile = authService.profile; // this call should be alright as we will never make it to /profile w/o being authorized
     $scope.ordersLoaded = false;
     $scope.orders = [];
-    //nick is a mean person :( // you're damn right
     $scope.createdAt = moment($scope.profile.createdAt).format("MMMM Do, YYYY");
 
     $scope.onOrdersLoaded = function(orders) {
@@ -21,7 +20,6 @@ superApp.controller('ProfileCtrl',
       $state.go("order", {orderid:orderid});
     }
 
-     // load the cart on login
     storeService.getProductsInCart(authService.profile.id, function(cart) {});
     storeService.getOrdersByUserID(authService.profile.id, function(orders) { $scope.onOrdersLoaded(orders); });
 
