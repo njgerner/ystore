@@ -53,7 +53,6 @@ superApp.controller('SettingsStoreCtrl',
       $scope.profile.addresses = $scope.addresses;
       $scope.updateProfile(function () {
         $scope.updatingShipTo = false;
-        console.log('done updating', $scope.addresses);
       });
     }
 
@@ -133,7 +132,6 @@ superApp.controller('SettingsStoreCtrl',
     };
 
     $scope.onCustomerLoaded = function (customer) {
-      console.log('customer loaded', customer, authService.profile);
       $scope.customer = customer;
       $scope.cards = $scope.customer.sources.data;
       $scope.loadingCustomer = false;

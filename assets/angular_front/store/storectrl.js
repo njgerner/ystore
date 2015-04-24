@@ -45,7 +45,6 @@ superApp.controller('StoreCtrl',
     };
 
     function onProductsInCartReceived (result) {
-      console.log('result from pIn', result);
       $scope.productsInCart = result;
     }
 
