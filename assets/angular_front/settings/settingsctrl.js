@@ -5,7 +5,7 @@ superApp.controller('SettingsCtrl',
   	storeService, FileUploader, $window) {
   
   	$scope.profile = authService.profile;
-    $scope.offices = $scope.profile.offices;
+    $scope.addresses = $scope.profile.addresses;
     $scope.viewState = $state.current.name.split('.')[1];
     $scope.currOffice = {};
   	$scope.updating = false;
@@ -19,8 +19,8 @@ superApp.controller('SettingsCtrl',
       });
     };
 
-    $scope.isCurrOffice = function(ind) {
-      return $scope.currOffice == $scope.offices[ind];
+    $scope.isCurrAddress = function(ind) {
+      return $scope.currAddress == $scope.addresses[ind];
     }
 
   	$scope.goToState = function(viewState) {
