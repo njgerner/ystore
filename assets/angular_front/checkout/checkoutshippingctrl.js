@@ -60,14 +60,13 @@ superApp.controller('CheckoutShippingCtrl',
       });
     };
 
-    if (authService.authorized) {
+    if (authService.authorized && $scope.addresses.length > 0) {
       for (var i = 0; i < $scope.addresses.length; i++) {
         if ($scope.addresses[i].default) {
           $scope.$parent.addressShipTo == $scope.addresses[i];
         }
       }
     } else {
-      $scope.addresses = [];
       $scope.toggleAddAddress();
     }
 

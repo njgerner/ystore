@@ -1,9 +1,9 @@
 trdServices.service('emailService', ['$http',
 	function($http) {
 
-	this.sendSupportRequest = function(email, body, callback) {
+	this.sendSupportRequest = function(email, props, callback) {
 		$http({method:'POST', url:'/email_support',
-			   data: {email:email, body:body}}).
+			   data: {email:email, props:props}}).
 			success(function(data, status, headers, config) {
 				callback(data.result);
 			}).

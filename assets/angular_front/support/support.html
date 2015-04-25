@@ -3,10 +3,19 @@
 	<h2><i class="i-support"></i>  YLIFT Support</h2>
 	<h5>Please fill out the form below to open up a support ticket with our technical department.</h5>
 	<div class="panel">
-		<form ng-submit="sendRequest()">
+		<form ng-hide="submitted" ng-submit="sendRequest()">
 			<div class="row">
 				<div class="large-12 columns">
-					<input type="text" ng-model="subject" placeholder="Subject (or select topic below)"/>
+					<label>Email
+						<input type="text" ng-model="email" placeholder="Enter your contact email" required/>
+					</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="large-12 columns">
+					<label>Subject
+						<input type="text" ng-model="subject" placeholder="Subject (or select topic below)"/>
+					</label>
 				</div>
 			</div>
 			<div class="row">
@@ -23,18 +32,24 @@
 		  </div>
 		  <div ng-show="topic == 'returns'" class="row">
 				<div class="large-12 columns">
-					<input type="text" ng-model="orderid" placeholder="Enter the order number (if possible)"/>
+					<label>Order #
+						<input type="text" ng-model="orderid" placeholder="Enter the order number (if possible)"/>
+					</label>
 				</div>
 			</div>
 		  <div class="row">
 		    <div class="large-12 columns">
-		      <label>Message Area
+		      <label>Message
 		        <textarea rows="8" ng-model="message" placeholder="Leave a message regarding your inquiry to provide any relevant information"></textarea>
 		      </label>
 		    </div>
 		  </div>
-		  <button type="submit" class="button expand">Submit Inquiry</button>
+		  <button type="submit" class="button expand">
+		  	<span ng-hide="submitting">Submit Inquiry</span>
+		  	<div ng-show="submitting" class="spinner"></div>
+		  </button>
 		</form>
+		<strong ng-show="submitted">Thank you for your inquiry, we will get back to as soon as possible. If you have any further questions or concerns please email support@ylift.io for an immediate response. Thank you!</strong>
 	</div>
 	</div>
 </div>

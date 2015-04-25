@@ -44,16 +44,15 @@ superApp.controller('SettingsStoreCtrl',
 
     $scope.makeDefaultShipTo = function(ind) {
       $scope.updatingShipTo = true;
-      for (var i = 0; i < $scope.offices.length; i++) {
-        if ($scope.offices[i].default) {
-          $scope.offices[i].default = false;
+      for (var i = 0; i < $scope.addresses.length; i++) {
+        if ($scope.addresses[i].default) {
+          $scope.addresses[i].default = false;
         }
       }
-      $scope.offices[ind].default = true;
-      $scope.profile.offices = $scope.offices;
+      $scope.addresses[ind].default = true;
+      $scope.profile.addresses = $scope.addresses;
       $scope.updateProfile(function () {
         $scope.updatingShipTo = false;
-        console.log('done updating', $scope.offices);
       });
     }
 
@@ -117,13 +116,13 @@ superApp.controller('SettingsStoreCtrl',
     }
 
     $scope.selectShipTo = function(ind) {
-      if ($scope.shipTo == $scope.offices[ind]) {
+      if ($scope.shipTo == $scope.addresses[ind]) {
         $scope.shipTo = null;
         $scope.showShipToView = false;
         return;
       }
-      $scope.shipTo = $scope.offices[ind];
-      $scope.officename = $scope.shipTo.name;
+      $scope.shipTo = $scope.addresses[ind];
+      $scope.addressname = $scope.shipTo.name;
       $scope.address1 = $scope.shipTo.address1;
       $scope.address2 = $scope.shipTo.address2;
       $scope.city = $scope.shipTo.city;
@@ -134,8 +133,7 @@ superApp.controller('SettingsStoreCtrl',
 
     $scope.onCustomerLoaded = function (customer) {
       $scope.customer = customer;
-      $scope.cards = $scope.customer.cards.data;
-      console.log('cards/customer loaded', $scope.cards, $scope.customer);
+      $scope.cards = $scope.customer.sources.data;
       $scope.loadingCustomer = false;
     }
 
