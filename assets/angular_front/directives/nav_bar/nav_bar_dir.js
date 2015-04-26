@@ -14,6 +14,7 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 			scope.name = "";
 			scope.profileid = null;
 			scope.isAdmin = false;
+			scope.query = null;
 			// scope.showCart = $rootScope.isVisible;
 			scope.productsInCart = [];
 			scope.itemCount = 0;
@@ -41,6 +42,8 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 
 	  		scope.search = function(query) {
 	  			$state.go("search_results", {'query' : query});
+	  		scope.search = function() {
+	  			console.log('here is the search query', scope.query);
 	  		}
 
 	  		scope.handleLoaded = function() {
@@ -80,6 +83,12 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 					scope.productsInCart = JSON.parse(newCart);
 				}
 				scope.itemCount = scope.productsInCart.length || 0;
+			});
+
+			scope.$watch(function() { return scope.query; }, function(newValue, oldValue) { // this makes me hard ... me too
+				if (newValue) {
+					console.log('the search query is', scope.query);
+				}
 			});
 
 		}

@@ -1,118 +1,81 @@
-<div class="fade" ng-class="{'active in': isSettingsState('profile')}">
-  <div class="row">
-    <form class="form-horizontal col-md-6">
-    <legend>My Info</legend>
-      <fieldset>
-        <div class="form-group">
-          <label for="inputName" class="col-md-3 control-label">Name</label>
-          <div class="col-md-9">
-            <input type="text" class="form-control" ng-model="profile.name" placeholder="{{profile.name}}">
-          </div>
+<div class="row">
+  <form>
+  <legend>My Info</legend>
+    <fieldset>
+      <div>
+        <label for="inputName">Name</label>
+        <div class="col-md-9">
+          <input type="text" ng-model="profile.name" placeholder="{{profile.name}}">
         </div>
-        <div class="form-group">
-          <label for="inputEmail" class="col-md-3 control-label">Email</label>
-          <div class="col-md-9">
-            <input type="text" class="form-control" ng-model="profile.email" placeholder="{{profile.email}}">
-          </div>
+      </div>
+      <div>
+        <label for="inputEmail" class="col-md-3 control-label">Email</label>
+        <div class="col-md-9">
+          <input type="text" ng-model="profile.email" placeholder="{{profile.email}}">
         </div>
-        <div class="form-group">
-          <label for="inputName" class="col-md-3 control-label">Phone</label>
-          <div class="col-md-9">
-            <input type="text" class="form-control" ng-model="profile.phone" placeholder="{{profile.phone}}">
-          </div>
+      </div>
+      <div>
+        <label for="inputName" class="col-md-3 control-label">Phone</label>
+        <div class="col-md-9">
+          <input type="text" ng-model="profile.phone" placeholder="{{profile.phone}}">
         </div>
-        <div class="form-group">
-          <div class="col-md-3"></div>
-          <div class="col-md-9">
-            <button ng-hide="addOfficeView" type="submit" class="btn ylift-brand" ng-click="updateProfile()">
-              <span ng-hide="updating">Save Changes</span>
-              <span ng-show="updating" ><i class="fa fa-spinner fa-pulse"></i> Updating...</span>
+      </div>
+      <div>
+        <div class="col-md-3"></div>
+        <div class="col-md-9">
+          <button ng-hide="addAddressView" type="submit" class="btn ylift-brand" ng-click="updateProfile()">
+            <span ng-hide="updating">Save Changes</span>
+            <div ng-show="updating" class="spinner"></div>
+          </button>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+  <div>
+    <legend>
+      My Addresss
+      <i class="fa text-ylift pull-right clickable" ng-class="{'fa-plus-square-o': addAddressView, 'fa-plus-square':!addAddressView}" ng-click="toggleAddAddress()">Add Address</i> 
+    </legend>
+    <ul class="list-group">
+      <li ng-repeat="address in addresses" ng-click="selectAddress($index)" ng-class="{'ylift-brand':isCurrAddress($index)}">
+        <i ng-hide="address.default" class="fa fa-circle-o"></i>
+        <i ng-show="address.default" class="fa fa-check-circle"></i>
+        {{address.name}}
+        <i class="fa fa-trash pull-right clickable" ng-click="removeAddress($index)"></i>
+      </li> 
+    </ul>
+    <form>
+      <div ng-show="addAddressView || showAddressView">
+        <div>
+            <input type="text" ng-model="addressname" placeholder="Address Name" required/>
+        </div>
+        <div>
+            <input type="text" ng-model="address1" placeholder="Address" required/>
+        </div>
+        <div>
+            <input type="text" ng-model="address2" placeholder="Suite # (If relevant)"/>
+        </div>
+        <div>
+            <input type="text" ng-model="city" placeholder="City" required/>
+        </div>
+        <div>
+            <input type="text" ng-model="state" placeholder="State" required/>
+        </div>
+        <div>
+            <input type="text" ng-model="zip" placeholder="Zip" required/>
+        </div>
+        <div>
+            <button ng-show="addAddressView" type="submit" class="btn ylift-brand" value="Add Address" ng-click="addAddress()"/>
+              <span ng-hide="updating">Add Address</span>
+              <div ng-show="updating" class="spinner"></div>
             </button>
-          </div>
+            <button ng-show="showAddressView" type="submit" class="btn ylift-brand" value="Add Address" ng-click="updateAddress()"/>
+              <span ng-hide="updating">Update Address</span>
+              <div ng-show="updating" class="spinner"></div>
+            </button>
         </div>
-      </fieldset>
-    </form>
-    <div class="col-md-6">
-      <legend>
-        My Offices
-        <i class="fa text-ylift pull-right clickable" ng-class="{'fa-plus-square-o': addOfficeView, 'fa-plus-square':!addOfficeView}" ng-click="toggleAddOffice()"></i> 
-      </legend>
-      <ul class="list-group">
-        <li class="list-group-item clickable" ng-repeat="office in offices" ng-click="selectOffice($index)" ng-class="{'ylift-brand':isCurrOffice($index)}">
-          <i ng-hide="office.default" class="fa fa-circle-o"></i>
-          <i ng-show="office.default" class="fa fa-check-circle"></i>
-          {{office.name}}
-          <i class="fa fa-trash pull-right clickable" ng-click="removeOffice($index)"></i>
-        </li> 
-      </ul>
-      <form class="form-horizontal">
-        <div ng-show="addOfficeView || showOfficeView">
-          <div class="form-group">
-              <input type="text" class="form-control" ng-model="officename" placeholder="Office Name" required/>
-          </div>
-          <div class="form-group">
-              <input type="text" class="form-control" ng-model="address1" placeholder="Office Address" required/>
-          </div>
-          <div class="form-group">
-              <input type="text" class="form-control" ng-model="address2" placeholder="Suite # (If relevant)"/>
-          </div>
-          <div class="form-group">
-              <input type="text" class="form-control" ng-model="city" placeholder="City" required/>
-          </div>
-          <div class="form-group">
-              <input type="text" class="form-control" ng-model="state" placeholder="State" required/>
-          </div>
-          <div class="form-group">
-              <input type="text" class="form-control" ng-model="zip" placeholder="Zip" required/>
-          </div>
-          <div class="form-group">
-              <button ng-show="addOfficeView" type="submit" class="btn ylift-brand" value="Add Office" ng-click="addOffice()"/>
-                <span ng-hide="updating">Add Office</span>
-                <span ng-show="updating" ><i class="fa fa-spinner fa-pulse"></i> Updating...</span>
-              </button>
-              <button ng-show="showOfficeView" type="submit" class="btn ylift-brand" value="Add Office" ng-click="updateOffice()"/>
-                <span ng-hide="updating">Update Office</span>
-                <span ng-show="updating" ><i class="fa fa-spinner fa-pulse"></i> Updating...</span>
-              </button>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-   <div class="row">
-    <form ng-hide="showOfficeView || addOfficeView" class="col-md-6">
-      <fieldset>
-        <legend>Profile Image</legend>
-        <img class="col-md-6" ng-src="/image/profiles/{{profile.id}}" width="100%"/>
-        <div class="col-md-6" ng-show="uploader.progress > 0 && uploader.progress < 100">
-          <i class="fa fa-spinner fa-pulse fa-4x"></i>
-        </div>
-        <div class="form-group">
-          <div class="col-md-6">
-            <input type="file" name="file" nv-file-select class="upload-button" ng-model="picFile" ng-multiple="false" ng-accept="'*.jpg,*.png'" ng-model-rejected="rejFiles" uploader="uploader"/><br/>
-            <button ng-show="uploader.queue.length > 0 && uploader.progress == 0" class="btn ylift-brand" ng-click="uploadProfileImage()">Change Picture</button>
-            <span ng-show="uploader.progress == 100">Upload Successful</span>
-            <!-- <input type="file" class="form-control" file-model-dir="inputImg"> -->
-          </div>
-        </div>
-      </fieldset>
-    </form>
-    <form ng-if="showOfficeView" class="col-md-6 pull-right">
-      <fieldset>
-        <legend>{{currOffice.name}} Image</legend>
-        <img class="col-md-6" ng-src="/image/offices/{{currOfficeImg}}" width="100%"/>
-        <div class="col-md-6" ng-show="uploader.progress > 0 && uploader.progress < 100">
-          <i class="fa fa-spinner fa-pulse fa-4x"></i>
-        </div>
-        <div class="form-group">
-          <div class="col-md-6">
-            <input type="file" name="file" nv-file-select class="upload-button" ng-model="picFile" ng-multiple="false" ng-accept="'*.jpg,*.png'" ng-model-rejected="rejFiles" uploader="uploader"/><br/>
-            <button ng-show="uploader.queue.length > 0 && uploader.progress == 0" class="btn ylift-brand" ng-click="uploadOfficeImage()">Change Office Picture</button>
-            <span ng-show="uploader.progress == 100">Upload Successful</span>
-            <!-- <input type="file" class="form-control" file-model-dir="inputImg"> -->
-          </div>
-        </div>
-      </fieldset>
+      </div>
     </form>
   </div>
+</div>
 </div>

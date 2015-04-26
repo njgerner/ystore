@@ -152,7 +152,7 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
                     internalThis.cartReceived = true;
                     internalThis.cart = data.cart;
                     internalThis.updateProductsInCartCookie(internalThis.cart.products);
-                    callback(data.cart);
+                    callback(data.cart.products);
                     $rootScope.$broadcast('cartloaded', internalThis.cart);
 
                 })

@@ -105,13 +105,12 @@ superApp.controller('CheckoutBillingCtrl',
     }
 
     function onCustomerLoaded (customer) {
-      console.log('customer created/loaded', customer);
       $scope.customer = customer;
       $scope.cards = $scope.customer.sources.data;
       $scope.loadingCustomer = false;
     }
 
-    if ($scope.profile) {
+    if ($scope.profile.customerid) {
       stripeService.getCustomer($scope.profile.customerid, onCustomerLoaded);
     } else {
       $scope.loadingCustomer = false;

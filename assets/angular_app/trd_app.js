@@ -25,7 +25,7 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
           console.log('authorized / received', authService.authorized, authService.authorizationReceived);
 
           var isExceptionalState = function() {
-            var exceptionalState = ["terms", "store", "store.search", "checkout", "order"];
+            var exceptionalState = ["terms", "store", "store.search", "checkout", "order", "support"];
             return exceptionalState.indexOf(toState.name) >= 0;
           }
 
@@ -115,11 +115,6 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
       templateUrl: "/partials/limit_orders.html",
       controller: "OrdersCtrl"
     })
-    // .state('locations', {
-    //   url: "/locations",
-    //   templateUrl: "/partials/locations.html",
-    //   controller: "LocationsCtrl"
-    // })
     .state('store', {
       url:"/store",
       templateUrl:"/partials/store.html",
@@ -175,11 +170,6 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
       templateUrl: "/partials/profile.html",
       controller: "ProfileCtrl"
     })
-    // .state('refer', {
-    //   url:"/refer",
-    //   templateUrl: "/partials/refer.html",
-    //   controller: "ReferCtrl"
-    // })
     .state('reset_password', {
       url:"/reset_password/:resettoken",
       templateUrl: "/partials/reset_password.html",
@@ -206,16 +196,11 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
       templateUrl: "/partials/settings_notifications.html",
       controller: "SettingsNotificationsCtrl"
     })
-    // .state('settings.scheduling', {
-    //   url:"/scheduling",
-    //   templateUrl: "/partials/settings_scheduling.html",
-    //   controller: "SettingsSchedulingCtrl"
-    // })
-    // .state('training', {
-    //   url:"/training",
-    //   templateUrl: "/partials/training.html",
-    //   controller: "TrainingCtrl"
-    // })
+    .state('support', {
+      url:"/support",
+      templateUrl: "/partials/support.html",
+      controller: "SupportCtrl"
+    })
     .state('terms', {
       url:"/terms",
       templateUrl: "/partials/terms.html",

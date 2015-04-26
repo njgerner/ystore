@@ -13,6 +13,7 @@ module.exports = function(express, app, __dirname) {
       jwt             = require('jwt-simple'),
       nodemailer      = require('nodemailer'),
       adminRoutes     = require('./admin-routes.js')(express, app, __dirname),
+      emailRoutes     = require('./email-routes.js')(express, app, __dirname),
       profileRoutes   = require('./profile-routes.js')(express, app, __dirname),
       stripeRoutes    = require('./stripe-routes.js')(express, app, __dirname),
       Q               = require('q'),               // https://registry.npmjs.org/q
@@ -578,6 +579,7 @@ passport.use('bearer', new BearerStrategy(
     app.post('/add_item_to_cart', add_item_to_cart);
     app.post('/add_token_to_customer/:profileid/:customerid', ensureAuthenticated, stripeRoutes.add_token_to_customer, stripeRoutes.update_customer);
     app.post('/empty_cart', empty_cart);
+    app.post('/email_support', emailRoutes.support);
     app.post('/get_products_by_category/:category', get_products_by_category);
     app.post('/login', loginHelper);
     app.post('/process_transaction?:profileid', stripeRoutes.process_transaction);
