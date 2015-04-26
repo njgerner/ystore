@@ -11,6 +11,6 @@ superApp.controller('SearchResultsCtrl',
       $state.go('product', {productnumber: productnumber});
     }
 
-	storeService.getFilteredProducts($scope.query, function(products) { $scope.displayProducts(products); });
+	storeService.getFilteredProducts($scope.query.toLowerCase(), function(products) { $scope.displayProducts(products); });
 
 }]);
