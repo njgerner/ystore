@@ -105,7 +105,6 @@ passport.use('bearer', new BearerStrategy(
       try {
       // asynchronous validation, for effect..
         var decoded = jwt.decode(token, app.get("jwtTokenSecret"));
-        console.log('BEARER', decoded);
         if (!decoded.user || !decoded.expires) {
           return done(null, false, { message: "missing user or expiration" });
         } else {
