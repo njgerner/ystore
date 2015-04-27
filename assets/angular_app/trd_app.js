@@ -135,36 +135,6 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
       templateUrl:"/partials/search_results.html",
       controller:"SearchResultsCtrl"
     })
-    // .state('store.juvuderm', {
-    //   url:"/juvuderm",
-    //   templateUrl:"/partials/juvuderm_store.html",
-    //   controller: "JuvudermCtrl"
-    // })
-    // .state('store.botox', {
-    //   url:"/botox",
-    //   templateUrl:"/partials/botox_store.html", 
-    //   controller: "BotoxCtrl"
-    // })
-    // .state('store.ygear', {
-    //   url:"/ygear",
-    //   templateUrl:"/partials/ygear_store.html",
-    //   controller: "YgearCtrl"
-    // })
-    // .state('store.supplies', {
-    //   url:"/supplies",
-    //   templateUrl:"/partials/supplies_store.html",
-    //   controller: "SuppliesCtrl"
-    // })
-    // .state('store.marketing', {
-    //   url:"/marketing",
-    //   templateUrl:"/partials/marketing_store.html",
-    //   controller: "MarketingCtrl"
-    // })
-    // .state('store.lasers', {
-    //   url:"/lasers",
-    //   templateUrl:"/partials/lasers_store.html",
-    //   controller: "LasersCtrl"
-    // })
     .state('profile', {
       url:"/profile",
       templateUrl: "/partials/profile.html",
