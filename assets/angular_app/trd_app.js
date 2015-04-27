@@ -130,6 +130,11 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
       templateUrl:"/partials/product.html",
       controller: "ProductCtrl"
     })
+    .state('search_results', {
+      url:"/search_results?query",
+      templateUrl:"/partials/search_results.html",
+      controller:"SearchResultsCtrl"
+    })
     .state('profile', {
       url:"/profile",
       templateUrl: "/partials/profile.html",
