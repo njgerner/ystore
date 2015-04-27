@@ -24,6 +24,7 @@
     "angular-foundation": "0.5.1"
   },
   "resolutions": {
-    "angular": "~1.2.x"
+    "angular": "~1.2.x",
+    "typeahead.js": "~0.11.0"
   }
 }

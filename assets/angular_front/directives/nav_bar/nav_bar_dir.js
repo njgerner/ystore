@@ -18,7 +18,6 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 			// scope.showCart = $rootScope.isVisible;
 			scope.productsInCart = [];
 			scope.itemCount = 0;
-			scope.searchQuery = "balls";
 			scope.cart = {};
 			scope.productNames = [];
 
@@ -42,8 +41,6 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 
 	  		scope.search = function(query) {
 	  			$state.go("search_results", {'query' : query});
-	  		scope.search = function() {
-	  			console.log('here is the search query', scope.query);
 	  		}
 
 	  		scope.handleLoaded = function() {
@@ -76,7 +73,7 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 				products.forEach(function(product, index) {
 		            scope.productNames.push(product.name);
 		        });
-			})
+			});
 
 			scope.$watch(function() { return $cookies.pInCart; }, function(newCart, oldCart) { // this makes me hard ... me too
 				if (newCart) {
