@@ -42,20 +42,6 @@ superApp.controller('SettingsStoreCtrl',
       }
     }
 
-    $scope.makeDefaultShipTo = function(ind) {
-      $scope.updatingShipTo = true;
-      for (var i = 0; i < $scope.addresses.length; i++) {
-        if ($scope.addresses[i].default) {
-          $scope.addresses[i].default = false;
-        }
-      }
-      $scope.addresses[ind].default = true;
-      $scope.profile.addresses = $scope.addresses;
-      $scope.updateProfile(function () {
-        $scope.updatingShipTo = false;
-      });
-    }
-
     $scope.onPaymentAdded = function(customer, error) {
       if (error) {
         $scope.error = error;
@@ -108,6 +94,21 @@ superApp.controller('SettingsStoreCtrl',
       }
     }
 
+    // $scope.makeDefault = function(ind) {
+    //   if ($window.confirm('Make this card the default?')) {
+    //     for (var i = 0; i < $scope.addresses.length; i++) {
+    //       if ($scope.addresses[i].default) {
+    //         $scope.addresses[i].default = false;
+    //       }
+    //       if (i == ind) {
+    //         $scope.addresses[i].default = true;
+    //       }
+    //     }
+    //     $scope.profile.addresses = $scope.addresses;
+    //     $scope.updateProfile();
+    //   }
+    // }
+
     $scope.removePayment = function(cardid) {
       if ($window.confirm('Are you sure? This will remove your credit card information from our database.')) {
         $scope.removingCard = true;
@@ -115,23 +116,8 @@ superApp.controller('SettingsStoreCtrl',
       }
     }
 
-    $scope.selectShipTo = function(ind) {
-      if ($scope.shipTo == $scope.addresses[ind]) {
-        $scope.shipTo = null;
-        $scope.showShipToView = false;
-        return;
-      }
-      $scope.shipTo = $scope.addresses[ind];
-      $scope.addressname = $scope.shipTo.name;
-      $scope.address1 = $scope.shipTo.address1;
-      $scope.address2 = $scope.shipTo.address2;
-      $scope.city = $scope.shipTo.city;
-      $scope.state = $scope.shipTo.state;
-      $scope.zip = $scope.shipTo.zip;  
-      $scope.showShipToView = true;
-    };
-
     $scope.onCustomerLoaded = function (customer) {
+      console.log('customer returned from onCustomerLoaded', customer);
       $scope.customer = customer;
       $scope.cards = $scope.customer.sources.data;
       $scope.loadingCustomer = false;

@@ -45,7 +45,8 @@ superApp.controller('SettingsProfileCtrl',
         "address2": $scope.address2,
         "city": $scope.city,
         "state": $scope.state,
-        "zip": $scope.zip
+        "zip": $scope.zip,
+        "default": $scope.default
       };
       if ($scope.addresses.length == 0) {
         address.default = true;
@@ -64,7 +65,8 @@ superApp.controller('SettingsProfileCtrl',
         "address2": $scope.address2,
         "city": $scope.city,
         "state": $scope.state,
-        "zip": $scope.zip
+        "zip": $scope.zip,
+        "default": $scope.default
       };
       if ($scope.addresses.length == 0) {
         address.default = true;
@@ -84,8 +86,27 @@ superApp.controller('SettingsProfileCtrl',
       }
     }
 
+    $scope.makeDefault = function(ind) {
+      if ($window.confirm('Make this address the default?')) {
+        for (var i = 0; i < $scope.addresses.length; i++) {
+          if ($scope.addresses[i].default) {
+            $scope.addresses[i].default = false;
+          }
+          if (i == ind) {
+            $scope.addresses[i].default = true;
+          }
+        }
+        $scope.profile.addresses = $scope.addresses;
+        $scope.updateProfile();
+      }
+    }
+
     $scope.toggleAddAddress = function() {
       $scope.addAddressView = !$scope.addAddressView;
+    };
+
+    $scope.toggleShowAddress = function() {
+      $scope.showAddressView = !$scope.showAddressView;
     };
 
 }]);

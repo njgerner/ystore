@@ -1,3 +1,20 @@
 .support-box {
 	margin-top: 30px;
 }
+
+.address-list {
+	padding: 20px 10px;
+	border-bottom: 1px solid $ylift;
+	display: flex;
+	width: 100%;
+
+
+	.i-cancel {
+		font-size: 25px;
+		float: right;
+	}
+}
+
+.address-edit-link {
+	margin: 0 10px;
+}
