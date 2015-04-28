@@ -13,8 +13,38 @@
 		font-size: 25px;
 		float: right;
 	}
+
+	&.thin {
+		border: none;
+		padding: 12px 8px;
+	}
 }
+
 
 .address-edit-link {
 	margin: 0 10px;
+}
+
+.check-it {
+	font-size: 25px;
+	.i-checked {
+		color: $green;
+	}
+}
+
+.inactive-state {
+	opacity: 0.2;
+	pointer-events:none;
+}
+
+.focused {
+	opacity: 1.0;
+}
+
+.clickable {
+	pointer-events: all;
+}
+
+.email-submit {
+	margin: 20px 10px;
 }
