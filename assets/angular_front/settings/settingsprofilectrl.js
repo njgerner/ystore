@@ -87,7 +87,7 @@ superApp.controller('SettingsProfileCtrl',
     }
 
     $scope.makeDefault = function(ind) {
-      if ($window.confirm('Make address the default?')) {
+      if ($window.confirm('Make this address the default?')) {
         for (var i = 0; i < $scope.addresses.length; i++) {
           if ($scope.addresses[i].default) {
             $scope.addresses[i].default = false;
