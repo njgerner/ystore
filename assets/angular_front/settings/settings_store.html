@@ -2,24 +2,6 @@
   <div class="row">
     <p ng-if="error" style="color: red">{{error}}</p>
   	<div>
-  		<legend>Past Orders</legend>
-        <div ng-show="loadingOrders"><i class=""></i></div>
-  			<div ng-hide="loadingOrders" class="">
-          <table class="table">
-            <tr>
-              <th>Order #</th>
-              <th>Status</th>
-              <th>Total</th>
-            </tr>
-            <tr class="clickable" ng-repeat="order in orders | orderBy: order.createdAt | limitTo: 5" ng-click="goToOrder(order.id)">
-              <td>{{order.id}}</td>
-              <td>{{order.status}}</td>
-              <td>${{order.total}}</td>
-            </tr>
-          </table>
-        </div>
-  	</div>
-  	<div>
   		<legend>Payment Options 
         <i ng-click="toggleAddPayment()"></i> 
       </legend>
