@@ -1,9 +1,13 @@
 <div ng-if="!cartProductsLoading" class="reveal-modal small" id="cart" data-reveal>
   <div class="row">
-    <div class="large-2 large-offset-8 columns">Price</div>
-    <div class="large-2 columns">Quantity</div>
+    <div class="small-2 small-offset-7 columns">Price</div>
+    <div class="large-3 columns end">Quantity</div>
   </div>
   <product-cart-dir ng-repeat="product in productsInCart" ind="$index" pn="product.productnumber" edit="'true'"></product-cart-dir>
-  <button class="button tiny" ng-click="goToCheckout()">Checkout</button>
-  <button class="button tiny" ng-click="hide()">Close</button>
+  <div class="row">
+  	<div class="small-5 small-offset-7 columns">
+  		<button class="button tiny" ng-click="goToCheckout()">Checkout</button>
+ 		<button class="button secondary tiny" ng-click="hide()">Close</button>
+  	</div>
+  </div>
 </div>

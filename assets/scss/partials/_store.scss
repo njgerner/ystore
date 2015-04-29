@@ -36,3 +36,19 @@
 		margin: 0 auto;
 	}
 }
+
+.row {
+	&.product {
+		margin-top: 15px;
+
+		.product-image {
+			margin-top: -30px;
+		}
+
+	}
+}
+
+.quantity-change {
+	cursor: pointer;
+	padding: 0 3px;
+}
