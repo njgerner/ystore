@@ -1,6 +1,5 @@
 // vars
 @import "partials/variables";
-
 // vendor 
 @import "foundation/settings",
 		"foundation/components/grid",
@@ -42,9 +41,11 @@
 		"animate";
 
 // trd app
+@import "partials/text";
 @import "partials/navbar";
 @import "partials/store";
 @import "partials/forms";
 @import "partials/profile";
 @import "partials/checkout";
 @import "partials/loading";
+@import "partials/footer";

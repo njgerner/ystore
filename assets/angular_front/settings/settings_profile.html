@@ -4,48 +4,56 @@
     <fieldset>
       <div>
         <label for="inputName">Name</label>
-        <div class="col-md-9">
+        <div>
           <input type="text" ng-model="profile.name" placeholder="{{profile.name}}">
         </div>
       </div>
       <div>
-        <label for="inputEmail" class="col-md-3 control-label">Email</label>
-        <div class="col-md-9">
-          <input type="text" ng-model="profile.email" placeholder="{{profile.email}}">
+        <label for="inputEmail">Email</label>
+        <div>
+          <input type="email" ng-model="profile.email" placeholder="{{profile.email}}" required>
         </div>
       </div>
       <div>
-        <label for="inputName" class="col-md-3 control-label">Phone</label>
-        <div class="col-md-9">
-          <input type="text" ng-model="profile.phone" placeholder="{{profile.phone}}">
+        <label for="inputName">Phone</label>
+        <div>
+          <input type="tel" ng-model="profile.phone" placeholder="{{profile.phone}}">
         </div>
       </div>
       <div>
-        <div class="col-md-3"></div>
-        <div class="col-md-9">
-          <button ng-hide="addAddressView" type="submit" class="btn ylift-brand" ng-click="updateProfile()">
+        <div></div>
+        <div>
+          <button ng-hide="addAddressView || showAddressView" type="submit" class="button small" ng-click="updateProfile()">
             <span ng-hide="updating">Save Changes</span>
-            <div ng-show="updating" class="spinner"></div>
+            <span ng-show="updating" class="loader"><span class="loader-inner"></span></span>
           </button>
         </div>
       </div>
     </fieldset>
   </form>
   <div>
-    <legend>
-      My Addresss
-      <i class="fa text-ylift pull-right clickable" ng-class="{'fa-plus-square-o': addAddressView, 'fa-plus-square':!addAddressView}" ng-click="toggleAddAddress()">Add Address</i> 
-    </legend>
-    <ul class="list-group">
-      <li ng-repeat="address in addresses" ng-click="selectAddress($index)" ng-class="{'ylift-brand':isCurrAddress($index)}">
-        <i ng-hide="address.default" class="fa fa-circle-o"></i>
-        <i ng-show="address.default" class="fa fa-check-circle"></i>
-        {{address.name}}
-        <i class="fa fa-trash pull-right clickable" ng-click="removeAddress($index)"></i>
-      </li> 
-    </ul>
-    <form>
-      <div ng-show="addAddressView || showAddressView">
+    <div class="row">
+        <div class="large-3 small-6 columns">
+          My Addresss
+        </div>
+        <div class="large-3 large-offset-6 small-6 columns text-right">
+          <div ng-hide="addAddressView" class="i-plus" ng-click="toggleAddAddress()"></div>
+          <div ng-show="addAddressView" class="i-cancel-circled" ng-click="toggleAddAddress()"></div>
+        </div>
+    </div>
+    <div class="row address-list" ng-repeat="address in addresses">
+      <div class="large-1 small-1 columns" ng-click="makeDefault($index)">
+        <i ng-show="address.default" class="i-star"></i>
+        <i ng-show="!address.default" class="i-star-open"></i>
+      </div>
+      <div class="large-5 small-6 columns">{{address.name}}</div>
+      <div class="large-3 large-offset-3 small-5 columns">
+        <a class="address-edit-link" ng-click="selectAddress($index)">Edit</a>|
+        <a class="address-edit-link" ng-click="removeAddress($index)">Delete</a>
+      </div>
+    </div> 
+    <form ng-show="addAddressView || showAddressView">
+      <fieldset>
         <div>
             <input type="text" ng-model="addressname" placeholder="Address Name" required/>
         </div>
@@ -64,18 +72,23 @@
         <div>
             <input type="text" ng-model="zip" placeholder="Zip" required/>
         </div>
-        <div>
-            <button ng-show="addAddressView" type="submit" class="btn ylift-brand" value="Add Address" ng-click="addAddress()"/>
-              <span ng-hide="updating">Add Address</span>
-              <div ng-show="updating" class="spinner"></div>
-            </button>
-            <button ng-show="showAddressView" type="submit" class="btn ylift-brand" value="Add Address" ng-click="updateAddress()"/>
-              <span ng-hide="updating">Update Address</span>
-              <div ng-show="updating" class="spinner"></div>
-            </button>
-        </div>
-      </div>
+        <!-- <div class="row"> -->
+          <button ng-show="addAddressView" type="submit" class="button small" ng-click="addAddress()">
+            <span ng-hide="updating">Add</span>
+            <span ng-show="updating" class="loader"><span class="loader-inner"></span></span>
+          </button>
+          <button ng-show="addAddressView && !updating" class="button secondary small" ng-click="toggleAddAddress()"/>
+            <span>Cancel</span>
+          </button>
+          <button ng-show="showAddressView" type="submit" class="button small" ng-click="updateAddress()">
+            <span ng-hide="updating">Update</span>
+            <span ng-show="updating" class="loader"><span class="loader-inner"></span></span>
+          </button>
+          <button ng-show="showAddressView && !updating" class="button secondary small" ng-click="toggleShowAddress()">
+            <span>Cancel</span>
+          </button>
+        <!-- </div> -->
+      </fieldset>
     </form>
   </div>
-</div>
 </div>

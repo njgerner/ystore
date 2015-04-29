@@ -44,7 +44,7 @@ $total-columns: 12;
 // We use these to control various global styles
 $body-bg: #f9f9f9;
 $body-font-color: #222;
-$body-font-family: "Titillium Web", sans-serif;
+$body-font-family: "Roboto Condensed", sans-serif;
 // $body-font-weight: $font-weight-normal;
 $body-font-style: normal;
 $font-weight-normal: normal !default;
@@ -810,12 +810,12 @@ $preloader-class: "preloader";
 
 // Panels
 
-// $include-html-panel-classes: $include-html-classes;
+$include-html-panel-classes: $include-html-classes;
 
 // We use these to control the background and border styles
-// $panel-bg: scale-color(#fff, $lightness: -5%);
-// $panel-border-style: solid;
-// $panel-border-size: 1px;
+$panel-bg: scale-color(#fff, $lightness: -5%);
+$panel-border-style: solid;
+$panel-border-size: 1px;
 
 // We use this % to control how much we darken things on hover
 // $panel-function-factor: -11%;
@@ -1184,7 +1184,7 @@ $topbar-bg-color: $ylift;
 $topbar-bg: $topbar-bg-color;
 
 // Height and margin
-$topbar-height: 45px;
+$topbar-height: 55px;
 $topbar-margin-bottom: 0;
 
 // Controlling the styles for the title in the top bar

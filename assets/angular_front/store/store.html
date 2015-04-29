@@ -3,10 +3,10 @@
 
   
     <div class="row">
-      <div class="large-12 hide-for-small">
+      <div class="large-12 hide-for-small banner">
 
-        <p><img src="http://placehold.it/1000x400&text=[banner img ftb]"/></p>
-
+        <!-- <p><img src="http://placehold.it/1000x400&text=[banner img ftb]"/></p> -->
+        <h4 class="text-brand"><img height="200px"src="/img/muse.png"/>Here is some random text the monkeys need to figure out</h4>
       </div>
     </div>
   </div>
@@ -39,7 +39,7 @@
     <div class="row" data-match-height>
 
       <div class="large-4 small-6 columns" ng-repeat="p in products" ng-click="goToProduct(p.productnumber)">
-        <img src="http://placehold.it/1000x1000&text=Thumbnail">
+        <img ng-src="{{p.img}}">
         <!-- <img ng-hide="p.img" src="http://placehold.it/1000x1000&text=Thumbnail"> -->
         <!-- <img ng-show="p.img" ng-src="{{p.img}}" height="475" width="475"> -->
         <div class="panel">
