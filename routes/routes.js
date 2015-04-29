@@ -247,7 +247,6 @@ passport.use('bearer', new BearerStrategy(
         mailOptions.text = 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
             'Please click on the following link, or paste into your browser to complete the process' + '\n\n' + 
             'http://www.ylift.io/portal#/reset_password/' + user.resetToken + '\n\n' +
-            'localhost:5000/portal#/reset_password/' + user.resetToken + '\n\n' + // this needs removed, also use the get host functionality of express
             'If you did not request this, please ignore this email and your password will remain unchanged.';
 
         transport.sendMail(mailOptions, function(error, info){
