@@ -2,6 +2,7 @@
 var trdApp = angular.module('trdApp', [
   'ngRoute',
   'ngAnimate',
+  'infinite-scroll',
   'ui.router',
   'trdApp.services',
   'trdApp.directives',
