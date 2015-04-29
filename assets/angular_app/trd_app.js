@@ -146,6 +146,11 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
       templateUrl: "/partials/reset_password.html",
       controller: "ResetPasswordCtrl"
     })
+    .state('sell_info', {
+      url:"/sell_info",
+      templateUrl: "/partials/sell_with_us.html",
+      controller: "SellInfoCtrl"
+    })
     .state('settings', {
       abstract: true,
       url:"/settings",
