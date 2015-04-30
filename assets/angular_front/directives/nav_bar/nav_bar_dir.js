@@ -82,12 +82,6 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 				scope.itemCount = scope.productsInCart.length || 0;
 			});
 
-			scope.$watch(function() { return scope.query; }, function(newValue, oldValue) { // this makes me hard ... me too
-				if (newValue) {
-					console.log('the search query is', scope.query);
-				}
-			});
-
 		}
 	}
 }]);

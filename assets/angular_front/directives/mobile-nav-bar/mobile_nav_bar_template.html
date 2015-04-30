@@ -4,7 +4,7 @@
 
     <div class="row">
       <div class="small-2 columns text-left">
-        <div class="cart">
+        <div class="cart" ng-click="openCart()">
           <i ng-click="openCart()" class="i-cart"></i>({{itemCount}})
         </div>
       </div>
@@ -13,11 +13,11 @@
 
         <form ng-submit="search(searchQuery)">
           <div class="row collapse">
-            <div class="large-8 small-9 columns">
+            <div class="small-9 columns">
               <input type="search" ng-model="searchQuery" typeahead="name for name in productNames | filter:$viewValue | limitTo:6" class="form-control" placeholder="Find Stuff">
             </div>
-            <div class="large-4 small-3 columns">
-              <button type="submit" class="button expand">Search</button>
+            <div class="small-2 columns end text-left">
+              <button type="submit" class="button tiny search"><i class="i-search"></i></button>
             </div>
           </div>
         </form>
@@ -35,11 +35,11 @@
 
 <aside id="menu-bar" class="right-off-canvas-menu">
   <ul class="off-canvas-list">
-    <li><label>Foundation</label></li>
-    <li><a href="#">The Psychohistorians</a></li>
-    <li><a href="#">The Encyclopedists</a></li>
-    <li><a href="#">The Mayors</a></li>
-    <li><a href="#">The Traders</a></li>
-    <li><a href="#">The Merchant Princes</a></li>
+    <li><label>YLIFT Store</label></li>
+    <li><a ui-sref="store"><i class="i-store"></i>    Shop Now</a></li>
+    <li><a ui-sref="checkout"><i class="i-cart"></i>    Checkout</a></li>
+    <li><a ui-sref="profile"><i class="i-user"></i>    My Account</a></li>
+    <li><a ui-sref="settings.store"><i class="i-settings"></i>    Settings</a></li>
+    <li><a ui-sref="support"><i class="i-support"></i>    Help</a></li>
   </ul>
 </aside>

@@ -12,8 +12,6 @@
   <link rel="stylesheet" href="/appcss">
   <link rel="icon" href="/favicon.ico">
   <link href="https://fontastic.s3.amazonaws.com/v5Jn9a5V3hU7fcgVrwphGa/icons.css" rel="stylesheet">
-  <link rel="stylesheet" href="http://css-spinners.com/css/spinner/throbber.css" type="text/css">
-
   <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed&subset=cyrillic,latin' rel='stylesheet' type='text/css'>
 
   <!--[if IE]><link rel="shortcut icon" href="/favicon.ico"><![endif]-->
@@ -23,13 +21,14 @@
   <body ng-controller="MainCtrl">
 
     <div class="off-canvas-wrap">
-      <mobile-nav-bar-dir class="show-for-small-only"></mobile-nav-bar-dir>
-      <nav-bar-dir class="show-for-medium-up"></nav-bar-dir>
-      <!-- <a class="exit-off-canvas"></a> -->
-      <main ui-view class="inner-wrap"></main>
-      <!-- <div ui-view ng-click="hideCart()"></div> -->
-      <cart-dir></cart-dir>
-      <footer-dir></footer-dir>
+      <div class="inner-wrap">
+        <mobile-nav-bar-dir class="show-for-small-only"></mobile-nav-bar-dir>
+        <nav-bar-dir class="show-for-medium-up"></nav-bar-dir>
+        <a class="exit-off-canvas"></a>
+        <main ui-view></main>
+        <cart-dir></cart-dir>
+        <footer-dir></footer-dir>
+      </div>
     </div>
 
     <!-- Core JavaScript

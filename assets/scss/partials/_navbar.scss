@@ -46,4 +46,19 @@
 			font-size: 25px;
 		}
 	}
+
+	button.search {
+		padding: 0;
+		margin: 15px 7px;
+		cursor: pointer;
+		font-size: 25px;
+
+		i {
+			float: left;
+		}
+	}
+
+	.top-bar-section ul {
+		position: fixed;
+	}
 }

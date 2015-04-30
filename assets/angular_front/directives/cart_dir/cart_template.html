@@ -1,7 +1,7 @@
 <div ng-if="!cartProductsLoading" class="reveal-modal small" id="cart" data-reveal>
   <div class="row">
     <div class="small-2 small-offset-7 columns">Price</div>
-    <div class="large-3 columns end">Quantity</div>
+    <div class="small-3 columns end">Quantity</div>
   </div>
   <product-cart-dir ng-repeat="product in productsInCart" ind="$index" pn="product.productnumber" edit="'true'"></product-cart-dir>
   <div class="row">
