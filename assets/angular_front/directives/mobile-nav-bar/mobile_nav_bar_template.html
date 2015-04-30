@@ -1,0 +1,45 @@
+<top-bar class="mobile">
+
+  <top-bar-section>
+
+    <div class="row">
+      <div class="small-2 columns text-left">
+        <div class="cart">
+          <i ng-click="openCart()" class="i-cart"></i>({{itemCount}})
+        </div>
+      </div>
+
+      <div class="small-8 columns">
+
+        <form ng-submit="search(searchQuery)">
+          <div class="row collapse">
+            <div class="large-8 small-9 columns">
+              <input type="search" ng-model="searchQuery" typeahead="name for name in productNames | filter:$viewValue | limitTo:6" class="form-control" placeholder="Find Stuff">
+            </div>
+            <div class="large-4 small-3 columns">
+              <button type="submit" class="button expand">Search</button>
+            </div>
+          </div>
+        </form>
+
+      </div>
+      <div class="small-2 columns text-right menu">
+        <i href="menu-bar" class="right-off-canvas-toggle i-menu"></i>
+      </div>
+
+    </div>
+
+
+  </top-bar-section>
+</top-bar>
+
+<aside id="menu-bar" class="right-off-canvas-menu">
+  <ul class="off-canvas-list">
+    <li><label>Foundation</label></li>
+    <li><a href="#">The Psychohistorians</a></li>
+    <li><a href="#">The Encyclopedists</a></li>
+    <li><a href="#">The Mayors</a></li>
+    <li><a href="#">The Traders</a></li>
+    <li><a href="#">The Merchant Princes</a></li>
+  </ul>
+</aside>

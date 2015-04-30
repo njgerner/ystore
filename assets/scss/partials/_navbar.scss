@@ -13,3 +13,37 @@
 		}
 	}
 }
+
+.mobile {
+
+	.top-bar {
+		height: 30px;
+	}
+
+	.cart {
+		color:$white;
+	}
+
+	a.account {
+		color:$white;
+	}
+
+	form {
+
+		input {
+			height: $topbar-height - 14;
+			margin-top: 7px;
+			width: 100%;
+		}
+	}
+
+	.menu {
+
+		padding-top: 5px;
+
+		.i-menu {
+			color: $white;
+			font-size: 25px;
+		}
+	}
+}

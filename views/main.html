@@ -22,9 +22,12 @@
 
   <body ng-controller="MainCtrl">
 
-    <nav-bar-dir></nav-bar-dir>
-    <div>
-      <div ui-view ng-click="hideCart()"></div>
+    <div class="off-canvas-wrap">
+      <mobile-nav-bar-dir class="show-for-small-only"></mobile-nav-bar-dir>
+      <nav-bar-dir class="show-for-medium-up"></nav-bar-dir>
+      <!-- <a class="exit-off-canvas"></a> -->
+      <main ui-view class="inner-wrap"></main>
+      <!-- <div ui-view ng-click="hideCart()"></div> -->
       <cart-dir></cart-dir>
       <footer-dir></footer-dir>
     </div>
