@@ -1,12 +1,12 @@
 <div class="large-8 large-offset-2 columns">   
 
 	<div class="row">
-		<h3 ng-show="products.length>0" id="search-results-header">Showing {{products.length}} of {{products.length}} results for "{{query}}"</h3>
+		<h3 ng-if="products.length > 0" id="search-results-header">Showing {{products.length}} of {{products.length}} results for "{{query}}"</h3>
 	</div>
 
     <div class="row" data-match-height>
-      <div class="large-4 small-6 columns" ng-repeat="p in products" ng-click="goToProduct(p.productnumber)">
-        <img src="http://placehold.it/1000x1000&text=Thumbnail">
+      <div infininte-scroll="loadMore()" infinite-scroll-distance="2" class="large-4 small-6 columns" ng-repeat="p in products" ng-click="goToProduct(p.productnumber)">
+        <img ng-src="{{p.img}}">
         <div class="panel">
           <h5 class="product-title">{{p.name}}</h5>
           <h6 class="subheader">${{p.price}}</h6>

@@ -62,3 +62,16 @@
 		position: fixed;
 	}
 }
+
+.f-dropdown > li {
+	width:100%;
+}
+
+.f-dropdown > li.active > a{
+	background-color:white!important;
+	color:$ylift!important;
+}
+
+#search-wrapper {
+	width:20%;
+}
