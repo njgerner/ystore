@@ -14,6 +14,55 @@
 	}
 }
 
+.mobile {
+
+	.top-bar {
+		height: 30px;
+	}
+
+	.cart {
+		color:$white;
+	}
+
+	a.account {
+		color:$white;
+	}
+
+	form {
+
+		input {
+			height: $topbar-height - 14;
+			margin-top: 7px;
+			width: 100%;
+		}
+	}
+
+	.menu {
+
+		padding-top: 5px;
+
+		.i-menu {
+			color: $white;
+			font-size: 25px;
+		}
+	}
+
+	button.search {
+		padding: 0;
+		margin: 15px 7px;
+		cursor: pointer;
+		font-size: 25px;
+
+		i {
+			float: left;
+		}
+	}
+
+	.top-bar-section ul {
+		position: fixed;
+	}
+}
+
 .f-dropdown > li {
 	width:100%;
 }

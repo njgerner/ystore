@@ -1,16 +1,13 @@
-appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$rootScope', '$window', '$cookieStore', '$cookies', 'storeService',
+appDirectives.directive('mobileNavBarDir', [ 'authService', '$state', '$location', '$rootScope', '$window', '$cookieStore', '$cookies', 'storeService',
 	function(authService, $state, $location, $rootScope, $window, $cookieStore, $cookies, storeService) {
 	return {
 		restrict: 'E',
 		scope: {
-			back: '=',
-			close: '=',
-			center: '='
+
 		},
-		templateUrl: 'directives/nav_bar_template.html',
+		templateUrl: 'directives/mobile_nav_bar_template.html',
 		link: function(scope, element) {
-			
-			scope.loggedIn = false;
+					scope.loggedIn = false;
 			scope.name = "";
 			scope.profileid = null;
 			scope.isAdmin = false;
@@ -24,10 +21,6 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 			scope.goToPage = function(page) {
 	  			$state.go(page);
 			};
-
-	    	scope.isActive = function(route) {
-	      		return route === $location.path();
-	  		};
 
 	  		scope.logoutNow = function() {
 	  			scope.loggedIn = false;

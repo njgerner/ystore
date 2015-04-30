@@ -151,6 +151,11 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
       templateUrl: "/partials/sell_with_us.html",
       controller: "SellInfoCtrl"
     })
+    .state('about', {
+      url:"/about",
+      templateUrl: "/partials/about.html",
+      controller: "AboutCtrl"
+    })
     .state('settings', {
       abstract: true,
       url:"/settings",
