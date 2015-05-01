@@ -71,7 +71,7 @@ passport.use('local-signup', new LocalStrategy(
         if (user) {
           if (!user.error) {
               mailOptions.to = user.email;
-              mailOptions.subject = 'Welcome to Something!';
+              mailOptions.subject = 'Welcome to the YLIFT Store!';
               mailOptions.html = {path: './views/email_templates/welcome_email.html'};
               transport.sendMail(mailOptions);
               done(null, user);
