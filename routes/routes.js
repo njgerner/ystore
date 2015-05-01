@@ -253,13 +253,12 @@ passport.use('bearer', new BearerStrategy(
             if(error){
                 console.log(error);
             }else{
-                console.log('Message sent: ' + info.response);
                 res.send('success');
             }
         });
       })
       .fail(function (err) {
-        res.send(err);
+        res.send('No account was found with this email');
       });
   };
 
