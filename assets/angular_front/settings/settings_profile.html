@@ -25,7 +25,7 @@
         <div>
           <button ng-hide="addAddressView || showAddressView" type="submit" class="button small" ng-click="updateProfile()">
             <span ng-hide="updating">Save Changes</span>
-            <span ng-show="updating" class="loader"><span class="loader-inner"></span></span>
+            <span ng-show="updating">Saving....</span>
           </button>
         </div>
       </div>
@@ -75,14 +75,14 @@
         <!-- <div class="row"> -->
           <button ng-show="addAddressView" type="submit" class="button small" ng-click="addAddress()">
             <span ng-hide="updating">Add</span>
-            <span ng-show="updating" class="loader"><span class="loader-inner"></span></span>
+            <span ng-show="updating">Adding...</span>
           </button>
           <button ng-show="addAddressView && !updating" class="button secondary small" ng-click="toggleAddAddress()"/>
             <span>Cancel</span>
           </button>
           <button ng-show="showAddressView" type="submit" class="button small" ng-click="updateAddress()">
             <span ng-hide="updating">Update</span>
-            <span ng-show="updating" class="loader"><span class="loader-inner"></span></span>
+            <span ng-show="updating">Updating...</span>
           </button>
           <button ng-show="showAddressView && !updating" class="button secondary small" ng-click="toggleShowAddress()">
             <span>Cancel</span>

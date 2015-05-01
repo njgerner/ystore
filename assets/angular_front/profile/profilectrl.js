@@ -20,6 +20,10 @@ superApp.controller('ProfileCtrl',
       $scope.ordersLoaded = true;
     }
 
+    $scope.logoutNow = function() {
+      $state.go("logout");
+    }
+
     $scope.goToOrder = function(orderid) {
       $state.go("order", {orderid:orderid});
     }

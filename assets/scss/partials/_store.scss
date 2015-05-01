@@ -1,3 +1,18 @@
+.row {
+	&.product {
+		margin-top: 15px;
+
+		.product-image {
+			margin-top: -30px;
+		}
+
+	}
+}
+
+.suggested-product {
+	max-width: 200px;
+}
+
 .product-title {
 	min-height: 40px;
 }
@@ -37,18 +52,13 @@
 	}
 }
 
-.row {
-	&.product {
-		margin-top: 15px;
-
-		.product-image {
-			margin-top: -30px;
-		}
-
-	}
-}
 
 .quantity-change {
 	cursor: pointer;
 	padding: 0 3px;
+}
+
+.review-stars {
+	margin-top: 4px;
+	color: #eedc31;
 }

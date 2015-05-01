@@ -72,7 +72,7 @@
 		    <div>
 	          <button ng-show="addPaymentView" type="submit" value="Add Payment Option" ng-disabled="!creditCardFieldsComplete() || !billingFieldsComplete()" ng-click="addPayment()"/>
 	            <span ng-hide="customerUpdating">Add Payment Option</span>
-	            <span ng-show="customerUpdating" class="loader"><span class="loader-inner"></span></span>
+	            <span ng-show="customerUpdating">Adding..</span>
 	          </button>
 	      	</div>
 		</fieldset>

@@ -1,24 +1,21 @@
 superApp.controller('ProductCtrl',
-  ['$rootScope', '$scope', '$state', '$stateParams', 'storeService', 'authService',
-  function($rootScope, $scope, $state, $stateParams, storeService, authService) {
+  ['$rootScope', '$scope', '$state', '$stateParams', 'storeService', 'authService', 'productService',
+  function($rootScope, $scope, $state, $stateParams, storeService, authService, productService) {
 
     $scope.loading = true;
+    $scope.reviewsLoading = true;
+    $scope.ratingLoading = true;
+    $scope.relatedLoading = true;
     $scope.added = false;
     $scope.productnumber = $stateParams.productnumber;
     $scope.error = false;
 
-    $scope.onProductsLoaded = function() {
-        $scope.product = storeService.productsByID[$scope.productnumber];
-        $scope.loading = false;
-    }
 
     $scope.itemAdded = function() {
-        console.log('added!');
         $scope.added = true;
     }
 
     $scope.addToCart = function() {
-        console.log('adding ' + $scope.quantity + ' to cart.');
         if ($scope.quantity <= 0) {
             $scope.error = 'Please select a quantity first';
             return;
@@ -40,15 +37,39 @@ superApp.controller('ProductCtrl',
         $scope.quantity = 0;
     }
 
-    if (storeService.productsReceived) {
-        $scope.product = storeService.productsByID[$scope.productnumber];
+    $scope.goToLeaveReview = function() {
+        $state.go("leave_review", {productnumber:$scope.productnumber});
+    }
+
+    function onProductLoaded (product) {
+        $scope.product = product;
         $scope.loading = false;
-    } else {
-        storeService.getAllProducts(function(result) {$scope.onProductsLoaded();});
+    }
+
+    function onRelatedProductsLoaded (products) {
+        $scope.relatedProducts = products;
+        $scope.relatedLoading = false;
+    }
+
+    function onReviewsLoaded (reviews) {
+        $scope.reviews = reviews;
+        $scope.reviewsLoading = false;
+    }
+
+    function onRatingLoaded (data) {
+        if (data) {
+            $scope.rating = data.mean;
+        }
+        $scope.ratingLoading = false;
     }
 
     if (authService.authorized) {
         $scope.profileid = authService.profile.id;
     }
+
+    storeService.getProductByID($scope.productnumber, onProductLoaded);
+    storeService.getRelatedProducts($scope.productnumber, onRelatedProductsLoaded);
+    productService.getReviews($scope.productnumber, onReviewsLoaded);
+    productService.getRating($scope.productnumber, onRatingLoaded);
 
 }]);

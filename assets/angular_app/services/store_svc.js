@@ -7,6 +7,7 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
     this.productsInCart = [];
     this.products = [];
     this.productsByID = {};
+    this.relatedProductsByID = {};
     this.productsByCategory = {};
     this.orders = [];
     this.ordersByID = {};
@@ -44,9 +45,32 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
     }
 
     this.getProductByID = function(productnumber, callback) {
+        if (this.productsByID[productnumber] !== undefined) {
+            callback(this.productsByID[productnumber]);
+            return;
+        }
+        var inThis = this;
         $http({method: 'GET', url: "/get_product_by_id/" + productnumber})
             .success(function(data, status, headers, config) {
+                inThis.productsByID[productnumber] = data.product;
                 callback(data.product);
+            })
+            .error(function(data, status, headers, config) {
+                callback(data);
+            });
+    }
+
+    this.getRelatedProducts = function(productnumber, callback) {
+        if (this.relatedProductsByID[productnumber] !== undefined) {
+            callback(this.relatedProductsByID[productnumber]);
+            return;
+        }
+        var inThis = this;
+        $http({method: 'GET', url: "/get_related_products/" + productnumber})
+            .success(function(data, status, headers, config) {
+                console.log('getRelatedProducts', data);
+                inThis.relatedProductsByID[productnumber] = data.products;
+                callback(data.products);
             })
             .error(function(data, status, headers, config) {
                 callback(data);
@@ -57,8 +81,10 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
         if (this.productsReceived) {
             callback(this.productsByCategory[category]);
         } else{
+            var inThis = this;
             $http({method: 'POST', url: "/get_products_by_category", data:{category:category}})
             .success(function(data, status, headers, config) {
+                inThis.productsByCategory[category] = data.products;
                 callback(data.products);
             })
             .error(function(data, status, headers, config) {
