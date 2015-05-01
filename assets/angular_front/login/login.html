@@ -40,7 +40,10 @@
             <input type="text" placeholder="Enter your email" ng-model="email" required>
           </label>
         </div>
-        <button class="button tiny left" ng-click="requestPasswordReset()">Continue</button>
+        <button class="button tiny left" ng-click="requestPasswordReset()">
+          <span ng-hide="requestingReset">Continue</span>
+          <span ng-show="requestingReset">Requesting...</span>
+        </button>
         <button class="button tiny right" ng-click="showSignin()">Go Back</button>
       </fieldset>
     </form>

@@ -7,6 +7,7 @@ superApp.controller('LoginCtrl',
     $scope.failedMessage = '';
     $scope.loggedin = authService.loggedin;
     $scope.signingIn = false;
+    $scope.requestingReset = false;
 
     if ($scope.loginToken) {
       authService.loginWithToken($scope.loginToken, function(failedMessage, successMessage) {
@@ -64,12 +65,14 @@ superApp.controller('LoginCtrl',
   	}
 
     $scope.requestPasswordReset = function() {
+      $scope.requestingReset = true;
       authService.requestPasswordReset($scope.email, function(failedMessage, successMessage) {
         if (successMessage) {
           $scope.failedMessage = null;
           $scope.loginState = "signin";
           $scope.pass_reset = true;
         } else {
+          $scope.requestingReset = false;
           $scope.failedMessage = failedMessage;
         }
       });
