@@ -363,6 +363,32 @@ exports.getProductByID = function(productnumber) {
   return deferred.promise;
 };
 
+exports.getRelatedProducts = function(productnumber) {
+  return db.get('products', productnumber)
+  .then(function(result) {
+    var product = result.body;
+    var deferred = Q.defer();
+    db.newSearchBuilder()
+    .collection('products')
+    .limit(4)
+    .query('category: ' + product.category) // balls and stuff
+    .then(function (res) {
+      deferred.resolve(rawDogger.push_values_to_top(res.body.results));
+    })
+    .fail(function (err) {
+      console.log('error getting product rating', err.body);
+      deferred.reject(new Error(err.body));
+    });
+
+    return deferred.promise;
+
+  }, function (err) {
+    return Q.fcall(function () {
+      throw new Error(err.body);
+    });
+  });
+};
+
 exports.getProductsByCategory = function(category) {
   var deferred = Q.defer();
   db.search('products', "value.category: " + category)
@@ -698,14 +724,12 @@ exports.submitReview = function(review) {
 };
 
 exports.getProductRating = function(productnumber) {
-  console.log('getting product rating for', productnumber);
   var deferred = Q.defer();
   db.newSearchBuilder()
   .collection('product-reviews')
   .aggregate('stats', 'value.rating')
   .query('`' + productnumber + '`')
   .then(function (res) {
-    console.log('result from getting product rating', res.body.aggregates[0].statistics);
     deferred.resolve(res.body.aggregates[0].statistics);
   })
   .fail(function (err) {
@@ -717,7 +741,6 @@ exports.getProductRating = function(productnumber) {
 };
 
 exports.getProductReviews = function(productnumber) {
-  console.log('getting product reviews for', productnumber);
   var deferred = Q.defer();
   db.search('product-reviews', '`' + productnumber + '`')
   .then(function (res) {

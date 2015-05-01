@@ -343,6 +343,20 @@ passport.use('bearer', new BearerStrategy(
       });
   };
 
+  var get_related_products = function(req, res) {
+    orchHelper.getRelatedProducts(req.params.productnumber)
+      .then(function (result) {
+        if (result) {
+          res.send({products: result});
+        } else {
+          res.send({err:'no related products in db'});
+        }
+      })
+      .fail(function (err) {
+        res.send({err:err});
+      });
+  };
+
   var get_products_by_category = function(req, res) {
     orchHelper.getProductsByCategory(req.body.category)
       .then(function (result) {
@@ -564,6 +578,7 @@ passport.use('bearer', new BearerStrategy(
     app.get('/cart/:profileid', ensureAuthenticated, get_cart);
     app.get('/get_customer/:customerid', ensureAuthenticated, stripeRoutes.get_customer);
     app.get('/get_product_by_id/:productnumber', get_product_by_id);
+    app.get('/get_related_products/:productnumber', get_related_products);
     app.get('/login', login);
     app.get('/order/:orderid', get_order_by_id);
     app.get('/product_rating/:productnumber', productRoutes.get_rating);
