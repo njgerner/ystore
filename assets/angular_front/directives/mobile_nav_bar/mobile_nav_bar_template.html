@@ -13,12 +13,8 @@
 
         <form ng-submit="search(searchQuery)">
           <div class="row collapse">
-            <div class="small-9 columns">
-              <input type="search" ng-model="searchQuery" typeahead="name for name in productNames | filter:$viewValue | limitTo:6" class="form-control" placeholder="Find Stuff">
-            </div>
-            <div class="small-2 columns end text-left">
-              <button type="submit" class="button tiny search"><i class="i-search"></i></button>
-            </div>
+              <input class="mobile" type="search" ng-model="searchQuery" typeahead="name for name in productNames | filter:$viewValue | limitTo:6" placeholder="Find Stuff">
+            <i class="i-search" ng-click="search(searchQuery)"> </i>
           </div>
         </form>
 

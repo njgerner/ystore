@@ -95,6 +95,12 @@
 	font-size:100%;
 }
 
+.mobile {
+  input [type="search"] {
+    border-radius: 10px;
+  }
+}
+
 .nav-text {
 	font-size:105%!important;
 }
