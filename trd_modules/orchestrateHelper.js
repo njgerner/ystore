@@ -8,7 +8,8 @@ var bcrypt        = require('bcryptjs'),
     User          = require('../models/user.js'), 
     Profile       = require('../models/profile.js'), 
     Cart          = require('../models/cart.js'),
-    RegKey        = require('../models/regkey.js'), 
+    RegKey        = require('../models/regkey.js'),
+    rawDogger     = require('./rawDogger.js'), //rawDogger contains all of our 'tools'
     moment        = require('moment'); //used for easy timestamping
 
 exports.uploadTrainingMaterials = function(filename, filecontent, userid) {
@@ -685,4 +686,50 @@ exports.updateCustomer = function(customer) {
     });
    
     return deferred.promise;
+};
+
+exports.submitReview = function(review) {
+  var deferred = Q.defer();
+  db.post('product-reviews', review)
+  .then(function (result) {
+    deferred.resolve(true);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body));
+  });
+
+  return deferred.promise;
+};
+
+exports.getProductRating = function(productnumber) {
+  console.log('getting product rating for', productnumber);
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+  .collection('product-reviews')
+  .aggregate('stats', 'value.rating')
+  .query('`' + productnumber + '`')
+  .then(function (res) {
+    console.log('result from getting product rating', res.body.aggregates[0].statistics);
+    deferred.resolve(res.body.aggregates[0].statistics);
+  })
+  .fail(function (err) {
+    console.log('error getting product rating', err.body);
+    deferred.reject(new Error(err.body));
+  });
+
+  return deferred.promise;
+};
+
+exports.getProductReviews = function(productnumber) {
+  console.log('getting product reviews for', productnumber);
+  var deferred = Q.defer();
+  db.search('product-reviews', '`' + productnumber + '`')
+  .then(function (res) {
+    deferred.resolve(rawDogger.push_values_to_top(res.body.results));
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body));
+  });
+
+  return deferred.promise;
 };

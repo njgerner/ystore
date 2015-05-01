@@ -44,6 +44,10 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
     }
 
     this.getProductByID = function(productnumber, callback) {
+        if (this.productsByID[productnumber] !== undefined) {
+            callback(this.productsByID[productnumber]);
+            return;
+        }
         $http({method: 'GET', url: "/get_product_by_id/" + productnumber})
             .success(function(data, status, headers, config) {
                 callback(data.product);

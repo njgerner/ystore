@@ -1,0 +1,10 @@
+<div class="review-stars">
+	<i ng-class="{'i-star':rating >= 1, 'i-star-open':rating < 1}"></i>
+	<i ng-class="{'i-star':rating >= 2, 'i-star-open':rating < 2}"></i>
+	<i ng-class="{'i-star':rating >= 3, 'i-star-open':rating < 3}"></i>
+	<i ng-class="{'i-star':rating >= 4, 'i-star-open':rating < 4}"></i>
+	<i ng-class="{'i-star':rating == 5, 'i-star-open':rating < 5}"></i>
+</div>
+<h5>{{title}}   <small>{{name}}</small></h5>
+<p>{{description}}</p>
+<br>
