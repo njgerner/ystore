@@ -42,12 +42,13 @@ superApp.controller('ProductCtrl',
         $state.go("leave_review", {productnumber:$scope.productnumber});
     }
 
-    function onProductLoaded = function(product) {
+    function onProductLoaded (product) {
         $scope.product = product;
         $scope.loading = false;
     }
 
-    function onRelatedProductsLoaded = function(products) {
+    function onRelatedProductsLoaded (products) {
+        console.log('onRelatedProductsLoaded', products);
         $scope.relatedProducts = products;
         $scope.relatedLoading = false;
     }

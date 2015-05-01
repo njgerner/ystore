@@ -60,7 +60,7 @@
 
 <div class="row">
   <hr>
-  <div class="large-12 columns">
+  <div ng-hide="relatedProductsLoading" class="large-12 columns">
     <h4>You might also like:</h4>
     <suggested-product-dir pn="p.productnumber" ng-repeat="p in relatedProducts"></suggested-product-dir>
   </div>

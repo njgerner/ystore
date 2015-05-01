@@ -347,7 +347,7 @@ passport.use('bearer', new BearerStrategy(
     orchHelper.getRelatedProducts(req.params.productnumber)
       .then(function (result) {
         if (result) {
-          res.send({product: result});
+          res.send({products: result});
         } else {
           res.send({err:'no related products in db'});
         }

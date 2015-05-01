@@ -68,6 +68,7 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
         var inThis = this;
         $http({method: 'GET', url: "/get_related_products/" + productnumber})
             .success(function(data, status, headers, config) {
+                console.log('getRelatedProducts', data);
                 inThis.relatedProductsByID[productnumber] = data.products;
                 callback(data.products);
             })
