@@ -95,8 +95,10 @@
 	font-size:100%;
 }
 
-#searchbar-mobile {
-	border-radius:10px;
+.mobile {
+  input [type="search"] {
+    border-radius: 10px;
+  }
 }
 
 .nav-text {
