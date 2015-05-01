@@ -73,5 +73,24 @@
 }
 
 #search-wrapper {
-	width:20%;
+	position:absolute;
+	left:30%;
+	width:50%;
+}
+
+#searchbar {
+	height:70%;
+	border-radius:10px;
+	font-size:100%;
+
+}
+
+.navtext {
+	font-size:115%!important;
+}
+
+.i-search {
+	position:absolute;
+	margin-left:-10%;
+	top:16px;
 }
