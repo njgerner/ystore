@@ -16,7 +16,7 @@
         <form style="height:100%" ng-submit="search(searchQuery)">
           <div style="height:100%" class="row collapse">
             <div style="height:100%" class="large-8 small-9 columns">
-              <input id="searchbar" type="text" ng-model="searchQuery" typeahead="name for name in productNames.length ? [$viewValue].concat(productNames) : [] | filter:$viewValue | limitTo:6" typeahead-on-select="search(searchQuery)" class="navtext" placeholder="Find Stuff" autoselect>
+              <input id="searchbar" type="text" ng-model="searchQuery" typeahead="name for name in productNames.length ? [$viewValue].concat(productNames) : [] | filter:$viewValue | limitTo:6" typeahead-on-select="search(searchQuery)" class="nav-text" placeholder="Find Stuff" autoselect>
             </div>
             <div class="large-4 small-3 columns">
               <i ng-click="search(searchQuery)" class="i-search pointer"> </i>
@@ -28,7 +28,7 @@
 
     <ul class="right">
       <li class="cart">
-        <a class="navtext" ng-click="openCart()">
+        <a class="nav-text" ng-click="openCart()">
         <div class="i-cart"></div>
         My Cart ({{itemCount}})
         </a>
@@ -38,7 +38,7 @@
         <a ui-sref="login">Login or Signup</a>
       </li>
       <li ng-show="profileid" has-dropdown>
-        <a class="navtext">
+        <a class="nav-text">
           {{name || 'My Account'}}
         </a>
         <ul top-bar-dropdown>
