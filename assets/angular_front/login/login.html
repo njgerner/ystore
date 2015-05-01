@@ -22,7 +22,10 @@
             </div>
           </div>
         </label>
-        <button class="button tiny left" type="submit">Log me in</button>
+        <button class="button tiny left" type="submit">
+          <span ng-show="signingIn">Logging in...</span>
+          <div ng-hide="signingIn">Log me in</div>
+        </button>
         <button class="button tiny right" ng-click="showReg()">Register</button>
       </fieldset>
     </form>
@@ -37,7 +40,10 @@
             <input type="text" placeholder="Enter your email" ng-model="email" required>
           </label>
         </div>
-        <button class="button tiny left" ng-click="requestPasswordReset()">Continue</button>
+        <button class="button tiny left" ng-click="requestPasswordReset()">
+          <span ng-hide="requestingReset">Continue</span>
+          <span ng-show="requestingReset">Requesting...</span>
+        </button>
         <button class="button tiny right" ng-click="showSignin()">Go Back</button>
       </fieldset>
     </form>
