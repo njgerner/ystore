@@ -14,10 +14,6 @@ superApp.controller('StoreCtrl',
       $state.go('product', {productnumber: productnumber});
     }
 
-    // $scope.goToCategory = function(category) {
-    //   $state.go('store.' + category);
-    // }
-
     $scope.isActive = function(route) {
       return route == $location.path();
     }

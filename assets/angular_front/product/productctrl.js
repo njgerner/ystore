@@ -1,8 +1,10 @@
 superApp.controller('ProductCtrl',
-  ['$rootScope', '$scope', '$state', '$stateParams', 'storeService', 'authService',
-  function($rootScope, $scope, $state, $stateParams, storeService, authService) {
+  ['$rootScope', '$scope', '$state', '$stateParams', 'storeService', 'authService', 'productService',
+  function($rootScope, $scope, $state, $stateParams, storeService, authService, productService) {
 
     $scope.loading = true;
+    $scope.reviewsLoading = true;
+    $scope.ratingLoading = true;
     $scope.added = false;
     $scope.productnumber = $stateParams.productnumber;
     $scope.error = false;
@@ -40,6 +42,22 @@ superApp.controller('ProductCtrl',
         $scope.quantity = 0;
     }
 
+    $scope.goToLeaveReview = function() {
+        $state.go("leave_review", {productnumber:$scope.productnumber});
+    }
+
+    function onReviewsLoaded (reviews) {
+        $scope.reviews = reviews;
+        $scope.reviewsLoading = false;
+    }
+
+    function onRatingLoaded (data) {
+        if (data) {
+            $scope.rating = data.mean;
+        }
+        $scope.ratingLoading = false;
+    }
+
     if (storeService.productsReceived) {
         $scope.product = storeService.productsByID[$scope.productnumber];
         $scope.loading = false;
@@ -50,5 +68,8 @@ superApp.controller('ProductCtrl',
     if (authService.authorized) {
         $scope.profileid = authService.profile.id;
     }
+
+    productService.getReviews($scope.productnumber, onReviewsLoaded);
+    productService.getRating($scope.productnumber, onRatingLoaded);
 
 }]);

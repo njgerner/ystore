@@ -22,7 +22,7 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
 
       $rootScope.$on('$stateChangeStart', 
         function(event, toState, toParams, fromState, fromParams){
-          console.log('to::' + toState.name, 'from:: ' + fromState.name);
+          console.log('to:: ' + toState.name, 'from:: ' + fromState.name);
           console.log('authorized / received', authService.authorized, authService.authorizationReceived);
 
           var isExceptionalState = function() {
@@ -31,7 +31,7 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
           }
 
           var isAuthorizedState = function() {
-            var authStates = ["profile", "settings", "settings.profile", "settings.store", "settings.notifications", "orders"];
+            var authStates = ["profile", "settings", "settings.profile", "settings.store", "settings.notifications", "orders", "leave_review"];
             return authStates.indexOf(toState.name) >= 0;
           }
 
@@ -131,6 +131,11 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
       templateUrl:"/partials/product.html",
       controller: "ProductCtrl"
     })
+    .state('leave_review', {
+      url:"/leave_review/:productnumber",
+      templateUrl:"/partials/leave_review.html",
+      controller: "LeaveReviewCtrl"
+    })
     .state('search_results', {
       url:"/search_results?query",
       templateUrl:"/partials/search_results.html",
@@ -145,6 +150,16 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
       url:"/reset_password/:resettoken",
       templateUrl: "/partials/reset_password.html",
       controller: "ResetPasswordCtrl"
+    })
+    .state('sell_info', {
+      url:"/sell_info",
+      templateUrl: "/partials/sell_with_us.html",
+      controller: "SellInfoCtrl"
+    })
+    .state('about', {
+      url:"/about",
+      templateUrl: "/partials/about.html",
+      controller: "AboutCtrl"
     })
     .state('settings', {
       abstract: true,

@@ -1,0 +1,50 @@
+<div class="row support-box">
+	<div ng-show="productLoaded" class="small-5 columns">
+		<h3>{{product.name}}</h3>
+		<img ng-src="{{product.img}}">
+	</div>
+	<div class="small-7 columns">
+	<h2>Leave a review</h2>
+	<h5>Please fill out the review form below, we appreciate your feedback!</h5>
+	<div class="panel">
+		<form ng-hide="submitted" ng-submit="sendReview()">
+			<div class="row">
+				<div class="large-12 columns">
+					<label>Headline
+						<input type="text" ng-model="title" placeholder="Enter a few words to headline your review" required/>
+					</label>
+				</div>
+			</div>
+			<div class="row">
+		    <div class="large-12 columns">
+		      <label>Choose Rating
+		        <select ng-model="rating" required>
+		          <option value="1">1 Star</option>
+		          <option value="2">2 Stars</option>
+		          <option value="3">3 Stars</option>
+		          <option value="4">4 Stars</option>
+		          <option value="5">5 Stars</option>
+		        </select>
+		      </label>
+		    </div>
+		  </div>
+		  <div class="row">
+		    <div class="large-12 columns">
+		      <label>Review
+		        <textarea rows="8" ng-model="review" placeholder="Leave a detailed review to help other customers while shopping (Optional)"></textarea>
+		      </label>
+		    </div>
+		  </div>
+		  <button type="submit" class="button expand">
+		  	<span ng-hide="submitting">Submit Review</span>
+		  	<div ng-show="submitting" class="spinner"></div>
+		  </button>
+		</form>
+		<div ng-show="submitted">
+			<strong>Thank you for your review, we appreciate your feedback!</strong>
+			<button class="button" ng-click="backToProduct()">Back to product</button>
+			<a class="button" role="button" ui-sref="store">Back to store</a>
+		</div>
+	</div>
+	</div>
+</div>

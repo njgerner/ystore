@@ -1,6 +1,6 @@
 <div class="row">
   <hr>
-  <div class="large-2 columns">
+  <div class="large-2 columns show-for-medium-up">
     <img src="http://placehold.it/400x300&text=[img]">
     <br>
     <img src="http://placehold.it/400x300&text=[img]">
@@ -14,6 +14,14 @@
     <img ng-src="{{product.img}}">
   </div>
   <div class="large-5 columns">
+    <div ng-hide="ratingLoading" class="review-stars">
+      <i ng-class="{'i-star':rating >= 1, 'i-star-open':rating < 1}"></i>
+      <i ng-class="{'i-star':rating >= 2, 'i-star-open':rating < 2}"></i>
+      <i ng-class="{'i-star':rating >= 3, 'i-star-open':rating < 3}"></i>
+      <i ng-class="{'i-star':rating >= 4, 'i-star-open':rating < 4}"></i>
+      <i ng-class="{'i-star':rating == 5, 'i-star-open':rating < 5}"></i>
+      <a ng-click="goToLeaveReview()">Leave review</a>
+    </div>
     <h4>{{product.name}}</h4>
     <p>{{product.description}}</p>
     <div class="panel">
@@ -38,7 +46,7 @@
   </div>
 </div>
 
-<div class="row">
+<div class="row show-for-medium-up">
   <hr/>
   <div class="large-6 columns">
     <h4>This is a content section.</h4>
@@ -55,5 +63,14 @@
   <div class="large-12 columns">
     <h4>You might also like:</h4>
     <suggested-product-dir pn="p.productnumber" ng-repeat="p in relatedProducts"></suggested-product-dir>
+  </div>
+</div>
+
+<div class="row">
+  <hr>
+  <div ng-hide="reviewsLoading" class="large-12 columns">
+    <h4>Helpful Customer Reviews</h4><br>
+    <product-review-dir review="r" ng-repeat="r in reviews"></product-review-dir>
+    <p ng-show="reviews.length <= 0">No reviews yet, <a ng-click="goToLeaveReview()">leave one!</a></p>
   </div>
 </div>
