@@ -12,7 +12,6 @@ appDirectives.directive('suggestedProductDir', [ '$state', '$rootScope', '$windo
 			scope.price = null;
 
 			scope.p = storeService.productsByID[scope.pn];
-			console.log('suggestedproductsdir product', scope.p);
 
 			scope.goToProduct = function() {
 				$state.go("product", {productnumber:scope.pn});

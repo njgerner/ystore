@@ -12,7 +12,6 @@ superApp.controller('ProductCtrl',
 
 
     $scope.itemAdded = function() {
-        console.log('added!');
         $scope.added = true;
     }
 
@@ -48,7 +47,6 @@ superApp.controller('ProductCtrl',
     }
 
     function onRelatedProductsLoaded (products) {
-        console.log('onRelatedProductsLoaded', products);
         $scope.relatedProducts = products;
         $scope.relatedLoading = false;
     }
