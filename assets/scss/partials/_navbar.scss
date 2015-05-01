@@ -63,15 +63,46 @@
 	}
 }
 
+/*hey twitter, suck my FUCKING ASSHOLE*/
+.f-dropdown {
+	max-width:5000px;
+	width:100%!important;
+}
+
 .f-dropdown > li {
 	width:100%;
 }
 
-.f-dropdown > li.active > a{
+.f-dropdown > li.active > a {
+	background-color:$ylift!important;
+	color:white!important;
+}
+
+.f-dropdown > li > a {
 	background-color:white!important;
 	color:$ylift!important;
 }
 
 #search-wrapper {
-	width:20%;
+	position:absolute;
+	left:30%;
+	width:50%;
+}
+
+#searchbar {
+	height:70%;
+	border-radius:10px;
+	font-size:100%;
+}
+
+.nav-text {
+	font-size:105%!important;
+}
+
+.i-search {
+	position:absolute;
+	font-size:170%;
+	margin-left:-12%;
+	top:8.5px;
+	color:$ylift;
 }

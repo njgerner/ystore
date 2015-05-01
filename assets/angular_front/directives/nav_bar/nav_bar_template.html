@@ -2,7 +2,7 @@
   <ul class="title-area">
     <li class="name">
       <h1>
-        <a ui-sref="store">
+        <a class="navtext" ui-sref="store">
           YLIFT Store
         </a>
       </h1>
@@ -13,13 +13,13 @@
   <top-bar-section>
     <ul class="search">
       <li id="search-wrapper" class="has-form">
-        <form ng-submit="search(searchQuery)">
-          <div class="row collapse">
-            <div class="large-8 small-9 columns">
-              <input type="text" ng-model="searchQuery" typeahead="name for name in productNames | filter:$viewValue | limitTo:6" typeahead-on-select="search(searchQuery)" class="form-control" placeholder="Find Stuff" autoselect=>
+        <form style="height:100%" ng-submit="search(searchQuery)">
+          <div style="height:100%" class="row collapse">
+            <div style="height:100%" class="large-8 small-9 columns">
+              <input id="searchbar" type="text" ng-model="searchQuery" typeahead="name for name in productNames.length ? [$viewValue].concat(productNames) : [] | filter:$viewValue | limitTo:6" typeahead-on-select="search(searchQuery)" class="nav-text" placeholder="Find Stuff" autoselect>
             </div>
             <div class="large-4 small-3 columns">
-              <button type="submit" class="button expand">Search</button>
+              <i ng-click="search(searchQuery)" class="i-search pointer"> </i>
             </div>
           </div>
         </form>
@@ -28,7 +28,7 @@
 
     <ul class="right">
       <li class="cart">
-        <a ng-click="openCart()">
+        <a class="nav-text" ng-click="openCart()">
         <div class="i-cart"></div>
         My Cart ({{itemCount}})
         </a>
@@ -38,7 +38,7 @@
         <a ui-sref="login">Login or Signup</a>
       </li>
       <li ng-show="profileid" has-dropdown>
-        <a>
+        <a class="nav-text">
           {{name || 'My Account'}}
         </a>
         <ul top-bar-dropdown>

@@ -2,6 +2,7 @@
 
 	<div class="row">
 		<h3 ng-if="products.length > 0" id="search-results-header">Showing {{products.length}} of {{products.length}} results for "{{query}}"</h3>
+    <h3 ng-if="products.length == 0" id="search-results-header">No results found for "{{query}}"</h3>
 	</div>
 
     <div class="row" data-match-height>
