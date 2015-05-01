@@ -22,7 +22,10 @@
             </div>
           </div>
         </label>
-        <button class="button tiny left" type="submit">Log me in</button>
+        <button class="button tiny left" type="submit">
+          <span ng-show="signingIn">Logging in...</span>
+          <div ng-hide="signingIn">Log me in</div>
+        </button>
         <button class="button tiny right" ng-click="showReg()">Register</button>
       </fieldset>
     </form>

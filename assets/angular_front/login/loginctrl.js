@@ -6,6 +6,7 @@ superApp.controller('LoginCtrl',
     $scope.loginToken = $stateParams.token;
     $scope.failedMessage = '';
     $scope.loggedin = authService.loggedin;
+    $scope.signingIn = false;
 
     if ($scope.loginToken) {
       authService.loginWithToken($scope.loginToken, function(failedMessage, successMessage) {
@@ -43,6 +44,7 @@ superApp.controller('LoginCtrl',
     }
 
   	$scope.login = function() {
+      $scope.signingIn = true;
   		authService.login($scope.email, $scope.password, function(failedMessage, successMessage) {
   			if (successMessage) {
           console.log('success?', successMessage);
@@ -53,9 +55,11 @@ superApp.controller('LoginCtrl',
             $state.go("store");
           }
   			} else {
-  				console.log('login failed', failedMessage);
-	  			$scope.failedMessage = failedMessage;
-	  		}
+          $scope.signingIn = false;
+          console.log('login failed', failedMessage);
+          $scope.failedMessage = failedMessage;
+        }
+
   		});
   	}
 
