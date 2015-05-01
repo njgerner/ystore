@@ -247,20 +247,19 @@ passport.use('bearer', new BearerStrategy(
         mailOptions.subject = 'Password Reset';
         mailOptions.text = 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
             'Please click on the following link, or paste into your browser to complete the process' + '\n\n' + 
-            'http://www.ylift.io/portal#/reset_password/' + user.resetToken + '\n\n' +
+            'http://' + req.get('host') + '/portal#/reset_password/' + user.resetToken + '\n\n' +
             'If you did not request this, please ignore this email and your password will remain unchanged.';
 
         transport.sendMail(mailOptions, function(error, info){
             if(error){
                 console.log(error);
             }else{
-                console.log('Message sent: ' + info.response);
                 res.send('success');
             }
         });
       })
       .fail(function (err) {
-        res.send(err);
+        res.send('No account was found with this email');
       });
   };
 

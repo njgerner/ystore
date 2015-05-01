@@ -62,6 +62,7 @@ superApp.controller('LoginCtrl',
     $scope.requestPasswordReset = function() {
       authService.requestPasswordReset($scope.email, function(failedMessage, successMessage) {
         if (successMessage) {
+          $scope.failedMessage = null;
           $scope.loginState = "signin";
           $scope.pass_reset = true;
         } else {

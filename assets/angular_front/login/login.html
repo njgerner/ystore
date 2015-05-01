@@ -3,6 +3,9 @@
     <form ng-submit="login()">
       <fieldset>
         <legend>Sign In</legend>
+        <div ng-if="pass_reset">
+          <p> Please check your email for instructions on resetting your password. </p>
+        </div>
         <div class="email-field">
           <label>Email
             <input type="text" placeholder="Enter your email" ng-model="email" required>
@@ -28,6 +31,7 @@
     <form>
       <fieldset>
         <legend>Password Assistance</legend>
+        <small ng-show="failedMessage" class="error"> {{failedMessage}} </small>
         <div class="email-field">
           <label>Email
             <input type="text" placeholder="Enter your email" ng-model="email" required>

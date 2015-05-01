@@ -303,11 +303,7 @@ exports.generateResetToken = function(email) {
       });
   })
   .fail(function (err){
-    if (err.body.message == 'The requested items could not be found.'){
-      deferred.resolve(false);
-    } else {
-      deferred.reject(new Error(err.body));
-    }
+    deferred.reject(new Error(err.body));
   });
   return deferred.promise;
 };
