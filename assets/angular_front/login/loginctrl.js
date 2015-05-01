@@ -14,7 +14,7 @@ superApp.controller('LoginCtrl',
         if (successMessage) {
           $state.go("profile");
         } else {
-          // console.log(failedMessage);
+          console.log(failedMessage);
           $scope.failedMessage = "Invalid/missing token.";
         }
       });
