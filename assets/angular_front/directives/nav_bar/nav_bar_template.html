@@ -16,7 +16,7 @@
         <form style="height:100%" ng-submit="search(searchQuery)">
           <div style="height:100%" class="row collapse">
             <div style="height:100%" class="large-8 small-9 columns">
-              <input id="searchbar" type="text" ng-model="searchQuery" typeahead="name for name in productNames | filter:$viewValue | limitTo:6" typeahead-on-select="search(searchQuery)" class="navtext" placeholder="Find Stuff" autoselect>
+              <input id="searchbar" type="text" ng-model="searchQuery" typeahead="name for name in productNames.length ? [$viewValue].concat(productNames) : [] | filter:$viewValue | limitTo:6" typeahead-on-select="search(searchQuery)" class="navtext" placeholder="Find Stuff" autoselect>
             </div>
             <div class="large-4 small-3 columns">
               <i ng-click="search(searchQuery)" class="i-search pointer"> </i>

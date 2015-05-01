@@ -63,11 +63,22 @@
 	}
 }
 
+/*hey twitter, suck my FUCKING ASSHOLE*/
+.f-dropdown {
+	max-width:5000px;
+	width:100%!important;
+}
+
 .f-dropdown > li {
 	width:100%;
 }
 
-.f-dropdown > li.active > a{
+.f-dropdown > li.active > a {
+	background-color:$ylift!important;
+	color:white!important;
+}
+
+.f-dropdown > li > a {
 	background-color:white!important;
 	color:$ylift!important;
 }
@@ -82,7 +93,6 @@
 	height:70%;
 	border-radius:10px;
 	font-size:100%;
-
 }
 
 .navtext {
