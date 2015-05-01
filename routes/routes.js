@@ -51,13 +51,12 @@ passport.use('local-signin', new LocalStrategy(
         done(null, user);
       }
       if (!user) {
-        console.log("COULD NOT LOG IN");
         var err = 'Invalid email or password. Please try again.'; //inform user could not log them in
         done(err, false);
       }
     })
     .fail(function (err){
-      console.log(err.body);
+      done('Invalid email/password combination', false);
     });
   }
 ));
@@ -69,7 +68,6 @@ passport.use('local-signup', new LocalStrategy(
   function(req, username, password, done) {
     orchHelper.localReg(req.body.email, req.body.password)
       .then(function (user) {
-        console.log('localReg ran', user);
         if (user) {
           if (!user.error) {
               mailOptions.to = user.email;
@@ -78,18 +76,15 @@ passport.use('local-signup', new LocalStrategy(
               transport.sendMail(mailOptions);
               done(null, user);
           } else {
-            console.log("COULD NOT REGISTER - BAD INPUT");
             done(user.error);
           }
         }
         if (!user) {
-          console.log("COULD NOT REGISTER");
           req.session.error = 'There was an error on our end, please try registering again or contact the YLift Support Team.'; //inform user could not log them in
           done(null, false);
         }
       })
       .fail(function (err){
-        console.log(err);
         done(err);
       });
   }
@@ -118,7 +113,6 @@ passport.use('bearer', new BearerStrategy(
                 if (user) {
                   return done(null, user);
                 } else {
-                  console.log("DESERIALIZATION FAILED!!!!");
                   return done(null, false);
                 }
               })
@@ -128,7 +122,6 @@ passport.use('bearer', new BearerStrategy(
           }
         }
       } catch (err) {
-        console.log('error caught in bearer', err);
         return done(err, false);
       }
     });
@@ -156,10 +149,10 @@ passport.use('bearer', new BearerStrategy(
 
   // GET /
   var index_redirect = function(req, res){
-    res.redirect('/portal');
+    res.redirect('/home');
   };
 
-  var portal = function(req, res) {
+  var home = function(req, res) {
     res.sendFile('views/main.html', { root: __dirname });
   };
 
@@ -171,7 +164,6 @@ passport.use('bearer', new BearerStrategy(
   ///////////////////////////////////////////////////////////////
   var authorized = function(req, res){
     res.type('application/json');
-    console.log('req things body/user', req.body, req.user);
     delete req.user.hash;
     delete req.user.salt;
     orchHelper.findProfileByID(req.user.profile)
@@ -210,20 +202,20 @@ passport.use('bearer', new BearerStrategy(
                 res.json({message: "Token validation failed. Mitched it."});
               });
           } else {
-            console.log('no authorized user with this token, go to index');
             res.json({message: "Invalid token."});
           }
         })
         .fail(function (err) {
-
+          res.json({message: "That email is not yet registered, please click register and signup."});
         });
     } else {
-      res.redirect("/portal");
+      res.redirect("/home");
     }
   };
 
   // POST /login
   var loginHelper = function(req, res, next) {
+
     return passport.authenticate('local-signin', function(err, user, info) {
       if (err) { return next(err); }
       if (!user) { return res.json({err:"login helper, no user error", message:info.message, failed:true}); }
@@ -247,7 +239,7 @@ passport.use('bearer', new BearerStrategy(
         mailOptions.subject = 'Password Reset';
         mailOptions.text = 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
             'Please click on the following link, or paste into your browser to complete the process' + '\n\n' + 
-            'http://' + req.get('host') + '/portal#/reset_password/' + user.resetToken + '\n\n' +
+            'http://' + req.get('host') + '/home#/reset_password/' + user.resetToken + '\n\n' +
             'If you did not request this, please ignore this email and your password will remain unchanged.';
 
         transport.sendMail(mailOptions, function(error, info){
@@ -286,7 +278,6 @@ passport.use('bearer', new BearerStrategy(
         res.send({success:true});
       })
       .fail(function (err) {
-        console.log("error updating password:", err);
         res.send({error:err});
       });
   };
@@ -466,40 +457,11 @@ passport.use('bearer', new BearerStrategy(
   var empty_cart = function(req, res) {
     orchHelper.emptyUserCart(req.body.profileid)
       .then(function (cart) {
-        console.log('then result', cart);
         res.status(200).json({cart:cart});
       })
       .fail(function (err) {
-        console.log('error', err);
         res.status(500).json({err:err});
       });
-  };
-
-  // multer middleware setup
-  var setUploadDest = function(req, res, next) {
-    var done = false;
-    return multer({dest: './uploads/',
-      rename: function(fieldname, filename, req, res) {
-        console.log('renaming...', fieldname, filename);
-        return filename;
-      },
-      changeDest: function(dest, req, res) {
-        console.log('setting upload destination to ' + dest + req.body.path);
-        return dest + req.body.path;
-      },
-      onFileUploadStart: function (file) {
-        console.log(file.originalname + ' is starting ...', file);
-      },
-      onFileUploadComplete: function (file) {
-        console.log(file.fieldname + ' uploaded to  ' + file.path);
-        done=true;
-        res.json({result:"successful upload"}); // send success response here even though we're not done w/ s3
-      },
-      onError: function (error, next) {
-        console.log('somethign fucking happened', error);
-        res.json({err:error});
-      }
-    })(req, res, next);
   };
 
   ///GET /404
@@ -567,7 +529,7 @@ passport.use('bearer', new BearerStrategy(
     ///////////////////////////////////////////////////////////////
     app.get('/', index_redirect);
     app.get('/index', index_redirect);
-    app.get('/portal', portal);
+    app.get('/home', home);
     app.get('/appjs', appjs);
     app.get('/appcss', appcss);
 
@@ -585,7 +547,6 @@ passport.use('bearer', new BearerStrategy(
     app.get('/product_reviews/:productnumber', productRoutes.get_reviews);
     app.get('/request_pass_reset/:email', request_pass_reset);
     app.get('/reset_password/:userid', reset_password);
-    // app.get('/training', adminRoutes.training);
 
     // -- START POST Routes
     ///////////////////////////////////////////////////////////////

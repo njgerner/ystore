@@ -42,7 +42,6 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 				    	}
 				    }).
 				    error(function(data, status, headers, config) {
-				    	console.log("AUTH ERROR", data, status);
 				      	internalThis.authorizationReceived = true;
 				      	internalThis.authorized = false;
 				      	callback(internalThis.authorized);
@@ -55,7 +54,6 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 			var internalThis = this;
 			$http({method: 'GET', url: '/login?token=' + token})
 			    .success(function (data, status, headers, config) {
-			    	console.log('loginwithtoken data', data, status);
 			    	if (data.tkn) {
 			    		trdInterceptor.setToken(data.tkn);
 			    		callback(null, data.message);
@@ -75,14 +73,11 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 					headers:{'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'},
 					data:$.param({email:email, password:password})}).
 			    success(function (data, status, headers, config) {
-			    	console.log('login data', data, status);
 			    	if (data.tempPwd && data.tkn) {
 			    		trdInterceptor.setToken(data.tkn);
 			    		callback(null, "temp_password");
 			    	} else if (data.tkn) {
 			    		trdInterceptor.setToken(data.tkn);
-			    		// internalThis.authorizationReceived = true;
-					    // internalThis.authorized = true;
 			    		callback(null, "success!");
 			    	}
 			    	else {
@@ -104,7 +99,6 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 			 			if(data.tkn) {
 			 				trdInterceptor.setToken(data.tkn);
 			 			}
-			 			// console.log("return from server", data);
 			    	callback(data.err, data.status);
 			    }).
 			    error(function(data, status, headers, config) {

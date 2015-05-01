@@ -12,7 +12,7 @@ superApp.controller('LoginCtrl',
         if (successMessage) {
           $state.go("profile");
         } else {
-          // console.log(failedMessage);
+          console.log(failedMessage);
           $scope.failedMessage = "Invalid/missing token.";
         }
       });
@@ -43,6 +43,7 @@ superApp.controller('LoginCtrl',
     }
 
   	$scope.login = function() {
+      console.log('logging in...', $scope.email, $scope.password);
   		authService.login($scope.email, $scope.password, function(failedMessage, successMessage) {
   			if (successMessage) {
           console.log('success?', successMessage);
