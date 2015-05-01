@@ -6,6 +6,8 @@ superApp.controller('LoginCtrl',
     $scope.loginToken = $stateParams.token;
     $scope.failedMessage = '';
     $scope.loggedin = authService.loggedin;
+    $scope.signingIn = false;
+    $scope.requestingReset = false;
 
     if ($scope.loginToken) {
       authService.loginWithToken($scope.loginToken, function(failedMessage, successMessage) {
@@ -43,7 +45,7 @@ superApp.controller('LoginCtrl',
     }
 
   	$scope.login = function() {
-      console.log('logging in...', $scope.email, $scope.password);
+      $scope.signingIn = true;
   		authService.login($scope.email, $scope.password, function(failedMessage, successMessage) {
   			if (successMessage) {
           console.log('success?', successMessage);
@@ -54,19 +56,23 @@ superApp.controller('LoginCtrl',
             $state.go("store");
           }
   			} else {
-  				console.log('login failed', failedMessage);
-	  			$scope.failedMessage = failedMessage;
-	  		}
+          $scope.signingIn = false;
+          console.log('login failed', failedMessage);
+          $scope.failedMessage = failedMessage;
+        }
+
   		});
   	}
 
     $scope.requestPasswordReset = function() {
+      $scope.requestingReset = true;
       authService.requestPasswordReset($scope.email, function(failedMessage, successMessage) {
         if (successMessage) {
           $scope.failedMessage = null;
           $scope.loginState = "signin";
           $scope.pass_reset = true;
         } else {
+          $scope.requestingReset = false;
           $scope.failedMessage = failedMessage;
         }
       });
