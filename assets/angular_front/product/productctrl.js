@@ -5,14 +5,11 @@ superApp.controller('ProductCtrl',
     $scope.loading = true;
     $scope.reviewsLoading = true;
     $scope.ratingLoading = true;
+    $scope.relatedLoading = true;
     $scope.added = false;
     $scope.productnumber = $stateParams.productnumber;
     $scope.error = false;
 
-    $scope.onProductsLoaded = function() {
-        $scope.product = storeService.productsByID[$scope.productnumber];
-        $scope.loading = false;
-    }
 
     $scope.itemAdded = function() {
         console.log('added!');
@@ -20,7 +17,6 @@ superApp.controller('ProductCtrl',
     }
 
     $scope.addToCart = function() {
-        console.log('adding ' + $scope.quantity + ' to cart.');
         if ($scope.quantity <= 0) {
             $scope.error = 'Please select a quantity first';
             return;
@@ -46,6 +42,16 @@ superApp.controller('ProductCtrl',
         $state.go("leave_review", {productnumber:$scope.productnumber});
     }
 
+    function onProductLoaded = function(product) {
+        $scope.product = product;
+        $scope.loading = false;
+    }
+
+    function onRelatedProductsLoaded = function(products) {
+        $scope.relatedProducts = products;
+        $scope.relatedLoading = false;
+    }
+
     function onReviewsLoaded (reviews) {
         $scope.reviews = reviews;
         $scope.reviewsLoading = false;
@@ -58,17 +64,12 @@ superApp.controller('ProductCtrl',
         $scope.ratingLoading = false;
     }
 
-    if (storeService.productsReceived) {
-        $scope.product = storeService.productsByID[$scope.productnumber];
-        $scope.loading = false;
-    } else {
-        storeService.getAllProducts(function(result) {$scope.onProductsLoaded();});
-    }
-
     if (authService.authorized) {
         $scope.profileid = authService.profile.id;
     }
 
+    storeService.getProductByID($scope.productnumber, onProductLoaded);
+    storeService.getRelatedProducts($scope.productnumber, onRelatedProductsLoaded);
     productService.getReviews($scope.productnumber, onReviewsLoaded);
     productService.getRating($scope.productnumber, onRatingLoaded);
 
