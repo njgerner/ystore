@@ -1,8 +1,8 @@
 <div ng-show="loading" class="i-spinner">
-	
+
 </div>
 <div ng-hide="loading" class="container">
-	<div style="margin-top:15px; margin-bottom:15px" class="row text-center">
+	<div id="order-confirmation-table" class="row text-center">
 		<h3><strong>Order Confirmation<strong></h3>
 	</div>
 	<div style="margin-bottom:30px" class="row large-6 large-offset-3 columns">
@@ -31,7 +31,9 @@
 		  </tbody>
 		</table>
 	</div>
-	<div class="row col-md-8 col-md-offset-2">
-		<button style="display:block; margin:auto" class="button ylift-brand" ng-click="goToProfile()">Back to profile</button>
+	<div class="row">
+	 	<div class="large-8 large-offset-2 columns">
+			<button class="button ylift-brand auto-center" ng-click="goToProfile()">Back to profile</button>
+		</div>
 	</div>
 </div>
