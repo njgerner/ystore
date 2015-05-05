@@ -14,7 +14,7 @@ superApp.controller('OrderCtrl',
     
     storeService.getOrderByID($scope.orderid, function(order) {
       $scope.order = order;
-      $scope.order.createdAt = $scope.displayCreatedAt($scope.order.createdAt);
+      $scope.createdAt = $scope.displayCreatedAt($scope.order.createdAt);
       $scope.loading = false;
     });
 }]);
