@@ -1,0 +1,15 @@
+.merchant-note {
+  @include alert(
+    // Adjust the background of the alert
+    $bg: #cccccc,
+    // Give a border to the alert box
+    $radius: true
+  );
+  .close {
+    @include alert-close();
+  }
+  &.alert-close {
+    opacity: 0;
+  }
+	margin-top: 8px;
+}
