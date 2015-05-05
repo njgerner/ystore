@@ -9,11 +9,12 @@ superApp.controller('OrderCtrl',
     }
 
     $scope.displayCreatedAt = function(time) {
-      return moment(time).format("MMMM Do, YYYY")
+      return moment(time).format("MMMM Do, YYYY");
     }
     
     storeService.getOrderByID($scope.orderid, function(order) {
       $scope.order = order;
+      $scope.createdAt = $scope.displayCreatedAt($scope.order.createdAt);
       $scope.loading = false;
     });
 }]);
