@@ -8,7 +8,7 @@ module.exports = {
 			"name": null,
 			"addresses": [],
 			"cart": null,
-			"jsonType": "merchant",
+			"jsonType": "profile",
 			"createdAt": new Date(),
 			"updatedAt": new Date()
 		};

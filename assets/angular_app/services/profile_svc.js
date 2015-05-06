@@ -15,7 +15,7 @@ trdServices.service("profileService", ['$rootScope', '$http', '$cookieStore', 'a
     }
 
     this.getMerchantProfile = function(callback) {
-        if (this.merchant != undefined) {
+        if (this.merchant !== undefined) {
             return this.merchant;
         }
         var inThis = this;
@@ -85,7 +85,7 @@ trdServices.service("profileService", ['$rootScope', '$http', '$cookieStore', 'a
     }
 
     this.isAdminOfMerchant = function(merchantid) {
-        return this.adminOf[authService.profile.id];
+        return this.adminOf[merchantid];
     }
  
 }]);
