@@ -7,7 +7,7 @@
 <div class="row">
     <div class="large-8 columns"><h5>Select a payment method</h5></div>
     <div ng-show="addAddressView" class="large-4 columns text-right" ng-click="toggleAddPayment()"><i class="i-cancel-circled"></i></div>
-    <div ng-hide="addAddressView" class="large-4 columns text-right" ng-click="toggleAddPayment()"><i class="i-plus"></i></div>
+    <div style="padding:0" ng-hide="addAddressView" class="large-4 columns text-right" ng-click="toggleAddPayment()"><i class="i-plus"></i></div>
 </div>
 <div class="row">
     <div class="row address-list thin" ng-repeat="card in cards" ng-click="selectPayment($index)">
