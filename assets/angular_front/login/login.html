@@ -69,7 +69,10 @@
           </label>
           <small ng-show="failedMessage" class="error">{{failedMessage}}</small>
         </div>
-        <button type="submit" class="button tiny left">Register</button>
+        <button type="submit" class="button tiny left">
+          <span ng-hide="registering">Register</span>
+          <span ng-show="registering">Registering...</span>
+        </button>
         <button class="button tiny right" ng-click="showSignin()">Back To Login</button>
       </fieldset>
     </form>

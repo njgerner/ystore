@@ -8,6 +8,7 @@ superApp.controller('LoginCtrl',
     $scope.loggedin = authService.loggedin;
     $scope.signingIn = false;
     $scope.requestingReset = false;
+    $scope.registering = false;
 
     if ($scope.loginToken) {
       authService.loginWithToken($scope.loginToken, function(failedMessage, successMessage) {
@@ -84,10 +85,12 @@ superApp.controller('LoginCtrl',
         $scope.failedMessage = "Passwords must match!";
         return;
       }
+      $scope.registering = true;
   		authService.register($scope.email, $scope.password, function(err, status) {
         console.log("loginctrl err/status", err, status);
   			if (err) {
           console.log('error register', err);
+          $scope.registering = false;
           $scope.failedMessage = status;
         } else {
   				$state.go(status);

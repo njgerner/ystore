@@ -182,6 +182,11 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
       templateUrl: "/partials/settings_notifications.html",
       controller: "SettingsNotificationsCtrl"
     })
+    .state('settings.merchant', {
+      url:"/merchant",
+      templateUrl: "/partials/settings_merchant.html",
+      controller: "SettingsMerchantCtrl"
+    })
     .state('support', {
       url:"/support",
       templateUrl: "/partials/support.html",

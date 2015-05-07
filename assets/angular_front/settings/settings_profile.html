@@ -5,29 +5,26 @@
       <div>
         <label for="inputName">Name</label>
         <div>
-          <input type="text" ng-model="profile.name" placeholder="{{profile.name}}">
+          <input type="text" ng-model="profile.name" placeholder="Add your name">
         </div>
       </div>
       <div>
         <label for="inputEmail">Email</label>
         <div>
-          <input type="email" ng-model="profile.email" placeholder="{{profile.email}}" required>
+          <input type="email" ng-model="profile.email" placeholder="Enter your email" required>
         </div>
       </div>
       <div>
         <label for="inputName">Phone</label>
         <div>
-          <input type="tel" ng-model="profile.phone" placeholder="{{profile.phone}}">
+          <input type="tel" ng-model="profile.phone" placeholder="Add a contact phone number">
         </div>
       </div>
       <div>
-        <div></div>
-        <div>
-          <button ng-hide="addAddressView || showAddressView" type="submit" class="button small" ng-click="updateProfile()">
-            <span ng-hide="updating">Save Changes</span>
-            <span ng-show="updating">Saving....</span>
-          </button>
-        </div>
+        <button ng-hide="addAddressView || showAddressView" type="submit" class="button small" ng-click="updateProfile()">
+          <span ng-hide="updating">Save Changes</span>
+          <span ng-show="updating">Saving....</span>
+        </button>
       </div>
     </fieldset>
   </form>

@@ -16,6 +16,7 @@ module.exports = function(express, app, __dirname) {
       emailRoutes     = require('./email-routes.js')(express, app, __dirname),
       profileRoutes   = require('./profile-routes.js')(express, app, __dirname),
       productRoutes   = require('./product-routes.js')(express, app, __dirname),
+      regRoutes       = require('./reg-routes.js')(express, app, __dirname),
       stripeRoutes    = require('./stripe-routes.js')(express, app, __dirname),
       Q               = require('q'),               // https://registry.npmjs.org/q
       stripeEnv       = process.env.STRIPE;
@@ -71,7 +72,7 @@ passport.use('local-signup', new LocalStrategy(
         if (user) {
           if (!user.error) {
               mailOptions.to = user.email;
-              mailOptions.subject = 'Welcome to Something!';
+              mailOptions.subject = 'Welcome to the YLIFT Store!';
               mailOptions.html = {path: './views/email_templates/welcome_email.html'};
               transport.sendMail(mailOptions);
               done(null, user);
@@ -562,13 +563,19 @@ passport.use('bearer', new BearerStrategy(
     app.post('/register', register);
     app.post('/remove_card_from_customer/:profileid/:customerid', ensureAuthenticated, stripeRoutes.remove_card_from_customer, stripeRoutes.update_customer);
     app.post('/submit_review', ensureAuthenticated, productRoutes.submit_review);
+    app.post('/verify_key', ensureAuthenticated, regRoutes.verify_key);
     app.post('/update_cart', update_cart);
     app.post('/update_customer/:profileid', ensureAuthenticated, stripeRoutes.update_customer);
     app.post('/update_password', update_password);
     app.post('/update_user', ensureAuthenticated, update_user);
     // -- START Profile Routes
     ///////////////////////////////////////////////////////////////
+    app.get('/profile/get_merchant/:profileid', ensureAuthenticated, profileRoutes.get_merchant);
     app.post('/profile/update/:profileid', ensureAuthenticated, profileRoutes.update_profile);
+    app.post('/profile/get_merchant/:profileid', ensureAuthenticated, profileRoutes.get_merchant);
+    app.post('/profile/add_merchant/:profileid', ensureAuthenticated, profileRoutes.add_merchant);
+    app.post('/profile/update_merchant/:profileid', ensureAuthenticated, profileRoutes.update_merchant);
+    app.post('/profile/delete_merchant/:profileid', ensureAuthenticated, profileRoutes.delete_merchant);
 
     // -- START ERROR Routes
     ///////////////////////////////////////////////////////////////
