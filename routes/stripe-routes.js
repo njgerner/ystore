@@ -166,6 +166,7 @@ module.exports = function(express, app, __dirname) {
 		var total = transaction.total;
 		var shipping = transaction.shipping;
 		var shipTo = transaction.addressShipTo;
+		var merchants = transaction.merchants;
 		var customer = transaction.customer;
 		var charge = {
 			amount: total * 100, // stripe processes in the smallest denomination so for USD it is cents!!! <-- why was i so excited about this?
@@ -182,11 +183,12 @@ module.exports = function(express, app, __dirname) {
 			} else {
 				var order = {
 					id: crypto.randomBytes(5).toString('hex'),
-					charge: charge,
+					charge: charge.id,
 					total: total,
 					shipping: shipping,
 					products: productsInCart,
 					shipTo: shipTo,
+					merchants: merchants,
 					profile: profileid,
 					customer: customer.id,
 					createdAt: new Date(),

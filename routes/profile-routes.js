@@ -15,7 +15,6 @@ module.exports = function(express, app, __dirname) {
 	  	.then(function (result) {
 	  		var isAdmin = false;
 	  		if (result.owner == req.params.profileid) {
-	  			console.log('profile-routes result', result);
 	  			isAdmin = true;
 	  		}
 	  		res.status(200).json({profile:result, admin:isAdmin});

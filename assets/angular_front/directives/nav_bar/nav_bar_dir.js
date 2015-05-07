@@ -60,7 +60,6 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 
 	  		function onProfileLoaded () {
 	  			profileService.getMerchantProfile(function (profile) {
-	  				console.log('profile returned from get merchant profile', profile);
 	  				if (profile && profile.name) {
 	  					scope.merchantName = profile.name;
 	  					scope.isMerchant = true;

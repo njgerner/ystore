@@ -13,6 +13,10 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
     this.ordersByID = {};
     this.cart = {};
 
+    this.getProductMerchant = function(productid, callback) {
+        return this.productsByID[productid].attributes.vendor;
+    }
+
     this.getAllProducts = function(callback) {
         if (this.productsReceived) {
             callback(this.products);
@@ -229,7 +233,36 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
         .error(function(data, status, headers, config) {
             callback(data);
         });
+    }
 
+    this.getMerchantOrders = function(merchantid, callback) {
+      var internalThis = this;
+      $http({method: 'GET', url: "/merchant_orders/" + merchantid})
+        .success(function(data, status, headers, config) {
+          if(!data.orders) {
+            callback();
+            return;
+          }
+          for (var i = 0; i < data.orders.length; i++) {
+            internalThis.ordersByID[data.orders[i].id] = data.orders[i];
+          }
+          callback(data.orders);
+        })
+        .error(function(data, status, headers, config) {
+            callback(data);
+        });
+    }
+
+    this.updateOrder = function(order, callback) {
+      var internalThis = this;
+      $http({method: 'POST', url: "/update_order", data:{order:order}})
+        .success(function(data, status, headers, config) {
+          internalThis.ordersByID[data.order.id] = data.order;
+          callback(data.order);
+        })
+        .error(function(data, status, headers, config) {
+            callback(data);
+        });
     }
 
     this.getFilteredProducts = function(query, callback) {

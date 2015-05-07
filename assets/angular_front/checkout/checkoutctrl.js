@@ -59,8 +59,12 @@ superApp.controller('CheckoutCtrl',
     $scope.onProductsLoaded = function() {
       $scope.products = storeService.productsByID;
       storeService.getProductsInCart($scope.profileid, function (products) { 
+        $scope.merchants = [];
         $scope.productsInCart = products;
         for (var i = 0; i < $scope.productsInCart.length; i++) {
+          if ($scope.merchants.indexOf(storeService.getProductMerchant($scope.productsInCart[i].productnumber)) == -1) {
+            $scope.merchants.push(storeService.getProductMerchant($scope.productsInCart[i].productnumber));
+          }
           $scope.total += ( $scope.products[$scope.productsInCart[i].productnumber].price * $scope.productsInCart[i].quantity );
         }
       });
@@ -68,7 +72,7 @@ superApp.controller('CheckoutCtrl',
 
     $scope.submitOrder = function() {
       $scope.orderSubmitted = true;
-      stripeService.submitOrder($scope.addresseshipTo, $scope.productsInCart, $scope.shippingCost, $scope.total, function(err, result) {
+      stripeService.submitOrder($scope.addressShipTo, $scope.productsInCart, $scope.merchants, $scope.shippingCost, $scope.total, function(err, result) {
         if (err) {
           $scope.orderError = err.message;
           $scope.orderSubmitted = false;

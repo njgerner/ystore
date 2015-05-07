@@ -685,12 +685,40 @@ exports.getMerchantProfile = function(profileid) {
   return deferred.promise;
 };
 
+exports.getMerchantOrders = function(merchantid) {
+  var deferred = Q.defer();
+  db.search('orders', 'value.merchants: ' + merchantid)
+  .then(function (res) {
+    var results = rawDogger.push_values_to_top(res.body.results);
+    deferred.resolve(results);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body));
+  });
+   
+  return deferred.promise;
+};
+
 exports.updateCustomer = function(customer) {
   var deferred = Q.defer();
   customer.updatedAt = new Date();
   db.put('customers', customer.id, customer)
     .then(function (result) {
       deferred.resolve(customer);
+    })
+    .fail(function (err) {
+      deferred.reject(new Error(err.body));
+    });
+   
+    return deferred.promise;
+};
+
+exports.updateOrder = function(order) {
+  var deferred = Q.defer();
+  order.updatedAt = new Date();
+  db.put('orders', order.id, order)
+    .then(function (result) {
+      deferred.resolve(order);
     })
     .fail(function (err) {
       deferred.reject(new Error(err.body));
