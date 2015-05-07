@@ -628,6 +628,63 @@ exports.getProfile = function(profileid) {
   return deferred.promise;
 };
 
+exports.addMerchantProfile = function(profile) {
+  var deferred = Q.defer();
+  profile.updatedAt = new Date();
+  db.put('merchant-profiles', profile.id, profile)
+    .then(function (result) {
+      deferred.resolve(profile);
+    })
+    .fail(function (err) {
+      deferred.reject(new Error(err.body));
+    });
+   
+    return deferred.promise;
+};
+
+exports.updateMerchantProfile = function(profile) {
+  var deferred = Q.defer();
+  profile.updatedAt = new Date();
+  db.put('merchant-profiles', profile.id, profile)
+    .then(function (result) {
+      deferred.resolve(profile);
+    })
+    .fail(function (err) {
+      deferred.reject(new Error(err.body));
+    });
+   
+    return deferred.promise;
+};
+
+exports.deleteMerchantProfile = function(merchantid) {
+  var deferred = Q.defer();
+  db.remove('merchant-profiles', merchantid)
+    .then(function (result) {
+      deferred.resolve(true);
+    })
+    .fail(function (err) {
+      deferred.reject(new Error(err.body));
+    });
+   
+    return deferred.promise;
+};
+
+exports.getMerchantProfile = function(profileid) {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+  .collection('merchant-profiles')
+  .query(profileid)
+  .then(function (res) {
+    var results = rawDogger.push_values_to_top(res.body.results);
+    deferred.resolve(results[0]);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body));
+  });
+   
+  return deferred.promise;
+};
+
 exports.updateCustomer = function(customer) {
   var deferred = Q.defer();
   customer.updatedAt = new Date();
@@ -681,5 +738,17 @@ exports.getProductReviews = function(productnumber) {
     deferred.reject(new Error(err.body));
   });
 
+  return deferred.promise;
+};
+
+exports.getRegKey = function(keyid) {
+  var deferred = Q.defer();
+  db.get('registration-keys', keyid)
+    .then(function (result) {
+      deferred.resolve(result.body);
+    })
+    .fail(function (err) {
+      deferred.reject(new Error(err.body));
+    });
   return deferred.promise;
 };
