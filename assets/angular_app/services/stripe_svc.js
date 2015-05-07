@@ -5,7 +5,7 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
       this.card = null;
       this.customer = {};
       this.customerReceived = false;
-      Stripe.setPublishableKey("pk_live_vNO7fZbJ5sYZ9DBbinIm36Q5");
+      Stripe.setPublishableKey("pk_test_vNO7fZbJ5sYZ9DBbinIm36Q5");
 
     	this.setToken = function(token) {
     		this.token = token;
