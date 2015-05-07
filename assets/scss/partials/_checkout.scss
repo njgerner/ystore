@@ -1,3 +1,14 @@
 .checkout-cost-text {
 	margin: 5px;
 }
+
+input.ng-dirty {
+	
+	&.trd-invalid {
+		border-color:red;
+	}
+
+	&.ng-invalid {
+		border-color:red;
+	}
+}
