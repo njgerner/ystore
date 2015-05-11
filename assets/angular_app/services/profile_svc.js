@@ -16,6 +16,7 @@ trdServices.service("profileService", ['$rootScope', '$http', '$cookieStore', 'a
 
     this.getMerchantProfile = function(callback) {
         if (this.merchant !== undefined) {
+            console.log('an undefined merchant', this.merchant);
             return this.merchant;
         }
         var inThis = this;
