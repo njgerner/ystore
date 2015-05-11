@@ -111,6 +111,11 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
       templateUrl: "/partials/orders.html",
       controller: "OrdersCtrl"
     })
+    .state('merchant_orders', {
+      url: "/merchant_orders",
+      templateUrl: "/partials/merchant_orders.html",
+      controller: "MerchantOrdersCtrl"
+    })
     .state('limit_orders', {
       url: "/orders/:orderid/:limit",
       templateUrl: "/partials/limit_orders.html",

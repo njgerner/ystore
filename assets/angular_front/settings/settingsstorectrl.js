@@ -117,10 +117,11 @@ superApp.controller('SettingsStoreCtrl',
     }
 
     $scope.onCustomerLoaded = function (customer) {
-      console.log('customer returned from onCustomerLoaded', customer);
       $scope.customer = customer;
-      $scope.cards = $scope.customer.sources.data;
       $scope.loadingCustomer = false;
+      if ($scope.customer && $scope.customer.sources) {
+        $scope.cards = $scope.customer.sources.data;
+      }
     }
 
   	$scope.onOrdersLoaded = function (orders) {

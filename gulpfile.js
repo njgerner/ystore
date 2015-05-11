@@ -18,11 +18,12 @@ var paths = {
 		'assets/angular_app/trd_interceptor.js',
 		'assets/angular_app/controllers.js',
 		'assets/angular_app/services.js',
+		'assets/angular_app/filters.js',
 		'assets/angular_app/directives.js',
+		'assets/angular_app/filters/*.js',
 		'assets/angular_front/**/*.js',
 		'assets/angular_app/controllers/*.js',
 		'assets/angular_app/services/*.js',
-		'assets/angular_app/filters.js',
 		bowerRoot + 'foundation/js/foundation.js'
 	],
 	scss: [
@@ -54,18 +55,6 @@ gulp.task('jshint', function() {
     .pipe(jshint())
     .pipe(jshint.reporter('default'));
 });
-
-// gulp.task('handle-scss', ['clean:css'], function() {
-// 	return gulpRubySass(paths.scss, { container: 'gulp-ruby-sass-app' })
-// 				.on('error', function (err) {
-// 			    	console.error('Error', err.message);
-// 			  	})
-// 				.pipe(gulpConcat('yapp.css'))	// concat css files into one
-// 				.pipe(gulp.dest('public/css'))	// output unminified version
-// 				.pipe(minifyCSS())				// minify
-// 				.pipe(gulpRename("yapp.min.css"))// change name for minificated verion
-// 				.pipe(gulp.dest('public/css'));	// output minified version
-// });
 
 gulp.task('handle-scss', ['clean:css'], function() {
 	gulp.src(paths.scss)

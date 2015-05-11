@@ -17,6 +17,7 @@ module.exports = function(express, app, __dirname) {
       profileRoutes   = require('./profile-routes.js')(express, app, __dirname),
       productRoutes   = require('./product-routes.js')(express, app, __dirname),
       regRoutes       = require('./reg-routes.js')(express, app, __dirname),
+      storeRoutes     = require('./store-routes.js')(express, app, __dirname),
       stripeRoutes    = require('./stripe-routes.js')(express, app, __dirname),
       Q               = require('q'),               // https://registry.npmjs.org/q
       stripeEnv       = process.env.STRIPE;
@@ -540,6 +541,7 @@ passport.use('bearer', new BearerStrategy(
     app.get('/authorized', ensureAuthenticated, authorized);
     app.get('/cart/:profileid', ensureAuthenticated, get_cart);
     app.get('/get_customer/:customerid', ensureAuthenticated, stripeRoutes.get_customer);
+    app.get('/merchant_orders/:merchantid', storeRoutes.merchant_orders);
     app.get('/get_product_by_id/:productnumber', get_product_by_id);
     app.get('/get_related_products/:productnumber', get_related_products);
     app.get('/login', login);
@@ -566,6 +568,7 @@ passport.use('bearer', new BearerStrategy(
     app.post('/verify_key', ensureAuthenticated, regRoutes.verify_key);
     app.post('/update_cart', update_cart);
     app.post('/update_customer/:profileid', ensureAuthenticated, stripeRoutes.update_customer);
+    app.post('/update_order', ensureAuthenticated, storeRoutes.update_order);
     app.post('/update_password', update_password);
     app.post('/update_user', ensureAuthenticated, update_user);
     // -- START Profile Routes

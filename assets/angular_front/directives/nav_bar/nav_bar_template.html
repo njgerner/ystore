@@ -7,7 +7,6 @@
         </a>
       </h1>
     </li>
-    <!-- <li class="toggle-topbar menu-icon"><a href="menu-bar" role="button" class="right-off-canvas-toggle"></a></li> -->
   </ul>
 
   <top-bar-section>
@@ -44,6 +43,10 @@
         <ul top-bar-dropdown>
           <li><a ui-sref="profile">Profile</a></li>
           <li><a ui-sref="settings.profile">Settings</a></li>
+          <li ng-if="isMerchant" class="divider"></li>
+          <li ng-if="isMerchant"><small>Merchant</small></li>
+          <li ng-if="isMerchant"><a ui-sref="merchant_orders">View Orders</a></li>
+          <li ng-if="isMerchant"><a ui-sref="settings.merchant">Settings</a></li>
           <li class="divider"></li>
           <li><a ng-click="logoutNow()">Log Out</a></li>
         </ul>

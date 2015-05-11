@@ -1,5 +1,7 @@
-appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$rootScope', '$window', '$cookieStore', '$cookies', 'storeService',
-	function(authService, $state, $location, $rootScope, $window, $cookieStore, $cookies, storeService) {
+appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$rootScope', '$window', 
+		'$cookieStore', '$cookies', 'storeService', 'profileService',
+	function(authService, $state, $location, $rootScope, $window, 
+		$cookieStore, $cookies, storeService, profileService) {
 	return {
 		restrict: 'E',
 		scope: {
@@ -14,8 +16,8 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 			scope.name = "";
 			scope.profileid = null;
 			scope.isAdmin = false;
+			scope.isMerchant = false;
 			scope.query = null;
-			// scope.showCart = $rootScope.isVisible;
 			scope.productsInCart = [];
 			scope.itemCount = 0;
 			scope.cart = {};
@@ -35,7 +37,6 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 	  		};
 
 	  		scope.openCart = function() {
-	  			// $rootScope.toggleVisible(function(isVisible) {scope.showCart = isVisible});
 	  			$rootScope.showCart(function(isVisible) {scope.showCart = isVisible});
 	  		};
 
@@ -49,6 +50,7 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 	  				scope.name = authService.profile.name;
 	  				scope.profileid = authService.profile.id;
 	  				scope.isAdmin = authService.isAdmin;
+	  				onProfileLoaded();
 	  			} else {
 	  				scope.loggedIn = false;
 	  				scope.name =  null;
@@ -56,11 +58,21 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 	  			}
 	  		};
 
+	  		function onProfileLoaded () {
+	  			profileService.getMerchantProfile(function (profile) {
+	  				if (profile && profile.name) {
+	  					scope.merchantName = profile.name;
+	  					scope.isMerchant = true;
+	  				}
+	  			});
+	  		}
+
 			if (authService.authorized) {
 				scope.loggedIn = true;
 				scope.name = authService.profile.name;
 				scope.profileid = authService.profile.id;
 				scope.isAdmin = authService.isAdmin;
+				onProfileLoaded();
 			} else {
 				scope.loadedFun = null;
 			    scope.loadedFun = $rootScope.$on('authorizationloaded', function(evt, args) {
