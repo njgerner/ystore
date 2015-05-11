@@ -9,6 +9,7 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
     this.productsByID = {};
     this.relatedProductsByID = {};
     this.productsByCategory = {};
+    this.productsByMerchant = {};
     this.orders = [];
     this.ordersByID = {};
     this.cart = {};
@@ -89,6 +90,22 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
             $http({method: 'POST', url: "/get_products_by_category", data:{category:category}})
             .success(function(data, status, headers, config) {
                 inThis.productsByCategory[category] = data.products;
+                callback(data.products);
+            })
+            .error(function(data, status, headers, config) {
+                callback(data);
+            });
+        }
+    }
+
+    this.getProductsByMerchant = function(merchantid, callback) {
+        if (this.productsByMerchant[merchantid] !== undefined) {
+            callback(this.productsByMerchant[merchantid]);
+        } else{
+            var inThis = this;
+            $http({method: 'GET', url: "/get_products_by_merchant/" + merchantid})
+            .success(function(data, status, headers, config) {
+                inThis.productsByMerchant[merchantid] = data.products;
                 callback(data.products);
             })
             .error(function(data, status, headers, config) {

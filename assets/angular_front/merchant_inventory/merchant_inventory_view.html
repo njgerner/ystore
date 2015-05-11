@@ -1,0 +1,16 @@
+<div class="panel" ng-repeat="product in products">
+	<div class="row">
+		<div class="small-4 columns">
+			<img ng-src="{{product.img}}">
+			<ul class="button-group even-2">
+			<li><a ng-click="goToProduct(product.productnumber)" class="button expand small">View Product</a></li>
+			<li><a ng-click="deleteProduct(product.productnumber)" class="button expand alert small">Delete</a></li>
+			</ul>
+		</div>
+		<div class="small-8 columns">
+			<h5>{{product.name}} <small>${{product.price}}</small></h5>
+			<p><strong>Category: </strong>{{product.category}}</p>
+			<p><strong>Description: </strong>{{product.description}}</p>
+		</div>
+	</div>
+</div>

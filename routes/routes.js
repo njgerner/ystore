@@ -543,6 +543,7 @@ passport.use('bearer', new BearerStrategy(
     app.get('/get_customer/:customerid', ensureAuthenticated, stripeRoutes.get_customer);
     app.get('/merchant_orders/:merchantid', storeRoutes.merchant_orders);
     app.get('/get_product_by_id/:productnumber', get_product_by_id);
+    app.get('/get_products_by_merchant/:merchantid', ensureAuthenticated, storeRoutes.get_products_by_merchant);
     app.get('/get_related_products/:productnumber', get_related_products);
     app.get('/login', login);
     app.get('/order/:orderid', get_order_by_id);

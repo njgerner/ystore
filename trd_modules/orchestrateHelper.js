@@ -129,7 +129,6 @@ exports.changePassword = function(id, password) {
 
 //used in local-signup strategy
 exports.localReg = function (email, password) {
-  var deferred = Q.defer();
   var user = User.newUser(email, password);
   var profile = Profile.newProfile(email);
   var cart = Cart.newCart();
@@ -688,6 +687,20 @@ exports.getMerchantProfile = function(profileid) {
 exports.getMerchantOrders = function(merchantid) {
   var deferred = Q.defer();
   db.search('orders', 'value.merchants: ' + merchantid)
+  .then(function (res) {
+    var results = rawDogger.push_values_to_top(res.body.results);
+    deferred.resolve(results);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body));
+  });
+   
+  return deferred.promise;
+};
+
+exports.getMerchantProducts = function(merchantid) {
+  var deferred = Q.defer();
+  db.search('products', 'value.attributes.vendor: ' + merchantid)
   .then(function (res) {
     var results = rawDogger.push_values_to_top(res.body.results);
     deferred.resolve(results);
