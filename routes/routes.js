@@ -555,6 +555,7 @@ passport.use('bearer', new BearerStrategy(
     ///////////////////////////////////////////////////////////////
     app.post('/add_customer/:profileid', ensureAuthenticated, stripeRoutes.add_customer);
     app.post('/add_guest_customer', stripeRoutes.add_guest_customer);
+    app.post('/add_check_order', storeRoutes.create_check_order);
     app.post('/add_item_to_cart', add_item_to_cart);
     app.post('/add_token_to_customer/:profileid/:customerid', ensureAuthenticated, stripeRoutes.add_token_to_customer, stripeRoutes.update_customer);
     app.post('/empty_cart', empty_cart);
@@ -568,6 +569,7 @@ passport.use('bearer', new BearerStrategy(
     app.post('/verify_key', ensureAuthenticated, regRoutes.verify_key);
     app.post('/update_cart', update_cart);
     app.post('/update_customer/:profileid', ensureAuthenticated, stripeRoutes.update_customer);
+    app.post('/update_guest_customer', stripeRoutes.update_guest_customer);
     app.post('/update_order', ensureAuthenticated, storeRoutes.update_order);
     app.post('/update_password', update_password);
     app.post('/update_user', ensureAuthenticated, update_user);

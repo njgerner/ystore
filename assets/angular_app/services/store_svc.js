@@ -279,4 +279,16 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
         $cookieStore.put('pInCart', productsInCart || []);
     }
 
+    this.submitCheckOrder = function(customer, total, callback) {
+      var inThis = this;
+      $http({method: 'POST', url: "/add_check_order",
+            data:{total:total,customer:customer}})
+        .success(function(data, status, headers, config) {
+            callback(null, {id: data.order.id});
+        })
+        .error(function(data, status, headers, config) {
+          callback("There was an error processing your order, please try again. If this issue persists, please contact YLift Support (support@ylift.io).");
+        });
+      };
+
 }]);
