@@ -299,7 +299,7 @@ exports.getAllProducts = function() {
   db.newSearchBuilder()
     .collection('products')
     .limit(100)
-    .query('*')
+    .query('value.active: "Y"')
   .then(function(result) {
     var products = [];
     for (var i = 0; i < result.body.results.length; i++) {
@@ -341,7 +341,7 @@ exports.getRelatedProducts = function(productnumber) {
     db.newSearchBuilder()
     .collection('products')
     .limit(4)
-    .query('category: ' + product.category) // balls and stuff
+    .query('value.category: ' + product.category + ' AND value.active: "Y"') // balls and stuff
     .then(function (res) {
       deferred.resolve(rawDogger.push_values_to_top(res.body.results));
     })
@@ -360,13 +360,12 @@ exports.getRelatedProducts = function(productnumber) {
 
 exports.getProductsByCategory = function(category) {
   var deferred = Q.defer();
-  db.search('products', "value.category: " + category)
+  db.newSearchBuilder()
+  .collection('products')
+  .limit(100)
+  .query('value.category: ' + product.category + ' AND value.active: "Y"') // balls and stuff
   .then(function (result){
-    var products = [];
-    for (var i = 0; i < result.body.results.length; i++) {
-      products[i] = result.body.results[i].value;
-    }
-    deferred.resolve(products);
+    deferred.resolve(rawDogger.push_values_to_top(res.body.results));
   })
   .fail(function (err){
     if (err.body.message == 'The requested items could not be found.'){
@@ -420,6 +419,22 @@ exports.addItemToUserCart = function(userid, productnumber, quantity) {
   return deferred.promise;
 };
 
+exports.addProduct = function(product, user) {
+  var deferred = Q.defer();
+  product.createdAt = new Date();
+  product.updatedAt = new Date();
+  product.createdBy = user;
+  db.put('products', product.productnumber, product)
+    .then(function (result) {
+      deferred.resolve(product);
+    })
+    .fail(function (err) {
+      deferred.reject(new Error(err.body));
+    });
+   
+    return deferred.promise;
+};
+
 exports.getCartByID = function(profileid) {
   var deferred = Q.defer();
   db.get('carts', profileid)
@@ -432,6 +447,50 @@ exports.getCartByID = function(profileid) {
     } else {
       deferred.reject(new Error(err.body));
     }
+  });
+  return deferred.promise;
+};
+
+exports.getProductKeyMap = function(key) {
+  var deferred = Q.defer();
+  db.get('product-key-map', key)
+  .then(function (result) {
+    deferred.resolve(result.body);
+  })
+  .fail(function (err) {
+    if (err.body.message == 'The requested items could not be found.'){
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body));
+    }
+  });
+  return deferred.promise;
+};
+
+exports.getMerchantProductCount = function(merchantid) {
+   var deferred = Q.defer();
+  db.newSearchBuilder()
+  .collection('products')
+  .query(merchantid)
+  .then(function (res) {
+    deferred.resolve(res.body.total_count);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body));
+  });
+  return deferred.promise;
+};
+
+exports.incrementCollectionProperty = function(collection, key, prop) {
+  var deferred = Q.defer();
+  db.newPatchBuilder(collection, key)
+  .inc(prop)
+  .apply()
+  .then(function (res) {
+    deferred.resolve(res.body);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body));
   });
   return deferred.promise;
 };
@@ -700,7 +759,10 @@ exports.getMerchantOrders = function(merchantid) {
 
 exports.getMerchantProducts = function(merchantid) {
   var deferred = Q.defer();
-  db.search('products', 'value.attributes.vendor: ' + merchantid)
+  db.newSearchBuilder()
+  .collection('products')
+  .limit(100)
+  .query('value.attributes.vendor: ' + merchantid)
   .then(function (res) {
     var results = rawDogger.push_values_to_top(res.body.results);
     deferred.resolve(results);
@@ -732,6 +794,21 @@ exports.updateOrder = function(order) {
   db.put('orders', order.id, order)
     .then(function (result) {
       deferred.resolve(order);
+    })
+    .fail(function (err) {
+      deferred.reject(new Error(err.body));
+    });
+   
+    return deferred.promise;
+};
+
+exports.updateProduct = function(product, user) {
+  var deferred = Q.defer();
+  product.updatedAt = new Date();
+  product.updatedBy = user;
+  db.put('products', product.productnumber, product)
+    .then(function (result) {
+      deferred.resolve(product);
     })
     .fail(function (err) {
       deferred.reject(new Error(err.body));

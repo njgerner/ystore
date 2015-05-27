@@ -3,27 +3,23 @@ superApp.controller('MerchantInventoryCtrl',
   function($rootScope, $scope, $state, profileService, storeService) {
 
     $scope.profileLoading = true;
-    $scope.productsLoading = true;
 
     $scope.goToOrders = function() {
       $state.go("merchant_orders");
     }
 
-    $scope.onProductsLoaded = function(products) {
-      console.log('on products loaded', products);
+    function onProductsLoaded (products) {
       $scope.products = products;
+      console.log('products', $scope.products);
+      $scope.productsLoading = false;
     }
 
-    $scope.onProfileLoaded = function(profile) {
+  	function onProfileLoaded (profile) {
       $scope.merchant = profile;
+      $scope.profileLoading = false;
+      storeService.getProductsByMerchant($scope.merchant.id, onProductsLoaded);
     }
 
-  	$scope.onProfileLoaded = function(profile) {
-  		$scope.merchant = profile;
-      console.log('onProfileLoaded', $scope.merchant);
-      storeService.getProductsByMerchant($scope.merchant.id, $scope.onProductsLoaded);
-    }
-
-  	profileService.getMerchantProfile($scope.onProfileLoaded);
+  	profileService.getMerchantProfile(onProfileLoaded);
 
 }]);

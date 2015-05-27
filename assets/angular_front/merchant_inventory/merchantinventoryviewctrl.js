@@ -1,16 +1,25 @@
 superApp.controller('MerchantInventoryViewCtrl',
-  ['$rootScope', '$scope', '$state',
-  function($rootScope, $scope, $state) {
+  ['$rootScope', '$scope', '$state', 'storeService', 'profileService', 'productService',
+  function($rootScope, $scope, $state, storeService, profileService, productService) {
 
-  	$scope.profile = $scope.profile;
-  	$scope.products = $scope.products;
+    $scope.goToProduct = function(id) {
+      $state.go("merchant_inventory.product", {productnumber:id});
+    }
 
-  	$scope.goToProduct = function(id) {
-  		$state.go("merchant_inventory.product", {productnumber:id});
-  	}
+    $scope.deactivateProduct = function(product) {
+      if (confirm('Are you sure you want to deactivate this product?')) {
+        product.active = "N";
+        productService.updateProduct(product, onProductUpdated);
+      }
+    }
 
-  	$scope.deleteProduct = function(id) {
-  		
-  	}
+    $scope.activateProduct = function(product) {
+      product.active = "Y";
+      productService.updateProduct(product, onProductUpdated);
+    }
+
+    function onProductUpdated (product) {
+      console.log('success');
+    }
 
 }]);

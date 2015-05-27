@@ -10,14 +10,28 @@
     <img src="http://placehold.it/400x300&text=[img]">
   </div>
   <div class="large-5 columns">
+    <input ng-show="mode == 'edit'" type="text" ng-model="product.img"/>
     <img ng-src="{{product.img}}">
   </div>
   <div class="large-5 columns">
-    <h4>{{product.name}}</h4>
-    <p>{{product.description}}</p>
+    <!-- Edit name -->
+    <h4>{{product.name}}<small ng-click="mode = 'edit'" class="right"><i class="i-pencil"></i>Edit</small></h4>
+    <input ng-show="mode == 'edit'" type="text" ng-model="product.name"/>
+    <!-- Edit description -->
+    <p ng-show="mode == 'view'">{{product.description}}</p>
+    <textarea ng-show="mode == 'edit'" ng-model="product.description" rows="12"></textarea>
+    <!-- Edit price -->
     <div class="panel">
-      <h5>${{product.price}}</h5>
+      <h5 ng-show="mode == 'view'">${{product.price}}</h5>
+      <input ng-show="mode == 'edit'" type="text" ng-model="product.price"/>
     </div>
-
+    <!-- Save -->
+    <div ng-show="mode == 'edit'" class="clearfix">
+      <button class="small secondary right" ng-click="mode = 'view'">Cancel</button>
+      <button class="small primary right" ng-click="updateProduct()">
+        <span ng-hide="updating">Save</span>
+        <span ng-show="updating">Saving...</span>
+      </button>
+    </div>
   </div>
 </div>
