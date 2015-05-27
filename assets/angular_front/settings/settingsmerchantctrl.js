@@ -31,20 +31,45 @@ superApp.controller('SettingsMerchantCtrl',
       }
     }
 
+    $scope.cancel = function() {
+      $scope.showSignUp = false;
+      $scope.verifying = false;
+      $scope.registering = false;
+      $scope.updating = false;
+      $scope.deleting = false;
+      $scope.merchantLoading = false;
+      $scope.merchantLoaded = false;
+      $scope.keyStatus = null;
+    }
+
+    $scope.addProfileToMerchant = function() {
+      console.log('adding profile to merchant', $scope.merchantProfile);
+      $scope.adding = true;
+      $scope.merchantProfile.members.push(authService.profile.id);
+      $scope.updateMerchantAccount($scope.merchantProfile, onMerchantUpdated);
+    }
+
     $scope.verifyRegKey = function() {
       $scope.verifying = true;
       registrationService.verifyKey($scope.regkey, onVerification);
     }
 
-    function onVerification(status) {
+    function onVerification(status, merchant) {
+      console.log("onVerification", status, merchant);
       $scope.verifying = false;
       if (status == "verified") {
         $scope.keyStatus = status;
         $scope.showSignUp = true;
       } else if (status == "unverified") {
         $scope.keyStatus = status;
-      } else {
-        $scope.keyStatus = "invalid";
+      } else if (status == "invalid") {
+        $scope.keyStatus = status;
+      }
+
+      if (merchant && status == "can_add") {
+        $scope.keyStatus = status;
+        $scope.merchantProfile = merchant;
+        console.log('merchant profile set', $scope.merchantProfile);
       }
     }
 
@@ -62,7 +87,9 @@ superApp.controller('SettingsMerchantCtrl',
       $scope.updating = false;
       if (error) {
         $scope.error = error;
+        return;
       }
+      $scope.merchantLoaded = true;
     }
 
     function onMerchantDeleted (error) {

@@ -15,12 +15,20 @@ module.exports = function(express, app, __dirname) {
 	  	.then(function (key) {
 	  		if (key && key.status == "verified" && !key.isActive) {
 	  			res.status(200).json({status:"verified"});
+	  		} else if (key && key.status == "verified" && key.isActive) {
+	  			orchHelper.getMerchantProfile(key.owner)
+	  			.then(function(result) {
+	  				res.status(200).json({status:"can_add", merchant:result});
+	  			}, function (err) {
+	  				throw new Error(err.body);
+	  			});
 	  		} else {
 	  			res.status(200).json({status:"unverified"});
 	  		}
 	  	})
 	  	.fail(function (err) {
-	  		res.status(500).json({err:err});
+	  		console.log('405 error', err);
+	  		res.status(405).json({status:"invalid"});
 	  	});
 	};
 

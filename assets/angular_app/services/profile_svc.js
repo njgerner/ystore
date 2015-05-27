@@ -51,13 +51,13 @@ trdServices.service("profileService", ['$rootScope', '$http', '$cookieStore', 'a
 
     this.updateMerchantProfile = function(profile, callback) {
         var inThis = this;
-        $http({method: 'POST', url: '/profile/update_merchant/' + authService.profile.id, 
+        $http({method: 'POST', url: '/profile/update_merchant', 
                data:{profile:profile}})
         .success(function (data, status, headers, config) {
             if (data.profile && data.admin) {
                 inThis.adminOf[data.profile.id] = true;
             }
-            inThis.merchant = data.profile6
+            inThis.merchant = data.profile;
             callback(data.profile);
         })
         .error(function (data, status, headers, config) {

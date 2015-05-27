@@ -11,7 +11,7 @@ module.exports = function(express, app, __dirname) {
 
 	// GET /profile/get_merchant/:profileid
 	ProfileRoutes.get_merchant = function(req, res) {
-	  orchHelper.getMerchantProfile(req.params.profileid)
+	  orchHelper.findMerchantProfile(req.params.profileid)
 	  	.then(function (result) {
 	  		var isAdmin = false;
 	  		if (result.owner == req.params.profileid) {
@@ -41,15 +41,18 @@ module.exports = function(express, app, __dirname) {
 	  merchant.name = req.body.name;
 	  merchant.regkey = req.body.regkey;
 	  orchHelper.addMerchantProfile(merchant)
-	  	.then(function (result) {
-	  		res.status(200).json(merchant);
-	  	})
-	  	.fail(function (err) {
-	  		res.status(500).json({err:err});
-	  	});
+  	.then(function (result) {
+  		return orchHelper.activateRegKey(req.body.regkey, merchant.id);
+  	})
+  	.then(function (result) {
+  		res.status(200).json(merchant);
+  	})
+  	.fail(function (err) {
+  		res.status(500).json({err:err});
+  	});
 	};
 
-	// POST /profile/update_merchant/:profileid
+	// POST /profile/update_merchant
 	ProfileRoutes.update_merchant = function(req, res) {
 	  orchHelper.updateMerchantProfile(req.body.profile)
 	  	.then(function (result) {
@@ -65,15 +68,15 @@ module.exports = function(express, app, __dirname) {
 		orchHelper.getMerchantProfile(req.params.profileid)
 		.then(function (result) {
 			if (result.id == req.body.merchantid && result.owner == req.params.profileid) {
-			  orchHelper.deleteMerchantProfile(req.body.merchantid)
-		  	.then(function (result) {
-		  		res.status(200).json({result:"deleted"});
-		  	})
-		  	.fail(function (err) {
-		  		res.status(500).json({err:err});
-		  	});
+				orchHelper.deleteMerchantProfile(req.body.merchantid)
+			  	.then(function (result) {
+			  		res.status(200).json({result:"deleted"});
+			  	})
+			  	.fail(function (err) {
+			  		res.status(500).json({err:err});
+			  	});
 			} else {
-		  	res.status(200).json({result:"unauthorized"});
+		  		res.status(200).json({result:"unauthorized"});
 			}
 		})
 		.fail(function (err) {

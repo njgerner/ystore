@@ -727,7 +727,7 @@ exports.deleteMerchantProfile = function(merchantid) {
     return deferred.promise;
 };
 
-exports.getMerchantProfile = function(profileid) {
+exports.findMerchantProfile = function(profileid) {
   var deferred = Q.defer();
   db.newSearchBuilder()
   .collection('merchant-profiles')
@@ -740,6 +740,18 @@ exports.getMerchantProfile = function(profileid) {
     deferred.reject(new Error(err.body));
   });
    
+  return deferred.promise;
+};
+
+exports.getMerchantProfile = function(profileid) {
+  var deferred = Q.defer();
+  db.get('merchant-profiles', profileid)
+    .then(function (result) {
+      deferred.resolve(result.body);
+    })
+    .fail(function (err) {
+      deferred.reject(new Error(err.body));
+    });
   return deferred.promise;
 };
 
@@ -868,5 +880,24 @@ exports.getRegKey = function(keyid) {
     .fail(function (err) {
       deferred.reject(new Error(err.body));
     });
+  return deferred.promise;
+};
+
+exports.activateRegKey = function(keyid, ownerid) {
+  var deferred = Q.defer();
+  db.get('registration-keys', keyid)
+  .then(function (result) {
+    var key = result.body;
+    key.isActive = true;
+    key.activationDate = new Date();
+    key.owner = ownerid;
+    return db.put('registration-keys', key.id, key);
+  })
+  .then(function (result) {
+    deferred.resolve(result.body);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body));
+  });
   return deferred.promise;
 };

@@ -582,7 +582,7 @@ passport.use('bearer', new BearerStrategy(
     app.post('/profile/update/:profileid', ensureAuthenticated, profileRoutes.update_profile);
     app.post('/profile/get_merchant/:profileid', ensureAuthenticated, profileRoutes.get_merchant);
     app.post('/profile/add_merchant/:profileid', ensureAuthenticated, profileRoutes.add_merchant);
-    app.post('/profile/update_merchant/:profileid', ensureAuthenticated, profileRoutes.update_merchant);
+    app.post('/profile/update_merchant', ensureAuthenticated, profileRoutes.update_merchant);
     app.post('/profile/delete_merchant/:profileid', ensureAuthenticated, profileRoutes.delete_merchant);
 
     // -- START ERROR Routes
