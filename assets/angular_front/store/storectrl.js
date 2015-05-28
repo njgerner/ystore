@@ -40,6 +40,10 @@ superApp.controller('StoreCtrl',
       $rootScope.showCart(function(isVisible) {$scope.showCart = isVisible});
     };
 
+    $scope.defaultImage = function(product) {
+      product.img = "http://placehold.it/475x475&text=[img]";
+    }
+
     function onProductsInCartReceived (result) {
       $scope.productsInCart = result;
     }
