@@ -1,5 +1,5 @@
-trdServices.service("productService", ['$rootScope', '$http', '$cookieStore', 'stripeService',
-    function ($rootScope, $http, $cookieStore, stripeService) {
+trdServices.service("productService", ['$rootScope', '$http', '$cookieStore', 'stripeService', 'profileService',
+    function ($rootScope, $http, $cookieStore, stripeService, profileService) {
 
     	this.submitReview = function(productnumber, review, callback) {
     		review.productnumber = productnumber;
@@ -32,5 +32,31 @@ trdServices.service("productService", ['$rootScope', '$http', '$cookieStore', 's
                 callback({message:"error", err:data});
             });
     	}
+
+        this.addProduct = function(product, callback) {
+            if (!profileService.merchant) {
+                callback({message:"error", err:'merchant not authorized'});
+                return;
+            }
+            $http({method: 'POST', url: "/add_product",
+                   data: {product:product, merchant:profileService.merchant}})
+            .success(function(data, status, headers, config) {
+                callback(data);
+            })
+            .error(function(data, status, headers, config) {
+                callback({message:"error", err:data});
+            });
+        }
+
+        this.updateProduct = function(product, callback) {
+            $http({method: 'POST', url: "/update_product",
+                   data: {product:product}})
+            .success(function(data, status, headers, config) {
+                callback(data);
+            })
+            .error(function(data, status, headers, config) {
+                callback({message:"error", err:data});
+            });
+        }
 
 }]);

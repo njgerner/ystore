@@ -22,13 +22,31 @@ superApp.controller('SettingsMerchantCtrl',
       $scope.updating = true;
       profileService.updateMerchantProfile($scope.merchantProfile, onMerchantUpdated);
     }
+    
+    // leaving this functionality out for now
+    // $scope.deleteMerchantAccount = function() {
+    //   $scope.error = null;
+    //   if ($window.confirm('Are you sure you want to remove this account?')) {
+    //     $scope.deleting = true;
+    //     profileService.deleteMerchantProfile(onMerchantDeleted);
+    //   }
+    // }
 
-    $scope.deleteMerchantAccount = function() {
-      $scope.error = null;
-      if ($window.confirm('Are you sure you want to remove this account?')) {
-        $scope.deleting = true;
-        profileService.deleteMerchantProfile(onMerchantDeleted);
-      }
+    $scope.cancel = function() {
+      $scope.showSignUp = false;
+      $scope.verifying = false;
+      $scope.registering = false;
+      $scope.updating = false;
+      $scope.deleting = false;
+      $scope.merchantLoading = false;
+      $scope.merchantLoaded = false;
+      $scope.keyStatus = null;
+    }
+
+    $scope.addProfileToMerchant = function() {
+      $scope.adding = true;
+      $scope.merchantProfile.members.push(authService.profile.id);
+      $scope.updateMerchantAccount($scope.merchantProfile, onMerchantUpdated);
     }
 
     $scope.verifyRegKey = function() {
@@ -36,15 +54,20 @@ superApp.controller('SettingsMerchantCtrl',
       registrationService.verifyKey($scope.regkey, onVerification);
     }
 
-    function onVerification(status) {
+    function onVerification(status, merchant) {
       $scope.verifying = false;
       if (status == "verified") {
         $scope.keyStatus = status;
         $scope.showSignUp = true;
       } else if (status == "unverified") {
         $scope.keyStatus = status;
-      } else {
-        $scope.keyStatus = "invalid";
+      } else if (status == "invalid") {
+        $scope.keyStatus = status;
+      }
+
+      if (merchant && status == "can_add") {
+        $scope.keyStatus = status;
+        $scope.merchantProfile = merchant;
       }
     }
 
@@ -62,7 +85,9 @@ superApp.controller('SettingsMerchantCtrl',
       $scope.updating = false;
       if (error) {
         $scope.error = error;
+        return;
       }
+      $scope.merchantLoaded = true;
     }
 
     function onMerchantDeleted (error) {

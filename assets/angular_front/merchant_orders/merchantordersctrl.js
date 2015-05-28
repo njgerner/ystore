@@ -13,8 +13,6 @@ superApp.controller('MerchantOrdersCtrl',
 
     $scope.updateOrder = function(order) {
       storeService.updateOrder(order, function(order) {
-
-      console.log('updating order!', order);
       });
     }
 

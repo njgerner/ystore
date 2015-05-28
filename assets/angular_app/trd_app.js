@@ -112,6 +112,27 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
       templateUrl: "/partials/orders.html",
       controller: "OrdersCtrl"
     })
+    .state('merchant_inventory', {
+      abstract: true,
+      url: "/merchant_inventory",
+      templateUrl: "/partials/merchant_inventory.html",
+      controller: "MerchantInventoryCtrl"
+    })
+    .state('merchant_inventory.view', {
+      url: "/view",
+      templateUrl: "/partials/merchant_inventory_view.html",
+      controller: "MerchantInventoryViewCtrl"
+    })
+    .state('merchant_inventory.product', {
+      url: "/product/:productnumber",
+      templateUrl: "/partials/merchant_inventory_product.html",
+      controller: "MerchantInventoryProductCtrl"
+    })
+    .state('merchant_inventory.new_product', {
+      url: "/new_product",
+      templateUrl: "/partials/merchant_inventory_new_product.html",
+      controller: "MerchantInventoryNewProductCtrl"
+    })
     .state('merchant_orders', {
       url: "/merchant_orders",
       templateUrl: "/partials/merchant_orders.html",

@@ -20,6 +20,17 @@ module.exports = function(express, app, __dirname) {
 		});
 	};
 
+	// GET /get_products_by_merchant/:merchantid
+	StoreRoutes.get_products_by_merchant = function(req, res) {
+		orchHelper.getMerchantProducts(req.params.merchantid)
+		.then(function (data) {
+			res.status(200).json({products:data});
+		})
+		.fail(function (err) {
+			res.status(500).json({err:err});
+		});
+	};
+
 	// POST /update_order
 	StoreRoutes.update_order = function(req, res) {
 		orchHelper.updateOrder(req.body.order)
