@@ -4,6 +4,7 @@ module.exports = function(express, app, __dirname) {
   var path            = require('path'),            // http://nodejs.org/docs/v0.3.1/api/path.html
       passport        = require('passport'),        // https://npmjs.org/package/passport
       orchHelper      = require('../trd_modules/orchestrateHelper'),
+      emailHelper     = require('../trd_modules/emailHelper'),
       config          = require('../trd_modules/config'),
       moment          = require('moment'),
       multer          = require('multer'),
@@ -72,11 +73,13 @@ passport.use('local-signup', new LocalStrategy(
       .then(function (user) {
         if (user) {
           if (!user.error) {
-              mailOptions.to = user.email;
-              mailOptions.subject = 'Welcome to the YLIFT Store!';
-              mailOptions.html = {path: './views/email_templates/welcome_email.html'};
-              transport.sendMail(mailOptions);
+            emailHelper.sendWelcome(user.name, user.email)
+            .then(function(result) {
               done(null, user);
+            })
+            .fail(function(err) {
+              done(null, user, err);
+            });
           } else {
             done(user.error);
           }
