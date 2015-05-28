@@ -6,6 +6,7 @@ module.exports = {
 			"id": id,
 			"name": null,
 			"owner": owner,
+			"members": [owner],
 			"category": category,
 			"addresses": [],
 			"jsonType": "merchant",

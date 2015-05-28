@@ -16,7 +16,8 @@ trdServices.service("profileService", ['$rootScope', '$http', '$cookieStore', 'a
 
     this.getMerchantProfile = function(callback) {
         if (this.merchant !== undefined) {
-            return this.merchant;
+            callback(this.merchant);
+            return;
         }
         var inThis = this;
         $http({method: 'GET', url: '/profile/get_merchant/' + authService.profile.id})
@@ -50,7 +51,7 @@ trdServices.service("profileService", ['$rootScope', '$http', '$cookieStore', 'a
 
     this.updateMerchantProfile = function(profile, callback) {
         var inThis = this;
-        $http({method: 'POST', url: '/profile/update_merchant/' + authService.profile.id, 
+        $http({method: 'POST', url: '/profile/update_merchant', 
                data:{profile:profile}})
         .success(function (data, status, headers, config) {
             if (data.profile && data.admin) {

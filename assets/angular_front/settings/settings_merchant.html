@@ -3,6 +3,16 @@
   <span class="merchant-note" ng-hide="verifying" ng-if="!keyStatus">Before we can set up a corporate merchant account we need you to verify the registration key provided to you.</span>
   <span class="alert-box success" ng-hide="verifying" ng-if="keyStatus == 'verified'">Success! Please register your company merchant account below.</span>
   <span class="alert-box info" ng-hide="verifying" ng-if="keyStatus == 'unverified' || keyStatus == 'invalid'">That key is invalid or not verified, please make sure you are using the correct key.</span>
+  <div class="panel" ng-hide="verifying" ng-if="keyStatus == 'can_add'">
+    <h5>Registration key verified, please either add yourself to the account or cancel.</h5>
+    <div>
+      <button class="primary small" ng-click="addProfileToMerchant()">
+        <span ng-hide="adding">Add Me</span>
+        <span ng-show="adding">Adding...</span>
+        </button>
+      <button class="secondary small" ng-click="cancel()">Cancel</button>
+    </div>
+  </div>
   <form ng-hide="showSignUp">
     <fieldset>
       <div>
@@ -45,6 +55,7 @@
         <span ng-hide="registering">Register Account</span>
         <span ng-show="registering">Registering...</span>
       </button>
+      <button class="button secondary small" ng-click="cancel()">Cancel</button>
     </fieldset>
   </form>
 </div>
@@ -82,10 +93,10 @@
         <span ng-hide="updating">Update Account</span>
         <span ng-show="updating">Updating...</span>
       </button>
-      <button class="button small alert right" ng-click="deleteMerchantAccount()">
+<!--       <button class="button small alert right" ng-click="deleteMerchantAccount()">
         <span ng-hide="deleting">Delete Account</span>
         <span ng-show="deleting">Deleting...</span>
-      </button>
+      </button> -->
     </fieldset>
   </form>
 </div>

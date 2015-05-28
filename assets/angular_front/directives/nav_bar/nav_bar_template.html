@@ -44,8 +44,9 @@
           <li><a ui-sref="profile">Profile</a></li>
           <li><a ui-sref="settings.profile">Settings</a></li>
           <li ng-if="isMerchant" class="divider"></li>
-          <li ng-if="isMerchant"><small>Merchant</small></li>
+          <li class="nav-sub-header" ng-if="isMerchant">Merchant</li>
           <li ng-if="isMerchant"><a ui-sref="merchant_orders">View Orders</a></li>
+          <li ng-if="isMerchant"><a ui-sref="merchant_inventory.view">Manage</a></li>
           <li ng-if="isMerchant"><a ui-sref="settings.merchant">Settings</a></li>
           <li class="divider"></li>
           <li><a ng-click="logoutNow()">Log Out</a></li>

@@ -1,0 +1,42 @@
+<div class="row">
+  <hr>
+  <div class="large-4 columns">
+    <label>Image URL
+      <input type="text" ng-model="product.img" placeholder="/img/products/##-###-###_475x475.jpg"/>
+      <!-- filler image goes here -->
+    </label>
+  </div>
+  <div class="large-8 columns">
+    <p ng-show="error">{{error}}</p>
+    <!-- Edit name -->
+    <label>Product name
+      <input type="text" ng-model="product.name" placeholder="Enter the product name"/>
+    </label>
+    <!-- Edit name -->
+    <label>Product category
+      <select ng-model="product.category">
+        <option value="skin care">Skin care</option>
+        <option value="cosmetics">Cosmetics</option>
+        <option value="ylift">YLIFT</option>
+        <option value="other">Other</option>
+      </select>
+    </label>
+    <!-- Edit description -->
+    <label>Product description
+      <textarea ng-model="product.description" rows="12" placeholder="Enter the product description"></textarea>
+    </label>
+    <!-- Edit price -->
+    <div class="panel">
+      <label>Product Price
+        <input type="text" ng-model="product.price" placeholder="Enter price, exclude currency symbol"/>
+      </label>
+    </div>
+    <!-- Save -->
+    <div class="clearfix">
+      <button class="primary expand right" ng-click="addProduct()">
+        <span ng-hide="updating">Add</span>
+        <span ng-show="updating">Adding...</span>
+      </button>
+    </div>
+  </div>
+</div>

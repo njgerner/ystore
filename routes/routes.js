@@ -543,6 +543,7 @@ passport.use('bearer', new BearerStrategy(
     app.get('/get_customer/:customerid', ensureAuthenticated, stripeRoutes.get_customer);
     app.get('/merchant_orders/:merchantid', storeRoutes.merchant_orders);
     app.get('/get_product_by_id/:productnumber', get_product_by_id);
+    app.get('/get_products_by_merchant/:merchantid', ensureAuthenticated, storeRoutes.get_products_by_merchant);
     app.get('/get_related_products/:productnumber', get_related_products);
     app.get('/login', login);
     app.get('/order/:orderid', get_order_by_id);
@@ -556,9 +557,11 @@ passport.use('bearer', new BearerStrategy(
     app.post('/add_customer/:profileid', ensureAuthenticated, stripeRoutes.add_customer);
     app.post('/add_guest_customer', stripeRoutes.add_guest_customer);
     app.post('/add_item_to_cart', add_item_to_cart);
+    app.post('/add_product', ensureAuthenticated, productRoutes.add_product);
     app.post('/add_token_to_customer/:profileid/:customerid', ensureAuthenticated, stripeRoutes.add_token_to_customer, stripeRoutes.update_customer);
     app.post('/empty_cart', empty_cart);
     app.post('/email_support', emailRoutes.support);
+    app.post('/deactivate_product', ensureAuthenticated, productRoutes.deactivate_product);
     app.post('/get_products_by_category/:category', get_products_by_category);
     app.post('/login', loginHelper);
     app.post('/process_transaction?:profileid', stripeRoutes.process_transaction);
@@ -570,14 +573,16 @@ passport.use('bearer', new BearerStrategy(
     app.post('/update_customer/:profileid', ensureAuthenticated, stripeRoutes.update_customer);
     app.post('/update_order', ensureAuthenticated, storeRoutes.update_order);
     app.post('/update_password', update_password);
+    app.post('/update_product', ensureAuthenticated, productRoutes.update_product);
     app.post('/update_user', ensureAuthenticated, update_user);
+    
     // -- START Profile Routes
     ///////////////////////////////////////////////////////////////
     app.get('/profile/get_merchant/:profileid', ensureAuthenticated, profileRoutes.get_merchant);
     app.post('/profile/update/:profileid', ensureAuthenticated, profileRoutes.update_profile);
     app.post('/profile/get_merchant/:profileid', ensureAuthenticated, profileRoutes.get_merchant);
     app.post('/profile/add_merchant/:profileid', ensureAuthenticated, profileRoutes.add_merchant);
-    app.post('/profile/update_merchant/:profileid', ensureAuthenticated, profileRoutes.update_merchant);
+    app.post('/profile/update_merchant', ensureAuthenticated, profileRoutes.update_merchant);
     app.post('/profile/delete_merchant/:profileid', ensureAuthenticated, profileRoutes.delete_merchant);
 
     // -- START ERROR Routes
