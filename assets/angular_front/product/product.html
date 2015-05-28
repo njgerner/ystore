@@ -10,7 +10,7 @@
     <img src="http://placehold.it/400x300&text=[img]">
   </div>
   <div class="large-5 columns">
-    <img ng-src="{{product.img}}">
+    <img ng-src="{{product.img}}" ng-error="defaultImage()">
   </div>
   <div class="large-5 columns">
     <div ng-hide="ratingLoading" class="review-stars">
