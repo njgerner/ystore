@@ -80,7 +80,7 @@ module.exports = function(express, app, __dirname) {
 
 	// POST /deactivate_product
 	ProductRoutes.deactivate_product = function(req, res) {
-		orchHelper.getMerchantProfile(req.user.profile)
+		orchHelper.findMerchantProfile(req.user.profile)
 		.then(function (res) {
 			return orchHelper.deactivateProduct(req.body.productid);
 		})
@@ -94,7 +94,7 @@ module.exports = function(express, app, __dirname) {
 
 	// POST /update_product
 	ProductRoutes.update_product = function(req, res) {
-		orchHelper.getMerchantProfile(req.user.profile)
+		orchHelper.findMerchantProfile(req.user.profile)
 		.then(function (res) {
 			return orchHelper.updateProduct(req.body.product, req.user.profile);
 		})

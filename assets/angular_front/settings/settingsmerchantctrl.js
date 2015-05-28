@@ -22,14 +22,15 @@ superApp.controller('SettingsMerchantCtrl',
       $scope.updating = true;
       profileService.updateMerchantProfile($scope.merchantProfile, onMerchantUpdated);
     }
-
-    $scope.deleteMerchantAccount = function() {
-      $scope.error = null;
-      if ($window.confirm('Are you sure you want to remove this account?')) {
-        $scope.deleting = true;
-        profileService.deleteMerchantProfile(onMerchantDeleted);
-      }
-    }
+    
+    // leaving this functionality out for now
+    // $scope.deleteMerchantAccount = function() {
+    //   $scope.error = null;
+    //   if ($window.confirm('Are you sure you want to remove this account?')) {
+    //     $scope.deleting = true;
+    //     profileService.deleteMerchantProfile(onMerchantDeleted);
+    //   }
+    // }
 
     $scope.cancel = function() {
       $scope.showSignUp = false;
@@ -43,7 +44,6 @@ superApp.controller('SettingsMerchantCtrl',
     }
 
     $scope.addProfileToMerchant = function() {
-      console.log('adding profile to merchant', $scope.merchantProfile);
       $scope.adding = true;
       $scope.merchantProfile.members.push(authService.profile.id);
       $scope.updateMerchantAccount($scope.merchantProfile, onMerchantUpdated);
@@ -55,7 +55,6 @@ superApp.controller('SettingsMerchantCtrl',
     }
 
     function onVerification(status, merchant) {
-      console.log("onVerification", status, merchant);
       $scope.verifying = false;
       if (status == "verified") {
         $scope.keyStatus = status;
@@ -69,7 +68,6 @@ superApp.controller('SettingsMerchantCtrl',
       if (merchant && status == "can_add") {
         $scope.keyStatus = status;
         $scope.merchantProfile = merchant;
-        console.log('merchant profile set', $scope.merchantProfile);
       }
     }
 

@@ -731,7 +731,7 @@ exports.findMerchantProfile = function(profileid) {
   var deferred = Q.defer();
   db.newSearchBuilder()
   .collection('merchant-profiles')
-  .query(profileid)
+  .query('value.owner: ' + profileid + ' OR value.members: ' + profileid)
   .then(function (res) {
     var results = rawDogger.push_values_to_top(res.body.results);
     deferred.resolve(results[0]);
