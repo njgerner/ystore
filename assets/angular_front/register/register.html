@@ -1,20 +1,18 @@
-<div class="small-12 large-6 large-offset-3 columns text-center">
+<div class="small-12 large-6 large-offset-3 columns text-center logo-container">
 	<div ng-hide="viewState != 'start'">
-		<img style="margin-top:2%" width="150px" src="img/logo.png" />
-		<h4 style="margin:2%"> Thanks for your interest! </h4>
+		<img width="150px" src="img/logo.png" />
+		<h4 style="margin-top: 1rem;"> Choose how you want to register </h4>
 		<div class="row" ng-hide="viewState != 'start'">
 			<!-- <button class="button" ng-click="viewState = 'info'">Learn More</button> -->
-			<div class="small-6 large-3 large-offset-3 columns">
+			<div class="small-6 large-4 large-offset-2 columns">
 				<button class="button" ng-click="viewState = 'individual'">Register As Individual</button>
 			</div>
-			<div class="small-6 large-3 columns">
-				<button class="button" ng-click="viewState = 'form1'">Register As YLift</button>
+			<div class="small-6 large-4 end columns">
+				<button class="button" ng-click="viewState = 'form1'">YLIFT Network Registration</button>
 			</div>
 		</div>
 		<div class="row">
-			<a ui-sref="login">
-				<button class="button small">Back to Login</button>
-			</a>
+			<a ui-sref="login" class="button secondary small">Back to Login</a>
 		</div>
 	</div>
 </div>
