@@ -38,7 +38,6 @@ superApp.controller('ProductCtrl',
     }
 
     $scope.goToLeaveReview = function() {
-        console.log('ngerror');
         $state.go("leave_review", {productnumber:$scope.productnumber});
     }
 

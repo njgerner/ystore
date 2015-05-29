@@ -3,14 +3,28 @@ superApp.controller('MerchantInventoryCtrl',
   function($rootScope, $scope, $state, profileService, storeService) {
 
     $scope.profileLoading = true;
+    $scope.productNames = [];
+    $scope.filteredProducts = [];
 
     $scope.goToOrders = function() {
       $state.go("merchant_orders");
     }
 
+    $scope.filter = function(query) {
+      $scope.filteredProducts = [];
+      $scope.products.forEach(function(product, index) {
+          if(product.name.toUpperCase().indexOf(query.toUpperCase()) > -1) {
+            $scope.filteredProducts.push(product);
+          }
+      });
+    }
+
     function onProductsLoaded (products) {
       $scope.products = products;
-      console.log('products', $scope.products);
+      $scope.filteredProducts = products;
+      products.forEach(function(product, index) {
+                $scope.productNames.push(product.name);
+            });
       $scope.productsLoading = false;
     }
 

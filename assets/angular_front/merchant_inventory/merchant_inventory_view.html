@@ -1,7 +1,7 @@
-<div class="panel" ng-repeat="product in products">
+<div class="panel" ng-repeat="product in filteredProducts">
 	<div class="row">
 		<div class="small-4 columns">
-			<img ng-src="{{product.img}}">
+			<img ng-src="{{product.img}}" ng-error="defaultImage(product)">
 			<ul class="button-group even-2">
 			<li><a ng-click="goToProduct(product.productnumber)" class="button expand small">View Product</a></li>
 			<li ng-show='product.active == "Y"'><a ng-click="deactivateProduct(product)" class="button expand alert small">Deactivate</a></li>
