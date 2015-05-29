@@ -1,11 +1,11 @@
-trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'authService',
-    function ($rootScope, $http, $cookieStore, authService) {
+trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'authService', 'PUBLISH',
+    function ($rootScope, $http, $cookieStore, authService, stripePubKey) {
 
       this.token = null;
       this.card = null;
       this.customer = {};
       this.customerReceived = false;
-      Stripe.setPublishableKey("pk_test_8LwfnHnZaS9JT7OFYUhsnT4J");
+      Stripe.setPublishableKey(stripePubKey);
 
     	this.setToken = function(token) {
     		this.token = token;

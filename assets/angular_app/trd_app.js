@@ -10,6 +10,7 @@ var trdApp = angular.module('trdApp', [
   'ui.slider',
   'ngTagsInput',
   'ngError',
+  'env.config',
   'mm.foundation',
   'angularFileUpload' //https://github.com/nervgh/angular-file-upload
   // 'uiGmapgoogle-maps'

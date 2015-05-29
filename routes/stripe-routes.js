@@ -4,7 +4,7 @@ module.exports = function(express, app, __dirname) {
 	console.log('Loading Stripe Routes');
 
 	var path            = require('path'),            						// http://nodejs.org/docs/v0.3.1/api/path.html
-    	config 					= require('../trd_modules/config.js'), 							//config file contains all tokens and other private info
+    	config 					= require('../trd_modules/config.json'), 							//config file contains all tokens and other private info
     	Customer 				= require('../models/customer.js'),
 			orchHelper      = require('../trd_modules/orchestrateHelper'),
 			crypto 					= require('crypto'),

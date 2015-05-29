@@ -3,12 +3,14 @@ var gulpUtil = require('gulp-util');
 var gulpConcat = require('gulp-concat');
 var gulpUglify = require('gulp-uglify');
 var gulpSass = require('gulp-sass');
+var gulpNgConfig = require('gulp-ng-config');
 var gulpRename = require('gulp-rename');
 var gulpFlatten = require('gulp-flatten');
 var jshint = require('gulp-jshint');
 var minifyCSS = require('gulp-minify-css');
 var runSequence = require('run-sequence');
 var del = require('del');
+var env = require('dotenv').load();
 
 var bowerRoot = 'assets/js/vendor/';
 
@@ -33,6 +35,7 @@ var paths = {
 		{src:'assets/angular_front/directives/**/*.html', dest:'public/directives/'},
 		{src:'assets/angular_front/**/*.html', dest:'public/partials/'},
 	],
+	config: 'trd_modules/config.json',
 	watch_scss: 'assets/scss/**/*.scss'
 };
 
@@ -75,6 +78,9 @@ gulp.task('handle-app-js', function() {
 		.pipe(gulp.dest('public/js/'));
 });
 
+gulp.task('config', function() {
+});
+
 gulp.task('copy', function() {
 	for (var i = 0; i < paths.html_src_and_dest.length; i++) {
 		gulp.src(paths.html_src_and_dest[i].src)
@@ -94,6 +100,14 @@ gulp.task('copy', function() {
 	gulp.src('assets/js/**/*')
 		.pipe(gulp.dest('public/js/'));
 
+	gulp.src(paths.config)
+		.pipe(gulpNgConfig('env.config', {
+			environment: process.env.STRIPE,
+			constants: {
+				'SECRET': 'overriden'
+			}
+		}))
+		.pipe(gulp.dest('public/js/'));
 });
 
 gulp.task('watch', function() {
