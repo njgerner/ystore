@@ -197,10 +197,11 @@ module.exports = function(express, app, __dirname) {
 					trackingNum: null
 				};
 				orchHelper.addOrder(order)
-					.then(function (result) {
-						if (profileid !== undefined) {
-						console.log('single order successfully added! Moving to add order.');
-						orchHelper.addOrderToUser(profileid, order)
+				.then(function (result) {
+					if (profileid !== undefined) {
+						emailHelper.sendOrderstoMerchants(order)
+						.then(function (res) {
+							orchHelper.addOrderToUser(profileid, order)
 							.then(function (result) {
 								console.log('added order to user', result);
 								res.status(201).json({order:order, success:result});
@@ -209,14 +210,18 @@ module.exports = function(express, app, __dirname) {
 								console.log('error adding user order', err);
 								res.status(500).json({err:err, message:"Put User Order Error"});
 							});
-						} else {
-							res.status(200).json({order:order, success:result});
-						}
-					})
-					.fail(function (err) {
-						console.log('error adding single order', err);
-						res.status(500).json({err:err, message:"Put Order Error"});
-					});
+
+						}, function (err) {
+							throw new Error(err.body);
+						});
+					} else {
+						res.status(200).json({order:order, success:result});
+					}
+				})
+				.fail(function (err) {
+					console.log('error adding single order', err);
+					res.status(500).json({err:err, message:"Put Order Error"});
+				});
 			}
 		});
 	};
