@@ -34,12 +34,6 @@ superApp.controller('LoginCtrl',
       $scope.loginState = "signin";
     }
 
-    $scope.showReg = function() {
-      $scope.failedMessage = '';
-      $scope.loginState = "register";
-      $scope.pass_reset = false;
-    }
-
     $scope.showForgotPass = function() {
       $scope.failedMessage = '';
       $scope.loginState = "forgot_password";
@@ -78,25 +72,6 @@ superApp.controller('LoginCtrl',
         }
       });
     };
-
-  	$scope.register = function() {
-      $scope.failedMessage = null;
-      if ($scope.password !== $scope.confirmpassword) {
-        $scope.failedMessage = "Passwords must match!";
-        return;
-      }
-      $scope.registering = true;
-  		authService.register($scope.email, $scope.password, function(err, status) {
-        console.log("loginctrl err/status", err, status);
-  			if (err) {
-          console.log('error register', err);
-          $scope.registering = false;
-          $scope.failedMessage = status;
-        } else {
-  				$state.go(status);
-        }
-  		});
-  	}
 
     $scope.changeState = function(state) {
       $scope.loginState = state;

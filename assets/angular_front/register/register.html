@@ -1,10 +1,52 @@
-<div class="small-12 columns text-center">
-	<img width="150px" src="img/logo.png" />
-	<h4>Register for the YLIFT Network</h4>
+<div class="small-12 large-6 large-offset-3 columns text-center">
+	<img style="margin-top:2%" width="150px" src="img/logo.png" />
 	<div ng-hide="viewState != 'start'">
-		<!-- <button class="button" ng-click="viewState = 'info'">Learn More</button> -->
-		<button class="button" ng-click="viewState = 'form1'">Register Now</button>
+		<h4 style="margin:2%"> Thanks for your interest! </h4>
+		<div class="row" ng-hide="viewState != 'start'">
+			<!-- <button class="button" ng-click="viewState = 'info'">Learn More</button> -->
+			<div class="small-6 large-3 large-offset-3 columns">
+				<button class="button" ng-click="viewState = 'individual'">Register As Individual</button>
+			</div>
+			<div class="small-6 large-3 columns">
+				<button class="button" ng-click="viewState = 'form1'">Register As YLift</button>
+			</div>
+		</div>
+		<div class="row">
+			<a ui-sref="login">
+				<button class="button small">Back to Login</button>
+			</a>
+		</div>
 	</div>
+</div>
+
+<div ng-show="viewState == 'individual'" class="small-8 large-4 small-centered columns">
+    <form name="loginForm" ng-submit="registerIndividual()">
+      <fieldset>
+        <legend>Register</legend>
+        <div class="input-wrapper">
+          <label>Email
+            <input type="text" name="email" placeholder="Enter your email" ng-model="email" required>
+          </label>
+          <small ng-show="loginForm.email.$invalid && loginForm.email.$dirty" class="error">Please enter a valid email address</small>
+        </div>
+        <div class="input-wrapper">
+          <label>Password
+            <input type="password" name="password" placeholder="Enter your password" ng-model="password" required>
+          </label>
+        </div>
+        <div class="input-wrapper">
+        <label>Confirm Password
+          <input type="password" name="confirmpassword" placeholder="Confirm your password" ng-model="confirmpassword" required>
+          </label>
+          <small ng-show="failedMessage" class="error">{{failedMessage}}</small>
+        </div>
+        <button type="submit" class="button tiny left">
+          <span ng-hide="registering">Register</span>
+          <span ng-show="registering">Registering...</span>
+        </button>
+        <button class="button tiny right" ng-click="viewState = 'start'">Back</button>
+      </fieldset>
+    </form>
 </div>
 
 <div ng-show="viewState == 'form1'" class="small-12 large-6 large-centered columns">
@@ -18,12 +60,12 @@
 		    <div class="small-3 columns">
 		      <label>Title
 		        <select ng-model="title">
-		        	<option value="Dr.">Dr</option>
-		        	<option value="Dr.">Mr</option>
-		        	<option value="Dr.">Mrs</option>
-		        	<option value="Dr.">Ms</option>
+		        	<option value="Dr.">Dr.</option>
+		        	<option value="Dr.">Mr.</option>
+		        	<option value="Dr.">Mrs.</option>
+		        	<option value="Dr.">Ms.</option>
 		        	<option value="Dr.">Miss</option>
-		        	<option value="Dr.">Prof</option>
+		        	<option value="Dr.">Prof.</option>
 		        </select>
 		      </label>
 		    </div>

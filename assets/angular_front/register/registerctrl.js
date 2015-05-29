@@ -80,6 +80,25 @@ superApp.controller('RegisterCtrl',
   		$window.location.reload();
   	}
 
+    $scope.registerIndividual = function() {
+      $scope.failedMessage = null;
+      if ($scope.password !== $scope.confirmpassword) {
+        $scope.failedMessage = "Passwords must match!";
+        return;
+      }
+      $scope.registering = true;
+      authService.register($scope.email, $scope.password, function(err, status) {
+        console.log("loginctrl err/status", err, status);
+        if (err) {
+          console.log('error register', err);
+          $scope.registering = false;
+          $scope.failedMessage = status;
+        } else {
+          $state.go(status);
+        }
+      });
+    }
+
   	function validate(state) {
   		$scope.validating = true;
   		$scope.error = null;
