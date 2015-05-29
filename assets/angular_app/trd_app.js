@@ -27,17 +27,20 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
           console.log('authorized / received', authService.authorized, authService.authorizationReceived);
 
           var isExceptionalState = function() {
-            var exceptionalState = ["terms", "store", "store.search", "checkout", "order", "support"];
+            var exceptionalState = ["terms", "support"];
+            // var exceptionalState = ["terms", "store", "store.search", "checkout", "order", "support"];
             return exceptionalState.indexOf(toState.name) >= 0;
           }
 
           var isAuthorizedState = function() {
-            var authStates = ["profile", "settings", "settings.profile", "settings.store", "settings.notifications", "orders", "leave_review"];
+            var authStates = ["summary"];
+            // var authStates = ["profile", "settings", "settings.profile", "settings.store", "settings.notifications", "orders", "leave_review"];
             return authStates.indexOf(toState.name) >= 0;
           }
 
           var isUnauthorizedState = function () {
-            var unauthedStates = ["login", "login_by_token", "email_sent", "email_taken", "resend_email", "new_password", "reset_password"];
+            var unauthedStates = ["register"];
+            // var unauthedStates = ["login", "login_by_token", "email_sent", "email_taken", "resend_email", "new_password", "reset_password"];
             return unauthedStates.indexOf(toState.name) >= 0;
           };
           
@@ -50,7 +53,8 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
               $state.go("login");
             } else if (authService.authorized && isUnauthorizedState()) { // don't want signed in people going to login, pass reset, etc....
               event.preventDefault();
-              $state.go("store");
+              $state.go("register");
+              // $state.go("store");
             } else { // non authorized can go to non authorized states
               return;
             }
@@ -64,7 +68,8 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
               } else if (!authService.authorized && isAuthorizedState()) { // don't want non signed in people going to profile, settings, etc...
                 $state.go("login");
               } else if (authService.authorized && isUnauthorizedState()) { // don't want signed in people going to login, pass reset, etc....
-                $state.go("store");
+                $state.go("register");
+                // $state.go("store");
               } else { // non authorized can go to non authorized states
                 $state.go(toState.name, toParams);
               }
@@ -89,13 +94,28 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
 trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
   function($httpProvider, $stateProvider, $urlRouterProvider) {
     $httpProvider.interceptors.push('trdInterceptor');
-    $urlRouterProvider.otherwise("/store");
+    $urlRouterProvider.otherwise("/register");
     
     $stateProvider
     .state('login', {
       url: "/login",
       templateUrl: "/partials/login.html",
       controller: "LoginCtrl"
+    })
+    .state('register', {
+      url: "/register",
+      templateUrl: "/partials/register.html",
+      controller: "RegisterCtrl"
+    })
+    .state('register.home', {
+      url: "/intro",
+      templateUrl: "/partials/register_home.html",
+      controller: "RegisterHomeCtrl"
+    })
+    .state('register.form', {
+      url: "/form",
+      templateUrl: "/partials/register_form.html",
+      controller: "RegisterFormCtrl"
     })
     .state('logout', {
       url: "/logout",
