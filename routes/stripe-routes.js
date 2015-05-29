@@ -198,9 +198,9 @@ module.exports = function(express, app, __dirname) {
 				};
 				orchHelper.addOrder(order)
 				.then(function (result) {
-					if (profileid !== undefined) {
-						emailHelper.sendOrderstoMerchants(order)
-						.then(function (res) {
+					emailHelper.sendOrderstoMerchants(order)
+					.then(function (res) {
+						if (profileid !== undefined) {
 							orchHelper.addOrderToUser(profileid, order)
 							.then(function (result) {
 								console.log('added order to user', result);
@@ -211,12 +211,12 @@ module.exports = function(express, app, __dirname) {
 								res.status(500).json({err:err, message:"Put User Order Error"});
 							});
 
-						}, function (err) {
-							throw new Error(err.body);
-						});
-					} else {
-						res.status(200).json({order:order, success:result});
-					}
+						} else {
+							res.status(200).json({order:order, success:result});
+						}
+					}, function (err) {
+						throw new Error(err.body);
+					});
 				})
 				.fail(function (err) {
 					console.log('error adding single order', err);
