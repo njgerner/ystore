@@ -34,7 +34,7 @@
 
       <div class="large-4 small-6 columns" ng-repeat="p in products" ng-click="goToProduct(p.productnumber)">
         <div class="product-card pointer">
-          <img ng-src="{{p.img}}" class="image">
+          <img ng-src="{{p.img}}" class="image" ng-error="defaultImage(p)">
           <div class="content">
             <h5 class="product-title">{{p.name}}</h5>
             <h6 class="subheader">${{p.price}}</h6>

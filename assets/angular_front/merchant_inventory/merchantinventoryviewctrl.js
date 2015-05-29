@@ -18,8 +18,11 @@ superApp.controller('MerchantInventoryViewCtrl',
       productService.updateProduct(product, onProductUpdated);
     }
 
+    $scope.defaultImage = function (product) {
+      product.img = "http://placehold.it/475x475&text=[img]";
+    }
+
     function onProductUpdated (product) {
-      console.log('success');
     }
 
 }]);

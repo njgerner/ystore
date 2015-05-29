@@ -1,5 +1,5 @@
 superApp.controller('ProductCtrl',
-  ['$rootScope', '$scope', '$state', '$stateParams', 'storeService', 'authService', 'productService',
+  ['$rootScope', '$scope', '$state', '$stateParams', 'storeService', 'authService', 'productService', 
   function($rootScope, $scope, $state, $stateParams, storeService, authService, productService) {
 
     $scope.loading = true;
@@ -39,6 +39,10 @@ superApp.controller('ProductCtrl',
 
     $scope.goToLeaveReview = function() {
         $state.go("leave_review", {productnumber:$scope.productnumber});
+    }
+
+    $scope.defaultImage = function(productnumber) {
+        $scope.product.img = "http://placehold.it/475x475&text=[img]";
     }
 
     function onProductLoaded (product) {
