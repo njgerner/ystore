@@ -37,7 +37,7 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
           }
 
           var isUnauthorizedState = function () {
-            var unauthedStates = ["login", "login_by_token", "email_sent", "email_taken", "resend_email", "new_password", "reset_password"];
+            var unauthedStates = ["login", "login_by_token", "email_sent", "email_taken", "resend_email", "new_password", "reset_password", "register"];
             return unauthedStates.indexOf(toState.name) >= 0;
           };
           
@@ -89,13 +89,28 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
 trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
   function($httpProvider, $stateProvider, $urlRouterProvider) {
     $httpProvider.interceptors.push('trdInterceptor');
-    $urlRouterProvider.otherwise("/store");
+    $urlRouterProvider.otherwise("/login");
     
     $stateProvider
     .state('login', {
       url: "/login",
       templateUrl: "/partials/login.html",
       controller: "LoginCtrl"
+    })
+    .state('register', {
+      url: "/register",
+      templateUrl: "/partials/register.html",
+      controller: "RegisterCtrl"
+    })
+    .state('register.home', {
+      url: "/intro",
+      templateUrl: "/partials/register_home.html",
+      controller: "RegisterHomeCtrl"
+    })
+    .state('register.form', {
+      url: "/form",
+      templateUrl: "/partials/register_form.html",
+      controller: "RegisterFormCtrl"
     })
     .state('logout', {
       url: "/logout",

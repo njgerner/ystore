@@ -35,6 +35,11 @@ appDirectives.directive('productCartDir', [ '$state', '$rootScope', '$window', '
 			scope.removeItemFromCart = function() {
 				scope.$parent.removeItemFromCart();
 			}
+
+			scope.goToProduct = function() {
+				$state.go('product', {productnumber: scope.product.productnumber});
+				$rootScope.hideCart(function() {});
+			}
 		}
 	}
 }]);

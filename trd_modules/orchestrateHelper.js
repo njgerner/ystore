@@ -383,16 +383,27 @@ exports.addItemToUserCart = function(userid, productnumber, quantity) {
   db.get('carts', userid)
   .then(function (result) {
     var cart = result.body;
-    db.get('products', productnumber) // make sure they aren't ordering dog shit
+    db.get('products', productnumber) // make sure they aren't ordering dog shit // unless we decide to sell dog shit
     .then(function (result) {
-      var product = result.body;
-      var productObj = {
-        productnumber: productnumber,
-        quantity: quantity
-      };
-      cart.products.push(productObj);
-      cart.status = "active";
-      cart.updatedAt = new Date();
+      //first check to see if product is already in cart
+      var duplicate = false;
+      for(var i = 0; i < cart.products.length; i++) {
+        if(cart.products[i].productnumber == productnumber) {
+          duplicate = true;
+          cart.products[i].quantity = Number(cart.products[i].quantity) + Number(quantity); //if so just update quantity
+          cart.status = "active";
+          cart.updatedAt = new Date();
+        }
+      }
+      if(!duplicate) {
+        var productObj = {
+          productnumber: productnumber,
+          quantity: quantity
+        };
+        cart.products.push(productObj);
+        cart.status = "active";
+        cart.updatedAt = new Date();
+      }
       db.put('carts', userid, cart)
       .then(function (result) {
         deferred.resolve(cart); // item(s) successfully added to cart

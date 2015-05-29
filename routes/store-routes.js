@@ -6,6 +6,7 @@ module.exports = function(express, app, __dirname) {
 	var path            = require('path'),            						// http://nodejs.org/docs/v0.3.1/api/path.html
     	config 			= require('../trd_modules/config.js'), 			//config file contains all tokens and other private info
 		orchHelper      = require('../trd_modules/orchestrateHelper'),
+		Order 			= require('../models/order'),
 		Q               = require('q'),
 		fs 				= require('fs');
 
@@ -34,6 +35,18 @@ module.exports = function(express, app, __dirname) {
 	// POST /update_order
 	StoreRoutes.update_order = function(req, res) {
 		orchHelper.updateOrder(req.body.order)
+		.then(function (data) {
+			res.status(200).json({order:data});
+		})
+		.fail(function (err) {
+			res.status(500).json({err:err});
+		});
+	};
+
+	// POST /add_check_order
+	StoreRoutes.create_check_order = function(req, res) {
+		var order = Order.newOrder(req.body.total, req.body.customer);
+		orchHelper.addOrder(order)
 		.then(function (data) {
 			res.status(200).json({order:data});
 		})
