@@ -35,6 +35,10 @@ superApp.controller('RegisterCtrl',
   		} 
   	}
 
+    $scope.backTo = function(state) {
+      $scope.viewState = state;
+    }
+
   	$scope.submit = function() {
   		$scope.validating = true;
   		if ($scope.cctype == 'check') {

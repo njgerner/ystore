@@ -11,12 +11,17 @@ superApp.controller('MerchantInventoryCtrl',
     }
 
     $scope.filter = function(query) {
-      $scope.filteredProducts = [];
-      $scope.products.forEach(function(product, index) {
-          if(product.name.toUpperCase().indexOf(query.toUpperCase()) > -1) {
-            $scope.filteredProducts.push(product);
-          }
-      });
+      if(query == '') {    //for when user clicks 'all inventory'
+        $scope.query = '';
+        $scope.filteredProducts = $scope.products;
+      }else {
+        $scope.filteredProducts = [];
+        $scope.products.forEach(function(product, index) {
+            if(product.name.toUpperCase().indexOf(query.toUpperCase()) > -1) {
+              $scope.filteredProducts.push(product);
+            }
+        });
+      }
     }
 
     function onProductsLoaded (products) {

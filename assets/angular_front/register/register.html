@@ -1,6 +1,6 @@
 <div class="small-12 large-6 large-offset-3 columns text-center">
-	<img style="margin-top:2%" width="150px" src="img/logo.png" />
 	<div ng-hide="viewState != 'start'">
+		<img style="margin-top:2%" width="150px" src="img/logo.png" />
 		<h4 style="margin:2%"> Thanks for your interest! </h4>
 		<div class="row" ng-hide="viewState != 'start'">
 			<!-- <button class="button" ng-click="viewState = 'info'">Learn More</button> -->
@@ -20,7 +20,7 @@
 </div>
 
 <div ng-show="viewState == 'individual'" class="small-8 large-4 small-centered columns">
-    <form name="loginForm" ng-submit="registerIndividual()">
+    <form class="regform" name="loginForm" ng-submit="registerIndividual()">
       <fieldset>
         <legend>Register</legend>
         <div class="input-wrapper">
@@ -53,7 +53,7 @@
 	<div ng-show="error">
 		<p class='error'>{{error}}</p>
 	</div>
-	<form>
+	<form class="regform" novalidate>
 		<legend>Basic Information</legend>
 		<fieldset>
 			<div class="row">
@@ -133,7 +133,7 @@
 		    </div>
 		  </div>
 		  <div class="row clearfix">
-		  	<button class="button secondary right">Cancel</button>
+			<button class="button secondary right" ng-click="backTo('start')">Back</button>
 		  	<button class="button right" ng-click="goTo('form2')">
 		  		<span ng-hide="validating">Next</span>
 		  		<span ng-show="validating">Validating...</span>
@@ -147,7 +147,7 @@
 	<div ng-show="error">
 		<p class='error'>{{error}}</p>
 	</div>
-	<form>
+	<form class="regform" novalidate>
 		<legend>Practice Information</legend>
 		<fieldset>
 			<div class="row">
@@ -193,7 +193,7 @@
 		    </div>
 		  </div>
 		  <div class="row clearfix">
-		  	<button class="button secondary right" ng-click="goTo('form1')">Back</button>
+		  	<button class="button secondary right" ng-click="backTo('form1')">Back</button>
 		  	<button class="button right" ng-click="goTo('form3')">
 		  		<span ng-hide="validating">Next</span>
 		  		<span ng-show="validating">Validating...</span>
@@ -207,7 +207,7 @@
 	<div ng-show="error">
 		<p class='error'>{{error}}</p>
 	</div>
-	<form>
+	<form class="regform" novalidate>
 		<legend>Training Scheduling</legend>
 		<fieldset>
 			<div class="row">
@@ -252,7 +252,7 @@
 			  </div>
 		  </div>
 		  <div class="row clearfix">
-		  	<button class="button secondary right" ng-click="goTo('form2')">Back</button>
+		  	<button class="button secondary right" ng-click="backTo('form2')">Back</button>
 		  	<button class="button right" ng-click="goTo('form4')">
 		  		<span ng-hide="validating">Next</span>
 		  		<span ng-show="validating">Validating...</span>
@@ -266,7 +266,7 @@
 	<div ng-show="error">
 		<p class='error'>{{error}}</p>
 	</div>
-	<form>
+	<form class="regform" novalidate>
 		<legend>Payment Information</legend>
 		<fieldset>
 			<div class="row">
@@ -362,7 +362,7 @@
 			  </div>
 			</div>
 		  <div class="row clearfix">
-		  	<button class="button secondary right" ng-click="goTo('form3')">Back</button>
+		  	<button class="button secondary right" ng-click="backTo('form3')">Back</button>
 		  	<button class="button right" ng-click="goTo('review')">
 		  		<span ng-hide="validating">Next</span>
 		  		<span ng-show="validating">Validating...</span>

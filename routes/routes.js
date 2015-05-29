@@ -440,7 +440,7 @@ passport.use('bearer', new BearerStrategy(
   var add_item_to_cart = function(req, res) {
     orchHelper.addItemToUserCart(req.body.profileid, req.body.productnumber, req.body.quantity)
       .then(function (cart) {
-        res.status(201).json({cart:cart}); // does this work??
+        res.status(201).json({cart:cart}); // does this work?? // lol
       })
       .fail(function (err) {
         res.status(500).json({err:err});
