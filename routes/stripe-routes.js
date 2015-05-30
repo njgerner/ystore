@@ -146,6 +146,19 @@ module.exports = function(express, app, __dirname) {
 			});
 	};
 
+	StripeRoutes.update_guest_customer = function(req, res) {	
+		console.warn('updating customer/props', req.body.customerid, req.body.props);
+		stripe.customers.update(req.body.customerid, req.body.props, function(err, result){
+			orchHelper.updateCustomer(result)
+			.then(function (customer) {
+				res.status(200).json({customer:customer});
+			})
+			.fail(function (err) {
+				res.status(500).json({err:err.body, message:"Stripe customer update error"});
+			});
+		});
+	};
+
 	StripeRoutes.get_customer = function(req, res) {
 		console.log('getting customer', req.params.customerid);
 		orchHelper.getCustomer(req.params.customerid)
@@ -170,7 +183,7 @@ module.exports = function(express, app, __dirname) {
 		var customer = transaction.customer;
 		var charge = {
 			amount: total * 100, // stripe processes in the smallest denomination so for USD it is cents!!! <-- why was i so excited about this?
-			source: card.id,
+			source: card.id || card,
 			currency: "USD",
 			customer: transaction.customer.id,
 			receipt_email: transaction.customer.email,
@@ -183,14 +196,14 @@ module.exports = function(express, app, __dirname) {
 			} else {
 				var order = {
 					id: crypto.randomBytes(5).toString('hex'),
-					charge: charge.id,
+					charge: charge.id || charge,
 					total: total,
 					shipping: shipping,
 					products: productsInCart,
 					shipTo: shipTo,
 					merchants: merchants,
 					profile: profileid,
-					customer: customer.id,
+					customer: customer.id || customer,
 					createdAt: new Date(),
 					updatedAt: new Date(),
 					status: 'PROCESSING',

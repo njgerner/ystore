@@ -1,0 +1,399 @@
+<div class="small-12 large-6 large-offset-3 columns text-center logo-container">
+	<div ng-hide="viewState != 'start'">
+		<img width="150px" src="img/logo.png" />
+		<h4 style="margin-top: 1rem;"> Choose how you want to register </h4>
+		<div class="row" ng-hide="viewState != 'start'">
+			<!-- <button class="button" ng-click="viewState = 'info'">Learn More</button> -->
+			<div class="small-6 large-4 large-offset-2 columns">
+				<button class="button" ng-click="viewState = 'individual'">Register As Individual</button>
+			</div>
+			<div class="small-6 large-4 end columns">
+				<button class="button" ng-click="viewState = 'form1'">YLIFT Network Registration</button>
+			</div>
+		</div>
+		<div class="row">
+			<a ui-sref="login" class="button secondary small">Back to Login</a>
+		</div>
+	</div>
+</div>
+
+<div ng-show="viewState == 'individual'" class="small-8 large-4 small-centered columns">
+    <form class="regform" name="loginForm" ng-submit="registerIndividual()">
+      <fieldset>
+        <legend>Register</legend>
+        <div class="input-wrapper">
+          <label>Email
+            <input type="text" name="email" placeholder="Enter your email" ng-model="email" required>
+          </label>
+          <small ng-show="loginForm.email.$invalid && loginForm.email.$dirty" class="error">Please enter a valid email address</small>
+        </div>
+        <div class="input-wrapper">
+          <label>Password
+            <input type="password" name="password" placeholder="Enter your password" ng-model="password" required>
+          </label>
+        </div>
+        <div class="input-wrapper">
+        <label>Confirm Password
+          <input type="password" name="confirmpassword" placeholder="Confirm your password" ng-model="confirmpassword" required>
+          </label>
+          <small ng-show="failedMessage" class="error">{{failedMessage}}</small>
+        </div>
+        <button type="submit" class="button tiny left">
+          <span ng-hide="registering">Register</span>
+          <span ng-show="registering">Registering...</span>
+        </button>
+        <button class="button tiny right" ng-click="viewState = 'start'">Back</button>
+      </fieldset>
+    </form>
+</div>
+
+<div ng-show="viewState == 'form1'" class="small-12 large-6 large-centered columns">
+	<div ng-show="error">
+		<p class='error'>{{error}}</p>
+	</div>
+	<form class="regform" novalidate>
+		<legend>Basic Information</legend>
+		<fieldset>
+			<div class="row">
+		    <div class="small-3 columns">
+		      <label>Title
+		        <select ng-model="title">
+		        	<option value="Dr.">Dr.</option>
+		        	<option value="Dr.">Mr.</option>
+		        	<option value="Dr.">Mrs.</option>
+		        	<option value="Dr.">Ms.</option>
+		        	<option value="Dr.">Miss</option>
+		        	<option value="Dr.">Prof.</option>
+		        </select>
+		      </label>
+		    </div>
+		    <div class="small-9 columns">
+		      <label>Name
+		        <input type="text" ng-model="name" name="name" placeholder="First & Last" required/>
+		      </label>
+		    </div>
+		  </div>
+		  <div class="row">
+		    <div class="small-12 columns">
+		      <label>Address
+		        <input type="text" ng-model="address1" name="address1" placeholder="Street Address" required/>
+		      </label>
+		    </div>
+		  </div>
+		  <div class="row">
+		    <div class="small-12 columns">
+		      <label>Address Line 2
+		        <input type="text" ng-model="address2" name="address2" placeholder="Street Address Line 2" />
+		      </label>
+		    </div>
+		  </div>
+		  <div class="row">
+		    <div class="small-9 columns">
+		      <label>City
+		        <input type="text" ng-model="city" name="city" placeholder="Enter city" required/>
+		      </label>
+		    </div>
+		    <div class="small-3 columns">
+		      <label>State
+		        <input type="text" ng-model="state" name="state" placeholder="Enter state" required/>
+		      </label>
+		    </div>
+		  </div>
+		  <div class="row">
+		    <div class="small-5 columns">
+		      <label>Zip
+		        <input type="text" ng-model="zip" name="zip" placeholder="Enter zip" required/>
+		      </label>
+		    </div>
+		    <div class="small-7 columns">
+		      <label>Country
+		        <input type="text" ng-model="country" name="country" placeholder="Enter country (USA)" />
+		      </label>
+		    </div>
+		  </div>
+		  <div class="row">
+		    <div class="small-12 columns">
+		      <label>Email
+		        <input type="email" ng-model="email" name="email" placeholder="Enter phone number" required/>
+		      </label>
+		    </div>
+		  </div>
+		  <div class="row">
+		    <div class="small-6 columns">
+		      <label>Phone
+		        <input type="tel" ng-model="phone" name="phone" placeholder="Enter phone number" required/>
+		      </label>
+		    </div>
+		    <div class="small-6 columns">
+		      <label>Fax
+		        <input type="tel" ng-model="fax" name="fax" placeholder="Enter fax number" />
+		      </label>
+		    </div>
+		  </div>
+		  <div class="row clearfix">
+			<button class="button secondary right" ng-click="backTo('start')">Back</button>
+		  	<button class="button right" ng-click="goTo('form2')">
+		  		<span ng-hide="validating">Next</span>
+		  		<span ng-show="validating">Validating...</span>
+		  	</button>
+		  </div>
+		</fieldset>
+	</form>
+</div>
+
+<div ng-show="viewState == 'form2'" class="small-12 large-6 large-centered columns">
+	<div ng-show="error">
+		<p class='error'>{{error}}</p>
+	</div>
+	<form class="regform" novalidate>
+		<legend>Practice Information</legend>
+		<fieldset>
+			<div class="row">
+		    <div class="small-12 columns">
+		      <label>Specialty
+		        <input type="text" ng-model="specialty" name="specialty" placeholder="Your practicing specialty" />
+		      </label>
+		    </div>
+		  </div>
+		  <div class="row">
+		    <div class="small-12 columns">
+		      <label>NPI/Medical License #
+		        <input type="text" ng-model="medlicensenum" name="medlicensenum" placeholder="Enter medical license number" required/>
+		      </label>
+		    </div>
+		  </div>
+		  <div class="row">
+		    <div class="small-12 columns">
+		      <label>Affiliation/Practice Type
+		        <input type="text" ng-model="practicetype" name="practicetype"  placeholder="Large, single specialty, etc..." />
+		      </label>
+		    </div>
+		  </div>
+		  <div class="row">
+		    <div class="small-12 columns">
+		      <label>Do you purchase dermal filler?
+		        <input id="yesbox" type="checkbox"><label for="yesbox">Yes</label>
+		        <input id="nobox" type="checkbox"><label for="nobox">No</label>
+		      </label>
+		    </div>
+		    
+		  </div>
+		  <div class="row">
+		    <div class="small-6 columns">
+		      <label>Filler Pharmaceutical Company
+		        <input type="text" ng-model="fillercompany" name="fillercompany" placeholder="Enter a pharmaceutical company name" />
+		      </label>
+		    </div>
+		    <div class="small-6 columns">
+		      <label>Purchasing Tier
+		        <input type="text" ng-model="fillertier" name="fillertier" placeholder="Tier level" />
+		      </label>
+		    </div>
+		  </div>
+		  <div class="row clearfix">
+		  	<button class="button secondary right" ng-click="backTo('form1')">Back</button>
+		  	<button class="button right" ng-click="goTo('form3')">
+		  		<span ng-hide="validating">Next</span>
+		  		<span ng-show="validating">Validating...</span>
+		  	</button>
+		  </div>
+		</fieldset>
+	</form>
+</div>
+
+<div ng-show="viewState == 'form3'" class="small-12 large-6 large-centered columns">
+	<div ng-show="error">
+		<p class='error'>{{error}}</p>
+	</div>
+	<form class="regform" novalidate>
+		<legend>Training Scheduling</legend>
+		<fieldset>
+			<div class="row">
+		    <div class="small-12 columns">
+		      <label>Training Location
+		        <select ng-model="location">
+		        	<option value="remote">Personal On Site Training</option>
+		        	<option value="NY">YLIFT New York</option>
+		        	<option value="NASH">YLIFT Nashville</option>
+		        	<option value="MIA">YLIFT Miami</option>
+		        	<option value="LA">YLIFT LA</option>
+		        </select>
+		      </label>
+		    </div>
+		  </div>
+		  <div class="row">
+		    <div class="small-12 columns">
+		      <label>Certificate Name
+		        <input type="text" ng-model="certname" name="certname" placeholder="Enter the name you want to appear on your certificate" required/>
+		      </label>
+		    </div>
+		  </div>
+		  <div class="row">
+		    <div class="small-12 columns">
+		      <label>Additional Support Staff
+		        <input type="text" ng-model="staffnum" ng-max="10" name="staffnum" placeholder="How many additional clinical support staff will train with you?" />
+		      </label>
+		    </div>
+		  </div>
+		  <div ng-show="staffnum > 0">
+			  <div ng-repeat="num in getNumber(staffnum) | limitTo: 10" class="row" ng-init="staff[$index] = {}">
+			    <div class="small-6 columns">
+			      <label>Staff #{{$index + 1}} Name
+			        <input type="text" ng-model="staff[$index].name" name="name" placeholder="Enter staff name" />
+			      </label>
+			    </div>
+			    <div class="small-6 columns">
+			      <label>Staff #{{$index + 1}} Credentials
+			        <input type="text" ng-model="staff[$index].credentials" name="credentials" placeholder="Enter staff credentials" />
+			      </label>
+			    </div>
+			  </div>
+		  </div>
+		  <div class="row clearfix">
+		  	<button class="button secondary right" ng-click="backTo('form2')">Back</button>
+		  	<button class="button right" ng-click="goTo('form4')">
+		  		<span ng-hide="validating">Next</span>
+		  		<span ng-show="validating">Validating...</span>
+		  	</button>
+		  </div>
+		</fieldset>
+	</form>
+</div>
+
+<div ng-show="viewState == 'form4'" class="small-12 large-6 large-centered columns">
+	<div ng-show="error">
+		<p class='error'>{{error}}</p>
+	</div>
+	<form class="regform" novalidate>
+		<legend>Payment Information</legend>
+		<fieldset>
+			<div class="row">
+		    <div class="small-12 columns">
+		      <label>Credit Card Type
+		        <select ng-model="cctype">
+		        	<option value="visa">Visa</option>
+		        	<option value="mastercard">Mastercard</option>
+		        	<option value="american">American Express</option>
+		        	<option value="discover">Discover</option>
+		        	<option value="check">Check (Payable to YLIFT)</option>
+		        </select>
+		      </label>
+		    </div>
+		  </div>
+		  <div ng-hide="cctype == 'check'">
+		  	<div class="row">
+			    <div class="small-12 columns">
+			      <label>Name On Card
+			        <input type="text" ng-model="cardname" name="cardname" placeholder="Enter the name as it appears on the card" />
+			      </label>
+			    </div>
+			  </div>
+			  <div class="row">
+			    <div class="small-12 columns">
+			      <label>Credit Card Number
+			        <input type="text" ng-model="ccnum" name="ccnum" placeholder="Enter 16 digit credit card number" />
+			      </label>
+			    </div>
+			  </div>
+			  <div class="row">
+			    <div class="small-3 columns">
+			      <label>Expiration Month
+			        <input type="text" ng-model="expmonth" ng-length="2" name="expmonth" placeholder="MM" />
+			      </label>
+			    </div>
+			    <div class="small-3 columns">
+			      <label>Expiration Year
+			        <input type="text" ng-model="expyear" ng-length="4" name="expyear" placeholder="YYYY" />
+			      </label>
+			    </div>
+			    <div class="small-6 columns">
+			      <label>CVC Number
+			        <input type="text" ng-model="cvc" ng-min="3" ng-max="4" name="cvc" placeholder="3 or 4 Digit Number" />
+			      </label>
+			    </div>
+			  </div>
+			  <hr>
+			  <div class="row">
+			    <div class="small-12 columns">
+			      <label>Billing Address
+			        <input id="billingsame" type="checkbox"><label for="billingame">Same as mailing address</label>
+			      </label>
+			    </div>
+			  </div>
+				<div class="row">
+			    <div class="small-12 columns">
+			      <label>Address
+			        <input type="text" ng-model="billingaddress1" name="billingaddress1" placeholder="Street Address"/>
+			      </label>
+			    </div>
+			  </div>
+			  <div class="row">
+			    <div class="small-12 columns">
+			      <label>Address Line 2
+			        <input type="text" ng-model="billingaddress2" name="billingaddress2" placeholder="Street Address Line 2" />
+			      </label>
+			    </div>
+			  </div>
+			  <div class="row">
+			    <div class="small-9 columns">
+			      <label>City
+			        <input type="text" ng-model="billingcity" name="billingcity" placeholder="Enter city"/>
+			      </label>
+			    </div>
+			    <div class="small-3 columns">
+			      <label>State
+			        <input type="text" ng-model="billingstate" name="billingstate" placeholder="Enter state"/>
+			      </label>
+			    </div>
+			  </div>
+			  <div class="row">
+			    <div class="small-5 columns">
+			      <label>Zip
+			        <input type="text" ng-model="billingzip" name="billingzip" placeholder="Enter zip"/>
+			      </label>
+			    </div>
+			    <div class="small-7 columns">
+			      <label>Country
+			        <input type="text" ng-model="billingcountry" name="billingcountry" placeholder="Enter country (USA)" />
+			      </label>
+			    </div>
+			  </div>
+			</div>
+		  <div class="row clearfix">
+		  	<button class="button secondary right" ng-click="backTo('form3')">Back</button>
+		  	<button class="button right" ng-click="goTo('review')">
+		  		<span ng-hide="validating">Next</span>
+		  		<span ng-show="validating">Validating...</span>
+		  	</button>
+		  </div>
+		</fieldset>
+	</form>
+</div>
+
+<div ng-show="viewState == 'review'" class="small-12 large-6 large-centered columns">
+	<div ng-show="error">
+		<p class='error'>{{error}}</p>
+	</div>
+		<ul class="pricing-table">
+		  <li class="title">Purchase Summary</li>
+		  <li class="price">${{total}}</li>
+		  <li class="description">Your registration fee into the YLIFT Network includes:</li>
+		  <li class="bullet-item">Live Seminars</li>
+		  <li class="bullet-item">In Person Hands-on Training</li>
+		  <li class="bullet-item">YLIFT Network Pricing</li>
+		  <li class="cta-button">
+		  	<a class="button secondary" ng-click="goTo('form4')">Back</a>
+		  	<a class="button" ng-click="submit()">
+		  		<span ng-hide="validating">Submit Order</span>
+		  		<span ng-show="validating">Processing...</span>
+		  	</a>
+		  </li>
+		</ul>
+</div>
+
+<div ng-show="viewState == 'success'" class="small-12 large-6 large-centered columns">
+	<div class="panel">
+		<h5>Thank you for registering with the YLIFT Network! You will receive an email confirmation shortly, if you have any further questions please reach out to support@ylift.io. A YLIFT team member will follow up with you shortly regarding the status of your membership and to schedule a training session.</h5>	
+		<button ng-click="resetScope()">Back to start</button>
+	</div>
+</div>

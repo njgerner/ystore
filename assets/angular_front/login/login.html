@@ -1,3 +1,7 @@
+<div class="small-12 columns text-center logo-container">
+  <img width="150px" src="img/logo.png" />
+</div>
+
 <div class="row">
   <div ng-show="loginState == 'signin'"class="small-12 large-4 small-centered columns">
     <form ng-submit="login()">
@@ -26,7 +30,9 @@
           <span ng-show="signingIn">Logging in...</span>
           <div ng-hide="signingIn">Log me in</div>
         </button>
-        <button class="button tiny right" ng-click="showReg()">Register</button>
+        <a ui-sref="register">
+            <button class="button tiny right">Register</button>
+        </a>
       </fieldset>
     </form>
   </div>
@@ -45,35 +51,6 @@
           <span ng-show="requestingReset">Requesting...</span>
         </button>
         <button class="button tiny right" ng-click="showSignin()">Go Back</button>
-      </fieldset>
-    </form>
-  </div>
-  <div ng-show="loginState == 'register'"class="small-8 large-4 small-centered columns">
-    <form name="loginForm" ng-submit="register()">
-      <fieldset>
-        <legend>Register</legend>
-        <div class="input-wrapper">
-          <label>Email
-            <input type="text" name="email" placeholder="Enter your email" ng-model="email" required>
-          </label>
-          <small ng-show="loginForm.email.$invalid && loginForm.email.$dirty" class="error">Please enter a valid email address</small>
-        </div>
-        <div class="input-wrapper">
-          <label>Password
-            <input type="password" name="password" placeholder="Enter your password" ng-model="password" required>
-          </label>
-        </div>
-        <div class="input-wrapper">
-        <label>Confirm Password
-          <input type="password" name="confirmpassword" placeholder="Confirm your password" ng-model="confirmpassword" required>
-          </label>
-          <small ng-show="failedMessage" class="error">{{failedMessage}}</small>
-        </div>
-        <button type="submit" class="button tiny left">
-          <span ng-hide="registering">Register</span>
-          <span ng-show="registering">Registering...</span>
-        </button>
-        <button class="button tiny right" ng-click="showSignin()">Back To Login</button>
       </fieldset>
     </form>
   </div>

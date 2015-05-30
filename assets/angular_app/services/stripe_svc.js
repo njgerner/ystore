@@ -27,7 +27,7 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
         return this.card;
       }
 
-    	this.addCard = function(data, billing, callback) {
+    	this.addCard = function(data, billing, callback, meta) {
         var inThis = this;
         Stripe.card.createToken({
           number: data.number,
@@ -39,7 +39,8 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
           address_line2: billing.address_line2,
           address_city: billing.address_city,
           address_state: billing.address_state,
-          address_zip: billing.address_zip
+          address_zip: billing.address_zip,
+          metadata: meta
 				}, function (status, response) {
           if (status.error) {
             callback(status.error);
@@ -123,6 +124,7 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
           .success(function(data, status, headers, config) {
             internalThis.customerReceived = true;
             internalThis.customer = data.customer;
+            internalThis.card = data.customer.default_source;
             callback(data.customer);
           })
           .error(function(data, status, headers, config) {
@@ -130,9 +132,9 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
           });
       };
 
-      this.updateCustomer = function(props) {
+      this.updateCustomer = function(props, callback) {
         var inThis = this;
-        Stripe.customer.update(this.customer.id, props, function(err, customer) { 
+        Stripe.customers.update(this.customer.id, props, function(err, customer) { 
           if (err) {
             callback();
             return;
@@ -150,7 +152,22 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
         })
       };
 
+      this.updateGuestCustomer = function(props, callback) {
+        var inThis = this;      
+        $http({method: 'POST', url: "/update_guest_customer",
+          data:{customerid:inThis.customer.id, props:props}})
+          .success(function(data, status, headers, config) {
+            inThis.customerReceived = true;
+            inThis.customer = data.customer;
+            callback(data.customer);
+          })
+          .error(function(data, status, headers, config) {
+            callback();
+          });
+      };
+
     	this.submitOrder = function(addressShipTo, productsInCart, merchants, shipping, total, callback) {
+        console.log('submitting order', total, this.card, this.customer);
         if (!this.card) {
            callback({message: "Invalid credit card info, please check that the information provided is correct and try again." }, null);
         } else { // i need a dolla dolla, a dolla is all i neeeeeeed
@@ -162,7 +179,7 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
                 callback(null, {id: data.order.id, success: data.success});
             })
             .error(function(data, status, headers, config) {
-              callback({message: "There was an error processing your order, please try again. If this issue persists, please contact YLift Support (support@ylift.io)."});
+              callback("There was an error processing your order, please try again. If this issue persists, please contact YLift Support (support@ylift.io).");
             });
         }
       }
