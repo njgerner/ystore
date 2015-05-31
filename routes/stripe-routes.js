@@ -7,6 +7,7 @@ module.exports = function(express, app, __dirname) {
     	config 					= require('../trd_modules/config.json'), 							//config file contains all tokens and other private info
     	Customer 				= require('../models/customer.js'),
 			orchHelper      = require('../trd_modules/orchestrateHelper'),
+			emailHelper     = require('../trd_modules/emailHelper'),
 			crypto 					= require('crypto'),
 			Q               = require('q'),
 			routes 					= require('./routes.js'),
@@ -211,25 +212,24 @@ module.exports = function(express, app, __dirname) {
 				};
 				orchHelper.addOrder(order)
 				.then(function (result) {
-					emailHelper.sendOrderstoMerchants(order)
-					.then(function (res) {
-						if (profileid !== undefined) {
-							orchHelper.addOrderToUser(profileid, order)
-							.then(function (result) {
-								console.log('added order to user', result);
-								res.status(201).json({order:order, success:result});
-							})
-							.fail(function (err) {
-								console.log('error adding user order', err);
-								res.status(500).json({err:err, message:"Put User Order Error"});
-							});
-
-						} else {
-							res.status(200).json({order:order, success:result});
-						}
-					}, function (err) {
-						throw new Error(err.body);
-					});
+					// trying to keep this route universal and not all purchases will have a merchant (e.g. ylift registration)
+					if (merchants.length > 0) {
+						emailHelper.sendOrdersToMerchants(order).done();
+					}
+					// user account purchase
+					if (profileid !== undefined) {
+						orchHelper.addOrderToUser(profileid, order)
+						.then(function (result) {
+							res.status(201).json({order:order, success:result});
+						})
+						.fail(function (err) {
+							console.log('error adding user order', err);
+							res.status(500).json({err:err, message:"Put User Order Error"});
+						});
+					// guest account purchase
+					} else {
+						res.status(200).json({order:order, success:result});
+					}
 				})
 				.fail(function (err) {
 					console.log('error adding single order', err);

@@ -35,7 +35,6 @@ exports.sendWelcome = function(name, email) {
 };
 
 exports.sendOrdersToMerchants = function(order) {
-	console.log('sending orders to merchants', order);
 	var deferred = Q.defer();
 	var productPromises = [];
 	var products = [];
@@ -46,13 +45,24 @@ exports.sendOrdersToMerchants = function(order) {
 
 	Q.all(productPromises)
     .then(function (products) {
-    	console.log('products that are included in said order', products);
 		var promises = [];
+		var productContent = {};
+		for (var i = 0; i < products.length; i++) {
+			if (productContent[products[i].attributes.vendor] === undefined) {
+				productContent[products[i].attributes.vendor] = [];
+			}
+			for (var j = 0; j < order.products.length; j++) {
+				if (order.products[j].productnumber == products[i].productnumber) {
+					products[i].quantity = order.products[j].quantity;
+					products[i].total = order.products[j].quantity * products[i].price;
+				}
+			}
+			productContent[products[i].attributes.vendor].push(products[i]);
+		}
 		order.merchants.forEach(function (merchant, index) {
 			var def = Q.defer();
-			orchHelper.getMerhantProfile(merchant)
+			orchHelper.getMerchantProfile(merchant)
 			.then(function (profile) {
-				console.log('got merchant profile', profile);
 				var template_content = [{
 			        "name": "order",
 			        "content": order
@@ -71,7 +81,25 @@ exports.sendOrdersToMerchants = function(order) {
 						"Reply-To": "message." + process.env.DEFAULT_EMAIL_REPLY_TO
 					},
 					"merge": true,
-					"merge_language": "mailchimp",
+					"merge_language": "handlebars",
+					"global_merge_vars": [
+						{
+							"name": "orderid",
+							"content": order.id
+						}, {
+							"name": "total",
+							"content": order.total
+						}, {
+							"name": "count",
+							"content": order.products.length
+						}, {
+							"name": "shipTo",
+							"content": order.shipTo
+						}, {
+							"name": "products",
+							"content": productContent[merchant]
+						}
+					],
 					"tags": ["order", "orders", "merchant", profile.name, "ylift"]
 				};
 
@@ -89,10 +117,9 @@ exports.sendOrdersToMerchants = function(order) {
 
 			promises.push(def.promise);
 		});
-		return Q.all(promises)
+		return Q.all(promises);
     })
 	.then(function (result) {
-		console.log('result of sending orders to merchants', result);
 		deferred.resolve(result);
 	})
     .fail(function (err) {

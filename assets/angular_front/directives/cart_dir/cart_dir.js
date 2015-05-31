@@ -76,7 +76,11 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 			storeService.getProductsInCart(authService.profileid, onProductsInCartReceived);
 
 			scope.$watch(function() { return $cookies.pInCart; }, function(newCart, oldCart) { // this makes me hard
+				if (newCart !== undefined) {
 					onProductsInCartReceived(JSON.parse(newCart));
+				} else {
+					onProductsInCartReceived([]);
+				}
 			});
 
 		}
