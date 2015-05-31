@@ -6,6 +6,7 @@ module.exports = function(express, app, __dirname) {
       orchHelper      = require('../trd_modules/orchestrateHelper'),
       emailHelper     = require('../trd_modules/emailHelper'),
       config          = require('../trd_modules/config'),
+      flow            = require('../assets/js/flow-node')(process.env.TMPDIR),
       moment          = require('moment'),
       multer          = require('multer'),
       fs              = require('fs'),
@@ -20,6 +21,11 @@ module.exports = function(express, app, __dirname) {
       regRoutes       = require('./reg-routes.js')(express, app, __dirname),
       storeRoutes     = require('./store-routes.js')(express, app, __dirname),
       stripeRoutes    = require('./stripe-routes.js')(express, app, __dirname),
+      formidable      = require('formidable'),
+      qt              = require('quickthumb'),
+      multipart       = require('connect-multiparty'),
+      multipartMiddleware = multipart(),
+      util            = require('util'),
       Q               = require('q'),               // https://registry.npmjs.org/q
       stripeEnv       = process.env.STRIPE;
 
@@ -469,6 +475,26 @@ passport.use('bearer', new BearerStrategy(
       });
   };
 
+  var get_image = function(req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
+    flow.get(req, function(status, filename, original_filename, identifier) {
+      console.log('GET IMAGE', status);
+      if (status == 'found') {
+        res.status(200).send();
+      } else {
+        res.status(204).send();
+      }
+    });
+  };
+
+  var upload_image = function(req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
+
+    flow.post(req, function(status, filename, original_filename, identifier) {
+      res.status(status).send();
+    });
+  };
+
   ///GET /404
   var fourofour = function(req, res, next){
     // trigger a 404 since no other middleware
@@ -554,6 +580,7 @@ passport.use('bearer', new BearerStrategy(
     app.get('/product_reviews/:productnumber', productRoutes.get_reviews);
     app.get('/request_pass_reset/:email', request_pass_reset);
     app.get('/reset_password/:userid', reset_password);
+    app.get('/upload_image', get_image);
 
     // -- START POST Routes
     ///////////////////////////////////////////////////////////////
@@ -580,6 +607,7 @@ passport.use('bearer', new BearerStrategy(
     app.post('/update_password', update_password);
     app.post('/update_product', ensureAuthenticated, productRoutes.update_product);
     app.post('/update_user', ensureAuthenticated, update_user);
+    app.post('/upload_image', multipartMiddleware, upload_image);
     
     // -- START Profile Routes
     ///////////////////////////////////////////////////////////////
