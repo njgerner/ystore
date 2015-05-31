@@ -36,6 +36,12 @@
     <li><a ui-sref="checkout"><i class="i-cart"></i>    Checkout</a></li>
     <li><a ui-sref="profile"><i class="i-user"></i>    My Account</a></li>
     <li><a ui-sref="settings.store"><i class="i-settings"></i>    Settings</a></li>
+    <li ng-if="isMerchant" class="divider"></li>
+    <li class="nav-sub-header" ng-if="isMerchant">Merchant</li>
+    <li ng-if="isMerchant"><a ui-sref="merchant_orders">View Orders</a></li>
+    <li ng-if="isMerchant"><a ui-sref="merchant_inventory.view">Manage</a></li>
+    <li ng-if="isMerchant"><a ui-sref="settings.merchant">Settings</a></li>
+    <li class="divider"></li>
     <li><a ui-sref="support"><i class="i-support"></i>    Help</a></li>
   </ul>
 </aside>
