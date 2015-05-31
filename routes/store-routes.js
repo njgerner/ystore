@@ -4,7 +4,7 @@ module.exports = function(express, app, __dirname) {
 	console.log('Loading Store Routes');
 
 	var path            = require('path'),            						// http://nodejs.org/docs/v0.3.1/api/path.html
-    	config 			= require('../trd_modules/config.js'), 			//config file contains all tokens and other private info
+    	config 			= require('../trd_modules/config.json'), 			//config file contains all tokens and other private info
 		orchHelper      = require('../trd_modules/orchestrateHelper'),
 		Order 			= require('../models/order'),
 		Q               = require('q'),

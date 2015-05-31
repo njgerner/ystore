@@ -2,7 +2,7 @@
   <hr>
   <div class="large-5 columns" flow-init="{target: '/upload_image'}"
                                flow-files-submitted="$flow.upload()"
-                               flow-files-success="$file.msg = $message">
+                               flow-files-success="$file.msg = $message;$scope.onFileSuccess($file, $message, $flow)">
       <label>Image</label>
       <div ng-hide="$flow.files.length > 0" class="alert image-drop" flow-drop flow-drag-enter="style={border:'4px solid green'}" flow-drag-leave="style={}"
      ng-style="style">

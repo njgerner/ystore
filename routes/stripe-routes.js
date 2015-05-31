@@ -4,9 +4,10 @@ module.exports = function(express, app, __dirname) {
 	console.log('Loading Stripe Routes');
 
 	var path            = require('path'),            						// http://nodejs.org/docs/v0.3.1/api/path.html
-    	config 					= require('../trd_modules/config.js'), 							//config file contains all tokens and other private info
+    	config 					= require('../trd_modules/config.json'), 							//config file contains all tokens and other private info
     	Customer 				= require('../models/customer.js'),
 			orchHelper      = require('../trd_modules/orchestrateHelper'),
+			emailHelper     = require('../trd_modules/emailHelper'),
 			crypto 					= require('crypto'),
 			Q               = require('q'),
 			routes 					= require('./routes.js'),
@@ -210,26 +211,30 @@ module.exports = function(express, app, __dirname) {
 					trackingNum: null
 				};
 				orchHelper.addOrder(order)
-					.then(function (result) {
-						if (profileid !== undefined) {
-						console.log('single order successfully added! Moving to add order.');
+				.then(function (result) {
+					// trying to keep this route universal and not all purchases will have a merchant (e.g. ylift registration)
+					if (merchants.length > 0) {
+						emailHelper.sendOrdersToMerchants(order).done();
+					}
+					// user account purchase
+					if (profileid !== undefined) {
 						orchHelper.addOrderToUser(profileid, order)
-							.then(function (result) {
-								console.log('added order to user', result);
-								res.status(201).json({order:order, success:result});
-							})
-							.fail(function (err) {
-								console.log('error adding user order', err);
-								res.status(500).json({err:err, message:"Put User Order Error"});
-							});
-						} else {
-							res.status(200).json({order:order, success:result});
-						}
-					})
-					.fail(function (err) {
-						console.log('error adding single order', err);
-						res.status(500).json({err:err, message:"Put Order Error"});
-					});
+						.then(function (result) {
+							res.status(201).json({order:order, success:result});
+						})
+						.fail(function (err) {
+							console.log('error adding user order', err);
+							res.status(500).json({err:err, message:"Put User Order Error"});
+						});
+					// guest account purchase
+					} else {
+						res.status(200).json({order:order, success:result});
+					}
+				})
+				.fail(function (err) {
+					console.log('error adding single order', err);
+					res.status(500).json({err:err, message:"Put Order Error"});
+				});
 			}
 		});
 	};

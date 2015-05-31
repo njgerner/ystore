@@ -4,6 +4,10 @@ superApp.controller('MerchantInventoryNewProductCtrl',
 
   	$scope.product = {};
 
+    $scope.onFileSuccess = function(file, msg, flow) {
+      console.log('file/msg/flow', file, msg, flow);
+    }
+
   	$scope.addProduct = function() {
   		if ($scope.updating) {
   			return;
