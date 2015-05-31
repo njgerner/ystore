@@ -10,6 +10,7 @@ var trdApp = angular.module('trdApp', [
   'ui.slider',
   'ngTagsInput',
   'ngError',
+  'env.config',
   'mm.foundation',
   'angularFileUpload' //https://github.com/nervgh/angular-file-upload
   // 'uiGmapgoogle-maps'
@@ -32,7 +33,7 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
           }
 
           var isAuthorizedState = function() {
-            var authStates = ["profile", "settings", "settings.profile", "settings.store", "settings.notifications", "orders", "leave_review"];
+            var authStates = ["profile", "settings", "settings.profile", "settings.store", "settings.notifications", "orders", "leave_review", "merchant_orders", "merchant_inventory"];
             return authStates.indexOf(toState.name) >= 0;
           }
 
