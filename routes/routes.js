@@ -22,7 +22,6 @@ module.exports = function(express, app, __dirname) {
       regRoutes       = require('./reg-routes.js')(express, app, __dirname),
       storeRoutes     = require('./store-routes.js')(express, app, __dirname),
       stripeRoutes    = require('./stripe-routes.js')(express, app, __dirname),
-      formidable      = require('formidable'),
       qt              = require('quickthumb'),
       multipart       = require('connect-multiparty'),
       multipartMiddleware = multipart(),
