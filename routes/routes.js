@@ -15,6 +15,7 @@ module.exports = function(express, app, __dirname) {
       jwt             = require('jwt-simple'),
       nodemailer      = require('nodemailer'),
       adminRoutes     = require('./admin-routes.js')(express, app, __dirname),
+      awsRoutes       = require('./aws-routes.js')(express, app, __dirname),
       emailRoutes     = require('./email-routes.js')(express, app, __dirname),
       profileRoutes   = require('./profile-routes.js')(express, app, __dirname),
       productRoutes   = require('./product-routes.js')(express, app, __dirname),
@@ -181,7 +182,7 @@ passport.use('bearer', new BearerStrategy(
       .then(function (profile) {
         orchHelper.findUserByID(req.user.id)
           .then(function (user) {
-            res.send({user:user, profile:profile, isAdmin:user.isAdmin, stripePubKey:config[stripeEnv].PUBLISH}); //eliminate the user doc ASAP
+            res.send({user:user, profile:profile, isAdmin:user.isAdmin}); //eliminate the user doc ASAP
           })
           .fail(function (err) {
             console.log('need to decide what data to pass back on err', err);
@@ -491,7 +492,7 @@ passport.use('bearer', new BearerStrategy(
     res.header("Access-Control-Allow-Origin", "*");
 
     flow.post(req, function(status, filename, original_filename, identifier) {
-      res.status(status).send();
+      res.status(status).json({filename:filename, identifier:identifier});
     });
   };
 
@@ -580,6 +581,7 @@ passport.use('bearer', new BearerStrategy(
     app.get('/product_reviews/:productnumber', productRoutes.get_reviews);
     app.get('/request_pass_reset/:email', request_pass_reset);
     app.get('/reset_password/:userid', reset_password);
+    app.get('/sign_s3', awsRoutes.sign_s3);
     app.get('/upload_image', get_image);
 
     // -- START POST Routes

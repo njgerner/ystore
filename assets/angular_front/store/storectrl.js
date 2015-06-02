@@ -41,7 +41,11 @@ superApp.controller('StoreCtrl',
     };
 
     $scope.defaultImage = function(product) {
-      product.img = "http://placehold.it/475x475&text=[img]";
+      if (product.remote_img) {
+        product.img = product.remote_img;
+      } else {
+        product.img = "http://placehold.it/475x475&text=[img]";
+      }
     }
 
     function onProductsInCartReceived (result) {

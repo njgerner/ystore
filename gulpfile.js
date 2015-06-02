@@ -102,10 +102,7 @@ gulp.task('copy', function() {
 
 	gulp.src(paths.config)
 		.pipe(gulpNgConfig('env.config', {
-			environment: process.env.STRIPE,
-			constants: {
-				'SECRET': 'overriden'
-			}
+			environment: process.env.CLIENT_CONFIG
 		}))
 		.pipe(gulp.dest('public/js/'));
 });

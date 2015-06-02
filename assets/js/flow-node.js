@@ -21,7 +21,11 @@ module.exports = flow = function(temporaryFolder) {
         // Clean up the identifier
         identifier = cleanIdentifier(identifier);
         // What would the file name be?
-        return path.resolve($.temporaryFolder, './flow-' + identifier + '.' + chunkNumber);
+        return path.resolve($.temporaryFolder, './' + identifier + '.' + chunkNumber);
+    }
+
+    function getFilename(identifier) {
+        return path.resolve($.temporaryFolder, './' + identifier.toString());
     }
 
     function validateRequest(chunkNumber, chunkSize, totalSize, identifier, filename, fileSize) {
@@ -88,7 +92,6 @@ module.exports = flow = function(temporaryFolder) {
     //'invalid_flow_request', null, null, null
     //'non_flow_request', null, null, null
     $.post = function(req, callback) {
-        console.log('posting image', req.body, req.files);
 
         var fields = req.body;
         var files = req.files;
@@ -98,8 +101,6 @@ module.exports = flow = function(temporaryFolder) {
         var totalSize = fields['flowTotalSize'];
         var identifier = cleanIdentifier(fields['flowIdentifier']);
         var filename = fields['flowFilename'];
-
-        console.log('chunkNumber/chunkSize/totalSize/identifier/filename', chunkNumber, chunkSize, totalSize, identifier, filename);
 
         if (!files[$.fileParameterName] || !files[$.fileParameterName].size) {
             callback('invalid_flow_request', null, null, null);
@@ -180,6 +181,17 @@ module.exports = flow = function(temporaryFolder) {
         pipeChunk(1);
     };
 
+    $.move = function(identifier, destination, rename, callback) {
+        if (rename) {
+            destination += rename;
+        } else {
+            destination += identifier;
+        }
+        // fs.createReadStream(getFilename(identifier)).pipe(fs.createWriteStream('/assets/' + rename));
+        fs.rename(getFilename(identifier), destination, callback);
+
+    }
+
     $.clean = function(identifier, options) {
         options = options || {};
 
@@ -188,11 +200,9 @@ module.exports = flow = function(temporaryFolder) {
 
             var chunkFilename = getChunkFilename(number, identifier);
 
-            //console.log('removing pipeChunkRm ', number, 'chunkFilename', chunkFilename);
             fs.exists(chunkFilename, function(exists) {
                 if (exists) {
 
-                    console.log('exist removing ', chunkFilename);
                     fs.unlink(chunkFilename, function(err) {
                         if (err && options.onError) options.onError(err);
                     });
