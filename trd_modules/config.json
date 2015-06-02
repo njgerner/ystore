@@ -8,5 +8,19 @@
   "STRIPE_LIVE": {
   	"SECRET": "sk_live_tuUyDD6PezfDZV8Qyke334wC",
   	"PUBLISH": "pk_live_vNO7fZbJ5sYZ9DBbinIm36Q5"
+  },
+  "CLIENT_TEST": {
+    "PUBLISH": "pk_test_8LwfnHnZaS9JT7OFYUhsnT4J",
+    "AWS_ACCESS": "AKIAJNKA6HXE6XJGVLTQ",
+    "AWS_BUCKET": "ylift.io"
+  },
+  "CLIENT_PROD": {
+    "PUBLISH": "pk_live_vNO7fZbJ5sYZ9DBbinIm36Q5",
+    "AWS_ACCESS": "AKIAJNKA6HXE6XJGVLTQ",
+    "AWS_BUCKET": "ylift.io"
+  },
+  "AWS": {
+    "ACCESS": "AKIAJNKA6HXE6XJGVLTQ",
+    "SECRET": "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"
   }
 }

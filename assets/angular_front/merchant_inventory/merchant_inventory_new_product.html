@@ -1,12 +1,17 @@
 <div class="row">
   <hr>
-  <div class="large-4 columns">
-    <label>Image URL
-      <input type="text" ng-model="product.img" placeholder="/img/products/##-###-###_475x475.jpg"/>
-      <!-- filler image goes here -->
-    </label>
+  <div class="large-5 columns" flow-init="{target: '/upload_image'}"
+                               flow-files-submitted="$flow.upload()"
+                               flow-files-success="$file.msg = $message"
+                               flow-files-added="onFileAdded($files, $event, $flow)">
+      <label>Image</label>
+      <div ng-hide="$flow.files.length > 0" class="alert image-drop" flow-drop flow-drag-enter="style={border:'4px solid green'}" flow-drag-leave="style={}"
+     ng-style="style">
+        Drag and Drop your image file here or <input type="file" flow-btn flow-attrs="{accept:'image/*'}"/>
+      </div>
+      <img ng-show="$flow.files.length > 0" flow-img="$flow.files[0]" />
   </div>
-  <div class="large-8 columns">
+  <div class="large-7 columns">
     <p ng-show="error">{{error}}</p>
     <!-- Edit name -->
     <label>Product name

@@ -9,6 +9,7 @@ var methodOverride = require('method-override');
 var path = require('path');
 var passport = require('passport');
 var session = require('express-session');
+var qt = require('quickthumb');
 
 // var routes = require('./routes/routes');
 
@@ -36,6 +37,7 @@ app.use(cookieParser());
 
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(qt.static(__dirname + 'public/img'));
 
 // Session-persisted message middleware
 app.use(function(req, res, next){

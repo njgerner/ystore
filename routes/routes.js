@@ -5,6 +5,7 @@ module.exports = function(express, app, __dirname) {
       passport        = require('passport'),        // https://npmjs.org/package/passport
       orchHelper      = require('../trd_modules/orchestrateHelper'),
       emailHelper     = require('../trd_modules/emailHelper'),
+      flow            = require('../assets/js/flow-node')(process.env.TMPDIR),
       config          = require('../trd_modules/config.json'),
       moment          = require('moment'),
       multer          = require('multer'),
@@ -14,12 +15,18 @@ module.exports = function(express, app, __dirname) {
       jwt             = require('jwt-simple'),
       nodemailer      = require('nodemailer'),
       adminRoutes     = require('./admin-routes.js')(express, app, __dirname),
+      awsRoutes       = require('./aws-routes.js')(express, app, __dirname),
       emailRoutes     = require('./email-routes.js')(express, app, __dirname),
       profileRoutes   = require('./profile-routes.js')(express, app, __dirname),
       productRoutes   = require('./product-routes.js')(express, app, __dirname),
       regRoutes       = require('./reg-routes.js')(express, app, __dirname),
       storeRoutes     = require('./store-routes.js')(express, app, __dirname),
       stripeRoutes    = require('./stripe-routes.js')(express, app, __dirname),
+      formidable      = require('formidable'),
+      qt              = require('quickthumb'),
+      multipart       = require('connect-multiparty'),
+      multipartMiddleware = multipart(),
+      util            = require('util'),
       Q               = require('q'),               // https://registry.npmjs.org/q
       stripeEnv       = process.env.STRIPE;
 
@@ -175,7 +182,7 @@ passport.use('bearer', new BearerStrategy(
       .then(function (profile) {
         orchHelper.findUserByID(req.user.id)
           .then(function (user) {
-            res.send({user:user, profile:profile, isAdmin:user.isAdmin, stripePubKey:config[stripeEnv].PUBLISH}); //eliminate the user doc ASAP
+            res.send({user:user, profile:profile, isAdmin:user.isAdmin}); //eliminate the user doc ASAP
           })
           .fail(function (err) {
             console.log('need to decide what data to pass back on err', err);
@@ -469,6 +476,26 @@ passport.use('bearer', new BearerStrategy(
       });
   };
 
+  var get_image = function(req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
+    flow.get(req, function(status, filename, original_filename, identifier) {
+      console.log('GET IMAGE', status);
+      if (status == 'found') {
+        res.status(200).send();
+      } else {
+        res.status(204).send();
+      }
+    });
+  };
+
+  var upload_image = function(req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
+
+    flow.post(req, function(status, filename, original_filename, identifier) {
+      res.status(status).json({filename:filename, identifier:identifier});
+    });
+  };
+
   ///GET /404
   var fourofour = function(req, res, next){
     // trigger a 404 since no other middleware
@@ -554,6 +581,8 @@ passport.use('bearer', new BearerStrategy(
     app.get('/product_reviews/:productnumber', productRoutes.get_reviews);
     app.get('/request_pass_reset/:email', request_pass_reset);
     app.get('/reset_password/:userid', reset_password);
+    app.get('/sign_s3', awsRoutes.sign_s3);
+    app.get('/upload_image', get_image);
 
     // -- START POST Routes
     ///////////////////////////////////////////////////////////////
@@ -580,6 +609,7 @@ passport.use('bearer', new BearerStrategy(
     app.post('/update_password', update_password);
     app.post('/update_product', ensureAuthenticated, productRoutes.update_product);
     app.post('/update_user', ensureAuthenticated, update_user);
+    app.post('/upload_image', multipartMiddleware, upload_image);
     
     // -- START Profile Routes
     ///////////////////////////////////////////////////////////////

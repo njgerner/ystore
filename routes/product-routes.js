@@ -6,8 +6,28 @@ module.exports = function(express, app, __dirname) {
 	var path            = require('path'),            						// http://nodejs.org/docs/v0.3.1/api/path.html
     	config 			= require('../trd_modules/config.json'), 			//config file contains all tokens and other private info
 		orchHelper      = require('../trd_modules/orchestrateHelper'),
+		aws 			= require('aws-sdk'),
+		AWS_ACCESS_KEY  = process.env.AWS_ACCESS,
+		AWS_SECRET_KEY  = process.env.AWS_SECRET,
+		S3_BUCKET  		= process.env.S3_BUCKET,
 		Q               = require('q'),
+		flow            = require('../assets/js/flow-node')(process.env.TMPDIR),
+		fsExtra 		= require('fs.extra');
 		fs 				= require('fs');
+
+	function updateAWSImageLocation (from, to) {
+		aws.config.update({accessKeyId: AWS_ACCESS_KEY, secretAccessKey: AWS_SECRET_KEY});
+		var s3 = new aws.S3();
+		var s3_params = {
+			Bucket: S3_BUCKET,
+			Key: to,
+			CopySource: S3_BUCKET + "/" + from
+		};
+		s3.copyObject(s3_params, function (err, data) {
+			if (err) console.log('error s3 copyObject', err, err.stack);
+			else 	 console.log('data s3 copyObject', data);
+		});
+	}
 
 	// GET /product_rating/:productnumber
 	ProductRoutes.get_rating = function(req, res) {
@@ -59,7 +79,18 @@ module.exports = function(express, app, __dirname) {
 			return merchant.productKey + "-" + count;
 		})
 		.then(function (pn) {
-			console.log('pn', pn);
+			var name = pn + "." + product.tmpImg.extension;
+			var img = "img/products/" + name;
+			updateAWSImageLocation(product.tmpImg.name, name);
+			flow.move(product.tmpImg.identifier, 'public/', img, function (err) {
+				if (err) {
+					console.error('error moving file to ' + '/public/products/' + img, err);
+					throw err;
+				}
+				delete product.tmpImg;
+			});
+			product.img = img;
+			product.remote_img = 'https://'+S3_BUCKET+'.s3.amazonaws.com/' + name;
 			product.currency = "USD";
 			product.productnumber = pn;
 			// TODO: should eventually move increment setting to client
@@ -102,6 +133,7 @@ module.exports = function(express, app, __dirname) {
 			res.status(201).json(result);
 		})
 	  	.fail(function (err) {
+	  		console.log('error updating product', err);
 	  		res.status(403).json({err:'profile not authorized to edit product'});
 	  	}).done();
 	};
