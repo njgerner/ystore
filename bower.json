@@ -23,7 +23,8 @@
     "foundation": "~5.2.0",
     "angular-foundation": "0.5.1",
     "ngInfiniteScroll": "~1.2.0",
-    "ng-error": "~1.0.2"
+    "ng-error": "~1.0.2",
+    "ng-flow": "~2"
   },
   "resolutions": {
     "angular": "~1.2.x",
