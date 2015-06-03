@@ -4,7 +4,6 @@ trdServices.service('awsService', ['$http',
 	this.getSignedRequest = function(file, callback) {
 		$http({method:'GET', url:'/sign_s3?file_name=' + file.name + '&file_type=' + file.type}).
 			success(function(data, status, headers, config) {
-				console.log('getSignedRequest', file, data);
 				callback(file, data.signed_request, data.url);
 			}).
 			error(function(data, status, headers, config) {

@@ -37,6 +37,9 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 	  		};
 
 	  		scope.openCart = function() {
+	  			if (scope.itemCount == 0) {
+	  				return;
+	  			}
 	  			$rootScope.showCart(function(isVisible) {scope.showCart = isVisible});
 	  		};
 
@@ -92,6 +95,10 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 					scope.productsInCart = JSON.parse(newCart);
 				}
 				scope.itemCount = scope.productsInCart.length || 0;
+			});
+
+			$rootScope.$on('merchantcreated', function(evt, args) {
+				onProfileLoaded();
 			});
 
 		}

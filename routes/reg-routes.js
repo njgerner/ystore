@@ -27,7 +27,7 @@ module.exports = function(express, app, __dirname) {
 	  		}
 	  	})
 	  	.fail(function (err) {
-	  		console.log('405 error', err);
+	  		console.log('405 error', err.body);
 	  		res.status(405).json({status:"invalid"});
 	  	});
 	};

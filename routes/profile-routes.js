@@ -20,7 +20,7 @@ module.exports = function(express, app, __dirname) {
 	  		res.status(200).json({profile:result, admin:isAdmin});
 	  	})
 	  	.fail(function (err) {
-	  		res.status(500).json({err:err});
+	  		res.status(404).json({err:err});
 	  	});
 	};
 
@@ -37,10 +37,10 @@ module.exports = function(express, app, __dirname) {
 
 	// POST /profile/add_merchant/:profileid
 	ProfileRoutes.add_merchant = function(req, res) {
-	  var merchant = Merchant.newProfile(req.params.profileid, req.body.category);
-	  merchant.name = req.body.name;
-	  merchant.regkey = req.body.regkey;
-	  orchHelper.addMerchantProfile(merchant)
+	var merchant = Merchant.newProfile(req.params.profileid, req.body.category);
+	merchant.name = req.body.name;
+	merchant.regkey = req.body.regkey;
+	orchHelper.addMerchantProfile(merchant)
   	.then(function (result) {
   		return orchHelper.activateRegKey(req.body.regkey, merchant.id);
   	})

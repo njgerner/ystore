@@ -21,7 +21,8 @@ module.exports = function(express, app, __dirname) {
 		var s3_params = {
 			Bucket: S3_BUCKET,
 			Key: to,
-			CopySource: S3_BUCKET + "/" + from
+			CopySource: S3_BUCKET + "/" + from,
+	        ACL: 'public-read'
 		};
 		s3.copyObject(s3_params, function (err, data) {
 			if (err) console.log('error s3 copyObject', err, err.stack);
@@ -87,8 +88,8 @@ module.exports = function(express, app, __dirname) {
 					console.error('error moving file to ' + '/public/products/' + img, err);
 					throw err;
 				}
-				delete product.tmpImg;
 			});
+			delete product.tmpImg;
 			product.img = img;
 			product.remote_img = 'https://'+S3_BUCKET+'.s3.amazonaws.com/' + name;
 			product.currency = "USD";
@@ -125,9 +126,24 @@ module.exports = function(express, app, __dirname) {
 
 	// POST /update_product
 	ProductRoutes.update_product = function(req, res) {
+		var product = req.body.product;
 		orchHelper.findMerchantProfile(req.user.profile)
 		.then(function (res) {
-			return orchHelper.updateProduct(req.body.product, req.user.profile);
+			if (product.tmpImg) {
+				var name = product.productnumber + "." + product.tmpImg.extension;
+				var img = "img/products/" + name;
+				updateAWSImageLocation(product.tmpImg.name, name);
+				flow.move(product.tmpImg.identifier, 'public/', img, function (err) {
+					if (err) {
+						console.error('error moving file to ' + '/public/products/' + img, err);
+						throw err;
+					}
+				});
+				delete product.tmpImg;
+				product.img = img;
+				product.remote_img = 'https://'+S3_BUCKET+'.s3.amazonaws.com/' + name;
+			}
+			return orchHelper.updateProduct(product, req.user.profile);
 		})
 		.then(function (result) {
 			res.status(201).json(result);
