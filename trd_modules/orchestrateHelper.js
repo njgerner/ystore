@@ -912,3 +912,22 @@ exports.activateRegKey = function(keyid, ownerid) {
   });
   return deferred.promise;
 };
+
+exports.getTrainingDates = function() {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+    .collection('training-dates')
+    .limit(100)
+    .query('value.available:true')
+  .then(function(result) {
+    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
+  })
+  .fail(function (err){
+    if (err.body.message == 'The requested items could not be found.'){
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body));
+    }
+  });
+  return deferred.promise;
+};

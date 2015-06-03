@@ -1,8 +1,8 @@
 superApp.controller('RegisterCtrl',
   ['$rootScope', '$scope', '$state', 'authService', '$location', '$window', '$timeout', 
-  		'stripeService', 'storeService',
+  		'stripeService', 'storeService', 'trainingService',
   function($rootScope, $scope, $state, authService, $location, $window, $timeout, 
-  		stripeService, storeService) {
+  		stripeService, storeService, trainingService) {
 
   	$scope.staff = [];
   	$scope.viewState = 'start';
@@ -14,7 +14,7 @@ superApp.controller('RegisterCtrl',
 			// apply mailing address to billing fields
 			$scope.billingname = $scope.name;
 			$scope.billingaddress1 = $scope.address1;
-			$scope.billingaddress2 = $scope.address1;
+			$scope.billingaddress2 = $scope.address2;
 			$scope.billingcity = $scope.city;
 			$scope.billingstate = $scope.state;
 			$scope.billingzip = $scope.zip;
@@ -55,9 +55,10 @@ superApp.controller('RegisterCtrl',
 	        	fax: $scope.fax,
 	        	specialty: $scope.specialty,
 	        	medlicense: $scope.medlicensenum,
-	        	fillercompany: $scope.fillercompany,
-	        	fillertier: $scope.fillertier,
-	        	traininglocation: $scope.location,
+	        	filler_revenue_pct: $scope.filler_revenue_pct,
+	        	filler_procedures: $scope.filler_procedures,
+            training_location: $scope.location,
+	        	training_date: $scope.training_date,
 	        	certname: $scope.certname,
 	        	staff: $scope.staff
 	        };
@@ -82,7 +83,7 @@ superApp.controller('RegisterCtrl',
   	}
 
   	$scope.resetScope = function() {
-  		$window.location.reload();
+  		$state.go('register');
   	}
 
     $scope.registerIndividual = function() {
@@ -93,7 +94,6 @@ superApp.controller('RegisterCtrl',
       }
       $scope.registering = true;
       authService.register($scope.email, $scope.password, function(err, status) {
-        console.log("loginctrl err/status", err, status);
         if (err) {
           console.log('error register', err);
           $scope.registering = false;
@@ -104,6 +104,11 @@ superApp.controller('RegisterCtrl',
       });
     }
 
+    function onTrainingDatesLoaded(dates) {
+      $scope.dates = dates;
+    }
+
+// START VALIDATION
   	function validate(state) {
   		$scope.validating = true;
   		$scope.error = null;
@@ -185,9 +190,10 @@ superApp.controller('RegisterCtrl',
 		        	fax: $scope.fax,
 		        	specialty: $scope.specialty,
 		        	medlicense: $scope.medlicensenum,
-		        	fillercompany: $scope.fillercompany,
-		        	fillertier: $scope.fillertier,
-		        	traininglocation: $scope.location,
+		        	filler_revenue_pct: $scope.filler_revenue_pct,
+		        	filler_procedures: $scope.filler_procedures,
+              training_location: $scope.location,
+		        	training_date: $scope.training_date,
 		        	certname: $scope.certname,
 		        	staff: $scope.staff
 		        };
@@ -211,4 +217,8 @@ superApp.controller('RegisterCtrl',
 
   		}
   	}
+// END VALIDATION
+
+  trainingService.getAvailableDates(onTrainingDatesLoaded);
+
 }]);
