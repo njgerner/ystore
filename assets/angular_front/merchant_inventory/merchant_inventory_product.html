@@ -10,8 +10,12 @@
     <img src="http://placehold.it/400x300&text=[img]">
   </div>
   <div class="large-5 columns">
-    <input ng-show="mode == 'edit'" type="text" ng-model="product.img"/>
-    <img ng-src="{{product.img}}">
+    <div flow-init="{target: '/upload_image'}" flow-files-submitted="$flow.upload()"
+         flow-files-success="$file.msg = $message" flow-files-added="onFileAdded($files, $event, $flow)">
+      <img ng-hide="$flow.files.length" ng-src="{{product.img}}" />
+      <img ng-show="$flow.files.length > 0" flow-img="$flow.files[0]" />
+      <input ng-show="mode == 'edit'" type="file" flow-btn flow-attrs="{accept:'image/*'}"/>
+    </div>
   </div>
   <div class="large-5 columns">
     <!-- Edit name -->

@@ -699,16 +699,32 @@ exports.getProfile = function(profileid) {
 
 exports.addMerchantProfile = function(profile) {
   var deferred = Q.defer();
-  profile.updatedAt = new Date();
-  db.put('merchant-profiles', profile.id, profile)
-    .then(function (result) {
-      deferred.resolve(profile);
-    })
-    .fail(function (err) {
-      deferred.reject(new Error(err.body));
-    });
+  var key = profile.name.charAt(0).toLowerCase();
+  db.get('product-key-map', key)
+  .then(function (result) {
+    var map = result.body;
+    var code = map.code;
+    while (code.toString().length < 3) {
+      code = "0" + code.toString();
+    }
+    profile.productKey = map.letter + "-" + code;
+    profile.updatedAt = new Date();
+    return db.put('merchant-profiles', profile.id, profile);
+  })
+  .then(function (result) {
+    return db.newPatchBuilder('product-key-map', key)
+      .inc('code', 1)
+      .apply();
+  })
+  .then(function (result) {
+    deferred.resolve(profile);
+  })
+  .fail(function (err) {
+    console.log('error adding merchant profile', err.body, err, profile);
+    deferred.reject(new Error(err.body));
+  });
    
-    return deferred.promise;
+  return deferred.promise;
 };
 
 exports.updateMerchantProfile = function(profile) {
@@ -902,7 +918,7 @@ exports.activateRegKey = function(keyid, ownerid) {
     key.isActive = true;
     key.activationDate = new Date();
     key.owner = ownerid;
-    return db.put('registration-keys', key.id, key);
+    return db.put('registration-keys', keyid, key);
   })
   .then(function (result) {
     deferred.resolve(result.body);
