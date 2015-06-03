@@ -38,21 +38,21 @@
           </label>
           <small ng-show="failedMessage" class="error">{{failedMessage}}</small>
         </div>
-        <button type="submit" class="button tiny left">
+        <button class="button small secondary right" ng-click="viewState = 'start'">Back</button>
+        <button type="submit" class="button small right">
           <span ng-hide="registering">Register</span>
           <span ng-show="registering">Registering...</span>
         </button>
-        <button class="button tiny right" ng-click="viewState = 'start'">Back</button>
       </fieldset>
     </form>
 </div>
 
 <div ng-show="viewState == 'form1'" class="small-12 large-6 large-centered columns">
+	<legend>Basic Information</legend>
 	<div ng-show="error">
 		<p class='error'>{{error}}</p>
 	</div>
 	<form class="regform" novalidate>
-		<legend>Basic Information</legend>
 		<fieldset>
 			<div class="row">
 		    <div class="small-3 columns">
@@ -183,8 +183,8 @@
 		    </div>
 		  </div>
 		  <div class="row clearfix">
-			<button class="button secondary right" ng-click="backTo('start')">Back</button>
-		  	<button class="button right" ng-click="goTo('form2')">
+			<button class="button secondary small right" ng-click="backTo('start')">Back</button>
+		  	<button class="button small right" ng-click="goTo('form2')">
 		  		<span ng-hide="validating">Next</span>
 		  		<span ng-show="validating">Validating...</span>
 		  	</button>
@@ -209,8 +209,8 @@
 		  </div>
 		  <div class="row">
 		    <div class="small-12 columns">
-		      <label>NPI/Medical License #
-		        <input type="text" ng-model="medlicensenum" name="medlicensenum" placeholder="Enter medical license number" required/>
+		      <label>Medical License #
+		        <input type="text" ng-model="medlicensenum" name="medlicensenum" placeholder="Enter medical license number"/>
 		      </label>
 		    </div>
 		  </div>
@@ -249,8 +249,8 @@
 		    </div>
 		  </div>
 		  <div class="row clearfix">
-		  	<button class="button secondary right" ng-click="backTo('form1')">Back</button>
-		  	<button class="button right" ng-click="goTo('form3')">
+		  	<button class="button secondary small right" ng-click="backTo('form1')">Back</button>
+		  	<button class="button small right" ng-click="goTo('form3')">
 		  		<span ng-hide="validating">Next</span>
 		  		<span ng-show="validating">Validating...</span>
 		  	</button>
@@ -260,11 +260,11 @@
 </div>
 
 <div ng-show="viewState == 'form3'" class="small-12 large-6 large-centered columns">
+	<legend>Schedule Training</legend>
 	<div ng-show="error">
 		<p class='error'>{{error}}</p>
 	</div>
 	<form class="regform" novalidate>
-		<legend>Schedule Training</legend>
 		<fieldset>
 		  <div class="row">
 		    <div class="small-6 columns">
@@ -315,8 +315,8 @@
 			  </div>
 		  </div>
 		  <div class="row clearfix">
-		  	<button class="button secondary right" ng-click="backTo('form2')">Back</button>
-		  	<button class="button right" ng-click="goTo('form4')">
+		  	<button class="button secondary small right" ng-click="backTo('form2')">Back</button>
+		  	<button class="button small right" ng-click="goTo('form4')">
 		  		<span ng-hide="validating">Next</span>
 		  		<span ng-show="validating">Validating...</span>
 		  	</button>
@@ -326,11 +326,11 @@
 </div>
 
 <div ng-show="viewState == 'form4'" class="small-12 large-6 large-centered columns">
+	<legend>Payment Information</legend>
 	<div ng-show="error">
 		<p class='error'>{{error}}</p>
 	</div>
 	<form class="regform" novalidate>
-		<legend>Payment Information</legend>
 		<fieldset>
 			<div class="row">
 		    <div class="small-12 columns">
@@ -424,8 +424,8 @@
 			  </div>
 			</div>
 		  <div class="row clearfix">
-		  	<button class="button secondary right" ng-click="backTo('form3')">Back</button>
-		  	<button class="button right" ng-click="goTo('review')">
+		  	<button class="button secondary small right" ng-click="backTo('form3')">Back</button>
+		  	<button class="button small right" ng-click="goTo('review')">
 		  		<span ng-hide="validating">Next</span>
 		  		<span ng-show="validating">Validating...</span>
 		  	</button>
@@ -446,8 +446,8 @@
 		  <li class="bullet-item">In Person Hands-on Training</li>
 		  <li class="bullet-item">YLIFT Network Pricing</li>
 		  <li class="cta-button">
-		  	<a class="button secondary" ng-click="goTo('form4')">Back</a>
-		  	<a class="button" ng-click="submit()">
+		  	<a class="button small secondary" ng-click="goTo('form4')">Back</a>
+		  	<a class="button small" ng-click="submit()">
 		  		<span ng-hide="validating">Submit Order</span>
 		  		<span ng-show="validating">Processing...</span>
 		  	</a>
@@ -456,8 +456,11 @@
 </div>
 
 <div ng-show="viewState == 'success'" class="small-12 large-6 large-centered columns">
-	<div class="panel">
-		<h5>Thank you for registering with the YLIFT Network! You will receive an email confirmation shortly, if you have any further questions please reach out to support@ylift.io. A YLIFT team member will follow up with you shortly regarding the status of your membership and to schedule a training session.</h5>	
-		<button ng-click="resetScope()">Back to start</button>
+	<div class="panel clearfix">
+		<h5>Thank you for registering with the YLIFT Network! You will receive an email confirmation shortly, if you have any further questions please reach out to support@ylift.io. 
+			<br>
+			<br>
+			A YLIFT team member will follow up with you shortly regarding the status of your membership and to schedule a training session.</h5>	
+		<button class="small right" ng-click="resetScope()">Back to start</button>
 	</div>
 </div>
