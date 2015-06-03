@@ -13,7 +13,7 @@ module.exports = function(express, app, __dirname) {
 	TrainingRoutes.get_dates = function(req, res) {
 		orchHelper.getTrainingDates()
 		.then(function (result) {
-			res.status(201).json(result);
+			res.status(200).json(result);
 		})
 	  	.fail(function (err) {
 	  		res.status(403).json({err:'could not get training dates'});

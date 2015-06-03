@@ -25,6 +25,19 @@ exports.uploadTrainingMaterials = function(filename, filecontent, userid) {
   return deferred.promise;
 };
 
+exports.updateUserDoc = function(user) {
+  var deferred = Q.defer();
+  db.put('local-users', user.id, user)
+  .then(function(result) {
+    deferred.resolve(true);
+  })
+  .fail(function(err) {
+    deferred.reject(new Error(err.body));
+  });
+
+  return deferred.promise;
+};
+
 exports.updateUserProfile = function(profile, userid, property) {
   var deferred = Q.defer();
   profile.updatedAt = new Date();
