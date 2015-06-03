@@ -38,21 +38,21 @@
           </label>
           <small ng-show="failedMessage" class="error">{{failedMessage}}</small>
         </div>
-        <button type="submit" class="button tiny left">
+        <button class="button small secondary right" ng-click="viewState = 'start'">Back</button>
+        <button type="submit" class="button small right">
           <span ng-hide="registering">Register</span>
           <span ng-show="registering">Registering...</span>
         </button>
-        <button class="button tiny right" ng-click="viewState = 'start'">Back</button>
       </fieldset>
     </form>
 </div>
 
 <div ng-show="viewState == 'form1'" class="small-12 large-6 large-centered columns">
+	<legend>Basic Information</legend>
 	<div ng-show="error">
 		<p class='error'>{{error}}</p>
 	</div>
 	<form class="regform" novalidate>
-		<legend>Basic Information</legend>
 		<fieldset>
 			<div class="row">
 		    <div class="small-3 columns">
@@ -95,7 +95,59 @@
 		    </div>
 		    <div class="small-3 columns">
 		      <label>State
-		        <input type="text" ng-model="state" name="state" placeholder="Enter state" required/>
+				<select ng-model="state">
+					<option value="AL">Alabama</option>
+					<option value="AK">Alaska</option>
+					<option value="AZ">Arizona</option>
+					<option value="AR">Arkansas</option>
+					<option value="CA">California</option>
+					<option value="CO">Colorado</option>
+					<option value="CT">Connecticut</option>
+					<option value="DE">Delaware</option>
+					<option value="DC">District Of Columbia</option>
+					<option value="FL">Florida</option>
+					<option value="GA">Georgia</option>
+					<option value="HI">Hawaii</option>
+					<option value="ID">Idaho</option>
+					<option value="IL">Illinois</option>
+					<option value="IN">Indiana</option>
+					<option value="IA">Iowa</option>
+					<option value="KS">Kansas</option>
+					<option value="KY">Kentucky</option>
+					<option value="LA">Louisiana</option>
+					<option value="ME">Maine</option>
+					<option value="MD">Maryland</option>
+					<option value="MA">Massachusetts</option>
+					<option value="MI">Michigan</option>
+					<option value="MN">Minnesota</option>
+					<option value="MS">Mississippi</option>
+					<option value="MO">Missouri</option>
+					<option value="MT">Montana</option>
+					<option value="NE">Nebraska</option>
+					<option value="NV">Nevada</option>
+					<option value="NH">New Hampshire</option>
+					<option value="NJ">New Jersey</option>
+					<option value="NM">New Mexico</option>
+					<option value="NY">New York</option>
+					<option value="NC">North Carolina</option>
+					<option value="ND">North Dakota</option>
+					<option value="OH">Ohio</option>
+					<option value="OK">Oklahoma</option>
+					<option value="OR">Oregon</option>
+					<option value="PA">Pennsylvania</option>
+					<option value="RI">Rhode Island</option>
+					<option value="SC">South Carolina</option>
+					<option value="SD">South Dakota</option>
+					<option value="TN">Tennessee</option>
+					<option value="TX">Texas</option>
+					<option value="UT">Utah</option>
+					<option value="VT">Vermont</option>
+					<option value="VA">Virginia</option>
+					<option value="WA">Washington</option>
+					<option value="WV">West Virginia</option>
+					<option value="WI">Wisconsin</option>
+					<option value="WY">Wyoming</option>
+				</select /required>	
 		      </label>
 		    </div>
 		  </div>
@@ -131,8 +183,8 @@
 		    </div>
 		  </div>
 		  <div class="row clearfix">
-			<button class="button secondary right" ng-click="backTo('start')">Back</button>
-		  	<button class="button right" ng-click="goTo('form2')">
+			<button class="button secondary small right" ng-click="backTo('start')">Back</button>
+		  	<button class="button small right" ng-click="goTo('form2')">
 		  		<span ng-hide="validating">Next</span>
 		  		<span ng-show="validating">Validating...</span>
 		  	</button>
@@ -157,8 +209,8 @@
 		  </div>
 		  <div class="row">
 		    <div class="small-12 columns">
-		      <label>NPI/Medical License #
-		        <input type="text" ng-model="medlicensenum" name="medlicensenum" placeholder="Enter medical license number" required/>
+		      <label>Medical License #
+		        <input type="text" ng-model="medlicensenum" name="medlicensenum" placeholder="Enter medical license number"/>
 		      </label>
 		    </div>
 		  </div>
@@ -171,28 +223,33 @@
 		  </div>
 		  <div class="row">
 		    <div class="small-12 columns">
-		      <label>Do you purchase dermal filler?
-		        <input id="yesbox" type="checkbox"><label for="yesbox">Yes</label>
-		        <input id="nobox" type="checkbox"><label for="nobox">No</label>
+		      <label>Check if you purchase dermal filler
+		      	<input type="checkbox" ng-model="uses_filler" ng-true-value="'YES'" ng-false-value="'NO'">
 		      </label>
 		    </div>
 		    
 		  </div>
 		  <div class="row">
 		    <div class="small-6 columns">
-		      <label>Filler Pharmaceutical Company
-		        <input type="text" ng-model="fillercompany" name="fillercompany" placeholder="Enter a pharmaceutical company name" />
+		      <label>% Practice revenue generated from fillers
+		      	<select ng-model="filler_revenue_pct">
+		        	<option value="0_20"> 0% to 20% </option>
+					<option value="20_40"> 20% to 40%</option>
+					<option value="40_60">40% to 60%</option>
+					<option value="60_80">60% to 80%</option>
+					<option value="80_100">80% to 100%</option>
+				</select>	
 		      </label>
 		    </div>
 		    <div class="small-6 columns">
-		      <label>Purchasing Tier
-		        <input type="text" ng-model="fillertier" name="fillertier" placeholder="Tier level" />
+		      <label>Filler procedure estimate
+		        <input type="text" ng-model="filler_procedures" name="filler_procedures" placeholder="How many procedures are performed per year" />
 		      </label>
 		    </div>
 		  </div>
 		  <div class="row clearfix">
-		  	<button class="button secondary right" ng-click="backTo('form1')">Back</button>
-		  	<button class="button right" ng-click="goTo('form3')">
+		  	<button class="button secondary small right" ng-click="backTo('form1')">Back</button>
+		  	<button class="button small right" ng-click="goTo('form3')">
 		  		<span ng-hide="validating">Next</span>
 		  		<span ng-show="validating">Validating...</span>
 		  	</button>
@@ -202,14 +259,14 @@
 </div>
 
 <div ng-show="viewState == 'form3'" class="small-12 large-6 large-centered columns">
+	<legend>Schedule Training</legend>
 	<div ng-show="error">
 		<p class='error'>{{error}}</p>
 	</div>
 	<form class="regform" novalidate>
-		<legend>Training Scheduling</legend>
 		<fieldset>
-			<div class="row">
-		    <div class="small-12 columns">
+		  <div class="row">
+		    <div class="small-6 columns">
 		      <label>Training Location
 		        <select ng-model="location">
 		        	<option value="remote">Personal On Site Training</option>
@@ -217,6 +274,13 @@
 		        	<option value="NASH">YLIFT Nashville</option>
 		        	<option value="MIA">YLIFT Miami</option>
 		        	<option value="LA">YLIFT LA</option>
+		        </select>
+		      </label>
+		    </div>
+		    <div class="small-6 columns">
+		      <label>Training Date Preference
+		        <select ng-model="training_date">
+		        	<option ng-repeat="date in dates" value="date.date">{{date.date}}</option>
 		        </select>
 		      </label>
 		    </div>
@@ -250,8 +314,8 @@
 			  </div>
 		  </div>
 		  <div class="row clearfix">
-		  	<button class="button secondary right" ng-click="backTo('form2')">Back</button>
-		  	<button class="button right" ng-click="goTo('form4')">
+		  	<button class="button secondary small right" ng-click="backTo('form2')">Back</button>
+		  	<button class="button small right" ng-click="goTo('form4')">
 		  		<span ng-hide="validating">Next</span>
 		  		<span ng-show="validating">Validating...</span>
 		  	</button>
@@ -261,11 +325,11 @@
 </div>
 
 <div ng-show="viewState == 'form4'" class="small-12 large-6 large-centered columns">
+	<legend>Payment Information</legend>
 	<div ng-show="error">
 		<p class='error'>{{error}}</p>
 	</div>
 	<form class="regform" novalidate>
-		<legend>Payment Information</legend>
 		<fieldset>
 			<div class="row">
 		    <div class="small-12 columns">
@@ -275,7 +339,6 @@
 		        	<option value="mastercard">Mastercard</option>
 		        	<option value="american">American Express</option>
 		        	<option value="discover">Discover</option>
-		        	<option value="check">Check (Payable to YLIFT)</option>
 		        </select>
 		      </label>
 		    </div>
@@ -316,7 +379,7 @@
 			  <div class="row">
 			    <div class="small-12 columns">
 			      <label>Billing Address
-			        <input id="billingsame" type="checkbox"><label for="billingame">Same as mailing address</label>
+			        <input id="billingsame" ng-model="billingsame" type="checkbox"><label for="billingsame">Same as mailing address</label>
 			      </label>
 			    </div>
 			  </div>
@@ -360,8 +423,8 @@
 			  </div>
 			</div>
 		  <div class="row clearfix">
-		  	<button class="button secondary right" ng-click="backTo('form3')">Back</button>
-		  	<button class="button right" ng-click="goTo('review')">
+		  	<button class="button secondary small right" ng-click="backTo('form3')">Back</button>
+		  	<button class="button small right" ng-click="goTo('review')">
 		  		<span ng-hide="validating">Next</span>
 		  		<span ng-show="validating">Validating...</span>
 		  	</button>
@@ -382,8 +445,8 @@
 		  <li class="bullet-item">In Person Hands-on Training</li>
 		  <li class="bullet-item">YLIFT Network Pricing</li>
 		  <li class="cta-button">
-		  	<a class="button secondary" ng-click="goTo('form4')">Back</a>
-		  	<a class="button" ng-click="submit()">
+		  	<a class="button small secondary" ng-click="goTo('form4')">Back</a>
+		  	<a class="button small" ng-click="submit()">
 		  		<span ng-hide="validating">Submit Order</span>
 		  		<span ng-show="validating">Processing...</span>
 		  	</a>
@@ -392,8 +455,11 @@
 </div>
 
 <div ng-show="viewState == 'success'" class="small-12 large-6 large-centered columns">
-	<div class="panel">
-		<h5>Thank you for registering with the YLIFT Network! You will receive an email confirmation shortly, if you have any further questions please reach out to support@ylift.io. A YLIFT team member will follow up with you shortly regarding the status of your membership and to schedule a training session.</h5>	
-		<button ng-click="resetScope()">Back to start</button>
+	<div class="panel clearfix">
+		<h5>Thank you for registering with the YLIFT Network! You will receive an email confirmation shortly, if you have any further questions please reach out to support@ylift.io. 
+			<br>
+			<br>
+			A YLIFT team member will follow up with you shortly regarding the status of your membership and to schedule a training session.</h5>	
+		<button class="small right" ng-click="resetScope()">Back to start</button>
 	</div>
 </div>

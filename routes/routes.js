@@ -22,6 +22,7 @@ module.exports = function(express, app, __dirname) {
       regRoutes       = require('./reg-routes.js')(express, app, __dirname),
       storeRoutes     = require('./store-routes.js')(express, app, __dirname),
       stripeRoutes    = require('./stripe-routes.js')(express, app, __dirname),
+      trainingRoutes  = require('./training-routes.js')(express, app, __dirname),
       qt              = require('quickthumb'),
       multipart       = require('connect-multiparty'),
       multipartMiddleware = multipart(),
@@ -581,6 +582,7 @@ passport.use('bearer', new BearerStrategy(
     app.get('/request_pass_reset/:email', request_pass_reset);
     app.get('/reset_password/:userid', reset_password);
     app.get('/sign_s3', awsRoutes.sign_s3);
+    app.get('/training_dates', trainingRoutes.get_dates);
     app.get('/upload_image', get_image);
 
     // -- START POST Routes

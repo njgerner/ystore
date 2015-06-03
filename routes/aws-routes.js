@@ -1,7 +1,7 @@
 module.exports = function(express, app, __dirname) {
 	function AWSRoutes() {}
 
-	console.log('Loading Admin Routes');
+	console.log('Loading AWS Routes');
 
 	var path            = require('path'),            						// http://nodejs.org/docs/v0.3.1/api/path.html
     	config 			= require('../trd_modules/config.json'), 			//config file contains all tokens and other private info

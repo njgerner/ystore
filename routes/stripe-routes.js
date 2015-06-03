@@ -78,7 +78,6 @@ module.exports = function(express, app, __dirname) {
 			}
 		})
 		.then(function (customer) {
-			console.log('sending guest customer back', customer);
 			res.status(201).json({customer:customer, message:"Guest customer created"});
 		}, function (err) {
 			console.log('error creating stripe customer', err.message);
@@ -132,7 +131,6 @@ module.exports = function(express, app, __dirname) {
 				}
 			})
 			.then(function (result) {
-				console.log('updating customer/profileid', req.body.customer, req.params.profileid);
 				orchHelper.updateCustomer(req.body.customer)
 					.then(function (customer) {
 						res.status(200).json({customer:customer});
@@ -148,7 +146,6 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	StripeRoutes.update_guest_customer = function(req, res) {	
-		console.warn('updating customer/props', req.body.customerid, req.body.props);
 		stripe.customers.update(req.body.customerid, req.body.props, function(err, result){
 			orchHelper.updateCustomer(result)
 			.then(function (customer) {
@@ -161,7 +158,6 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	StripeRoutes.get_customer = function(req, res) {
-		console.log('getting customer', req.params.customerid);
 		orchHelper.getCustomer(req.params.customerid)
 			.then(function (customer) {
 				res.status(200).json({customer:customer});
@@ -213,7 +209,7 @@ module.exports = function(express, app, __dirname) {
 				orchHelper.addOrder(order)
 				.then(function (result) {
 					// trying to keep this route universal and not all purchases will have a merchant (e.g. ylift registration)
-					if (merchants.length > 0) {
+					if (merchants && merchants.length > 0) {
 						emailHelper.sendOrdersToMerchants(order).done();
 					}
 					// user account purchase
