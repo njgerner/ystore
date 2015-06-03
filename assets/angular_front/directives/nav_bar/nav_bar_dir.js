@@ -97,6 +97,10 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 				scope.itemCount = scope.productsInCart.length || 0;
 			});
 
+			$rootScope.$on('merchantcreated', function(evt, args) {
+				onProfileLoaded();
+			});
+
 		}
 	}
 }]);
