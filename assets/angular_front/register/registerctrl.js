@@ -53,7 +53,8 @@ superApp.controller('RegisterCtrl',
 	        	country: $scope.country,
 	        	phone: $scope.phone,
 	        	fax: $scope.fax,
-	        	specialty: $scope.specialty,
+            specialty: $scope.specialty,
+	        	uses_filler: $scope.uses_filler,
 	        	medlicense: $scope.medlicensenum,
 	        	filler_revenue_pct: $scope.filler_revenue_pct,
 	        	filler_procedures: $scope.filler_procedures,
@@ -83,7 +84,7 @@ superApp.controller('RegisterCtrl',
   	}
 
   	$scope.resetScope = function() {
-  		$state.go('register');
+  		$state.go($state.current, {}, {reload: true});
   	}
 
     $scope.registerIndividual = function() {
@@ -134,11 +135,20 @@ superApp.controller('RegisterCtrl',
   			$scope.validating = false;
   			return false;
   		} else if (state == 'form3') {
-  			$scope.validating = false;
-  			return true; // no validations for now
+        $scope.validating = true;
+        if (!$scope.medlicensenum) {
+          $scope.error = 'Please enter your medical license number';
+        } else {
+          $scope.validating = false;
+          return true;
+        }
+        $scope.validating = false;
+  			return false; // no validations for now
   		} else if (state == 'form4') {
   			if (!$scope.certname) {
   				$scope.error = 'Please enter the name you\'d like to appear on your YLIFT certificate';
+        } else if (!$scope.location) {
+          $scope.error = 'Please select a training location';
   			} else {
   				$scope.validating = false;
   				return true;
@@ -188,6 +198,7 @@ superApp.controller('RegisterCtrl',
 		        	country: $scope.country,
 		        	phone: $scope.phone,
 		        	fax: $scope.fax,
+              uses_filler: $scope.uses_filler,
 		        	specialty: $scope.specialty,
 		        	medlicense: $scope.medlicensenum,
 		        	filler_revenue_pct: $scope.filler_revenue_pct,

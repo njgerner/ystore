@@ -167,7 +167,6 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
       };
 
     	this.submitOrder = function(addressShipTo, productsInCart, merchants, shipping, total, callback) {
-        console.log('submitting order', total, this.card, this.customer);
         if (!this.card) {
            callback({message: "Invalid credit card info, please check that the information provided is correct and try again." }, null);
         } else { // i need a dolla dolla, a dolla is all i neeeeeeed
