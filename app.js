@@ -66,7 +66,7 @@ if ('development' == app.get('env')) {
 if (process.env.ENV == 'PROD') {
   var enforce = require('express-sslify');
   // use HTTPS(true) in case you are behind a load balancer (e.g. Heroku)
-  app.use(enforce.HTTPS());
+  app.use(enforce.HTTPS(true));
 }
 
 // roll tide go hokies
