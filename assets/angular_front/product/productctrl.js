@@ -55,6 +55,11 @@ superApp.controller('ProductCtrl',
     }
 
     function onRelatedProductsLoaded (products) {
+        for (var i = 0; i < products.length; i++) {
+            if (products[i].productnumber == $scope.product.productnumber) {
+                products.splice(i, 1);
+            }
+        }
         $scope.relatedProducts = products;
         $scope.relatedLoading = false;
     }

@@ -34,10 +34,10 @@ trdServices.service("profileService", ['$rootScope', '$http', '$cookieStore', 'a
         });
     }
 
-    this.addMerchantProfile = function(name, email, regkey, callback) {
+    this.addMerchantProfile = function(name, category, regkey, callback) {
         var inThis = this;
         $http({method: 'POST', url: '/profile/add_merchant/' + authService.profile.id, 
-               data:{name:name, email:email, regkey:regkey}})
+               data:{name:name, category:category, regkey:regkey}})
         .success(function (data, status, headers, config) {
             inThis.merchant = data;
             inThis.adminOf[data.id] = true;

@@ -37,6 +37,9 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 	  		};
 
 	  		scope.openCart = function() {
+	  			if (scope.itemCount == 0) {
+	  				return;
+	  			}
 	  			$rootScope.showCart(function(isVisible) {scope.showCart = isVisible});
 	  		};
 
