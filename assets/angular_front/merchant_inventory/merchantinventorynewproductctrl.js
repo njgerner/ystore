@@ -24,7 +24,6 @@ superApp.controller('MerchantInventoryNewProductCtrl',
     }
 
     $scope.addProduct = function() {
-      console.log('to add', $scope.product);
       if ($scope.updating) {
         return;
       }
