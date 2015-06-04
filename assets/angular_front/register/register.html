@@ -38,6 +38,7 @@
           </label>
           <small ng-show="failedMessage" class="error">{{failedMessage}}</small>
         </div>
+		<p>By clicking register you agree to our <a ui-sref="terms" target="_blank">Terms & Conditions</a></p>
         <button class="button small secondary right" ng-click="viewState = 'start'">Back</button>
         <button type="submit" class="button small right">
           <span ng-hide="registering">Register</span>
@@ -165,7 +166,7 @@
 		  </div>
 		  <div class="row">
 		    <div class="small-12 columns">
-		      <label>Email
+		      <label>Email </span class="required">*</span>
 		        <input type="email" ng-model="email" name="email" placeholder="Enter an email" required/>
 		      </label>
 		    </div>
@@ -267,7 +268,7 @@
 		<fieldset>
 		  <div class="row">
 		    <div class="small-6 columns">
-		      <label>Training Location
+		      <label>Training Location </span class="required">*</span>
 		        <select ng-model="location">
 		        	<option value="remote">Personal On Site Training</option>
 		        	<option value="NY">YLIFT New York</option>
@@ -392,7 +393,7 @@
 			  </div>
 			  <div class="row">
 			    <div class="small-12 columns">
-			      <label>Address Line 2 </span class="required">*</span>
+			      <label>Address Line 2
 			        <input type="text" ng-model="billingaddress2" name="billingaddress2" placeholder="Street Address Line 2" />
 			      </label>
 			    </div>
@@ -442,18 +443,19 @@
 		<fieldset>
 			<div class="row">
 				<div class="small-12 columns">
-					<label>Email
+					<label>Email </span class="required">*</span>
 						<input type="email" name="email" placeholder="{{email}}" ng-model="loginemail" required>
 					</label>
-					<label>Password
+					<label>Password </span class="required">*</span>
 						<input type="password" name="password" placeholder="Enter your password" ng-model="password" required>
 					</label>
-					<label>Confirm Password
+					<label>Confirm Password </span class="required">*</span>
 						<input type="password" name="confirmpassword" placeholder="Please confirm your password" ng-model="confirmpassword" required>
 					</label>
 				</div>
 			</div>
 			 <div class="row clearfix">
+			 	<p>By clicking next you agree to our <a ui-sref="terms" target="_blank">Terms & Conditions</a></p>
 			  	<button class="button secondary small right" ng-click="backTo('form3')">Back</button>
 			  	<button class="button small right" ng-click="goTo('review')">
 			  		<span ng-hide="validating">Next</span>
