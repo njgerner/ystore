@@ -80,21 +80,39 @@ module.exports = function(express, app, __dirname) {
 			return merchant.productKey + "-" + count;
 		})
 		.then(function (pn) {
-			var name = pn + "." + product.tmpImg.extension;
-			var img = "img/products/" + name;
-			updateAWSImageLocation(product.tmpImg.name, name);
-			flow.move(product.tmpImg.identifier, 'public/', img, function (err) {
+			if(product.tmpImg) {
+				var name = pn + "." + product.tmpImg.extension;
+				var img = "img/products/" + name;
+				updateAWSImageLocation(product.tmpImg.name, name);
+				flow.move(product.tmpImg.identifier, 'public/', img, function (err) {
 				if (err) {
-					console.error('error moving file to ' + '/public/products/' + img, err);
-					throw err;
-				}
-			});
-			delete product.tmpImg;
-			product.img = img;
-			product.remote_img = 'https://'+S3_BUCKET+'.s3.amazonaws.com/' + name;
+						console.error('error moving file to ' + '/public/products/' + img, err);
+						throw err;
+					}
+				});
+				delete product.tmpImg;
+				product.img = img;
+				product.remote_img = 'https://'+S3_BUCKET+'.s3.amazonaws.com/' + name;
+			}
+			if(product.tmpAltImg) {
+				product.altImg = [];	//define this to be filled below
+				product.tmpAltImg.forEach(function (alt, i) {
+					name = pn +  "-a" + (i+1) + "." + alt.extension;
+					img = "img/products/" + name;
+					updateAWSImageLocation(alt.name, name);
+					flow.move(alt.identifier, 'public/', img, function (err) {
+						if (err) {
+							console.error('error moving file to ' + '/public/products/' + img, err);
+							throw err;
+						}
+					});
+					product.altImg.push({img: img, remote_img: 'https://'+S3_BUCKET+'.s3.amazonaws.com/' + name});
+				});
+			}
+			delete product.tmpAltImg;
 			product.currency = "USD";
 			product.productnumber = pn;
-			// TODO: should eventually move increment setting to client
+			//TODO : merchant should set increment
 			product.attributes = {
 				"increment": "1",
 				"vendor": merchant.id
