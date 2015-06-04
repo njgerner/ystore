@@ -23,7 +23,7 @@
         <legend>Register</legend>
         <div class="input-wrapper">
           <label>Email
-            <input type="text" name="email" placeholder="Enter your email" ng-model="email" required>
+            <input type="email" name="email" placeholder="Enter your email" ng-model="email" required>
           </label>
           <small ng-show="loginForm.email.$invalid && loginForm.email.$dirty" class="error">Please enter a valid email address</small>
         </div>
@@ -165,8 +165,8 @@
 		  </div>
 		  <div class="row">
 		    <div class="small-12 columns">
-		      <label>Email </span class="required">*</span>
-		        <input type="email" ng-model="email" name="email" placeholder="Enter phone number" required/>
+		      <label>Email
+		        <input type="email" ng-model="email" name="email" placeholder="Enter an email" required/>
 		      </label>
 		    </div>
 		  </div>
@@ -424,11 +424,42 @@
 			</div>
 		  <div class="row clearfix">
 		  	<button class="button secondary small right" ng-click="backTo('form3')">Back</button>
-		  	<button class="button small right" ng-click="goTo('review')">
+		  	<button class="button small right" ng-click="goTo('form5')">
 		  		<span ng-hide="validating">Next</span>
 		  		<span ng-show="validating">Validating...</span>
 		  	</button>
 		  </div>
+		</fieldset>
+	</form>
+</div>
+
+<div ng-show="viewState == 'form5'" class="small-12 large-6 large-centered columns">
+	<legend>Create Account Login</legend>
+	<div ng-show="error">
+		<p class='error'>{{error}}</p>
+	</div>
+	<form class="regform" novalidate>
+		<fieldset>
+			<div class="row">
+				<div class="small-12 columns">
+					<label>Email
+						<input type="email" name="email" placeholder="{{email}}" ng-model="loginemail" required>
+					</label>
+					<label>Password
+						<input type="password" name="password" placeholder="Enter your password" ng-model="password" required>
+					</label>
+					<label>Confirm Password
+						<input type="password" name="confirmpassword" placeholder="Please confirm your password" ng-model="confirmpassword" required>
+					</label>
+				</div>
+			</div>
+			 <div class="row clearfix">
+			  	<button class="button secondary small right" ng-click="backTo('form3')">Back</button>
+			  	<button class="button small right" ng-click="goTo('review')">
+			  		<span ng-hide="validating">Next</span>
+			  		<span ng-show="validating">Validating...</span>
+			  	</button>
+			  </div>
 		</fieldset>
 	</form>
 </div>

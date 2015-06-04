@@ -73,12 +73,18 @@ superApp.controller('RegisterCtrl',
   			});
   		} else {
 	  		stripeService.submitOrder(undefined, undefined, undefined, undefined, $scope.total, function (err, result) {
-  				$scope.validating = false;
-	  			if (err) {
-	  				$scope.error = err;
-	  			} else {
-	  				$scope.viewState = 'success';
-	  			}
+          if (err) {
+            $scope.error = err;
+          } else {
+            authService.addUserYLIFT(result.id, function (error) {
+              $scope.validating = false;
+              if (error) {
+                $scope.error = error;
+              } else {
+                $scope.viewState = 'success';
+              }
+            });
+          }
 	  		});
   		}
   	}
@@ -96,7 +102,6 @@ superApp.controller('RegisterCtrl',
       $scope.registering = true;
       authService.register($scope.email, $scope.password, function(err, status) {
         if (err) {
-          console.log('error register', err);
           $scope.registering = false;
           $scope.failedMessage = status;
         } else {
@@ -155,7 +160,7 @@ superApp.controller('RegisterCtrl',
   			}
   			$scope.validating = false;
   			return false;
-  		} else if (state == 'review') {
+  		} else if (state == 'form5') {
   			if ($scope.cctype == 'check') {
   				$scope.validating = false;
   				return true;
@@ -217,16 +222,40 @@ superApp.controller('RegisterCtrl',
   					var props = {
   						email: $scope.email,
   						metadata: meta
-  					};
+  					};            
   					stripeService.updateGuestCustomer(props, function(customer) {
   						$scope.validating = false;
   						$scope.viewState = state;
   						return true;
   					});
   				});
-  			}
+        }
 
-  		}
+      } else if (state == 'review') {
+        $scope.validating = true;
+        if ($scope.password !== $scope.confirmpassword) {
+          $scope.error = 'Passwords need to match';
+        } else if (!$scope.loginemail) {
+          $scope.error = 'Please enter an account login email';
+        } else {
+          $scope.profile = {};
+          return authService.register($scope.loginemail, $scope.password, function (error, status) {
+            $scope.validating = false;
+            if (error) {
+              $scope.error = error;
+              return false;
+            } else {
+              return authService.getAuthorization(function (authorized) {
+                if (authorized) {
+                  $scope.profile = authService.profile;
+                }
+                $scope.viewState = state;
+                return true;
+              });
+            }
+          });
+        }
+      }
   	}
 // END VALIDATION
 
