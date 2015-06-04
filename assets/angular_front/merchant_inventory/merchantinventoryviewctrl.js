@@ -19,8 +19,6 @@ superApp.controller('MerchantInventoryViewCtrl',
     }
 
     $scope.defaultImage = function(product) {
-      console.log('defaultImage');
-      console.log(product);
       if (product.remote_img) {
         product.img = product.remote_img;
       } else {

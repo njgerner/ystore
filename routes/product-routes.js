@@ -71,7 +71,6 @@ module.exports = function(express, app, __dirname) {
 		var merchant = req.body.merchant;
 		var key = merchant.name.substr(0, 1).toLowerCase();
 		var product = req.body.product;
-		console.log('rt the product = ', req.body.product);
 		orchHelper.getMerchantProductCount(merchant.id)
 		.then(function (count) {
 			count++;
