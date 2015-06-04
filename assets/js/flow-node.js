@@ -187,6 +187,7 @@ module.exports = flow = function(temporaryFolder) {
         } else {
             destination += identifier;
         }
+        console.log('move', getFilename(identifier), destination);
         // fs.createReadStream(getFilename(identifier)).pipe(fs.createWriteStream('/assets/' + rename));
         fs.rename(getFilename(identifier), destination, callback);
 

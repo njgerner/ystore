@@ -19,9 +19,9 @@ superApp.controller('MerchantInventoryViewCtrl',
     }
 
     $scope.defaultImage = function(product) {
-      console.log('default image', product);
+      console.log('defaultImage');
+      console.log(product);
       if (product.remote_img) {
-        console.log('if', product.remote_img);
         product.img = product.remote_img;
       } else {
         product.img = "http://placehold.it/475x475&text=[img]";
