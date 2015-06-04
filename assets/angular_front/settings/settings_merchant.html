@@ -28,7 +28,7 @@
     </fieldset>
   </form>
 </div>
-<div class="row" ng-show="showSignUp">
+<div class="row" ng-show="showSignUp && !merchantLoaded">
   <legend>Create a new merchant account</legend>
     <!-- errors go here -->
   <form>
@@ -74,7 +74,7 @@
       <div class="row">
         <label for="merchanturl">Website</label>
         <div>
-          <input type="url" name="merchanturl" ng-model="merchantProfile.website" placeholder="Enter the company website url">
+          <input type="text" name="merchanturl" ng-model="merchantProfile.website" placeholder="Enter the company website url">
         </div>
       </div>
       <div class="row">

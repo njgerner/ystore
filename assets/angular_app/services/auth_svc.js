@@ -164,4 +164,14 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 				});
 		};	
 
+		this.addUserYLIFT = function(orderid, callback) {
+			$http({method: 'POST', url:"/user/give_ylift", data:{orderid:orderid}}).
+			success(function (data, status, headers, config) {
+				callback(null);
+			}).
+			error(function(data, status, headers, config) {
+		    	callback('There was an error associating your order with a YLIFT account, please reach out to YLIFT support.');
+			});
+		}
+
 }]);

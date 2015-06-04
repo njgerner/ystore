@@ -10,7 +10,6 @@ var path = require('path');
 var passport = require('passport');
 var session = require('express-session');
 var qt = require('quickthumb');
-
 // var routes = require('./routes/routes');
 
 var app = express();
@@ -20,6 +19,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.set('jwtTokenSecret', 'DEEZNUTS');
+
 
 // uncomment after placing your favicon in /public
 app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -63,6 +63,11 @@ if ('development' == app.get('env')) {
   app.use(errorHandler());
 }
 
+if (process.env.ENV == 'PROD') {
+  var enforce = require('express-sslify');
+  // use HTTPS(true) in case you are behind a load balancer (e.g. Heroku)
+  app.use(enforce.HTTPS(true));
+}
 
 // roll tide go hokies
 require('./routes/routes.js')(express, app, __dirname);

@@ -29,7 +29,6 @@ trdServices.service("profileService", ['$rootScope', '$http', '$cookieStore', 'a
             callback(data.profile);
         })
         .error(function (data, status, headers, config) {
-            console.log('error updating profile', data);
             callback();
         });
     }

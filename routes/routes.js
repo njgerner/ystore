@@ -23,6 +23,7 @@ module.exports = function(express, app, __dirname) {
       storeRoutes     = require('./store-routes.js')(express, app, __dirname),
       stripeRoutes    = require('./stripe-routes.js')(express, app, __dirname),
       trainingRoutes  = require('./training-routes.js')(express, app, __dirname),
+      userRoutes      = require('./user-routes.js')(express, app, __dirname),
       qt              = require('quickthumb'),
       multipart       = require('connect-multiparty'),
       multipartMiddleware = multipart(),
@@ -233,10 +234,10 @@ passport.use('bearer', new BearerStrategy(
     return passport.authenticate('local-signin', function(err, user, info) {
       if (err) { return next(err); }
       if (!user) { return res.json({err:"login helper, no user error", message:info.message, failed:true}); }
+
       // no sessions, don't bother logging in...
       var payload = { user: user.id, expires: moment().add(4, 'days') };
       var secret = app.get("jwtTokenSecret");
-
 
       // encode
       var token = jwt.encode(payload, secret);
@@ -622,6 +623,9 @@ passport.use('bearer', new BearerStrategy(
     app.post('/profile/add_merchant/:profileid', ensureAuthenticated, profileRoutes.add_merchant);
     app.post('/profile/update_merchant', ensureAuthenticated, profileRoutes.update_merchant);
     app.post('/profile/delete_merchant/:profileid', ensureAuthenticated, profileRoutes.delete_merchant);
+
+    // -- START User Routes
+    app.post('/user/give_ylift', ensureAuthenticated, userRoutes.give_ylift);
 
     // -- START ERROR Routes
     ///////////////////////////////////////////////////////////////

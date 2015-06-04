@@ -79,7 +79,8 @@ superApp.controller('SettingsMerchantCtrl',
         $scope.admin = profileService.isAdminOfMerchant(profile.id);
         $scope.merchantLoaded = true;
       }
-  	}
+      $rootScope.$broadcast('merchantcreated', profile);
+    }
 
     function onMerchantUpdated (profile, error) {
       $scope.updating = false;
