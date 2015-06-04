@@ -68,14 +68,14 @@
 		      </label>
 		    </div>
 		    <div class="small-9 columns">
-		      <label>Name
+		      <label>Name </span class="required">*</span>
 		        <input type="text" ng-model="name" name="name" placeholder="First & Last" required/>
 		      </label>
 		    </div>
 		  </div>
 		  <div class="row">
 		    <div class="small-12 columns">
-		      <label>Address
+		      <label>Address </span class="required">*</span>
 		        <input type="text" ng-model="address1" name="address1" placeholder="Street Address" required/>
 		      </label>
 		    </div>
@@ -89,12 +89,12 @@
 		  </div>
 		  <div class="row">
 		    <div class="small-9 columns">
-		      <label>City
+		      <label>City </span class="required">*</span>
 		        <input type="text" ng-model="city" name="city" placeholder="Enter city" required/>
 		      </label>
 		    </div>
 		    <div class="small-3 columns">
-		      <label>State
+		      <label>State </span class="required">*</span>
 				<select ng-model="state">
 					<option value="AL">Alabama</option>
 					<option value="AK">Alaska</option>
@@ -153,7 +153,7 @@
 		  </div>
 		  <div class="row">
 		    <div class="small-5 columns">
-		      <label>Zip
+		      <label>Zip </span class="required">*</span>
 		        <input type="text" ng-model="zip" name="zip" placeholder="Enter zip" required/>
 		      </label>
 		    </div>
@@ -165,14 +165,14 @@
 		  </div>
 		  <div class="row">
 		    <div class="small-12 columns">
-		      <label>Email
+		      <label>Email </span class="required">*</span>
 		        <input type="email" ng-model="email" name="email" placeholder="Enter phone number" required/>
 		      </label>
 		    </div>
 		  </div>
 		  <div class="row">
 		    <div class="small-6 columns">
-		      <label>Phone
+		      <label>Phone </span class="required">*</span>
 		        <input type="tel" ng-model="phone" name="phone" placeholder="Enter phone number" required/>
 		      </label>
 		    </div>
@@ -209,7 +209,7 @@
 		  </div>
 		  <div class="row">
 		    <div class="small-12 columns">
-		      <label>Medical License #
+		      <label>Medical License # </span class="required">*</span>
 		        <input type="text" ng-model="medlicensenum" name="medlicensenum" placeholder="Enter medical license number"/>
 		      </label>
 		    </div>
@@ -287,7 +287,7 @@
 		  </div>
 		  <div class="row">
 		    <div class="small-12 columns">
-		      <label>Certificate Name
+		      <label>Certificate Name </span class="required">*</span>
 		        <input type="text" ng-model="certname" name="certname" placeholder="Enter the name you want to appear on your certificate" required/>
 		      </label>
 		    </div>
@@ -333,7 +333,7 @@
 		<fieldset>
 			<div class="row">
 		    <div class="small-12 columns">
-		      <label>Credit Card Type
+		      <label>Credit Card Type </span class="required">*</span>
 		        <select ng-model="cctype">
 		        	<option value="visa">Visa</option>
 		        	<option value="mastercard">Mastercard</option>
@@ -346,31 +346,31 @@
 		  <div ng-hide="cctype == 'check'">
 		  	<div class="row">
 			    <div class="small-12 columns">
-			      <label>Name On Card
+			      <label>Name On Card </span class="required">*</span>
 			        <input type="text" ng-model="cardname" name="cardname" placeholder="Enter the name as it appears on the card" />
 			      </label>
 			    </div>
 			  </div>
 			  <div class="row">
 			    <div class="small-12 columns">
-			      <label>Credit Card Number
+			      <label>Credit Card Number </span class="required">*</span>
 			        <input type="text" ng-model="ccnum" name="ccnum" placeholder="Enter 16 digit credit card number" />
 			      </label>
 			    </div>
 			  </div>
 			  <div class="row">
 			    <div class="small-3 columns">
-			      <label>Expiration Month
+			      <label>Expiration Month </span class="required">*</span>
 			        <input type="text" ng-model="expmonth" ng-length="2" name="expmonth" placeholder="MM" />
 			      </label>
 			    </div>
 			    <div class="small-3 columns">
-			      <label>Expiration Year
+			      <label>Expiration Year </span class="required">*</span>
 			        <input type="text" ng-model="expyear" ng-length="4" name="expyear" placeholder="YYYY" />
 			      </label>
 			    </div>
 			    <div class="small-6 columns">
-			      <label>CVC Number
+			      <label>CVC Number </span class="required">*</span>
 			        <input type="text" ng-model="cvc" ng-min="3" ng-max="4" name="cvc" placeholder="3 or 4 Digit Number" />
 			      </label>
 			    </div>
@@ -385,33 +385,33 @@
 			  </div>
 				<div class="row">
 			    <div class="small-12 columns">
-			      <label>Address
+			      <label>Address </span class="required">*</span>
 			        <input type="text" ng-model="billingaddress1" name="billingaddress1" placeholder="Street Address"/>
 			      </label>
 			    </div>
 			  </div>
 			  <div class="row">
 			    <div class="small-12 columns">
-			      <label>Address Line 2
+			      <label>Address Line 2 </span class="required">*</span>
 			        <input type="text" ng-model="billingaddress2" name="billingaddress2" placeholder="Street Address Line 2" />
 			      </label>
 			    </div>
 			  </div>
 			  <div class="row">
 			    <div class="small-9 columns">
-			      <label>City
+			      <label>City </span class="required">*</span>
 			        <input type="text" ng-model="billingcity" name="billingcity" placeholder="Enter city"/>
 			      </label>
 			    </div>
 			    <div class="small-3 columns">
-			      <label>State
+			      <label>State </span class="required">*</span>
 			        <input type="text" ng-model="billingstate" name="billingstate" placeholder="Enter state"/>
 			      </label>
 			    </div>
 			  </div>
 			  <div class="row">
 			    <div class="small-5 columns">
-			      <label>Zip
+			      <label>Zip </span class="required">*</span>
 			        <input type="text" ng-model="billingzip" name="billingzip" placeholder="Enter zip"/>
 			      </label>
 			    </div>
