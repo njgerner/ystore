@@ -11,13 +11,18 @@
 
   <top-bar-section>
     <ul class="search">
+      <li class="show-for-medium-up category" has-dropdown>
+        <a class="nav-text">Shop by <strong>Category</strong></a>
+        <ul top-bar-dropdown>
+          <li ng-repeat="(cat, count) in productCategories | orderBy: 'count'"><a ng-click="search(cat)">{{toTitleCase(cat)}}</a></li>
+        </ul>
       <li id="search-wrapper" class="has-form">
         <form style="height:100%" ng-submit="search(searchQuery)">
           <div style="height:100%" class="row collapse">
-            <div style="height:100%" class="large-8 small-9 columns">
-              <input id="searchbar" type="text" ng-model="searchQuery" typeahead="name for name in productNames.length ? [$viewValue].concat(productNames) : [] | filter:$viewValue | limitTo:6" typeahead-on-select="search(searchQuery)" class="nav-text" placeholder="Find Stuff" autoselect>
+            <div style="height:100%" class="small-10 columns">
+              <input id="searchbar" type="text" ng-model="searchQuery" typeahead="name for name in productNames.length ? [$viewValue].concat(productNames) : [] | filter:$viewValue | limitTo:6" typeahead-on-select="search(searchQuery)" class="nav-text" placeholder="Search for anything" autoselect>
             </div>
-            <div class="large-4 small-3 columns">
+            <div class="small-2 columns">
               <i ng-click="search(searchQuery)" class="i-search pointer"> </i>
             </div>
           </div>

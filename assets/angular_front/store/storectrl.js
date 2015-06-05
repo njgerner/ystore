@@ -18,24 +18,6 @@ superApp.controller('StoreCtrl',
       return route == $location.path();
     }
 
-    $scope.search = function() {
-      if ($scope.searchQuery.length == 0) {
-        $scope.goToCategory($scope.defaultCategory);
-        return;
-      } 
-      $scope.filterProducts($scope.searchQuery.toLowerCase());
-      $state.go('store.search');
-    }
-
-    $scope.filterProducts = function(query) {
-      $scope.filteredProducts = [];
-      $scope.products.forEach(function(product, index) {
-        if(product.name.toLowerCase().indexOf(query) > -1 || product.description.toLowerCase().indexOf(query) > -1){
-          $scope.filteredProducts.push(product);
-        }
-      });
-    }
-
     $scope.openCart = function() {
       $rootScope.showCart(function(isVisible) {$scope.showCart = isVisible});
     };
@@ -61,9 +43,6 @@ superApp.controller('StoreCtrl',
         var ind = stateUrl.indexOf("product");
         $scope.goToProduct(stateUrl[++ind]);
       }
-      // } else { // TODO need and else if for categories
-      //   $scope.goToCategory($scope.defaultCategory);
-      // }
       $scope.loading = false;
     }
 
