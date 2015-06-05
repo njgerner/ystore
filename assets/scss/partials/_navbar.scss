@@ -108,9 +108,15 @@
 .i-search {
 	position:absolute;
 	font-size:170%;
-	margin-left:-15%;
+	margin-left:-28%;
 	top:8.5px;
 	color:$ylift;
+}
+
+.show-for-medium-up {
+	&.category {
+		margin-left: 10%;
+	}
 }
 
 .nav-sub-header {

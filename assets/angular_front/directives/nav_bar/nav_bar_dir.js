@@ -19,6 +19,7 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 			scope.isMerchant = false;
 			scope.query = null;
 			scope.productsInCart = [];
+			scope.productCategories = {};
 			scope.itemCount = 0;
 			scope.cart = {};
 			scope.productNames = [];
@@ -26,6 +27,10 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 			scope.goToPage = function(page) {
 	  			$state.go(page);
 			};
+
+			scope.toTitleCase = function(str) {
+				return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+			}
 
 	    	scope.isActive = function(route) {
 	      		return route === $location.path();
@@ -86,6 +91,10 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 
 			storeService.getAllProducts(function(products) {
 				products.forEach(function(product, index) {
+					if (scope.productCategories[product.category] === undefined) {
+						scope.productCategories[product.category] = 0;
+					}
+					scope.productCategories[product.category]++;
 		            scope.productNames.push(product.name);
 		        });
 			});

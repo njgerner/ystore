@@ -284,7 +284,9 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
     this.getFilteredProducts = function(query, callback) {
         var filteredProducts = [];
         this.products.forEach(function(product, index) {
-            if(product.name.toLowerCase().indexOf(query) > -1 || product.description.toLowerCase().indexOf(query) > -1){
+            if(product.name.toLowerCase().indexOf(query) > -1 
+                || product.description.toLowerCase().indexOf(query) > -1
+                || product.category.toLowerCase() == query){
               filteredProducts.push(product);
             }
         });
