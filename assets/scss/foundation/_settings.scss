@@ -45,6 +45,7 @@ $total-columns: 12;
 $body-bg: #f9f9f9;
 $body-font-color: #222;
 $body-font-family: "Roboto Condensed", sans-serif;
+// $body-font-family: "FertigoPro-Regular", serif;
 // $body-font-weight: $font-weight-normal;
 $body-font-style: normal;
 $font-weight-normal: normal !default;
@@ -409,49 +410,49 @@ $button-font-align: center;
 
 // Dropdown
 
-// $include-html-dropdown-classes: $include-html-classes;
+$include-html-dropdown-classes: $include-html-classes;
 
 // We use these to controls height and width styles.
-// $f-dropdown-max-width: 200px;
-// $f-dropdown-height: auto;
-// $f-dropdown-max-height: none;
+$f-dropdown-max-width: 200px;
+$f-dropdown-height: auto;
+$f-dropdown-max-height: none;
 
 // Used for bottom position
-// $f-dropdown-margin-top: 2px;
+$f-dropdown-margin-top: 2px;
 
 // Used for right position
-// $f-dropdown-margin-left: $f-dropdown-margin-top;
+$f-dropdown-margin-left: $f-dropdown-margin-top;
 
 // Used for left position
-// $f-dropdown-margin-right: $f-dropdown-margin-top;
+$f-dropdown-margin-right: $f-dropdown-margin-top;
 
 // Used for top position
-// $f-dropdown-margin-bottom: $f-dropdown-margin-top;
+$f-dropdown-margin-bottom: $f-dropdown-margin-top;
 
 // We use this to control the background color
-// $f-dropdown-bg: #fff;
+$f-dropdown-bg: #fff;
 
 // We use this to set the border styles for dropdowns.
-// $f-dropdown-border-style: solid;
-// $f-dropdown-border-width: 1px;
-// $f-dropdown-border-color: scale-color(#fff, $lightness: -20%);
+$f-dropdown-border-style: solid;
+$f-dropdown-border-width: 1px;
+$f-dropdown-border-color: scale-color(#fff, $lightness: -20%);
 
 // We use these to style the triangle pip.
-// $f-dropdown-triangle-size: 6px;
-// $f-dropdown-triangle-color: #fff;
-// $f-dropdown-triangle-side-offset: 10px;
+$f-dropdown-triangle-size: 6px;
+$f-dropdown-triangle-color: #fff;
+$f-dropdown-triangle-side-offset: 10px;
 
 // We use these to control styles for the list elements.
-// $f-dropdown-list-style: none;
-// $f-dropdown-font-color: #555;
-// $f-dropdown-font-size: rem-calc(14);
-// $f-dropdown-list-padding: rem-calc(5, 10);
-// $f-dropdown-line-height: rem-calc(18);
-// $f-dropdown-list-hover-bg: #eeeeee  ;
-// $dropdown-mobile-default-float: 0;
+$f-dropdown-list-style: none;
+$f-dropdown-font-color: #555;
+$f-dropdown-font-size: rem-calc(14);
+$f-dropdown-list-padding: rem-calc(5, 10);
+$f-dropdown-line-height: rem-calc(18);
+$f-dropdown-list-hover-bg: #eeeeee  ;
+$dropdown-mobile-default-float: 0;
 
 // We use this to control the styles for when the dropdown has custom content.
-// $f-dropdown-content-padding: rem-calc(20);
+$f-dropdown-content-padding: rem-calc(20);
 
 // Dropdown Buttons
 
@@ -1180,7 +1181,7 @@ $panel-border-size: 1px;
 $include-html-top-bar-classes: $include-html-classes;
 
 // Background color for the top bar
-$topbar-bg-color: $ylift;
+$topbar-bg-color: $white;
 $topbar-bg: $topbar-bg-color;
 
 // Height and margin
@@ -1192,25 +1193,25 @@ $topbar-title-weight: $font-weight-normal;
 $topbar-title-font-size: rem-calc(17);
 
 // Style the top bar dropdown elements
-$topbar-dropdown-bg: #333;
-$topbar-dropdown-link-color: #fff;
-$topbar-dropdown-link-bg: #333;
+$topbar-dropdown-bg: #fff;
+$topbar-dropdown-link-color: $ylift;
+$topbar-dropdown-link-bg: #fff;
 $topbar-dropdown-link-weight: $font-weight-normal;
 $topbar-dropdown-toggle-size: 5px;
-$topbar-dropdown-toggle-color: #fff;
+$topbar-dropdown-toggle-color: $ylift;
 $topbar-dropdown-toggle-alpha: 0.4;
 
 // Set the link colors and styles for top-level nav
-$topbar-link-color: #fff;
-$topbar-link-color-hover: #fff;
-$topbar-link-color-active: #fff;
-$topbar-link-color-active-hover: #fff;
+$topbar-link-color: $ylift;
+$topbar-link-color-hover: $white;
+$topbar-link-color-active: $ylift;
+$topbar-link-color-active-hover: $ylift;
 $topbar-link-weight: $font-weight-normal;
 $topbar-link-font-size: rem-calc(13);
 $topbar-link-hover-lightness: -10%; // Darken by 10%
 $topbar-link-bg: $topbar-bg;
-$topbar-link-bg-color-hover: #272727;
-$topbar-link-bg-hover: #272727;
+$topbar-link-bg-color-hover: $ylift;
+$topbar-link-bg-hover: $ylift;
 $topbar-link-bg-active: $primary-color;
 $topbar-link-bg-active-hover: scale-color($primary-color, $lightness: -14%);
 $topbar-link-font-family: $body-font-family;
