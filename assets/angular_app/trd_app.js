@@ -205,6 +205,61 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
       templateUrl: "/partials/about.html",
       controller: "AboutCtrl"
     })
+    .state('techniques', {
+      url:"/techniques",
+      templateUrl: "/partials/techniques.html",
+      controller: "TechniquesCtrl"
+    })
+    .state('techniques.ylift', {
+      parent: 'techniques',
+      url:"/y-lift",
+      templateUrl: "/partials/techniques_ylift.html",
+    })
+    .state('techniques.yeye', {
+      parent: 'techniques',
+      url:"/y-eye",
+      templateUrl: "/partials/techniques_yeye.html",
+    })
+    .state('techniques.beautylift', {
+      parent: 'techniques',
+      url:"/beauty-lift",
+      templateUrl: "/partials/techniques_beautylift.html",
+    })
+    .state('techniques.botox', {
+      parent: 'techniques',
+      url:"/botox",
+      templateUrl: "/partials/techniques_botox.html",
+    })
+    .state('techniques.skynjection', {
+      parent: 'techniques',
+      url:"/botox",
+      templateUrl: "/partials/techniques_botox.html",
+    })
+    .state('techniques.chynjection', {
+      parent: 'techniques',
+      url:"/chynjection",
+      templateUrl: "/partials/techniques_chynjection.html",
+    })
+    .state('techniques.hands', {
+      parent: 'techniques',
+      url:"/hands",
+      templateUrl: "/partials/techniques_hands.html",
+    })
+    .state('techniques.injectables', {
+      parent: 'techniques',
+      url:"/injectables",
+      templateUrl: "/partials/techniques_injectables.html",
+    })
+    .state('techniques.laser', {
+      parent: 'techniques',
+      url:"/laser",
+      templateUrl: "/partials/techniques_laser.html",
+    })
+    .state('techniques.veins', {
+      parent: 'techniques',
+      url:"/veins",
+      templateUrl: "/partials/techniques_veins.html",
+    })
     .state('settings', {
       abstract: true,
       url:"/settings",
