@@ -3,7 +3,7 @@
 		<div class="large-4 columns">
 			<div ng-repeat="testimonial in testimonials track by $index">
 				<div ng-if="$index % 3 == 0" class = "panel before-after-single">
-					<a href="{{path}}" ng-repeat="path in testimonial.img">
+					<a ng-href="{{path}}" ng-repeat="path in testimonial.img">
 						<img class="before-after-image" ng-src="{{path}}">
 					</a>
 					<div class="before-after-text-container">
@@ -20,7 +20,7 @@
 		<div class="large-4 columns">
 			<div ng-repeat="testimonial in testimonials track by $index">
 				<div ng-if="$index % 3 == 1" class = "panel before-after-single">
-					<a href="{{path}}" ng-repeat="path in testimonial.img">
+					<a ng-href="{{path}}" ng-repeat="path in testimonial.img">
 						<img class="before-after-image" ng-src="{{path}}">
 					</a>
 					<div class="before-after-text-container">
@@ -37,7 +37,7 @@
 		<div class="large-4 columns">
 			<div ng-repeat="testimonial in testimonials track by $index">
 				<div ng-if="$index % 3 == 2" class = "panel before-after-single">
-					<a href="{{path}}" ng-repeat="path in testimonial.img">
+					<a ng-href="{{path}}" ng-repeat="path in testimonial.img">
 						<img class="before-after-image" ng-src="{{path}}">
 					</a>
 					<div class="before-after-text-container">
