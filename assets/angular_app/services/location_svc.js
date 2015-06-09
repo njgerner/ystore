@@ -3,10 +3,11 @@ trdServices.service("locationService", ['$rootScope', '$http', '$cookieStore', '
     	this.locationsRetrieved = false;
     	this.locations = [];
 
-    	this.addressToLatLong = function(address, address) {
+    	this.addressToLatLong = function(lookup, address) {
+
     		var deferred = $q.defer();
     		var geocoder = new google.maps.Geocoder();
-  			geocoder.geocode({address:address}, function (results, status) {
+  			geocoder.geocode({address:lookup}, function (results, status) {
   				if (status == google.maps.GeocoderStatus.OK && results.length > 0) {
   					address.location = results[0].geometry.location;
   					address.formattedaddress = results[0].formatted_address;
@@ -32,8 +33,8 @@ trdServices.service("locationService", ['$rootScope', '$http', '$cookieStore', '
 			    		profile.addresses.forEach(function (address, index) {
 			    			var deferred = $q.defer();
 			    			if (address && address.address1 && address.city && address.state && address.zip && (address.yliftInd == "YES")) {
-			    				var address = address.address1 + ', ' + address.city + ', ' + address.state + ' ' + address.zip;
-			    				inThis.addressToLatLong(address, address)
+			    				var lookup = address.address1 + ', ' + address.city + ', ' + address.state + ' ' + address.zip;
+			    				inThis.addressToLatLong(lookup, address)
 			    					.then(function (result) {
 			    						result.doctorname = profile.name;
 				    					result.profileid = profile.id;
@@ -49,7 +50,6 @@ trdServices.service("locationService", ['$rootScope', '$http', '$cookieStore', '
 			    		if (index == profiles.length-1) {
 			    			$q.all(promises)
 			    				.then(function (result) {
-			    					console.log('result', result);
 				    				var locations = result.filter(function(n) { return n != null });
 				    				inThis.locationsRetrieved = true;
 				    				inThis.locations = locations;

@@ -1,51 +1,52 @@
-<div id="map-canvas" class="ylift-locations"></div>
-<div ng-hide="locationsLoaded" class="locations-loading"><i class="fa fa-spinner fa-pulse fa-5x"></i></div>
-<i ng-show="locationsLoaded && !showLocationsRight" class="fa fa-outdent fa-3x show-locations" ng-click="toggleLocationPanel()"></i>
+<div class="off-canvas-wrap">
+	<div class="inner-wrap">
+		<a class="right-off-canvas-toggle menu-icon"><span></span></a>
+		<div ng-hide="locationsLoaded" class="loader locations-loading">Loading...</div>
+		<div ng-show="mapLoaded" id="map-canvas" class="ylift-locations"></div>
+	</div>
+</div>
 <div ng-show="locationsLoaded" ng-show="showLocationsRight" class="locations-panel animated" ng-class="{bounceOutRight:!showLocationsRight,bounceInRight:showLocationsRight}">
 	<div class="locations-header">
-	    <div style="padding-left:25x;padding-top:5px;"class="col-md-2">
-	      <i class="fa fa-chevron-right clickable" ng-click="toggleLocationPanel()"></i>
-	    </div>
-	    <div class="col-md-10">
-	      <h3 ng-hide="showSearch" style="position:absolute;left:5px;margin-top:6.5%"class="header-text">YLift Locations</h3>
-	      <i class="fa fa-search pull-right location-search" ng-click="toggleSearch()"></i>
-	      <form class="location-search" role="search" ng-show="showSearch">
-	        <input type="text" class="form-control col-md-6" ng-model="zip" placeholder="Search Zip">
-	        <button type="submit" class="btn btn-xs btn-default" ng-click="searchZip()">Go</button>
-	      </form>
-	    </div>
+      <i ng-hide="showSearch" class="i-right-open-big clickable" ng-click="toggleLocationPanel()"></i>
+      <i ng-show="showSearch" class="i-cancel clickable" ng-click="toggleSearch()"></i>
+      <h3 ng-hide="showSearch">Y Lift Locations</h3>
+      <i ng-hide="showSearch" class="i-search location-search" ng-click="toggleSearch()"></i>
+		<div class="row" ng-show="showSearch">
+		    <div class="large-12 columns">
+		      <div class="row collapse">
+		        <div class="small-10 columns">
+		          <input type="text" ng-model="zip" placeholder="Search Zip Code">
+		        </div>
+		        <div class="small-2 columns">
+		          <a type="submit" ng-click="searchZip()" class="button tiny secondary postfix">Go</a>
+		        </div>
+		      </div>
+		    </div>
+		</div>
 	</div>
 	<div class="locations-panel-content">
 		<ul class="list-group locations-list">
 			<li ng-repeat="location in locations" class="location-list-item" ng-class="{'location-focused':location.focused}">
 				<div class="row location-row" style="margin:0" ng-click="toggleFocus($index)">
-					<div class="col-md-9">
+					<div>
 						<h5>{{location.name}} <small>{{location.doctorname}}</small></h5>
 						<p>{{location.formattedaddress}}</p>
 					</div>
-					<div class="col-md-3">
-						<img ng-if="location.img" style="height:50px; width:50px;" ng-src="{{location.img}}">
-						<img ng-hide="location.img" style="height:50px; width:50px;" src="/img/logo.png">
-					</div>
 				</div>
 				<div ng-show="location.focused" class=" location-icons row animated" style="margin:0" ng-class="{fadeOut:!location.focused,fadeIn:location.focused}">
-					<div class="col-md-3 location-icon" ng-click="">
-						<i class="fa fa-calendar fa-2x"></i><br>
-						Appt
-					</div>
-					<div class="col-md-3 location-icon">
-						<i class="fa fa-phone-square fa-2x"></i><br>
-						Call
-					</div>
-					<div class="col-md-3 location-icon">
-						<a href="mailto:support@ylift.io">
-							<i class="fa fa-envelope-o fa-2x"></i><br>
-							Contact
+					<div class="icon-bar four-up">
+						<a class="item">
+							<i class="i-calendar"></i>
 						</a>
-					</div>
-					<div class="col-md-3 location-icon">
-						<i class="fa fa-info-circle fa-2x"></i><br>
-						Info
+						<a class="item">
+							<i class="i-phone"></i>
+						</a>
+						<a class="item">
+							<i class="i-message"></i>
+						</a>
+						<a class="item">
+							<i class="i-info"></i>
+						</a>
 					</div>
 				</div>
 			</li>

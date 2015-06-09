@@ -44,13 +44,11 @@ superApp.controller('LocationsCtrl',
   		var img = {
   			url: '/img/logo_md.png' // look into more props
   		};
-
       $scope.locationsLoaded = true;
       $scope.locations.forEach(function (location, index) {
-        console.log('location', location);
         location.focused = false;
   			$scope.markers[index] = new google.maps.Marker({
-  				position: new google.maps.LatLng(location.location.k, location.location.D),
+  				position: new google.maps.LatLng(location.location.A, location.location.F),
   				map: $scope.map,
   				animation: google.maps.Animation.DROP,
   				title: location.name,
@@ -63,6 +61,7 @@ superApp.controller('LocationsCtrl',
   	}
 
   	$scope.onMapLoaded = function(map) {
+      $scope.mapLoaded = true;
   		$scope.map = map;
 		  locationService.getAllLocations(function (locations) {
 				$scope.locations = locations;
