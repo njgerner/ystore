@@ -32,6 +32,26 @@ module.exports = function(express, app, __dirname) {
 		});
 	};
 
+	// GET /get_ylift_network_products
+	StoreRoutes.get_ylift_network_products = function(req, res) {
+		console.log('in get ylift network products', req.body);
+		if (!req.user.isYLIFT) {
+			res.status(401).json({err:'user not authorized to view products'});
+			return;
+		}
+		orchHelper.getYLIFTProducts()
+		.then(function (data) {
+			var products = data;
+			if (req.body.products) {
+				products = products.concat(req.body.products);
+			}
+			res.status(200).json({products:products});
+		})
+		.fail(function (err) {
+			res.status(500).json({err:err});
+		});
+	};
+
 	// POST /update_order
 	StoreRoutes.update_order = function(req, res) {
 		orchHelper.updateOrder(req.body.order)

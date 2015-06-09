@@ -321,10 +321,15 @@ passport.use('bearer', new BearerStrategy(
   };
 
   ///GET /all_products
-  var all_products = function(req, res) {
+  var all_products = function(req, res, next) {
     orchHelper.getAllProducts()
       .then(function (products) {
-        if (products) {
+        console.log('got all products', products, req.user.isYLIFT);
+        if (products && req.user.isYLIFT) {
+          console.log('set body products)');
+          req.body.products = products;
+          next();
+        } else if (products) {
           res.send({products: products});
         } else {
           res.send({err:'no products in db'});
@@ -581,6 +586,7 @@ passport.use('bearer', new BearerStrategy(
 
     app.get('/all_orders/:profileid', ensureAuthenticated, get_all_orders);
     app.get('/all_products', all_products);
+    // app.get('/all_products', all_products, storeRoutes.get_ylift_network_products);
     app.get('/all_profiles', all_profiles);
     app.get('/authorized', ensureAuthenticated, authorized);
     app.get('/cart/:profileid', ensureAuthenticated, get_cart);
@@ -588,6 +594,7 @@ passport.use('bearer', new BearerStrategy(
     app.get('/get_customer/:customerid', ensureAuthenticated, stripeRoutes.get_customer);
     app.get('/merchant_orders/:merchantid', storeRoutes.merchant_orders);
     app.get('/get_product_by_id/:productnumber', get_product_by_id);
+    app.get('/get_ylift_network_products', ensureAuthenticated, storeRoutes.get_ylift_network_products);
     app.get('/get_products_by_merchant/:merchantid', ensureAuthenticated, storeRoutes.get_products_by_merchant);
     app.get('/get_related_products/:productnumber', get_related_products);
     app.get('/login', login);
