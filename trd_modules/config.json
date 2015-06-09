@@ -2,20 +2,20 @@
   "YLIFT": "99467b0b-f179-4530-8928-2cca35a30baa",
   "TRD": "f77ac6c5-0ae8-4b35-832b-087977c7db0a",
   "STRIPE_TEST": {
-  	"SECRET": "sk_test_eGAKUaWf7kgrGe1lfW4pbOdQ",
-  	"PUBLISH": "pk_test_8LwfnHnZaS9JT7OFYUhsnT4J"
+  	"SECRET": "sk_test_x4FlntrbjN5644waJkFELSXT",
+  	"PUBLISH": "pk_test_gRzGeisehoTh9lf9kwSnJuE5"
   },
   "STRIPE_LIVE": {
-  	"SECRET": "sk_live_tuUyDD6PezfDZV8Qyke334wC",
-  	"PUBLISH": "pk_live_vNO7fZbJ5sYZ9DBbinIm36Q5"
+  	"SECRET": "sk_live_94eCqeK8qowReQH4hIVBBHX6",
+  	"PUBLISH": "pk_live_ywWy2BhfQ4eWBIu1BUgKVTG9"
   },
   "CLIENT_TEST": {
-    "PUBLISH": "pk_test_8LwfnHnZaS9JT7OFYUhsnT4J",
+    "PUBLISH": "pk_test_gRzGeisehoTh9lf9kwSnJuE5",
     "AWS_ACCESS": "AKIAJNKA6HXE6XJGVLTQ",
     "AWS_BUCKET": "ylift.io"
   },
   "CLIENT_PROD": {
-    "PUBLISH": "pk_live_vNO7fZbJ5sYZ9DBbinIm36Q5",
+    "PUBLISH": "pk_live_ywWy2BhfQ4eWBIu1BUgKVTG9",
     "AWS_ACCESS": "AKIAJNKA6HXE6XJGVLTQ",
     "AWS_BUCKET": "ylift.io"
   },
