@@ -92,7 +92,7 @@ module.exports = function(express, app, __dirname) {
 				});
 				delete product.tmpImg;
 				product.img = img;
-				product.remote_img = 'https://'+S3_BUCKET+'.s3.amazonaws.com/' + name;
+				product.remote_img = 'https://s3.amazonaws.com/'+S3_BUCKET+ '/' + name;
 			}
 			if(product.tmpAltImg) {
 				product.altImg = [];	//define this to be filled below
@@ -106,7 +106,7 @@ module.exports = function(express, app, __dirname) {
 							throw err;
 						}
 					});
-					product.altImg.push({img: img, remote_img: 'https://'+S3_BUCKET+'.s3.amazonaws.com/' + name});
+					product.altImg.push({img: img, remote_img: 'https://s3.amazonaws.com/'+S3_BUCKET+ '/' + name});
 				});
 			}
 			delete product.tmpAltImg;
@@ -159,7 +159,7 @@ module.exports = function(express, app, __dirname) {
 				});
 				delete product.tmpImg;
 				product.img = img;
-				product.remote_img = 'https://'+S3_BUCKET+'.s3.amazonaws.com/' + name;
+				product.remote_img = 'https://s3.amazonaws.com/'+S3_BUCKET+ '/' + name;
 			}
 			return orchHelper.updateProduct(product, req.user.profile);
 		})
