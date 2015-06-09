@@ -29,7 +29,7 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
           console.log('authorized / received', authService.authorized, authService.authorizationReceived);
 
           var isExceptionalState = function() {
-            var exceptionalState = ["terms", "store", "store.search", "checkout", "order", "support"];
+            var exceptionalState = ["terms", "store", "store.search", "checkout", "order", "support", "locations"];
             return exceptionalState.indexOf(toState.name) >= 0;
           }
 
@@ -128,6 +128,11 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
       url: "/orders/:orderid",
       templateUrl: "/partials/orders.html",
       controller: "OrdersCtrl"
+    })
+    .state('locations', {
+      url: "/locations",
+      templateUrl: "/partials/locations.html",
+      controller: "LocationsCtrl"
     })
     .state('merchant_inventory', {
       abstract: true,

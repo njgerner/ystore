@@ -184,7 +184,7 @@ module.exports = function(express, app, __dirname) {
 			currency: "USD",
 			customer: transaction.customer.id,
 			receipt_email: transaction.customer.email,
-			description: 'Thank you for your order from the YLIFT Store. You will be notified of any changes in your order status.'
+			description: 'Y LIFT Network registration fee, thank you for your order!'
 		};
 
 		stripe.charges.create(charge, function(err, charge) {

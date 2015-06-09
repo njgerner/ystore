@@ -183,7 +183,7 @@ passport.use('bearer', new BearerStrategy(
       .then(function (profile) {
         orchHelper.findUserByID(req.user.id)
           .then(function (user) {
-            res.send({user:user, profile:profile, isAdmin:user.isAdmin}); //eliminate the user doc ASAP
+            res.send({user:user, profile:profile, isAdmin:user.isAdmin, isYLIFT:user.isYLIFT}); //eliminate the user doc ASAP
             profile.last_login = new Date();
             return orchHelper.updateProfile(profile.id, profile);
           })
