@@ -11,6 +11,7 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 			this.profile = null;
 			this.profileid = null;
 			this.isAdmin = null;
+			this.isYLIFT = null;
 		};
 
 		this.getAuthorization = function(callback) {
@@ -24,6 +25,7 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 				var internalThis = this;
 				$http({method: 'GET', url: "/authorized"}).
 				    success(function(data, status, headers, config) {
+				    	console.log('data from authorized', data);
 				    	if (!data || !data.user || !data.profile) {
 				    		// something's wrong, not authorized
 				    		internalThis.authorizationReceived = true;
@@ -39,8 +41,8 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 					      	internalThis.authorized = true;
 					      	internalThis.loggedin = true;
 					      	callback(internalThis.authorized);
-					      	$rootScope.$broadcast('authorizationloaded', internalThis.authorized);
 				    	}
+				      	$rootScope.$broadcast('authorizationloaded', internalThis.authorized);
 				    }).
 				    error(function(data, status, headers, config) {
 				      	internalThis.authorizationReceived = true;

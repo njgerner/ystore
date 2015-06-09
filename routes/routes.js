@@ -322,8 +322,10 @@ passport.use('bearer', new BearerStrategy(
 
   ///GET /all_products
   var all_products = function(req, res, next) {
+    console.log('getting all products', req.body);
     orchHelper.getAllProducts()
       .then(function (products) {
+        console.log('something happened');
         console.log('got all products', products, req.user.isYLIFT);
         if (products && req.user.isYLIFT) {
           console.log('set body products)');

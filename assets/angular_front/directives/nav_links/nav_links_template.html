@@ -1,9 +1,9 @@
-<div class="nav-links">
+<div class="nav-links" ng-hide="waiting">
 	<ul class="inline-list">
 		<li>
 			<a ui-sref="about">About</a>
 		</li>
-		<li>
+		<li ng-hide="isYLIFT">
 			<a dropdown-toggle="#techniquesdrop">Techniques</a>
 			<ul id="techniquesdrop" class="f-dropdown" data-dropdown-content aria-hidden="true" tabindex="-1">
 				<li><a ui-sref="techniques.ylift">Y LIFT</a></li>
@@ -18,14 +18,9 @@
 				<li><a ui-sref="techniques.veins">Veins</a></li>
 			</ul>
 		</li>
-		<li>
+<!-- 		<li ng-hide="isYLIFT">
 			<a data-dropdown="zonesdrop" aria-controls="zonesdrop" aria-expanded="false">Zones</a>
-			<ul id="zonesdrop" class="f-dropdown" data-dropdown-content aria-hidden="true" tabindex="-1">
-				<li><a href="#">This is a link</a></li>
-				<li><a href="#">This is another</a></li>
-				<li><a href="#">Yet another</a></li>
-			</ul>
-		</li>
+		</li> -->
 		<li>
 			<!-- <a dropdown-toggle="#beforedrop" aria-controls="befredrop" aria-expanded="false">Before/After</a> -->
 			<a ui-sref="before_after">Before/After </a>
@@ -49,7 +44,7 @@
 				<li><a href="#">Yet another</a></li>
 			</ul>
 		</li>
-		<li>
+		<li ng-hide="isYLIFT">
 			<a ui-sref="appt_booking">Book an Appointment</a>
 		</li>
 	</ul>

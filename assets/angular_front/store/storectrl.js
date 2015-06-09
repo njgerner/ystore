@@ -46,6 +46,8 @@ superApp.controller('StoreCtrl',
       $scope.loading = false;
     }
 
-    storeService.getAllProducts(onProductsLoaded);
+    $scope.$on('authorizationloaded', function (evt, auth) {
+      storeService.getAllProducts(onProductsLoaded);
+    });
 
 }]);

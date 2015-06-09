@@ -312,7 +312,8 @@ exports.getAllProducts = function() {
   db.newSearchBuilder()
     .collection('products')
     .limit(100)
-    .query('value.active: "Y" AND NOT value.isYLIFT: "Y"')
+    .query('value.active: "Y"')
+    // .query('value.active: "Y" AND NOT value.isYLIFT: "Y"')
   .then(function(result) {
     var products = [];
     for (var i = 0; i < result.body.results.length; i++) {
