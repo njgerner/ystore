@@ -1,0 +1,54 @@
+<div id="map-canvas" class="ylift-locations"></div>
+<div ng-hide="locationsLoaded" class="locations-loading"><i class="fa fa-spinner fa-pulse fa-5x"></i></div>
+<i ng-show="locationsLoaded && !showLocationsRight" class="fa fa-outdent fa-3x show-locations" ng-click="toggleLocationPanel()"></i>
+<div ng-show="locationsLoaded" ng-show="showLocationsRight" class="locations-panel animated" ng-class="{bounceOutRight:!showLocationsRight,bounceInRight:showLocationsRight}">
+	<div class="locations-header">
+	    <div style="padding-left:25x;padding-top:5px;"class="col-md-2">
+	      <i class="fa fa-chevron-right clickable" ng-click="toggleLocationPanel()"></i>
+	    </div>
+	    <div class="col-md-10">
+	      <h3 ng-hide="showSearch" style="position:absolute;left:5px;margin-top:6.5%"class="header-text">YLift Locations</h3>
+	      <i class="fa fa-search pull-right location-search" ng-click="toggleSearch()"></i>
+	      <form class="location-search" role="search" ng-show="showSearch">
+	        <input type="text" class="form-control col-md-6" ng-model="zip" placeholder="Search Zip">
+	        <button type="submit" class="btn btn-xs btn-default" ng-click="searchZip()">Go</button>
+	      </form>
+	    </div>
+	</div>
+	<div class="locations-panel-content">
+		<ul class="list-group locations-list">
+			<li ng-repeat="location in locations" class="location-list-item" ng-class="{'location-focused':location.focused}">
+				<div class="row location-row" style="margin:0" ng-click="toggleFocus($index)">
+					<div class="col-md-9">
+						<h5>{{location.name}} <small>{{location.doctorname}}</small></h5>
+						<p>{{location.formattedaddress}}</p>
+					</div>
+					<div class="col-md-3">
+						<img ng-if="location.img" style="height:50px; width:50px;" ng-src="{{location.img}}">
+						<img ng-hide="location.img" style="height:50px; width:50px;" src="/img/logo.png">
+					</div>
+				</div>
+				<div ng-show="location.focused" class=" location-icons row animated" style="margin:0" ng-class="{fadeOut:!location.focused,fadeIn:location.focused}">
+					<div class="col-md-3 location-icon" ng-click="">
+						<i class="fa fa-calendar fa-2x"></i><br>
+						Appt
+					</div>
+					<div class="col-md-3 location-icon">
+						<i class="fa fa-phone-square fa-2x"></i><br>
+						Call
+					</div>
+					<div class="col-md-3 location-icon">
+						<a href="mailto:support@ylift.io">
+							<i class="fa fa-envelope-o fa-2x"></i><br>
+							Contact
+						</a>
+					</div>
+					<div class="col-md-3 location-icon">
+						<i class="fa fa-info-circle fa-2x"></i><br>
+						Info
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>

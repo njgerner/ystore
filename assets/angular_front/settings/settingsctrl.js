@@ -4,18 +4,18 @@ superApp.controller('SettingsCtrl',
   function($rootScope, $scope, $state, authService, profileService, $location, $stateParams, $timeout, 
   	storeService, FileUploader, $window) {
   
-  	$scope.profile = authService.profile;
+    $scope.profile = authService.profile;
+  	$scope.isYLIFT = authService.isYLIFT;
     $scope.addresses = $scope.profile.addresses;
     $scope.viewState = $state.current.name.split('.')[1];
     $scope.currOffice = {};
   	$scope.updating = false;
 
-    $scope.updateProfile = function(callback) {
+    $scope.updateProfile = function() {
       $scope.updating = true;
       profileService.updateProfile($scope.profile, function (profile) {
         $scope.profile = profile;
         $scope.updating = false;
-        callback();
       });
     };
 

@@ -18,6 +18,7 @@ superApp.controller('SettingsProfileCtrl',
       $scope.zip = null;
       $scope.currAddress = null;
       $scope.addressInd = null;
+      $scope.yliftInd = null;
     }
 
     $scope.selectAddress = function(ind) {
@@ -34,6 +35,7 @@ superApp.controller('SettingsProfileCtrl',
       $scope.city = $scope.currAddress.city;
       $scope.state = $scope.currAddress.state;
       $scope.zip = $scope.currAddress.zip;  
+      $scope.yliftInd = $scope.currAddress.yliftInd;
       $scope.addressInd = ind;
       $scope.showAddressView = true;
     };
@@ -50,6 +52,9 @@ superApp.controller('SettingsProfileCtrl',
       };
       if ($scope.addresses.length == 0) {
         address.default = true;
+      }
+      if ($scope.isYLIFT) {
+        address.yliftInd = $scope.yliftInd;
       }
       $scope.addresses.push(address);
       $scope.profile.addresses = $scope.addresses;
@@ -70,6 +75,9 @@ superApp.controller('SettingsProfileCtrl',
       };
       if ($scope.addresses.length == 0) {
         address.default = true;
+      }
+      if ($scope.isYLIFT) {
+        address.yliftInd = $scope.yliftInd;
       }
       $scope.addresses[$scope.addressInd] = address;
       $scope.profile.addresses = $scope.addresses;

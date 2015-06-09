@@ -1,0 +1,97 @@
+.ylift-locations {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	padding: -20px 0;
+	margin: 0;
+	z-index: 1;
+}
+
+.locations-loading {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.locations-panel {
+	position: absolute;
+	z-index: 2;
+	width: 300px;
+	right: 0;
+	height: 100%;
+	background-color: $white;
+}
+
+.locations-list {
+	list-style-type: none;
+}
+
+.location-focused {
+	background-color:$ylift-light;
+}
+
+.locations-header {
+  	background-color:$ylift;
+	position: absolute;
+	padding-left: 0px;
+	top: 0px;
+	width: 300px;
+	font-size: 25px;
+	height: 64px;
+	margin: 0px;
+  	color: $white;
+}
+
+.locations-panel-content {
+	overflow-y: show;
+	margin-top: 70px;
+  	min-height: 200px;
+	max-height: 400px;
+  	overflow-y:show;
+}
+
+.location-row {
+	margin:0;
+}
+
+.location-list-item {
+
+  	cursor:pointer;
+  	height:auto;
+  	border-bottom: 1px solid #3F3F3F;
+  	position: relative;
+  	p {
+  		font-size: 90%;
+  	}
+}
+
+.location-icons {
+	text-align: center;
+	margin:0;
+}
+
+i.location-search {
+	margin-top: 15px;
+}
+
+form.location-search {
+	position: absolute;
+	padding-top:10px;
+	::-webkit-input-placeholder { color: $white; }
+	::-moz-placeholder {color: $white; }
+	:-ms-input-placeholder { color: $white; } 
+	:-o-input-placeholder { color: $white; } 
+	> input {
+		color: $white;
+		width: 80%
+	}
+}
+
+.show-locations {
+	position: absolute;
+	z-index: 1;
+	top: 70px;
+	right: 40px;
+	color: $ylift;
+}

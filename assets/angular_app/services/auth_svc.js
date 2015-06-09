@@ -32,6 +32,7 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 				    	} else {
 					      	internalThis.email = data.profile.email;
 					      	internalThis.isAdmin = data.isAdmin;
+					      	internalThis.isYLIFT = data.isYLIFT;
 					      	internalThis.profile = data.profile;
 					      	internalThis.profileid = data.profile.id;
 					      	internalThis.authorizationReceived = true;
