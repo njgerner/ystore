@@ -17,7 +17,7 @@
     <img ng-src="{{product.altImg[3]}} ? {{product.altImg[3]}} : https://placehold.it/400x300&text=[img]"> -->
   </div>
   <div class="large-5 columns">
-    <img ng-src="{{product.img}}" ng-error="defaultImage()">
+    <img ng-src="{{product.img || product.remote_img}}" ng-error="defaultImage()">
   </div>
   <div class="large-5 columns">
     <div ng-hide="ratingLoading" class="review-stars">
