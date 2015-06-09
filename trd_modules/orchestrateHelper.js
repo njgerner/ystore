@@ -960,3 +960,23 @@ exports.getTrainingDates = function() {
   });
   return deferred.promise;
 };
+
+exports.getAllTestimonials = function() {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+  .collection('testimonials')
+  .limit(100)
+  .query('*')
+  .then(function (results) {
+    var testimonials = [];
+    results.body.results.forEach(function(result) {
+      testimonials.push(result.value);
+    });
+    deferred.resolve(testimonials);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body));
+  });
+   
+  return deferred.promise;
+};
