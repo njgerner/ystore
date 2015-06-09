@@ -13,8 +13,8 @@ appDirectives.directive('productImgDir', [ '$state', '$rootScope', '$window', 's
 		// replace: true, // Replace with the template below
 		// transclude: true, // we want to insert custom content inside the directive
 		link: function(scope, element) {
-			if (storeService.productsByID && storeService.productsByID[scope.pn] && storeService.productsByID[scope.pn].img) {
-				scope.src = storeService.productsByID[scope.pn].img
+			if (storeService.productsByID && storeService.productsByID[scope.pn] && storeService.productsByID[scope.pn].remote_img) {
+				scope.src = storeService.productsByID[scope.pn].remote_img
 			} else {
 				scope.src = "/img/logo.png";
 			}

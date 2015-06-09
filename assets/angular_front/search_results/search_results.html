@@ -7,7 +7,8 @@
 
     <div class="row" data-match-height>
       <div infininte-scroll="loadMore()" infinite-scroll-distance="2" class="large-4 small-6 columns" ng-repeat="p in products" ng-click="goToProduct(p.productnumber)">
-        <img ng-src="{{p.img}}">
+        <!-- this will need to be changed -->
+        <img ng-src="{{p.remote_img || p.img}}">
         <div class="panel">
           <h5 class="product-title">{{p.name}}</h5>
           <h6 class="subheader">${{p.price}}</h6>
