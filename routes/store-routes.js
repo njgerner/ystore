@@ -35,7 +35,7 @@ module.exports = function(express, app, __dirname) {
 	// GET /get_ylift_network_products
 	StoreRoutes.get_ylift_network_products = function(req, res) {
 		console.log('in get ylift network products', req.body);
-		if (!req.user.isYLIFT) {
+		if (!req.user || !req.user.isYLIFT) {
 			res.status(401).json({err:'user not authorized to view products'});
 			return;
 		}

@@ -326,15 +326,15 @@ passport.use('bearer', new BearerStrategy(
     orchHelper.getAllProducts()
       .then(function (products) {
         console.log('something happened');
-        console.log('got all products', products, req.user.isYLIFT);
-        if (products && req.user.isYLIFT) {
+        console.log('got all products', products, req.user);
+        if (products && req.user && req.user.isYLIFT) {
           console.log('set body products)');
           req.body.products = products;
           next();
         } else if (products) {
-          res.send({products: products});
+          res.status(200).json({products: products});
         } else {
-          res.send({err:'no products in db'});
+          res.status(204).json({err:'no products in db'});
         }
       })
       .fail(function (err) {
@@ -587,8 +587,8 @@ passport.use('bearer', new BearerStrategy(
     app.get('/appcss', appcss);
 
     app.get('/all_orders/:profileid', ensureAuthenticated, get_all_orders);
-    app.get('/all_products', all_products);
-    // app.get('/all_products', all_products, storeRoutes.get_ylift_network_products);
+    // app.get('/all_products', all_products);
+    app.get('/all_products', all_products, storeRoutes.get_ylift_network_products);
     app.get('/all_profiles', all_profiles);
     app.get('/authorized', ensureAuthenticated, authorized);
     app.get('/cart/:profileid', ensureAuthenticated, get_cart);

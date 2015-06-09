@@ -94,7 +94,7 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
 trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
   function($httpProvider, $stateProvider, $urlRouterProvider) {
     $httpProvider.interceptors.push('trdInterceptor');
-    $urlRouterProvider.otherwise("/store");
+    $urlRouterProvider.otherwise("/login");
     
     $stateProvider
     .state('authorizing', {
