@@ -35,6 +35,7 @@ superApp.controller('StoreCtrl',
     }
 
     function onProductsLoaded (result) {
+      console.log(result);
       $scope.products = result;
       $scope.productsByCategory = storeService.productsByCategory;
       storeService.getProductsInCart(authService.profileid, onProductsInCartReceived);
