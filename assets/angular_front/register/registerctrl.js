@@ -6,7 +6,8 @@ superApp.controller('RegisterCtrl',
 
   	$scope.staff = [];
   	$scope.viewState = 'start';
-    $scope.total = 5995;
+    // $scope.total = 5995;
+    $scope.total = 2;
 
   	$scope.$watch('billingsame', function(newValue, oldValue) {
 		if (newValue && $scope.billingsame) {
