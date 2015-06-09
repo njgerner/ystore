@@ -7,6 +7,16 @@
 	z-index: 1;
 }
 
+.i-map {
+	@extend pointer;
+	font-size: 35px;
+	color: black;
+	position: absolute;
+	top: 0.6rem;
+	right: 3rem;
+	z-index: 3;
+}
+
 .locations-loading {
 	z-index: 2;
 	// position: absolute;

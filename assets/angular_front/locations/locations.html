@@ -3,6 +3,7 @@
 		<a class="right-off-canvas-toggle menu-icon"><span></span></a>
 		<div ng-hide="locationsLoaded" class="loader locations-loading">Loading...</div>
 		<div ng-show="mapLoaded" id="map-canvas" class="ylift-locations"></div>
+		<i ng-hide="showLocationsRight" class="i-map" ng-click="toggleLocationPanel()"></i>
 	</div>
 </div>
 <div ng-show="locationsLoaded" ng-show="showLocationsRight" class="locations-panel animated" ng-class="{bounceOutRight:!showLocationsRight,bounceInRight:showLocationsRight}">
@@ -33,7 +34,7 @@
 						<p>{{location.formattedaddress}}</p>
 					</div>
 				</div>
-				<div ng-show="location.focused" class=" location-icons row animated" style="margin:0" ng-class="{fadeOut:!location.focused,fadeIn:location.focused}">
+<!-- 				<div ng-show="location.focused" class=" location-icons row animated" style="margin:0" ng-class="{fadeOut:!location.focused,fadeIn:location.focused}">
 					<div class="icon-bar four-up">
 						<a class="item">
 							<i class="i-calendar"></i>
@@ -48,7 +49,7 @@
 							<i class="i-info"></i>
 						</a>
 					</div>
-				</div>
+				</div> -->
 			</li>
 		</ul>
 	</div>
