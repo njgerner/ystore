@@ -31,7 +31,7 @@ superApp.controller('LocationsCtrl',
       var geocoder = new google.maps.Geocoder();
       geocoder.geocode({address:$scope.zip}, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK && results.length > 0) {
-          var latlng = new google.maps.LatLng(results[0].geometry.location.k, results[0].geometry.location.D);
+          var latlng = new google.maps.LatLng(results[0].geometry.location.A, results[0].geometry.location.F);
           $scope.map.setCenter(latlng);
           $scope.showSearch = false;
         } else {
