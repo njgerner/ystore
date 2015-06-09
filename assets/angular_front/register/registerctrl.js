@@ -215,7 +215,7 @@ superApp.controller('RegisterCtrl',
 		        };
   				stripeService.addCard(card, billing, function(result, error) {
   					if (error) {
-  						$scope.error = error;
+  						$scope.error = error.message || error;
   						$scope.validating = false;
   						return false;
   					}
