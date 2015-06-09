@@ -1,0 +1,35 @@
+#before-after-container {
+	margin-top: 25px;
+}
+
+.before-after-single {
+	background: #fff;
+	box-shadow: 3px 3px 8px #d3d1d1;
+	box-sizing: border-box;
+	margin-bottom: 25px;
+	padding: 0;
+	text-align: left;
+	width:100%;
+}
+
+.before-after-image {
+	width:100%;
+	height: auto;
+}
+
+.before-after-text-container {
+	color: $ylift;
+	margin-top:10px;
+	padding: 0 20px;
+}
+
+.before-after-text-1 {
+	border-bottom: 2px solid $ylift;
+	border-top: 2px solid $ylift;
+	padding: 10px 0;
+}
+
+.before-after-text-2 {
+	font-size: 12px;
+	padding: 15px 0;
+}

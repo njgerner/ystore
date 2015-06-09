@@ -499,6 +499,17 @@ passport.use('bearer', new BearerStrategy(
     });
   };
 
+  var get_all_testimonials = function(req, res) {
+    console.log('in route');
+    orchHelper.getAllTestimonials()
+    .then(function (testimonials) {
+      res.send({testimonials: testimonials});
+    })
+    .fail(function (err) {
+      res.send({error:err});
+    });
+  };
+
   ///GET /404
   var fourofour = function(req, res, next){
     // trigger a 404 since no other middleware
@@ -573,6 +584,7 @@ passport.use('bearer', new BearerStrategy(
     app.get('/all_profiles', all_profiles);
     app.get('/authorized', ensureAuthenticated, authorized);
     app.get('/cart/:profileid', ensureAuthenticated, get_cart);
+    app.get('/get_all_testimonials', get_all_testimonials);
     app.get('/get_customer/:customerid', ensureAuthenticated, stripeRoutes.get_customer);
     app.get('/merchant_orders/:merchantid', storeRoutes.merchant_orders);
     app.get('/get_product_by_id/:productnumber', get_product_by_id);

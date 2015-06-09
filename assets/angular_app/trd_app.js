@@ -260,6 +260,11 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
       url:"/veins",
       templateUrl: "/partials/techniques_veins.html",
     })
+    .state('before_after', {
+      url:"/before_after",
+      templateUrl: "/partials/before_after.html",
+      controller: "BeforeAfterCtrl"
+    })
     .state('settings', {
       abstract: true,
       url:"/settings",
