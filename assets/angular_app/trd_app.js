@@ -13,6 +13,8 @@ var trdApp = angular.module('trdApp', [
   'flow',
   'env.config',
   'mm.foundation',
+  'angulartics',
+  'angulartics.google.analytics',
   'angularFileUpload' //https://github.com/nervgh/angular-file-upload
   // 'uiGmapgoogle-maps'
 ]);
@@ -88,8 +90,8 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
 
 }]);
 
-trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
-  function($httpProvider, $stateProvider, $urlRouterProvider) {
+trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyticsProvider',
+  function($httpProvider, $stateProvider, $urlRouterProviderm, $analyticsProvider) {
     $httpProvider.interceptors.push('trdInterceptor');
     $urlRouterProvider.otherwise("/store");
     
