@@ -280,7 +280,8 @@
 		<fieldset>
 		  <div class="row">
 		    <div class="small-6 columns">
-		      <label>Training Location </span class="required">*</span>
+		      <label>Training Location </span class="required">*</span><br>
+		      	<small>Note: Must have license to practice at training location</small>
 		        <select ng-model="location">
 		        	<option value="remote">Personal On Site Training</option>
 		        	<option value="NY">YLIFT New York</option>
@@ -291,9 +292,10 @@
 		      </label>
 		    </div>
 		    <div class="small-6 columns">
-		      <label>Training Date Preference
+		      <label>Training Date Preference<br>
+		      	<small>Note: This date will be confirmed later by a Y LIFT team member</small>
 		        <select ng-model="training_date">
-		        	<option ng-repeat="date in dates" value="date.date">{{date.date}}</option>
+		        	<option ng-repeat="date in dates | orderBy: 'date'" value="date.date">{{date.date}}</option>
 		        </select>
 		      </label>
 		    </div>
