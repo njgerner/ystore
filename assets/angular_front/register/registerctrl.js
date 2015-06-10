@@ -133,7 +133,7 @@ superApp.controller('RegisterCtrl',
   				$scope.error = 'Please enter an email address';
   			} else if (!$scope.phone) {
   				$scope.error = 'Please enter a phone number';
-  			} else {
+        } else {
   				$scope.validating = false;
   				return true;
   			}
