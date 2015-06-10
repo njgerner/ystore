@@ -238,12 +238,20 @@ superApp.controller('RegisterCtrl',
         $scope.validating = true;
         if ($scope.password !== $scope.confirmpassword) {
           $scope.error = 'Passwords need to match';
+          $scope.validating = false;
+          return false;
         } else if (!$scope.password || $scope.confirmpassword) {
           $scope.error = 'Please enter a password';
+          $scope.validating = false;
+          return false;
         } else if ($scope.password.length < 6) {
           $scope.error = 'Password must be at least 6 characters long';
+          $scope.validating = false;
+          return false;
         } else if (!$scope.loginemail) {
           $scope.error = 'Please enter an account login email';
+          $scope.validating = false;
+          return false;
         } else {
           $scope.profile = {};
           return authService.register($scope.loginemail, $scope.password, function (error, status) {
