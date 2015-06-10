@@ -182,8 +182,7 @@ exports.localReg = function (email, password) {
     throw new Error(err.body);
   })
   .fail(function (err) {
-    user.error = err;
-    return user.error;
+    throw err;
   });
 };
 

@@ -311,7 +311,7 @@ passport.use('bearer', new BearerStrategy(
   ///////////////////////////////////////////////////////////////
   var register = function(req, res) {
     return passport.authenticate('local-signup', function(err, user) { 
-      if (err) { return res.json({err: "there was an error", status:"error registering, please try again" }); } //TODO: make this better
+      if (err) { return res.json({err: "there was an error", status:"Error registering, please try again. If this issue continues, please contact support@ylift.io." }); } //TODO: make this better
       if (!user) { return res.json({err:"login helper, no user error", message:"registered, but there was an error creating a user profile", failed:true}); }
       var payload = { user: user.id, expires: moment().add(4, 'days') };
       var secret = app.get("jwtTokenSecret");
