@@ -258,7 +258,7 @@ superApp.controller('RegisterCtrl',
           return authService.register($scope.loginemail, $scope.password, function (error, status) {
             $scope.validating = false;
             if (error) {
-              $scope.error = error;
+              $scope.error = status;
               return false;
             } else {
               return authService.getAuthorization(function (authorized) {
