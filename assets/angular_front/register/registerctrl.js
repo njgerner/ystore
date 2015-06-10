@@ -241,7 +241,7 @@ superApp.controller('RegisterCtrl',
           $scope.error = 'Passwords need to match';
           $scope.validating = false;
           return false;
-        } else if (!$scope.password || $scope.confirmpassword) {
+        } else if (!$scope.password || !$scope.confirmpassword) {
           $scope.error = 'Please enter a password';
           $scope.validating = false;
           return false;
