@@ -184,11 +184,11 @@
 		    </div>
 		  </div>
 		  <div class="row clearfix">
-			<button class="button secondary small right" ng-click="backTo('start')">Back</button>
 		  	<button class="button small right" ng-click="goTo('form2')">
 		  		<span ng-hide="validating">Next</span>
 		  		<span ng-show="validating">Validating...</span>
 		  	</button>
+			<button class="button secondary small right" ng-click="backTo('start')">Back</button>
 		  </div>
 		</fieldset>
 	</form>
@@ -202,23 +202,35 @@
 		<legend>Practice Information</legend>
 		<fieldset>
 			<div class="row">
+			    <div class="small-12 columns">
+			      <label>Medical License # </span class="required">*</span>
+			        <input type="text" ng-model="medlicensenum" name="medlicensenum" placeholder="Enter medical license number"/>
+			      </label>
+			   </div>
+			</div>
+			<div class="row">
 		    <div class="small-12 columns">
 		      <label>Specialty
-		        <input type="text" ng-model="specialty" name="specialty" placeholder="Your practicing specialty" />
-		      </label>
-		    </div>
-		  </div>
-		  <div class="row">
-		    <div class="small-12 columns">
-		      <label>Medical License # </span class="required">*</span>
-		        <input type="text" ng-model="medlicensenum" name="medlicensenum" placeholder="Enter medical license number"/>
+		      	<select ng-model="specialty">
+		        	<option value="Plastic Surgery">Plastic Surgery</option>
+					<option value="Dermatology">Dermatology</option>
+					<option value="Cosmetic Surgery">Cosmetic Surgery</option>
+					<option value="Ophthalmology">Ophthalmology</option>
+					<option value="Oral and Maxillofacial Surgery">Oral and Maxillofacial Surgery</option>
+					<option value="Oculoplastics">Oculoplastics</option>
+					<option value="Other">Other</option>
+				</select>
 		      </label>
 		    </div>
 		  </div>
 		  <div class="row">
 		    <div class="small-12 columns">
 		      <label>Affiliation/Practice Type
-		        <input type="text" ng-model="practicetype" name="practicetype"  placeholder="Large, single specialty, etc..." />
+		      	<select ng-model="practicetype">
+		        	<option value="SoloPractice">Solo Practice</option>
+					<option value="SmallGroup">Small Group</option>
+					<option value="LargeGroup">Large Group</option>
+				</select>
 		      </label>
 		    </div>
 		  </div>
@@ -244,16 +256,16 @@
 		    </div>
 		    <div class="small-6 columns">
 		      <label>Filler procedure estimate
-		        <input type="text" ng-model="filler_procedures" name="filler_procedures" placeholder="How many procedures are performed per year" />
+		        <input type="text" ng-model="filler_procedures" name="filler_procedures" placeholder="How many procedures are performed per week" />
 		      </label>
 		    </div>
 		  </div>
 		  <div class="row clearfix">
-		  	<button class="button secondary small right" ng-click="backTo('form1')">Back</button>
 		  	<button class="button small right" ng-click="goTo('form3')">
 		  		<span ng-hide="validating">Next</span>
 		  		<span ng-show="validating">Validating...</span>
 		  	</button>
+		  	<button class="button secondary small right" ng-click="backTo('form1')">Back</button>
 		  </div>
 		</fieldset>
 	</form>
@@ -309,17 +321,22 @@
 			    </div>
 			    <div class="small-6 columns">
 			      <label>Staff #{{$index + 1}} Credentials
-			        <input type="text" ng-model="staff[$index].credentials" name="credentials" placeholder="Enter staff credentials" />
+			      	<select ng-model="staff[$index].credentials" name="credentials">
+			        	<option value="RN">RN</option>
+			        	<option value="Aesthetician">Aesthetician</option>
+			        	<option value="Doctor">Doctor</option>
+			        	<option value="Other">Other</option>
+			        </select>
 			      </label>
 			    </div>
 			  </div>
 		  </div>
 		  <div class="row clearfix">
-		  	<button class="button secondary small right" ng-click="backTo('form2')">Back</button>
 		  	<button class="button small right" ng-click="goTo('form4')">
 		  		<span ng-hide="validating">Next</span>
 		  		<span ng-show="validating">Validating...</span>
 		  	</button>
+		  	<button class="button secondary small right" ng-click="backTo('form2')">Back</button>
 		  </div>
 		</fieldset>
 	</form>
@@ -362,12 +379,37 @@
 			  <div class="row">
 			    <div class="small-3 columns">
 			      <label>Expiration Month </span class="required">*</span>
-			        <input type="text" ng-model="expmonth" ng-length="2" name="expmonth" placeholder="MM" />
+			      	<select ng-model="expmonth">
+			        	<option value="01">01</option>
+			        	<option value="02">02</option>
+			        	<option value="03">03</option>
+			        	<option value="04">04</option>
+			        	<option value="05">05</option>
+			        	<option value="06">06</option>
+			        	<option value="07">07</option>
+			        	<option value="08">08</option>
+			        	<option value="09">09</option>
+			        	<option value="10">10</option>
+			        	<option value="11">11</option>
+			        	<option value="12">12</option>
+			        </select>
 			      </label>
 			    </div>
 			    <div class="small-3 columns">
 			      <label>Expiration Year </span class="required">*</span>
-			        <input type="text" ng-model="expyear" ng-length="4" name="expyear" placeholder="YYYY" />
+			      	<select ng-model="expyear">
+			        	<option value="2015">2015</option>
+			        	<option value="2016">2016</option>
+			        	<option value="2017">2017</option>
+			        	<option value="2018">2018</option>
+			        	<option value="2019">2019</option>
+			        	<option value="2020">2020</option>
+			        	<option value="2021">2021</option>
+			        	<option value="2022">2022</option>
+			        	<option value="2023">2023</option>
+			        	<option value="2024">2024</option>
+			        	<option value="2025">2025</option>
+			        </select>
 			      </label>
 			    </div>
 			    <div class="small-6 columns">
@@ -424,11 +466,11 @@
 			  </div>
 			</div>
 		  <div class="row clearfix">
-		  	<button class="button secondary small right" ng-click="backTo('form3')">Back</button>
 		  	<button class="button small right" ng-click="goTo('form5')">
 		  		<span ng-hide="validating">Next</span>
 		  		<span ng-show="validating">Validating...</span>
 		  	</button>
+		  	<button class="button secondary small right" ng-click="backTo('form3')">Back</button>
 		  </div>
 		</fieldset>
 	</form>
@@ -456,11 +498,11 @@
 			</div>
 			 <div class="row clearfix">
 			 	<p>By clicking next you agree to our <a ui-sref="terms" target="_blank">Terms & Conditions</a></p>
-			  	<button class="button secondary small right" ng-click="backTo('form3')">Back</button>
 			  	<button class="button small right" ng-click="goTo('review')">
 			  		<span ng-hide="validating">Next</span>
 			  		<span ng-show="validating">Validating...</span>
 			  	</button>
+			  	<button class="button secondary small right" ng-click="backTo('form3')">Back</button>
 			  </div>
 		</fieldset>
 	</form>
