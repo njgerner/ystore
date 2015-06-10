@@ -91,7 +91,7 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
 }]);
 
 trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyticsProvider',
-  function($httpProvider, $stateProvider, $urlRouterProviderm, $analyticsProvider) {
+  function($httpProvider, $stateProvider, $urlRouterProvider, $analyticsProvider) {
     $httpProvider.interceptors.push('trdInterceptor');
     $urlRouterProvider.otherwise("/store");
     
