@@ -38,6 +38,7 @@ superApp.controller('RegisterCtrl',
 
     $scope.backTo = function(state) {
       $scope.viewState = state;
+      $scope.error = null;
     }
 
   	$scope.submit = function() {
