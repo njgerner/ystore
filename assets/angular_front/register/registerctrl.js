@@ -165,6 +165,9 @@ superApp.controller('RegisterCtrl',
   				$scope.validating = false;
   				return true;
   			}
+        if (!$scope.cardname) {
+          $scope.error = 'Please enter your name as it appears on your card';
+        }
   			if (!Stripe.card.validateCardNumber($scope.ccnum)) {
   				$scope.error = 'Please enter a valid credit card number';
   			}
@@ -185,7 +188,7 @@ superApp.controller('RegisterCtrl',
 		          exp_year: $scope.expyear
 		        };
 		        var billing = {
-		          name: $scope.billingname,
+		          name: $scope.cardname,
 		          address_line1: $scope.billingaddress1,
 		          address_line2: $scope.billingaddress2,
 		          address_city: $scope.billingcity,
