@@ -129,3 +129,67 @@ exports.sendOrdersToMerchants = function(order) {
 
     return deferred.promise;
 };
+
+exports.sendOrdersToTeam = function(order) {
+	var productPromises = [];
+
+	order.products.forEach(function (product, index) {
+		productPromises.push(orchHelper.getProductByID(product.productnumber));
+	});
+
+	return Q.all(productPromises)
+    .then(function (products) {
+    	var toArr = process.env.DEFAULT_NOTIFY_LIST.toString().split(';');
+    	var to = [];
+    	for (var i = 0; i < toArr.length; i++) {
+    		var emailSplit = toArr[i].split("@");
+    		to[i] = {};
+    		to[i].email = toArr[i];
+    		to[i].name = emailSplit[0];
+    		to[i].type = "to";
+    	}
+		var template_content = [{
+	        "name": "order",
+	        "content": order
+	    }];
+
+		var message = {
+			"subject": "YLIFT Store Order",
+			"from_email": "message." + process.env.DEFAULT_EMAIL_FROM,
+			"from_name": "YLIFT Team",
+			"to": to,
+			"headers": {
+				"Reply-To": "message." + process.env.DEFAULT_EMAIL_REPLY_TO
+			},
+			"merge": true,
+			"merge_language": "handlebars",
+			"global_merge_vars": [
+				{
+					"name": "orderid",
+					"content": order.id
+				}, {
+					"name": "total",
+					"content": order.total
+				}, {
+					"name": "count",
+					"content": order.products.length
+				}, {
+					"name": "shipTo",
+					"content": order.shipTo
+				}, {
+					"name": "products",
+					"content": products
+				}, {
+					"name": "merchant_count",
+					"content": order.merchants.length
+				}, {
+					"name": "profileid",
+					"content": order.profile || 'guest'
+				}
+			],
+			"tags": ["order", "orders", "team", "ylift"]
+		};
+
+		return mandrill_client.messages.sendTemplate({"template_name": "team_order_notification", "template_content": template_content, "message": message});
+    });
+};

@@ -63,7 +63,7 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
               callback(null, data.err);
             });
           } else {
-            $http({method: 'POST', url: "/add_token_to_customer/" + authService.profile.id + "/" + inThis.customer.id, data: {token:response.id}})
+            $http({method: 'POST', url: "/add_token_to_customer/" + authService.profile.id + "/" + authService.profile.customerid, data: {token:response.id}})
             .success(function(data, status, headers, config) {
               inThis.customerReceived = true;
               inThis.customer = data.customer;
