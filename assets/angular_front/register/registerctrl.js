@@ -214,7 +214,7 @@ superApp.controller('RegisterCtrl',
               training_location: $scope.location,
 		        	training_date: $scope.training_date,
 		        	certname: $scope.certname,
-		        	staff: $scope.staff
+		        	staff: JSON.stringify($scope.staff)
 		        };
   				stripeService.addCard(card, billing, function(result, error) {
   					if (error) {
