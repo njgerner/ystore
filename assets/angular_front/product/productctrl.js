@@ -76,6 +76,8 @@ superApp.controller('ProductCtrl',
         $scope.ratingLoading = false;
     }
 
+    function onPageViewed (data) {} 
+
     if (authService.authorized) {
         $scope.profileid = authService.profile.id;
     }
@@ -84,5 +86,6 @@ superApp.controller('ProductCtrl',
     storeService.getRelatedProducts($scope.productnumber, onRelatedProductsLoaded);
     productService.getReviews($scope.productnumber, onReviewsLoaded);
     productService.getRating($scope.productnumber, onRatingLoaded);
+    productService.addPageView($scope.productnumber, onPageViewed);
 
 }]);

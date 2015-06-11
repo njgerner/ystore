@@ -33,6 +33,16 @@ trdServices.service("productService", ['$rootScope', '$http', '$cookieStore', 's
             });
     	}
 
+        this.addPageView = function(productnumber, callback) {
+            $http({method: 'POST', url: "/product_page_view/" + productnumber})
+            .success(function(data, status, headers, config) {
+                callback(data);
+            })
+            .error(function(data, status, headers, config) {
+                callback({message:"error", err:data});
+            });
+        }
+
         this.addProduct = function(product, callback) {
             if (!profileService.merchant) {
                 callback({message:"error", err:'merchant not authorized'});
