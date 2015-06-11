@@ -92,7 +92,7 @@ exports.updatePassword = function(resettoken, password) {
     .then(function (user){ //reset token is valid
       var theuser = user.body.results[0].value; //will never not be retarded
       theuser.hash = bcrypt.hashSync(password, 8); 
-      theuser.resettoken = null;
+      delete theuser.resettoken;
       db.put('local-users', theuser.id, theuser)
         .then(function (user) {
           deferred.resolve(user);
