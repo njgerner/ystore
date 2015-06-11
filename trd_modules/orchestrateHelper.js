@@ -979,3 +979,13 @@ exports.getAllTestimonials = function() {
    
   return deferred.promise;
 };
+
+exports.addPageView = function(type, id, profile) {
+  return db.newEventBuilder()
+  .from(type, id)
+  .type('page-view')
+  .data({
+    "profile": profile
+  })
+  .create();
+};

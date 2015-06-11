@@ -172,5 +172,21 @@ module.exports = function(express, app, __dirname) {
 	  	}).done();
 	};
 
+	// POST //product_page_view/:productnumber
+	ProductRoutes.page_view = function(req, res) {
+		var pn = req.params.productnumber;
+		var profile = 'guest';
+		if (req.user && req.user.profile) {
+			profile = req.user.profile;
+		}
+		orchHelper.addPageView('products', pn, profile)
+		.then(function (result) {
+			res.status(201).json(result);
+		})
+		.fail(function (err) {
+			res.status(500).json({err:err});
+		}).done();
+	};
+
 	return ProductRoutes;
 };

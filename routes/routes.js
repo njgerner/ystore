@@ -614,6 +614,7 @@ passport.use('bearer', new BearerStrategy(
     app.post('/get_products_by_category/:category', get_products_by_category);
     app.post('/login', loginHelper);
     app.post('/process_transaction?:profileid', stripeRoutes.process_transaction);
+    app.post('/product_page_view/:productnumber', productRoutes.page_view);
     app.post('/register', register);
     app.post('/remove_card_from_customer/:profileid/:customerid', ensureAuthenticated, stripeRoutes.remove_card_from_customer, stripeRoutes.update_customer);
     app.post('/submit_review', ensureAuthenticated, productRoutes.submit_review);
