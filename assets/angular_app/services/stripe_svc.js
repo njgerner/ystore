@@ -1,11 +1,16 @@
 trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'authService', 'PUBLISH',
     function ($rootScope, $http, $cookieStore, authService, stripePubKey) {
 
-      this.token = null;
-      this.card = null;
-      this.customer = {};
-      this.customerReceived = false;
       Stripe.setPublishableKey(stripePubKey);
+
+      this.initService = function() {
+        this.token = null;
+        this.card = null;
+        this.customer = {};
+        this.customerReceived = false;
+      }
+
+      this.initService();
 
     	this.setToken = function(token) {
     		this.token = token;
@@ -182,5 +187,9 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
             });
         }
       }
+
+      $rootScope.$on('loggedout', function(evt, args) {
+        this.initService;
+      });
 
 }]);

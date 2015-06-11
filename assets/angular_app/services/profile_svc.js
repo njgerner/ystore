@@ -87,5 +87,9 @@ trdServices.service("profileService", ['$rootScope', '$http', '$cookieStore', 'a
     this.isAdminOfMerchant = function(merchantid) {
         return this.adminOf[merchantid];
     }
+
+    $rootScope.$on('loggedout', function(evt, args) {
+        this.adminOf = {};
+    });
  
 }]);
