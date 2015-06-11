@@ -5,11 +5,6 @@ superApp.controller('LogoutCtrl',
 		$scope.clearCookies = function() {
 		  delete $cookies.trdTkn; // logout token
 		  delete $cookies.pInCart; // products in cart
-		  delete $cookies.profileUserProfile;
-		  delete $cookies.selectedUser;
-		  delete $cookies.statusUser;
-		  delete $cookies.task;
-		  delete $cookies.trackingUser;
 		};
 
 	  trdInterceptor.setToken(null);
