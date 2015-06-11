@@ -1,18 +1,22 @@
 trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'stripeService',
     function ($rootScope, $http, $cookieStore, stripeService) {
 
-    this.productsReceived = false;
-    this.cartReceived = false;
-    this.ordersReceived = false;
-    this.productsInCart = [];
-    this.products = [];
-    this.productsByID = {};
-    this.relatedProductsByID = {};
-    this.productsByCategory = {};
-    this.productsByMerchant = {};
-    this.orders = [];
-    this.ordersByID = {};
-    this.cart = {};
+    this.initService = function() {
+        this.productsReceived = false;
+        this.cartReceived = false;
+        this.ordersReceived = false;
+        this.productsInCart = [];
+        this.products = [];
+        this.productsByID = {};
+        this.relatedProductsByID = {};
+        this.productsByCategory = {};
+        this.productsByMerchant = {};
+        this.orders = [];
+        this.ordersByID = {};
+        this.cart = {};
+    }
+
+    this.initService();
 
     this.getProductMerchant = function(productid, callback) {
         return this.productsByID[productid].attributes.vendor;
@@ -308,5 +312,9 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
           callback("There was an error processing your order, please try again. If this issue persists, please contact YLift Support (support@ylift.io).");
         });
       };
+
+    $rootScope.$on('loggedout', function(evt, args) {
+        this.initService;
+    });
 
 }]);
