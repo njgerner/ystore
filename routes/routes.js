@@ -82,8 +82,14 @@ passport.use('local-signup', new LocalStrategy(
         if (user) {
           if (!user.error) {
             emailHelper.sendWelcome(user.name, user.email)
-            .then(function(result) {
-              done(null, user);
+            .then(function() {
+              emailHelper.newUserTeamNotification(user)
+              .then(function(result) {
+                done(null,user);
+              })
+              .fail(function(err) {
+                done(null, user, err);
+              });
             })
             .fail(function(err) {
               done(null, user, err);

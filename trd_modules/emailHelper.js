@@ -34,6 +34,63 @@ exports.sendWelcome = function(name, email) {
 	return deferred.promise;
 };
 
+exports.newUserTeamNotification = function(user) {
+	var toArr = process.env.DEFAULT_NOTIFY_LIST.toString().split(';');
+    var to = [];
+    for (var i = 0; i < toArr.length; i++) {
+        var emailSplit = toArr[i].split("@");
+        to[i] = {};
+        to[i].email = toArr[i];
+        to[i].name = emailSplit[0];
+        to[i].type = "to";
+    }
+	var type = "Individual";
+	if(user.isYLIFT) {
+		type = "YLift";
+	}
+	var name = user.name;
+	if(name === null) {
+		name = "N/A";
+	}
+	var deferred = Q.defer();
+	var template_content = [{
+        "name": "example name",
+        "content": "example content"
+    }];
+	var message = {
+		"subject": "We have a new user!",
+		"from_email": "message." + process.env.DEFAULT_EMAIL_FROM,
+		"from_name": "YLIFT Team",
+		"to": to,
+		"headers": {
+			"Reply-To": "message." + process.env.DEFAULT_EMAIL_REPLY_TO
+		},
+		"merge": true,
+		"merge_language": "handlebars",
+		"global_merge_vars": [
+			{
+				"name": "type",
+				"content": type
+			}, {
+				"name": "name",
+				"content": name
+			}, {
+				"name": "email",
+				"content": user.email
+			}],
+		"tags": ["welcome", "ylift"]
+	};
+	mandrill_client.messages.sendTemplate({"template_name": "new_user_notification", "template_content": template_content, "message": message},
+		function (result) {
+			deferred.resolve(result);
+		}, function (err) {
+			console.log('error sending welcome email', err.name, err.message);
+			deferred.reject(new Error(err.message));
+		});
+
+	return deferred.promise;
+};
+
 exports.sendOrdersToMerchants = function(order) {
 	var deferred = Q.defer();
 	var productPromises = [];
