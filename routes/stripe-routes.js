@@ -212,6 +212,9 @@ module.exports = function(express, app, __dirname) {
 					if (merchants && merchants.length > 0) {
 						emailHelper.sendOrdersToMerchants(order).done();
 					}
+					if (order.products && order.merchants) {
+						emailHelper.sendOrdersToTeam(order).done();
+					}
 					// user account purchase
 					if (profileid !== undefined) {
 						orchHelper.addOrderToUser(profileid, order)
@@ -226,7 +229,6 @@ module.exports = function(express, app, __dirname) {
 					} else {
 						res.status(200).json({order:order, success:result});
 					}
-					emailHelper.sendOrdersToTeam(order).done();
 				})
 				.fail(function (err) {
 					console.log('error adding single order', err);
