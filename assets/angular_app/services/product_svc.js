@@ -1,5 +1,5 @@
-trdServices.service("productService", ['$rootScope', '$http', '$cookieStore', 'stripeService', 'profileService',
-    function ($rootScope, $http, $cookieStore, stripeService, profileService) {
+trdServices.service("productService", ['$rootScope', '$http', '$cookieStore', 'stripeService', 'profileService', 'authService',
+    function ($rootScope, $http, $cookieStore, stripeService, profileService, authService) {
 
     	this.submitReview = function(productnumber, review, callback) {
     		review.productnumber = productnumber;
@@ -34,7 +34,7 @@ trdServices.service("productService", ['$rootScope', '$http', '$cookieStore', 's
     	}
 
         this.addPageView = function(productnumber, callback) {
-            $http({method: 'POST', url: "/product_page_view/" + productnumber})
+            $http({method: 'POST', url: "/product_page_view/" + productnumber + '?profile=' + authService.profileid})
             .success(function(data, status, headers, config) {
                 callback(data);
             })

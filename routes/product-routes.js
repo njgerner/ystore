@@ -172,16 +172,13 @@ module.exports = function(express, app, __dirname) {
 	  	}).done();
 	};
 
-	// POST //product_page_view/:productnumber
+	// POST //product_page_view/:productnumber?profile=
 	ProductRoutes.page_view = function(req, res) {
 		var pn = req.params.productnumber;
-		var profile = 'guest';
-		if (req.user && req.user.profile) {
-			profile = req.user.profile;
-		}
+		var profile = req.query.profile || 'guest';
 		orchHelper.addPageView('products', pn, profile)
 		.then(function (result) {
-			res.status(201).json(result);
+			res.status(201).json(true);
 		})
 		.fail(function (err) {
 			res.status(500).json({err:err});
