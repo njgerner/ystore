@@ -21,7 +21,7 @@ module.exports = function(express, app, __dirname) {
 		var email = transaction.email;
 		stripe.customers.create({
 			card: card,
-			description: "trd customer",
+			description: "ylift customer",
 			email: email
 		}, function(err, customer) {
 			if (err) {
@@ -66,7 +66,7 @@ module.exports = function(express, app, __dirname) {
 		var card = req.body.card;
 		stripe.customers.create({
 			card: card.id,
-			description: "trd guest customer"
+			description: "ylift guest customer"
 		}, function(err, customer) {
 			if (err) {
 				return Q.fcall(function () {
