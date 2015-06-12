@@ -100,7 +100,7 @@ superApp.controller('RegisterCtrl',
         return;
       }
       $scope.registering = true;
-      authService.register($scope.email, $scope.password, function(err, status) {
+      authService.register($scope.email, $scope.password, undefined, function(err, status) {
         if (err) {
           $scope.registering = false;
           $scope.failedMessage = status;
