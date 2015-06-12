@@ -261,38 +261,32 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
       templateUrl: "/partials/techniques_veins.html",
     })
     .state('zones', {
-      url:"/zones",
+      url:"/zones/:zone/:procedure",
       templateUrl: "/partials/zones.html",
       controller: "ZonesCtrl"
     })
     .state('zones.eyes', {
       parent: 'zones',
-      url:"/eyes",
       templateUrl: "/partials/zones_eyes.html",
     })
     .state('zones.face', {
       parent: 'zones',
-      url:"/face",
       templateUrl: "/partials/zones_face.html",
     })
     .state('zones.hair', {
       parent: 'zones',
-      url:"/hair",
       templateUrl: "/partials/zones_hair.html",
     })
     .state('zones.hands', {
       parent: 'zones',
-      url:"/hands",
       templateUrl: "/partials/zones_hands.html",
     })
     .state('zones.lips', {
       parent: 'zones',
-      url:"/lips",
       templateUrl: "/partials/zones_lips.html",
     })
     .state('zones.skin', {
       parent: 'zones',
-      url:"/skin",
       templateUrl: "/partials/zones_skin.html",
     })
     .state('before_after', {
