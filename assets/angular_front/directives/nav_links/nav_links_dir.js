@@ -1,5 +1,5 @@
-appDirectives.directive('navLinksDir', [ 'authService', '$state',
-	function(authService, $state) {
+appDirectives.directive('navLinksDir', [ 'authService', '$state', '$rootScope',
+	function(authService, $state, $rootScope) {
 	return {
 		restrict: 'E',
 		scope: {
@@ -7,13 +7,8 @@ appDirectives.directive('navLinksDir', [ 'authService', '$state',
 		templateUrl: 'directives/nav_links_template.html',
 		link: function(scope, element) {
 
-			scope.waiting = true;
-
-			scope.$on('authorizationloaded', function (evt, auth) {
-				scope.waiting = false;
-				scope.isAdmin = authService.isAdmin;
-				scope.isYLIFT = authService.isYLIFT;
-			});
+			scope.isAdmin = authService.isAdmin;
+			scope.isYLIFT = authService.isYLIFT;
 		}
 	}
 }]);
