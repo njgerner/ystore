@@ -100,7 +100,7 @@ superApp.controller('RegisterCtrl',
         return;
       }
       $scope.registering = true;
-      authService.register($scope.email, $scope.password, "individual", function(err, status) {
+      authService.register($scope.email, $scope.password, function(err, status) {
         if (err) {
           $scope.registering = false;
           $scope.failedMessage = status;
@@ -254,7 +254,7 @@ superApp.controller('RegisterCtrl',
           return false;
         } else {
           $scope.profile = {};
-          return authService.register($scope.loginemail, $scope.password, JSON.stringify($scope.meta), function (error, status) {
+          return authService.register($scope.loginemail, $scope.password, function (error, status) {
             $scope.validating = false;
             if (error) {
               $scope.error = status;
@@ -268,7 +268,7 @@ superApp.controller('RegisterCtrl',
                 return true;
               });
             }
-          });
+          }, JSON.stringify($scope.meta));
         }
       }
   	}

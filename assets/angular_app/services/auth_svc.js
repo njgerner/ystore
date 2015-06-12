@@ -90,7 +90,7 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 			    });
 		};
 
-		this.register = function(email, password, metadata, callback) {
+		this.register = function(email, password, callback, metadata) {
 			this.clearAuthorization();
 			var internalThis = this;
 			$http({method: 'POST', url: '/register',

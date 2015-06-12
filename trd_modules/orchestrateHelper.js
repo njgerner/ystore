@@ -143,7 +143,6 @@ exports.changePassword = function(id, password) {
 //used in local-signup strategy
 exports.localReg = function (email, password, metadata) {
   var user = User.newUser(email, password);
-  // var profile = metadata == "individual" ? Profile.newProfile(email, metadata):Profile.newProfile(email, JSON.parse(metadata));
   var profile = Profile.newProfile(email);
   if (metadata) {
     rawDogger.addMetaToProfile(profile, JSON.parse(metadata));
