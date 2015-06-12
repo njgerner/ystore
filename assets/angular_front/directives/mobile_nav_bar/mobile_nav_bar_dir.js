@@ -7,16 +7,16 @@ appDirectives.directive('mobileNavBarDir', [ 'authService', '$state', '$location
 		},
 		templateUrl: 'directives/mobile_nav_bar_template.html',
 		link: function(scope, element) {
-					scope.loggedIn = false;
+			scope.loggedIn = false;
 			scope.name = "";
 			scope.profileid = null;
 			scope.isAdmin = false;
 			scope.query = null;
-			// scope.showCart = $rootScope.isVisible;
 			scope.productsInCart = [];
 			scope.itemCount = 0;
 			scope.cart = {};
 			scope.productNames = [];
+			scope.productCategories = {};
 
 			scope.goToPage = function(page) {
 	  			$state.go(page);
@@ -49,6 +49,16 @@ appDirectives.directive('mobileNavBarDir', [ 'authService', '$state', '$location
 	  			}
 	  		};
 
+	  		function onProductsLoaded (products) {
+				products.forEach(function(product, index) {
+					if (scope.productCategories[product.category] === undefined) {
+						scope.productCategories[product.category] = 0;
+					}
+					scope.productCategories[product.category]++;
+		            scope.productNames.push(product.name);
+		        });
+			}
+
 			if (authService.authorized) {
 				scope.loggedIn = true;
 				scope.name = authService.profile.name;
@@ -62,10 +72,8 @@ appDirectives.directive('mobileNavBarDir', [ 'authService', '$state', '$location
 	  			});
 			}
 
-			storeService.getStoreFront(function(products) {
-				products.forEach(function(product, index) {
-		            scope.productNames.push(product.name);
-		        });
+			scope.$on('productsloaded', function (evt, products) {
+				onProductsLoaded(products);
 			});
 
 			scope.$watch(function() { return $cookies.pInCart; }, function(newCart, oldCart) { // this makes me hard ... me too

@@ -80,6 +80,16 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 	  			});
 	  		}
 
+			function onProductsLoaded (products) {
+				products.forEach(function(product, index) {
+					if (scope.productCategories[product.category] === undefined) {
+						scope.productCategories[product.category] = 0;
+					}
+					scope.productCategories[product.category]++;
+		            scope.productNames.push(product.name);
+		        });
+			}
+
 			if (authService.authorized) {
 				scope.loggedIn = true;
 				scope.name = authService.profile.name;
@@ -94,16 +104,6 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 	  			});
 			}
 
-			storeService.getStoreFront(function(products) {
-				products.forEach(function(product, index) {
-					if (scope.productCategories[product.category] === undefined) {
-						scope.productCategories[product.category] = 0;
-					}
-					scope.productCategories[product.category]++;
-		            scope.productNames.push(product.name);
-		        });
-			});
-
 			scope.$watch(function() { return $cookies.pInCart; }, function(newCart, oldCart) { // this makes me hard ... me too
 				if (newCart) {
 					scope.productsInCart = JSON.parse(newCart);
@@ -111,7 +111,11 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 				scope.itemCount = scope.productsInCart.length || 0;
 			});
 
-			$rootScope.$on('merchantcreated', function(evt, args) {
+			scope.$on('productsloaded', function (evt, products) {
+				onProductsLoaded(products);
+			});
+
+			scope.$on('merchantcreated', function (evt, args) {
 				onProfileLoaded();
 			});
 

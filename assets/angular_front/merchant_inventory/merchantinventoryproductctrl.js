@@ -18,7 +18,6 @@ superApp.controller('MerchantInventoryProductCtrl',
   			return;
   		}
   		$scope.updating = true;
-      console.log('updating merchant product', $scope.product);
   		productService.updateProduct($scope.product, onProductLoaded);
   	}
 

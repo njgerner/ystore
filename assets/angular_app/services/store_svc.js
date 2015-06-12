@@ -22,14 +22,20 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
         return this.productsByID[productid].attributes.vendor;
     }
 
-    this.getStoreFront = function(callback) {
+    this.getStoreFront = function(callback, refresh) {
+        if (this.productsReceived && !refresh) {
+            callback(this.products);
+            return;
+        }
         var internalThis = this;
         $http({method: 'POST', url: "/store", data:{ylift: authService.isYLIFT}})
             .success(function(data, status, headers, config) {
-                if (internalThis.productsReceived) {
+                if (internalThis.productsReceived && !refresh) {
                     callback(internalThis.products);
-                } else{
-                internalThis.productsReceived = true;
+                } else {
+                internalThis.products = [];
+                internalThis.productsByID = {};
+                internalThis.productsByCategory = {};
                 for(var i = 0; i < data.products.length; i++) {
                     internalThis.productsByID[data.products[i].productnumber] = data.products[i]; 
                     internalThis.products.push(data.products[i]); //seems redundant if we already have productsByID containing all products
@@ -40,6 +46,8 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
                         internalThis.productsByCategory[data.products[i].category].push(data.products[i]);
                     }
                 }
+                internalThis.productsReceived = true;
+                $rootScope.$broadcast('productsloaded', internalThis.products);
                 callback(internalThis.products);
               }
             })

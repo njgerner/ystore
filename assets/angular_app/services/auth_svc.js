@@ -20,6 +20,8 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 				this.authorizationReceived = true;
 				this.authorized = false;
 				callback(this.authorized);
+				console.log('auth loaded', this.authorized);
+				$rootScope.$broadcast('authorizationloaded', this.authorized);
 			} else {
 				// if auth has not been received, and we have a token, check authorization
 				var internalThis = this;

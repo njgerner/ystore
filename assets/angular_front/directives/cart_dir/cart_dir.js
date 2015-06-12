@@ -51,27 +51,30 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
   			$cookieStore.put('pInCart', scope.productsInCart);
 			}
 
-  		function onProductsLoaded (products) {
-  			scope.products = storeService.productsByID;
-  			if (scope.productsInCart.length > 0) {
-  				scope.updateTotal();
-  			}
-  			scope.cartProductsLoading = false;
-  		}
+	  		function onProductsLoaded (products) {
+	  			scope.products = storeService.productsByID;
+	  			if (scope.productsInCart.length > 0) {
+	  				scope.updateTotal();
+	  			}
+	  			scope.cartProductsLoading = false;
+	  		}
 
-  		function onProductsInCartReceived (products) {
-  			scope.productsInCart = products;
-  			storeService.getStoreFront(onProductsLoaded); // as the store grows we may want to load only products currently in cart
-  		};
+	  		function onProductsInCartReceived (products) {
+	  			scope.productsInCart = products;
+	  			scope.$on('productsloaded', function (evt, products) {
+	  				onProductsLoaded(products);
+	  				// storeService.getStoreFront(onProductsLoaded); // as the store grows we may want to load only products currently in cart
+	  			});
+	  		};
 
-  		var productsInCartWatch = null;
-			productsInCartWatch = scope.$watch('productsInCart', function(newValue, oldValue) {
-				if (!newValue) {
-					scope.updateTotal();
-					scope.updatePInCartCookie();
-					productsInCartWatch();
-				}
-			});
+	  		var productsInCartWatch = null;
+				productsInCartWatch = scope.$watch('productsInCart', function(newValue, oldValue) {
+					if (!newValue) {
+						scope.updateTotal();
+						scope.updatePInCartCookie();
+						productsInCartWatch();
+					}
+				});
 
 			storeService.getProductsInCart(authService.profileid, onProductsInCartReceived);
 

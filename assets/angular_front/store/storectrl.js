@@ -9,6 +9,7 @@ superApp.controller('StoreCtrl',
     $scope.productsInCart = [];
     $scope.productsByCategory = []
     $scope.loading = true;
+    $scope.authLoaded = authService.authorizationReceived;
 
     $scope.goToProduct = function(productnumber) {
       $state.go('product', {productnumber: productnumber});
@@ -46,6 +47,10 @@ superApp.controller('StoreCtrl',
       $scope.loading = false;
     }
 
-    storeService.getStoreFront(onProductsLoaded);
+    $scope.$watch('authLoaded', function (newValue, oldValue) {
+      if (newValue) {
+        storeService.getStoreFront(onProductsLoaded, true);
+      }
+    });
 
 }]);

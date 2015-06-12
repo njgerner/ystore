@@ -315,13 +315,8 @@ exports.getAllProducts = function() {
     .collection('products')
     .limit(100)
     .query('value.active: "Y"')
-    // .query('value.active: "Y" AND NOT value.isYLIFT: "Y"')
   .then(function(result) {
-    var products = [];
-    for (var i = 0; i < result.body.results.length; i++) {
-      products[i] = result.body.results[i].value;
-    }
-    deferred.resolve(products);
+    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
   })
   .fail(function (err){
     if (err.body.message == 'The requested items could not be found.'){

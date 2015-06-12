@@ -13,7 +13,6 @@ appDirectives.directive('navLinksDir', [ 'authService', '$state',
 				scope.waiting = false;
 				scope.isAdmin = authService.isAdmin;
 				scope.isYLIFT = authService.isYLIFT;
-				console.log('socpe isYLIFT', scope.isYLIFT);
 			});
 		}
 	}
