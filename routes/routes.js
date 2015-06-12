@@ -597,6 +597,7 @@ passport.use('bearer', new BearerStrategy(
     app.get('/get_products_by_merchant/:merchantid', ensureAuthenticated, storeRoutes.get_products_by_merchant);
     app.get('/get_related_products/:productnumber', get_related_products);
     app.get('/login', login);
+    app.get('/most_viewed_product/:profileid', ensureAuthenticated, productRoutes.most_viewed_product);
     app.get('/order/:orderid', get_order_by_id);
     app.get('/product_rating/:productnumber', productRoutes.get_rating);
     app.get('/product_reviews/:productnumber', productRoutes.get_reviews);

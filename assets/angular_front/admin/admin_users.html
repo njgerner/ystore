@@ -1,22 +1,47 @@
 <div ng-if="users.length" class="row admin-users-summary">
-	<div class="small-6 large-3 columns">
+	<h4>User Summary</h4>
+	<div class="small-6 large-3 columns text-center">
 		<span>{{users.length}}</span><br>
 		<small>Total Users</small>
 	</div>
-	<div class="small-6 large-3 end columns">
-		<span>{{getYLIFTUserCount()}}</span><br>
+	<div class="small-6 large-3 end columns text-center">
+		<span>{{yliftUsers.length}}</span><br>
 		<small>Y LIFT Network Users</small>
 	</div>
-	<div class="small-6 large-3 end columns">
+	<div class="small-6 large-3 end columns text-center">
 		<span>{{getActiveUserCount()}}</span><br>
 		<small>Recently Active Users</small>
 	</div>
-	<div class="small-6 large-3 end columns">
+	<div class="small-6 large-3 end columns text-center">
 		<span>{{getMonthlyUserCount()}}</span><br>
 		<small>Monthly Active Users</small>
 	</div>
 </div>
-<div ng-if="users.length" class="row" ng-repeat="user in users">
-	{{user.name}}
+<div ng-if="yliftUsers.length">
+	<div class="row">
+		<h4>Y LIFT Network Users</h4>
+		<div class="small-3 large-3 columns">
+			<strong>Name</strong>
+		</div>
+		<div class="small-3 large-3 columns">
+			<strong>Last Login</strong>
+		</div>
+		<div class="small-3 large-3 end columns">
+			<strong>Member Since</strong>
+		</div>
+	</div>
+	<div class="row">
+		<div class="info-row" ng-repeat="user in yliftUsers">
+			<div class="small-3 large-3 columns">
+				<span>{{user.name || user.email}}</span>
+			</div>
+			<div class="small-3 large-3 columns">
+				<span>{{getDisplayDate(user.last_login)}}</span>
+			</div>
+			<div class="small-3 large-3 end columns">
+				<span>{{getDisplayDate(user.createdAt)}}</span>
+			</div>
+		</div>
+	</div>
 </div>
 <div ng-hide="users.length" class="loader locations-loading">Loading...</div>

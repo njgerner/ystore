@@ -1,10 +1,6 @@
 superApp.controller('AdminUsersCtrl',
-  ['$rootScope', '$scope', '$state', 'adminService',
-  function($rootScope, $scope, $state, adminService) {
-
-  	$scope.getYLIFTUserCount = function() {
-  		return $scope.users.filter(isYLIFTUser).length;
-  	}
+  ['$rootScope', '$scope', '$state', 'adminService', 'productService', '$http',
+  function($rootScope, $scope, $state, adminService, productService, $http) {
 
   	$scope.getActiveUserCount = function() {
   		return $scope.users.filter(isActiveUser).length;
@@ -15,8 +11,8 @@ superApp.controller('AdminUsersCtrl',
   		return $scope.users.filter(isMonthlyUser).length;
   	}
 
-  	function isYLIFTUser(user) {
-  		return user.isYLIFT;
+  	$scope.getDisplayDate = function(date) {
+  		return moment(date).format("MMM Do YYYY");
   	}
 
 	function isActiveUser(user) {
@@ -36,5 +32,5 @@ superApp.controller('AdminUsersCtrl',
   	}
 
   	adminService.getAllProfiles(onUsersLoaded);
-  	adminService.getAllYLIFTUserDocs(onYLIFTsLoaded);
+  	adminService.getAllYLIFTProfiles(onYLIFTsLoaded);
 }]);

@@ -12,8 +12,8 @@ trdServices.service("adminService", ['$rootScope', '$http', '$cookieStore',
 	        });
     	}
 
-    	this.getAllYLIFTUserDocs = function(callback) {
-    		$http({method: 'GET', url: '/admin/all_ylift_users'})
+    	this.getAllYLIFTProfiles = function(callback) {
+    		$http({method: 'GET', url: '/admin/all_ylift_profiles'})
 	        .success(function (data, status, headers, config) {
 	            callback(data.profiles);
 	        })

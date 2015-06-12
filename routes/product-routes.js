@@ -54,6 +54,18 @@ module.exports = function(express, app, __dirname) {
 		});
 	};
 
+	// GET /most_viewed_product/:profileid
+	ProductRoutes.most_viewed_product = function(req, res) {
+		orchHelper.getMostFrequentEvent('products', 'page-view', req.params.profileid)
+		.then(function (data) {
+			res.status(200).json(data);
+		})
+		.fail(function (err) {
+			console.log('error trying to get most viewed prduct', err);
+			res.status(500).json({err:err});
+		});
+	};
+
 	// POST /submit_review
 	ProductRoutes.submit_review = function(req, res) {
 		var review = req.body.review;
