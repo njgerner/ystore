@@ -1,16 +1,27 @@
 module.exports = {
-	newProfile: function(email) {
+	newProfile: function(email, metadata) {
 		var crypto = require('crypto'),
     		id = crypto.randomBytes(20).toString('hex');
+    	var address = {"address1": metadata.address1};
+    	if(metadata.address2) {
+    		address.address2 = metadeta.address2;
+    	}
+    	address.city = metadata.city;
+    	address.state = metadata.state;
+    	address.zip = metadata.zip;
+    	address.country = metadata.country;
+    	if(metadata.staff) {
+    		metadata.staff = JSON.parse(metadata.staff);
+    	}
 		return {
 			"id": id,
 			"email": email,
 			"name": null,
-			"addresses": [],
+			"addresses": [address],
 			"cart": null,
-			"jsonType": "profile",
 			"createdAt": new Date(),
-			"updatedAt": new Date()
+			"updatedAt": new Date(),
+			"metadata": metadata
 		};
 	}
 };

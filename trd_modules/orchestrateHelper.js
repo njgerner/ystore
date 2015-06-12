@@ -141,9 +141,9 @@ exports.changePassword = function(id, password) {
 };
 
 //used in local-signup strategy
-exports.localReg = function (email, password) {
+exports.localReg = function (email, password, metadata) {
   var user = User.newUser(email, password);
-  var profile = Profile.newProfile(email);
+  var profile = Profile.newProfile(email, JSON.parse(metadata));
   var cart = Cart.newCart();
     //check if email is already assigned in our database
   return db.search('local-users', user.email)

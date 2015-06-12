@@ -77,7 +77,7 @@ passport.use('local-signup', new LocalStrategy(
     passwordField: 'password',
     passReqToCallback : true }, //allows us to pass back the request to the callback
   function(req, username, password, done) {
-    orchHelper.localReg(req.body.email, req.body.password)
+    orchHelper.localReg(req.body.email, req.body.password, req.body.metadata)
       .then(function (user) {
         if (user) {
           if (!user.error) {

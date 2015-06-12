@@ -196,7 +196,7 @@ superApp.controller('RegisterCtrl',
 		          address_zip: $scope.billingzip,
 		          country: $scope.billingcountry
 		        };
-		        var meta = {
+		        $scope.meta = {
 		        	name: $scope.name,
 		        	address1: $scope.address1,
 		        	address2: $scope.address2,
@@ -224,7 +224,7 @@ superApp.controller('RegisterCtrl',
   					}
   					var props = {
   						email: $scope.email,
-  						metadata: meta
+  						metadata: $scope.meta
   					};            
   					stripeService.updateGuestCustomer(props, function(customer) {
   						$scope.validating = false;
@@ -254,7 +254,7 @@ superApp.controller('RegisterCtrl',
           return false;
         } else {
           $scope.profile = {};
-          return authService.register($scope.loginemail, $scope.password, function (error, status) {
+          return authService.register($scope.loginemail, $scope.password, JSON.stringify($scope.meta), function (error, status) {
             $scope.validating = false;
             if (error) {
               $scope.error = status;
