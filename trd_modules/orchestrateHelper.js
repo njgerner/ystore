@@ -608,6 +608,21 @@ exports.getOrderByID = function(orderId) {
   return deferred.promise;
 };
 
+exports.getAllOrders = function() {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+  .collection('orders')
+  .limit(100)
+  .query('*')
+  .then(function (result) {
+    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body));
+  });
+  return deferred.promise;
+};
+
 exports.addOrderToUser = function(profileid, order) {
   var deferred = Q.defer();
   db.get('user-orders', profileid)
