@@ -1,12 +1,12 @@
 superApp.controller('RegisterCtrl',
   ['$rootScope', '$scope', '$state', 'authService', '$location', '$window', '$timeout', 
-  		'stripeService', 'storeService', 'trainingService',
+  		'stripeService', 'storeService', 'trainingService', 'REG_FEE',
   function($rootScope, $scope, $state, authService, $location, $window, $timeout, 
-  		stripeService, storeService, trainingService) {
+  		stripeService, storeService, trainingService, reg_fee) {
 
   	$scope.staff = [];
   	$scope.viewState = 'start';
-    $scope.total = 5995;
+    $scope.total = reg_fee;
 
   	$scope.$watch('billingsame', function(newValue, oldValue) {
 		if (newValue && $scope.billingsame) {
