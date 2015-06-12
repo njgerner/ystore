@@ -9,21 +9,27 @@ module.exports = function(express, app, __dirname) {
 		Q               = require('q'),
 		fs 				= require('fs');
 
-	// //GET /training
-	// AdminRoutes.training = function(req, res) {
-	// 	console.log('in training route');
-	// 	res.render('training');
-	// };
+	// GET /admin/all_profiles
+	AdminRoutes.all_profiles = function(req, res) {
+		orchHelper.getAllProfiles()
+		.then(function (data) {
+			res.status(200).json({profiles:data});
+		})
+		.fail(function (err) {
+			res.status(500).json({err:err});
+		});
+	};
 
-	// // POST /upload_training_materials
-	// AdminRoutes.upload_training_materials = function(req, res) {
-	// 	console.log('in upload_training_materials POST route');
-	// 	if(done===true){
-	//     console.log('upload route, uploading file:');
-	//     console.log('file =', req.files);
-	//     res.redirect('/training');
-	//   }
-	// };
+	// GET /admin/all_ylift_profiles
+	AdminRoutes.all_ylift_profiles = function(req, res) {
+		orchHelper.getAllYLIFTProfiles()
+		.then(function (data) {
+			res.status(200).json({profiles:data});
+		})
+		.fail(function (err) {
+			res.status(500).json({err:err});
+		});
+	};
 
 	return AdminRoutes;
 };

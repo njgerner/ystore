@@ -96,6 +96,32 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
     $urlRouterProvider.otherwise("/store");
     
     $stateProvider
+    .state('admin', {
+      abstract: true,
+      url: "/admin",
+      templateUrl: "/partials/admin.html",
+      controller: "AdminCtrl"
+    })
+    .state('admin.users', {
+      url: "/users",
+      templateUrl: "/partials/admin_users.html",
+      controller: "AdminUsersCtrl"
+    })
+    .state('admin.stripe', {
+      url: "/users",
+      templateUrl: "/partials/admin_stripe.html",
+      controller: "AdminStripeCtrl"
+    })
+    .state('admin.products', {
+      url: "/users",
+      templateUrl: "/partials/admin_products.html",
+      controller: "AdminProductsCtrl"
+    })
+    .state('admin.metrics', {
+      url: "/users",
+      templateUrl: "/partials/admin_metrics.html",
+      controller: "AdminMetricsCtrl"
+    })
     .state('login', {
       url: "/login",
       templateUrl: "/partials/login.html",

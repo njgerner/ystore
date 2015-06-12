@@ -700,9 +700,66 @@ exports.getAllProfiles = function() {
   return deferred.promise;
 };
 
+exports.getAllYLIFTProfiles = function() {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+  .collection('local-users')
+  .limit(100)
+  .query('value.isYLIFT: true')
+  .then(function (result) {
+    var profileids = [];
+    var users = rawDogger.push_values_to_top(result.body.results);
+    for (var i = 0; i < users.length; i++) {
+      if (users[i].isYLIFT) {
+        profileids.push(users[i].profile);
+      }
+    }
+    return profileids;
+  })
+  .then(function (profileids) {
+    var promises = [];
+    profileids.forEach(function (profileid, index) {
+      promises.push(module.exports.getProfile(profileid));
+    });
+    return Q.allSettled(promises)
+      .then(function (results) {
+        var profiles = [];
+        results.forEach(function (result) {
+          if (result.state === "fulfilled") {
+              profiles.push(result.value);
+          }
+        });
+        return profiles;
+      })
+      .fail(function (reasons) {
+        console.log('reasons', reasons);
+        return false;
+      });
+  })
+  .then(function (result) {
+    deferred.resolve(result);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body));
+  });
+  return deferred.promise;
+};
+
 exports.getProfile = function(profileid) {
   var deferred = Q.defer();
   db.get('local-profiles', profileid)
+    .then(function (result) {
+      deferred.resolve(result.body);
+    })
+    .fail(function (err) {
+      deferred.reject(new Error(err.body));
+    });
+  return deferred.promise;
+};
+
+exports.getUser = function(userid) {
+  var deferred = Q.defer();
+  db.get('local-users', userid)
     .then(function (result) {
       deferred.resolve(result.body);
     })
@@ -991,4 +1048,21 @@ exports.addPageView = function(type, id, profile) {
     "profile": profile
   })
   .create();
+};
+
+exports.getMostFrequentEvent = function(collection, type, profile) {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+  .collection('products')
+  .aggregate('top_values', 'value.productnumber')
+  .query('@path.kind:event AND @path.type:' + type)
+  .then(function (result) {
+    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
+  })
+  .fail(function (err) {
+    console.log('error getting most feqe', err.body);
+    deferred.reject(new Error(err.body));
+  });
+
+  return deferred.promise;
 };
