@@ -196,7 +196,7 @@ superApp.controller('RegisterCtrl',
 		          address_zip: $scope.billingzip,
 		          country: $scope.billingcountry
 		        };
-		        var meta = {
+		        $scope.meta = {
 		        	name: $scope.name,
 		        	address1: $scope.address1,
 		        	address2: $scope.address2,
@@ -224,7 +224,7 @@ superApp.controller('RegisterCtrl',
   					}
   					var props = {
   						email: $scope.email,
-  						metadata: meta
+  						metadata: $scope.meta
   					};            
   					stripeService.updateGuestCustomer(props, function(customer) {
   						$scope.validating = false;
@@ -268,7 +268,7 @@ superApp.controller('RegisterCtrl',
                 return true;
               });
             }
-          });
+          }, JSON.stringify($scope.meta));
         }
       }
   	}
