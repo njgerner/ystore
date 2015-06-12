@@ -7,7 +7,7 @@ trdServices.service("adminService", ['$rootScope', '$http', '$cookieStore',
 	            callback(data.profiles);
 	        })
 	        .error(function (data, status, headers, config) {
-	            console.log('error updating profile', data);
+	            console.log('error getting all profiles', data);
 	            callback();
 	        });
     	}
@@ -18,7 +18,7 @@ trdServices.service("adminService", ['$rootScope', '$http', '$cookieStore',
 	            callback(data.profiles);
 	        })
 	        .error(function (data, status, headers, config) {
-	            console.log('error updating profile', data);
+	            console.log('error getting ylift profiles', data);
 	            callback();
 	        });
     	}
