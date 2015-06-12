@@ -4,15 +4,15 @@ module.exports = function(express, app, __dirname) {
 	console.log('Loading Stripe Routes');
 
 	var path            = require('path'),            						// http://nodejs.org/docs/v0.3.1/api/path.html
-    	config 					= require('../trd_modules/config.json'), 							//config file contains all tokens and other private info
-    	Customer 				= require('../models/customer.js'),
-			orchHelper      = require('../trd_modules/orchestrateHelper'),
-			emailHelper     = require('../trd_modules/emailHelper'),
-			crypto 					= require('crypto'),
-			Q               = require('q'),
-			routes 					= require('./routes.js'),
-    	stripeEnv				= process.env.STRIPE,
-			stripe 					= require('stripe')(config[stripeEnv].SECRET);
+    	config 			= require('../trd_modules/config.json'), 			//config file contains all tokens and other private info
+    	Customer 		= require('../models/customer.js'),
+		orchHelper      = require('../trd_modules/orchestrateHelper'),
+		emailHelper     = require('../trd_modules/emailHelper'),
+		crypto 			= require('crypto'),
+		Q               = require('q'),
+		routes 			= require('./routes.js'),
+    	stripeEnv		= process.env.STRIPE,
+		stripe 			= require('stripe')(config[stripeEnv].SECRET);
 
 	StripeRoutes.add_customer = function(req, res) {
 		var profileid = req.params.profileid;
