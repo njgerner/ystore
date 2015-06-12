@@ -697,9 +697,53 @@ exports.getAllProfiles = function() {
   return deferred.promise;
 };
 
+exports.getAllYLIFTProfiles = function() {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+  .collection('local-users')
+  .limit(100)
+  .query('value.isYLIFT: true')
+  .then(function (result) {
+    var profileids = [];
+    var users = push_values_to_top(result.body.results);
+    for (var i = 0; i < users.length; i++) {
+      if (users[i].isYLIFT) {
+        profileids.push(users[i].profile);
+      }
+    }
+    return profileids;
+  })
+  .then(function (profileids) {
+    var promises = [];
+    profileids.forEach(function (id, index) {
+      promises.push(db.get('local-profiles', id));
+    });
+    return Q.allSettled(promises);
+  })
+  .then(function (result) {
+    deferred.resolve(result);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body));
+  });
+  return deferred.promise;
+};
+
 exports.getProfile = function(profileid) {
   var deferred = Q.defer();
   db.get('local-profiles', profileid)
+    .then(function (result) {
+      deferred.resolve(result.body);
+    })
+    .fail(function (err) {
+      deferred.reject(new Error(err.body));
+    });
+  return deferred.promise;
+};
+
+exports.getUser = function(userid) {
+  var deferred = Q.defer();
+  db.get('local-users', userid)
     .then(function (result) {
       deferred.resolve(result.body);
     })

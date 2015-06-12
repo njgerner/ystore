@@ -45,7 +45,7 @@
         </a>
         <ul top-bar-dropdown>
           <li ng-if="isAdmin" class="divider"></li>
-          <li><a ui-sref="admin">Admin</a></li>
+          <li ng-if="isAdmin"><a ui-sref="admin.users">Admin</a></li>
           <li ng-if="isAdmin" class="divider"></li>
           <li><a ui-sref="profile">Profile</a></li>
           <li><a ui-sref="settings.profile">Settings</a></li>

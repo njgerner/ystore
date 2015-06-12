@@ -276,9 +276,9 @@ passport.use('bearer', new BearerStrategy(
       });
   };
 
-  // GET /all_profiles
-  var all_profiles = function(req, res) {
-    orchHelper.getAllProfiles()
+  // GET /all_ylift_profiles
+  var all_ylift_profiles = function(req, res) {
+    orchHelper.getAllYLiftProfiles()
       .then(function (result) {
         res.send({profiles:result});
       })
@@ -564,12 +564,12 @@ passport.use('bearer', new BearerStrategy(
     ///////////////////////////////////////////////////////////////
     app.use('/admin', ensureAuthenticated); // ensure that we're authenticated and have a user
     app.use('/admin', function(req, res, next) {
-        orchHelper.findUserById(req.user._id)
+        orchHelper.getUser(req.user.id)
           .then(function (user) {
             if (user.isAdmin) {
               next();
             } else {
-              res.status(401).send("not an admin");
+              res.status(401).send("Not an admin");
             }
           })
           .fail(function (err) {
@@ -587,7 +587,7 @@ passport.use('bearer', new BearerStrategy(
 
     app.get('/all_orders/:profileid', ensureAuthenticated, get_all_orders);
     app.get('/all_products', all_products);
-    app.get('/all_profiles', all_profiles);
+    app.get('/all_ylift_profiles', all_ylift_profiles);
     app.get('/authorized', ensureAuthenticated, authorized);
     app.get('/cart/:profileid', ensureAuthenticated, get_cart);
     app.get('/get_all_testimonials', get_all_testimonials);
@@ -653,4 +653,11 @@ passport.use('bearer', new BearerStrategy(
     app.get('/500', fivehundred);
 
     // -- End ERROR Routes
+
+    // -- START Admin Routes
+    ///////////////////////////////////////////////////////////////
+    app.get('/admin/all_profiles', ensureAuthenticated, adminRoutes.all_profiles);
+    app.get('/admin/all_ylift_profiles', ensureAuthenticated, adminRoutes.all_ylift_profiles);
+    // -- End ERROR Routes
+
 };
