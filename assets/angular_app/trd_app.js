@@ -13,6 +13,8 @@ var trdApp = angular.module('trdApp', [
   'flow',
   'env.config',
   'mm.foundation',
+  'angulartics',
+  'angulartics.google.analytics',
   'angularFileUpload' //https://github.com/nervgh/angular-file-upload
   // 'uiGmapgoogle-maps'
 ]);
@@ -91,8 +93,8 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
 
 }]);
 
-trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
-  function($httpProvider, $stateProvider, $urlRouterProvider) {
+trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyticsProvider',
+  function($httpProvider, $stateProvider, $urlRouterProvider, $analyticsProvider) {
     $httpProvider.interceptors.push('trdInterceptor');
     $urlRouterProvider.otherwise("/login");
     
@@ -100,6 +102,32 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
     .state('authorizing', {
       url: "/authorizing",
       templateUrl: "partials/authorizing.html"
+    })
+    .state('admin', {
+      abstract: true,
+      url: "/admin",
+      templateUrl: "/partials/admin.html",
+      controller: "AdminCtrl"
+    })
+    .state('admin.users', {
+      url: "/users",
+      templateUrl: "/partials/admin_users.html",
+      controller: "AdminUsersCtrl"
+    })
+    .state('admin.stripe', {
+      url: "/users",
+      templateUrl: "/partials/admin_stripe.html",
+      controller: "AdminStripeCtrl"
+    })
+    .state('admin.products', {
+      url: "/users",
+      templateUrl: "/partials/admin_products.html",
+      controller: "AdminProductsCtrl"
+    })
+    .state('admin.metrics', {
+      url: "/users",
+      templateUrl: "/partials/admin_metrics.html",
+      controller: "AdminMetricsCtrl"
     })
     .state('login', {
       url: "/login",

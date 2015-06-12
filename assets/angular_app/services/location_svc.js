@@ -25,7 +25,7 @@ trdServices.service("locationService", ['$rootScope', '$http', '$cookieStore', '
     			return;
     		}
     		var inThis = this;
-    		$http({method: 'GET', url: '/all_profiles'}).
+    		$http({method: 'GET', url: '/all_ylift_profiles'}).
 			    success(function(data, status, headers, config) {
 			    	var profiles = data.profiles;
 			    	var promises = [];

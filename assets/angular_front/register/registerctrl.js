@@ -1,12 +1,12 @@
 superApp.controller('RegisterCtrl',
   ['$rootScope', '$scope', '$state', 'authService', '$location', '$window', '$timeout', 
-  		'stripeService', 'storeService', 'trainingService',
+  		'stripeService', 'storeService', 'trainingService', 'REG_FEE',
   function($rootScope, $scope, $state, authService, $location, $window, $timeout, 
-  		stripeService, storeService, trainingService) {
+  		stripeService, storeService, trainingService, reg_fee) {
 
   	$scope.staff = [];
   	$scope.viewState = 'start';
-    $scope.total = 5995;
+    $scope.total = reg_fee;
 
   	$scope.$watch('billingsame', function(newValue, oldValue) {
 		if (newValue && $scope.billingsame) {
@@ -37,6 +37,7 @@ superApp.controller('RegisterCtrl',
 
     $scope.backTo = function(state) {
       $scope.viewState = state;
+      $scope.error = null;
     }
 
   	$scope.submit = function() {
@@ -132,7 +133,7 @@ superApp.controller('RegisterCtrl',
   				$scope.error = 'Please enter an email address';
   			} else if (!$scope.phone) {
   				$scope.error = 'Please enter a phone number';
-  			} else {
+        } else {
   				$scope.validating = false;
   				return true;
   			}
@@ -164,6 +165,9 @@ superApp.controller('RegisterCtrl',
   				$scope.validating = false;
   				return true;
   			}
+        if (!$scope.cardname) {
+          $scope.error = 'Please enter your name as it appears on your card';
+        }
   			if (!Stripe.card.validateCardNumber($scope.ccnum)) {
   				$scope.error = 'Please enter a valid credit card number';
   			}
@@ -184,7 +188,7 @@ superApp.controller('RegisterCtrl',
 		          exp_year: $scope.expyear
 		        };
 		        var billing = {
-		          name: $scope.billingname,
+		          name: $scope.cardname,
 		          address_line1: $scope.billingaddress1,
 		          address_line2: $scope.billingaddress2,
 		          address_city: $scope.billingcity,
@@ -192,7 +196,7 @@ superApp.controller('RegisterCtrl',
 		          address_zip: $scope.billingzip,
 		          country: $scope.billingcountry
 		        };
-		        var meta = {
+		        $scope.meta = {
 		        	name: $scope.name,
 		        	address1: $scope.address1,
 		        	address2: $scope.address2,
@@ -210,7 +214,7 @@ superApp.controller('RegisterCtrl',
               training_location: $scope.location,
 		        	training_date: $scope.training_date,
 		        	certname: $scope.certname,
-		        	staff: $scope.staff
+		        	staff: JSON.stringify($scope.staff)
 		        };
   				stripeService.addCard(card, billing, function(result, error) {
   					if (error) {
@@ -220,7 +224,7 @@ superApp.controller('RegisterCtrl',
   					}
   					var props = {
   						email: $scope.email,
-  						metadata: meta
+  						metadata: $scope.meta
   					};            
   					stripeService.updateGuestCustomer(props, function(customer) {
   						$scope.validating = false;
@@ -234,14 +238,26 @@ superApp.controller('RegisterCtrl',
         $scope.validating = true;
         if ($scope.password !== $scope.confirmpassword) {
           $scope.error = 'Passwords need to match';
+          $scope.validating = false;
+          return false;
+        } else if (!$scope.password || !$scope.confirmpassword) {
+          $scope.error = 'Please enter a password';
+          $scope.validating = false;
+          return false;
+        } else if ($scope.password.length < 6) {
+          $scope.error = 'Password must be at least 6 characters long';
+          $scope.validating = false;
+          return false;
         } else if (!$scope.loginemail) {
           $scope.error = 'Please enter an account login email';
+          $scope.validating = false;
+          return false;
         } else {
           $scope.profile = {};
           return authService.register($scope.loginemail, $scope.password, function (error, status) {
             $scope.validating = false;
             if (error) {
-              $scope.error = error;
+              $scope.error = status;
               return false;
             } else {
               return authService.getAuthorization(function (authorized) {
@@ -252,7 +268,7 @@ superApp.controller('RegisterCtrl',
                 return true;
               });
             }
-          });
+          }, JSON.stringify($scope.meta));
         }
       }
   	}

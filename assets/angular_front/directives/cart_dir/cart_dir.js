@@ -61,7 +61,7 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 
   		function onProductsInCartReceived (products) {
   			scope.productsInCart = products;
-  			storeService.getAllProducts(onProductsLoaded); // as the store grows we may want to load only products currently in cart
+  			storeService.getStoreFront(onProductsLoaded); // as the store grows we may want to load only products currently in cart
   		};
 
   		var productsInCartWatch = null;

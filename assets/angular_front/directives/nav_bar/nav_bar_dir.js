@@ -11,18 +11,22 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 		},
 		templateUrl: 'directives/nav_bar_template.html',
 		link: function(scope, element) {
+
+			function init () {
+	  			scope.loggedIn = false;
+				scope.name = "";
+				scope.profileid = null;
+				scope.isAdmin = false;
+				scope.isMerchant = false;
+				scope.query = null;
+				scope.productsInCart = [];
+				scope.productCategories = {};
+				scope.itemCount = 0;
+				scope.cart = {};
+				scope.productNames = [];
+	  		}
 			
-			scope.loggedIn = false;
-			scope.name = "";
-			scope.profileid = null;
-			scope.isAdmin = false;
-			scope.isMerchant = false;
-			scope.query = null;
-			scope.productsInCart = [];
-			scope.productCategories = {};
-			scope.itemCount = 0;
-			scope.cart = {};
-			scope.productNames = [];
+			init();
 
 			scope.goToPage = function(page) {
 	  			$state.go(page);
@@ -38,6 +42,7 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 
 	  		scope.logoutNow = function() {
 	  			scope.loggedIn = false;
+	  			init();
 	  			$state.go("logout");
 	  		};
 
@@ -89,7 +94,7 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 	  			});
 			}
 
-			storeService.getAllProducts(function(products) {
+			storeService.getStoreFront(function(products) {
 				products.forEach(function(product, index) {
 					if (scope.productCategories[product.category] === undefined) {
 						scope.productCategories[product.category] = 0;

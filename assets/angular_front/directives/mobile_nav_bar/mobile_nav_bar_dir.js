@@ -62,7 +62,7 @@ appDirectives.directive('mobileNavBarDir', [ 'authService', '$state', '$location
 	  			});
 			}
 
-			storeService.getAllProducts(function(products) {
+			storeService.getStoreFront(function(products) {
 				products.forEach(function(product, index) {
 		            scope.productNames.push(product.name);
 		        });

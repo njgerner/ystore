@@ -71,6 +71,9 @@ superApp.controller('CheckoutCtrl',
     }
 
     $scope.submitOrder = function() {
+      if ($scope.orderSubmitted == true) {
+        return;
+      }
       $scope.orderSubmitted = true;
       stripeService.submitOrder($scope.addressShipTo, $scope.productsInCart, $scope.merchants, $scope.shippingCost, $scope.total, function(err, result) {
         if (err) {
@@ -88,7 +91,7 @@ superApp.controller('CheckoutCtrl',
     if (storeService.productsRetrieved) {
       $scope.onProductsLoaded();
     } else {
-      storeService.getAllProducts(function() { $scope.onProductsLoaded(); })
+      storeService.getStoreFront(function() { $scope.onProductsLoaded(); })
     }
 
 }]);

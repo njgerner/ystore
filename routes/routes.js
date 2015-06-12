@@ -77,13 +77,19 @@ passport.use('local-signup', new LocalStrategy(
     passwordField: 'password',
     passReqToCallback : true }, //allows us to pass back the request to the callback
   function(req, username, password, done) {
-    orchHelper.localReg(req.body.email, req.body.password)
+    orchHelper.localReg(req.body.email, req.body.password, req.body.metadata)
       .then(function (user) {
         if (user) {
           if (!user.error) {
             emailHelper.sendWelcome(user.name, user.email)
-            .then(function(result) {
-              done(null, user);
+            .then(function() {
+              emailHelper.newUserTeamNotification(user)
+              .then(function(result) {
+                done(null,user);
+              })
+              .fail(function(err) {
+                done(null, user, err);
+              });
             })
             .fail(function(err) {
               done(null, user, err);
@@ -270,9 +276,9 @@ passport.use('bearer', new BearerStrategy(
       });
   };
 
-  // GET /all_profiles
-  var all_profiles = function(req, res) {
-    orchHelper.getAllProfiles()
+  // GET /all_ylift_profiles
+  var all_ylift_profiles = function(req, res) {
+    orchHelper.getAllYLiftProfiles()
       .then(function (result) {
         res.send({profiles:result});
       })
@@ -311,7 +317,7 @@ passport.use('bearer', new BearerStrategy(
   ///////////////////////////////////////////////////////////////
   var register = function(req, res) {
     return passport.authenticate('local-signup', function(err, user) { 
-      if (err) { return res.json({err: "there was an error", status:"error registering, please try again" }); } //TODO: make this better
+      if (err) { return res.json({err: "there was an error", status:"Error registering, please try again. If this issue continues, please contact support@ylift.io." }); } //TODO: make this better
       if (!user) { return res.json({err:"login helper, no user error", message:"registered, but there was an error creating a user profile", failed:true}); }
       var payload = { user: user.id, expires: moment().add(4, 'days') };
       var secret = app.get("jwtTokenSecret");
@@ -325,8 +331,6 @@ passport.use('bearer', new BearerStrategy(
     console.log('getting all products', req.body);
     orchHelper.getAllProducts()
       .then(function (products) {
-        console.log('something happened');
-        console.log('got all products', products, req.user);
         if (products && req.user && req.user.isYLIFT) {
           console.log('set body products)');
           req.body.products = products;
@@ -565,12 +569,12 @@ passport.use('bearer', new BearerStrategy(
     ///////////////////////////////////////////////////////////////
     app.use('/admin', ensureAuthenticated); // ensure that we're authenticated and have a user
     app.use('/admin', function(req, res, next) {
-        orchHelper.findUserById(req.user._id)
+        orchHelper.getUser(req.user.id)
           .then(function (user) {
             if (user.isAdmin) {
               next();
             } else {
-              res.status(401).send("not an admin");
+              res.status(401).send("Not an admin");
             }
           })
           .fail(function (err) {
@@ -587,9 +591,8 @@ passport.use('bearer', new BearerStrategy(
     app.get('/appcss', appcss);
 
     app.get('/all_orders/:profileid', ensureAuthenticated, get_all_orders);
-    // app.get('/all_products', all_products);
-    app.get('/all_products', all_products, storeRoutes.get_ylift_network_products);
-    app.get('/all_profiles', all_profiles);
+    app.get('/all_products', all_products);
+    app.get('/all_ylift_profiles', all_ylift_profiles);
     app.get('/authorized', ensureAuthenticated, authorized);
     app.get('/cart/:profileid', ensureAuthenticated, get_cart);
     app.get('/get_all_testimonials', get_all_testimonials);
@@ -600,6 +603,7 @@ passport.use('bearer', new BearerStrategy(
     app.get('/get_products_by_merchant/:merchantid', ensureAuthenticated, storeRoutes.get_products_by_merchant);
     app.get('/get_related_products/:productnumber', get_related_products);
     app.get('/login', login);
+    app.get('/most_viewed_product/:profileid', ensureAuthenticated, productRoutes.most_viewed_product);
     app.get('/order/:orderid', get_order_by_id);
     app.get('/product_rating/:productnumber', productRoutes.get_rating);
     app.get('/product_reviews/:productnumber', productRoutes.get_reviews);
@@ -623,8 +627,10 @@ passport.use('bearer', new BearerStrategy(
     app.post('/get_products_by_category/:category', get_products_by_category);
     app.post('/login', loginHelper);
     app.post('/process_transaction?:profileid', stripeRoutes.process_transaction);
+    app.post('/product_page_view/:productnumber', productRoutes.page_view);
     app.post('/register', register);
     app.post('/remove_card_from_customer/:profileid/:customerid', ensureAuthenticated, stripeRoutes.remove_card_from_customer, stripeRoutes.update_customer);
+    app.post('/store', storeRoutes.get_storefront);
     app.post('/submit_review', ensureAuthenticated, productRoutes.submit_review);
     app.post('/verify_key', ensureAuthenticated, regRoutes.verify_key);
     app.post('/update_cart', update_cart);
@@ -655,4 +661,11 @@ passport.use('bearer', new BearerStrategy(
     app.get('/500', fivehundred);
 
     // -- End ERROR Routes
+
+    // -- START Admin Routes
+    ///////////////////////////////////////////////////////////////
+    app.get('/admin/all_profiles', ensureAuthenticated, adminRoutes.all_profiles);
+    app.get('/admin/all_ylift_profiles', ensureAuthenticated, adminRoutes.all_ylift_profiles);
+    // -- End ERROR Routes
+
 };

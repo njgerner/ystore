@@ -46,6 +46,6 @@ superApp.controller('StoreCtrl',
       $scope.loading = false;
     }
 
-    storeService.getAllProducts(onProductsLoaded);
+    storeService.getStoreFront(onProductsLoaded);
 
 }]);
