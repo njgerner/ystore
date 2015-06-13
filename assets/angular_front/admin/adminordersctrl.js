@@ -4,14 +4,26 @@ superApp.controller('AdminOrdersCtrl',
 
   	$scope.totalOrderVolume = 0;
   	$scope.monthOrderVolume = 0;
+    $scope.data = [];
 
   	function onOrdersLoaded (orders) {
+      var ordersByDate = {};
   		for (var i = 0; i < orders.length; i++) {
-  			$scope.totalOrderVolume += orders[i].total;
-  			if (moment(orders.createdAt).isAfter(moment().subtract(1, 'months'))) {
-  				$scope.monthOrderVolume += orders[i].total;
-  			}
-  		}
+        if (ordersByDate[moment(orders[i].createdAt).format("M/D")] === undefined) {
+          ordersByDate[moment(orders[i].createdAt).format("M/D")] = 0;
+        }
+        ordersByDate[moment(orders[i].createdAt).format("M/D")] += orders[i].total;
+        $scope.totalOrderVolume += orders[i].total;
+        if (moment(orders.createdAt).isAfter(moment().subtract(1, 'months'))) {
+          $scope.monthOrderVolume += orders[i].total;
+        }
+      }
+      for (var i = 0; i < ordersByDate.length; i++) {
+        $scope.data[i] = {};
+        $scope.data[i].x = Object.keys(ordersByDate)[i];
+        $scope.data[i].value = ordersByDate[i];
+      }
+      $scope.options = {};
   		$scope.orders = orders;
   	}
 
