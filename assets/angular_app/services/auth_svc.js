@@ -29,11 +29,14 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 				    success(function(data, status, headers, config) {
 				    	console.log('data from authorized', data);
 				    	if (!data || !data.user || !data.profile) {
+				    		console.log('authorized IF data data.user data.profile');
 				    		// something's wrong, not authorized
 				    		internalThis.authorizationReceived = true;
 				    		internalThis.authorized = false;
+				      		$rootScope.$broadcast('authorizationloaded', internalThis.authorized);
 				    		callback(internalThis.authorized);
 				    	} else {
+				    		console.log('authorized ELSE');
 					      	internalThis.email = data.profile.email;
 					      	internalThis.isAdmin = data.isAdmin;
 					      	internalThis.isYLIFT = data.isYLIFT;
@@ -42,14 +45,17 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 					      	internalThis.authorizationReceived = true;
 					      	internalThis.authorized = true;
 					      	internalThis.loggedin = true;
+				      		$rootScope.$broadcast('authorizationloaded', internalThis.authorized);
 					      	callback(internalThis.authorized);
 				    	}
-				      	$rootScope.$broadcast('authorizationloaded', internalThis.authorized);
+						console.log('auth loaded 2', internalThis.authorized);
 				    }).
 				    error(function(data, status, headers, config) {
 				      	internalThis.authorizationReceived = true;
 				      	internalThis.authorized = false;
 				      	callback(internalThis.authorized);
+						console.log('auth loaded 3', internalThis.authorized);
+				      	$rootScope.$broadcast('authorizationloaded', internalThis.authorized);
 				    });
 				}
 		};

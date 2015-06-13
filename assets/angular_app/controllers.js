@@ -39,10 +39,12 @@ superApp.controller('MainCtrl',
     });
 
     if (authService.authorizationReceived) {
+      console.log('handle loaded 1');
       $scope.handleLoaded();
     } else {
       $scope.loadedFun = null;
       $scope.loadedFun = $rootScope.$on('authorizationloaded', function(evt, args) {
+        console.log('handle loaded 2');
         $scope.handleLoaded();
         $scope.loadedFun();
       });

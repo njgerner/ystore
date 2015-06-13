@@ -93,10 +93,11 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
 
 }]);
 
-trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyticsProvider',
-  function($httpProvider, $stateProvider, $urlRouterProvider, $analyticsProvider) {
+trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyticsProvider', '$locationProvider',
+  function($httpProvider, $stateProvider, $urlRouterProvider, $analyticsProvider, $locationProvider) {
     $httpProvider.interceptors.push('trdInterceptor');
     $urlRouterProvider.otherwise("/store");
+    $locationProvider.hashPrefix('!'); // makes site crawlable 
     
     $stateProvider
     .state('authorizing', {
