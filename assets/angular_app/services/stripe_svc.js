@@ -1,11 +1,16 @@
 trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'authService', 'PUBLISH',
     function ($rootScope, $http, $cookieStore, authService, stripePubKey) {
 
-      this.token = null;
-      this.card = null;
-      this.customer = {};
-      this.customerReceived = false;
       Stripe.setPublishableKey(stripePubKey);
+
+      this.initService = function() {
+        this.token = null;
+        this.card = null;
+        this.customer = {};
+        this.customerReceived = false;
+      }
+
+      this.initService();
 
     	this.setToken = function(token) {
     		this.token = token;
@@ -58,7 +63,7 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
               callback(null, data.err);
             });
           } else {
-            $http({method: 'POST', url: "/add_token_to_customer/" + authService.profile.id + "/" + inThis.customer.id, data: {token:response.id}})
+            $http({method: 'POST', url: "/add_token_to_customer/" + authService.profile.id + "/" + authService.profile.customerid, data: {token:response.id}})
             .success(function(data, status, headers, config) {
               inThis.customerReceived = true;
               inThis.customer = data.customer;
@@ -182,5 +187,9 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
             });
         }
       }
+
+      $rootScope.$on('loggedout', function(evt, args) {
+        this.initService;
+      });
 
 }]);

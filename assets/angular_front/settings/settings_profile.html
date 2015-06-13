@@ -69,6 +69,11 @@
         <div>
             <input type="text" ng-model="zip" placeholder="Zip" required/>
         </div>
+        <div ng-show="isYLIFT">
+          <label>Check if this location is a Y LIFT Network practice
+            <input type="checkbox" ng-model="yliftInd" ng-true-value="YES" ng-false-value="NO">
+          </label>
+        </div>
         <!-- <div class="row"> -->
           <button ng-show="addAddressView" type="submit" class="button small" ng-click="addAddress()">
             <span ng-hide="updating">Add</span>

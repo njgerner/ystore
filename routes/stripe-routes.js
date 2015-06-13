@@ -4,15 +4,15 @@ module.exports = function(express, app, __dirname) {
 	console.log('Loading Stripe Routes');
 
 	var path            = require('path'),            						// http://nodejs.org/docs/v0.3.1/api/path.html
-    	config 					= require('../trd_modules/config.json'), 							//config file contains all tokens and other private info
-    	Customer 				= require('../models/customer.js'),
-			orchHelper      = require('../trd_modules/orchestrateHelper'),
-			emailHelper     = require('../trd_modules/emailHelper'),
-			crypto 					= require('crypto'),
-			Q               = require('q'),
-			routes 					= require('./routes.js'),
-    	stripeEnv				= process.env.STRIPE,
-			stripe 					= require('stripe')(config[stripeEnv].SECRET);
+    	config 			= require('../trd_modules/config.json'), 			//config file contains all tokens and other private info
+    	Customer 		= require('../models/customer.js'),
+		orchHelper      = require('../trd_modules/orchestrateHelper'),
+		emailHelper     = require('../trd_modules/emailHelper'),
+		crypto 			= require('crypto'),
+		Q               = require('q'),
+		routes 			= require('./routes.js'),
+    	stripeEnv		= process.env.STRIPE,
+		stripe 			= require('stripe')(config[stripeEnv].SECRET);
 
 	StripeRoutes.add_customer = function(req, res) {
 		var profileid = req.params.profileid;
@@ -21,7 +21,7 @@ module.exports = function(express, app, __dirname) {
 		var email = transaction.email;
 		stripe.customers.create({
 			card: card,
-			description: "trd customer",
+			description: "ylift customer",
 			email: email
 		}, function(err, customer) {
 			if (err) {
@@ -66,7 +66,7 @@ module.exports = function(express, app, __dirname) {
 		var card = req.body.card;
 		stripe.customers.create({
 			card: card.id,
-			description: "trd guest customer"
+			description: "ylift guest customer"
 		}, function(err, customer) {
 			if (err) {
 				return Q.fcall(function () {
@@ -184,7 +184,7 @@ module.exports = function(express, app, __dirname) {
 			currency: "USD",
 			customer: transaction.customer.id,
 			receipt_email: transaction.customer.email,
-			description: 'Thank you for your order from the YLIFT Store. You will be notified of any changes in your order status.'
+			description: 'Y LIFT Network registration fee, thank you for your order!'
 		};
 
 		stripe.charges.create(charge, function(err, charge) {
@@ -211,6 +211,9 @@ module.exports = function(express, app, __dirname) {
 					// trying to keep this route universal and not all purchases will have a merchant (e.g. ylift registration)
 					if (merchants && merchants.length > 0) {
 						emailHelper.sendOrdersToMerchants(order).done();
+					}
+					if (order.products && order.merchants) {
+						emailHelper.sendOrdersToTeam(order).done();
 					}
 					// user account purchase
 					if (profileid !== undefined) {

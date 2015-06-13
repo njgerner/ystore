@@ -1,0 +1,56 @@
+<div class="off-canvas-wrap">
+	<div class="inner-wrap">
+		<a class="right-off-canvas-toggle menu-icon"><span></span></a>
+		<div ng-hide="locationsLoaded" class="loader locations-loading">Loading...</div>
+		<div ng-show="mapLoaded" id="map-canvas" class="ylift-locations"></div>
+		<i ng-hide="showLocationsRight" class="i-map" ng-click="toggleLocationPanel()"></i>
+	</div>
+</div>
+<div ng-show="locationsLoaded" ng-show="showLocationsRight" class="locations-panel animated" ng-class="{bounceOutRight:!showLocationsRight,bounceInRight:showLocationsRight}">
+	<div class="locations-header">
+      <i ng-hide="showSearch" class="i-right-open-big clickable" ng-click="toggleLocationPanel()"></i>
+      <i ng-show="showSearch" class="i-cancel clickable" ng-click="toggleSearch()"></i>
+      <h3 ng-hide="showSearch">Y Lift Locations</h3>
+      <i ng-hide="showSearch" class="i-search location-search" ng-click="toggleSearch()"></i>
+		<div class="row" ng-show="showSearch">
+		    <div class="large-12 columns">
+		      <div class="row collapse">
+		        <div class="small-10 columns">
+		          <input type="text" ng-model="zip" placeholder="Search Zip Code">
+		        </div>
+		        <div class="small-2 columns">
+		          <a type="submit" ng-click="searchZip()" class="button tiny secondary postfix">Go</a>
+		        </div>
+		      </div>
+		    </div>
+		</div>
+	</div>
+	<div class="locations-panel-content">
+		<ul class="list-group locations-list">
+			<li ng-repeat="location in locations" class="location-list-item" ng-class="{'location-focused':location.focused}">
+				<div class="row location-row" style="margin:0" ng-click="toggleFocus($index)">
+					<div>
+						<h5>{{location.name}} <small>{{location.doctorname}}</small></h5>
+						<p>{{location.formattedaddress}}</p>
+					</div>
+				</div>
+<!-- 				<div ng-show="location.focused" class=" location-icons row animated" style="margin:0" ng-class="{fadeOut:!location.focused,fadeIn:location.focused}">
+					<div class="icon-bar four-up">
+						<a class="item">
+							<i class="i-calendar"></i>
+						</a>
+						<a class="item">
+							<i class="i-phone"></i>
+						</a>
+						<a class="item">
+							<i class="i-message"></i>
+						</a>
+						<a class="item">
+							<i class="i-info"></i>
+						</a>
+					</div>
+				</div> -->
+			</li>
+		</ul>
+	</div>
+</div>

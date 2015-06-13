@@ -13,6 +13,8 @@ var trdApp = angular.module('trdApp', [
   'flow',
   'env.config',
   'mm.foundation',
+  'angulartics',
+  'angulartics.google.analytics',
   'angularFileUpload' //https://github.com/nervgh/angular-file-upload
   // 'uiGmapgoogle-maps'
 ]);
@@ -29,7 +31,7 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
           console.log('authorized / received', authService.authorized, authService.authorizationReceived);
 
           var isExceptionalState = function() {
-            var exceptionalState = ["terms", "store", "store.search", "checkout", "order", "support"];
+            var exceptionalState = ["terms", "store", "store.search", "checkout", "order", "support", "locations"];
             return exceptionalState.indexOf(toState.name) >= 0;
           }
 
@@ -88,12 +90,38 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
 
 }]);
 
-trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
-  function($httpProvider, $stateProvider, $urlRouterProvider) {
+trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyticsProvider',
+  function($httpProvider, $stateProvider, $urlRouterProvider, $analyticsProvider) {
     $httpProvider.interceptors.push('trdInterceptor');
     $urlRouterProvider.otherwise("/store");
     
     $stateProvider
+    .state('admin', {
+      abstract: true,
+      url: "/admin",
+      templateUrl: "/partials/admin.html",
+      controller: "AdminCtrl"
+    })
+    .state('admin.users', {
+      url: "/users",
+      templateUrl: "/partials/admin_users.html",
+      controller: "AdminUsersCtrl"
+    })
+    .state('admin.stripe', {
+      url: "/users",
+      templateUrl: "/partials/admin_stripe.html",
+      controller: "AdminStripeCtrl"
+    })
+    .state('admin.products', {
+      url: "/users",
+      templateUrl: "/partials/admin_products.html",
+      controller: "AdminProductsCtrl"
+    })
+    .state('admin.metrics', {
+      url: "/users",
+      templateUrl: "/partials/admin_metrics.html",
+      controller: "AdminMetricsCtrl"
+    })
     .state('login', {
       url: "/login",
       templateUrl: "/partials/login.html",
@@ -128,6 +156,16 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider',
       url: "/orders/:orderid",
       templateUrl: "/partials/orders.html",
       controller: "OrdersCtrl"
+    })
+    .state('locations', {
+      url: "/locations",
+      templateUrl: "/partials/locations.html",
+      controller: "LocationsCtrl"
+    })
+    .state('network', {
+      url: "/network",
+      templateUrl: "/partials/network.html",
+      controller: "NetworkCtrl"
     })
     .state('merchant_inventory', {
       abstract: true,

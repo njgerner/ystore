@@ -32,6 +32,7 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 				    	} else {
 					      	internalThis.email = data.profile.email;
 					      	internalThis.isAdmin = data.isAdmin;
+					      	internalThis.isYLIFT = data.isYLIFT;
 					      	internalThis.profile = data.profile;
 					      	internalThis.profileid = data.profile.id;
 					      	internalThis.authorizationReceived = true;
@@ -89,12 +90,12 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 			    });
 		};
 
-		this.register = function(email, password, callback) {
+		this.register = function(email, password, callback, metadata) {
 			this.clearAuthorization();
 			var internalThis = this;
 			$http({method: 'POST', url: '/register',
 					headers:{'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'},
-					data:$.param({email:email, password:password})}).
+					data:$.param({email:email, password:password, metadata:metadata})}).
 			    success(function(data, status, headers, config) {
 			 			if(data.tkn) {
 			 				trdInterceptor.setToken(data.tkn);

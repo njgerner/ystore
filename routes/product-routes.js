@@ -54,6 +54,18 @@ module.exports = function(express, app, __dirname) {
 		});
 	};
 
+	// GET /most_viewed_product/:profileid
+	ProductRoutes.most_viewed_product = function(req, res) {
+		orchHelper.getMostFrequentEvent('products', 'page-view', req.params.profileid)
+		.then(function (data) {
+			res.status(200).json(data);
+		})
+		.fail(function (err) {
+			console.log('error trying to get most viewed prduct', err);
+			res.status(500).json({err:err});
+		});
+	};
+
 	// POST /submit_review
 	ProductRoutes.submit_review = function(req, res) {
 		var review = req.body.review;
@@ -170,6 +182,19 @@ module.exports = function(express, app, __dirname) {
 	  		console.log('error updating product', err);
 	  		res.status(403).json({err:'profile not authorized to edit product'});
 	  	}).done();
+	};
+
+	// POST //product_page_view/:productnumber?profile=
+	ProductRoutes.page_view = function(req, res) {
+		var pn = req.params.productnumber;
+		var profile = req.query.profile || 'guest';
+		orchHelper.addPageView('products', pn, profile)
+		.then(function (result) {
+			res.status(201).json(true);
+		})
+		.fail(function (err) {
+			res.status(500).json({err:err});
+		}).done();
 	};
 
 	return ProductRoutes;
