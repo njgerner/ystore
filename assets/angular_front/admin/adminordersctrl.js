@@ -12,18 +12,35 @@ superApp.controller('AdminOrdersCtrl',
         if (ordersByDate[moment(orders[i].createdAt).format("M/D")] === undefined) {
           ordersByDate[moment(orders[i].createdAt).format("M/D")] = 0;
         }
-        ordersByDate[moment(orders[i].createdAt).format("M/D")] += orders[i].total;
-        $scope.totalOrderVolume += orders[i].total;
+        ordersByDate[moment(orders[i].createdAt).format("M/D")] += parseInt(orders[i].total);
+        $scope.totalOrderVolume += parseInt(orders[i].total);
         if (moment(orders.createdAt).isAfter(moment().subtract(1, 'months'))) {
-          $scope.monthOrderVolume += orders[i].total;
+          $scope.monthOrderVolume += parseInt(orders[i].total);
         }
       }
-      for (var i = 0; i < ordersByDate.length; i++) {
+      console.log('orders by date', ordersByDate);
+      for (var i = 0; i < Object.keys(ordersByDate).length; i++) {
         $scope.data[i] = {};
         $scope.data[i].x = Object.keys(ordersByDate)[i];
         $scope.data[i].value = ordersByDate[i];
       }
-      $scope.options = {};
+      console.log('scope data', $scope.data);
+      $scope.dataLoaded = true;
+      $scope.options = {
+        margin: {
+          left: 100
+        },
+        series: [
+          {y: 'Total Volume ($)', color: 'steelblue', thickness: '2px', type: 'area', striped: true, label: 'Pouet'}
+        ],
+        lineMode: 'linear',
+        tension: 0.7,
+        tooltip: {mode: 'scrubber', formatter: function(x, y, series) {return 'pouet';}},
+        drawLegend: true,
+        drawDots: true,
+        hideOverflow: false,
+        columnsHGap: 5
+      }
   		$scope.orders = orders;
   	}
 
