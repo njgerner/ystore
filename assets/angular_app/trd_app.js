@@ -162,6 +162,11 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       templateUrl: "/partials/locations.html",
       controller: "LocationsCtrl"
     })
+    .state('network', {
+      url: "/network",
+      templateUrl: "/partials/network.html",
+      controller: "NetworkCtrl"
+    })
     .state('merchant_inventory', {
       abstract: true,
       url: "/merchant_inventory",
