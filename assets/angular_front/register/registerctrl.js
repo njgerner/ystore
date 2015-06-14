@@ -115,31 +115,31 @@ superApp.controller('RegisterCtrl',
     }
 
 // START VALIDATION
-  	function validate(state) {
-  		$scope.validating = true;
-  		$scope.error = null;
-  		if (state == 'form2') {
-  			if (!$scope.name) {
-  				$scope.error = 'Please enter your name to register';
-  			} else if (!$scope.address1) {
-  				$scope.error = 'Please enter an address';
-  			} else if (!$scope.city) {
-  				$scope.error = 'Please enter a city';
-  			} else if (!$scope.state || $scope.state.length != 2) {
-  				$scope.error = 'Please enter a two letter state identifier';
-  			} else if (!$scope.zip || $scope.zip.length != 5) {
-  				$scope.error = 'Please enter a five digit zip';
-  			} else if (!$scope.email) {
-  				$scope.error = 'Please enter an email address';
-  			} else if (!$scope.phone) {
-  				$scope.error = 'Please enter a phone number';
+    function validate(state) {
+      $scope.validating = true;
+      $scope.error = null;
+      if (state == 'form2') {
+        if (!$scope.name) {
+          $scope.error = 'Please enter your name to register';
+        } else if (!$scope.address1) {
+          $scope.error = 'Please enter an address';
+        } else if (!$scope.city) {
+          $scope.error = 'Please enter a city';
+        } else if (!$scope.state || $scope.state.length != 2) {
+          $scope.error = 'Please enter a two letter state identifier';
+        } else if (!$scope.zip || $scope.zip.length != 5) {
+          $scope.error = 'Please enter a five digit zip';
+        } else if (!$scope.email) {
+          $scope.error = 'Please enter an email address';
+        } else if (!$scope.phone) {
+          $scope.error = 'Please enter a phone number';
         } else {
-  				$scope.validating = false;
-  				return true;
-  			}
-  			$scope.validating = false;
-  			return false;
-  		} else if (state == 'form3') {
+          $scope.validating = false;
+          return true;
+        }
+        $scope.validating = false;
+        return false;
+      } else if (state == 'form3') {
         $scope.validating = true;
         if (!$scope.medlicensenum) {
           $scope.error = 'Please enter your medical license number';
@@ -148,93 +148,19 @@ superApp.controller('RegisterCtrl',
           return true;
         }
         $scope.validating = false;
-  			return false; // no validations for now
-  		} else if (state == 'form4') {
-  			if (!$scope.certname) {
-  				$scope.error = 'Please enter the name you\'d like to appear on your YLIFT certificate';
+        return false; // no validations for now
+      } else if (state == 'form4') {
+        if (!$scope.certname) {
+          $scope.error = 'Please enter the name you\'d like to appear on your YLIFT certificate';
         } else if (!$scope.location) {
           $scope.error = 'Please select a training location';
-  			} else {
-  				$scope.validating = false;
-  				return true;
-  			}
-  			$scope.validating = false;
-  			return false;
-  		} else if (state == 'form5') {
-  			if ($scope.cctype == 'check') {
-  				$scope.validating = false;
-  				return true;
-  			}
-        if (!$scope.cardname) {
-          $scope.error = 'Please enter your name as it appears on your card';
+        } else {
+          $scope.validating = false;
+          return true;
         }
-  			if (!Stripe.card.validateCardNumber($scope.ccnum)) {
-  				$scope.error = 'Please enter a valid credit card number';
-  			}
-  			if (!Stripe.card.validateCVC($scope.cvc)) {
-  				$scope.error = 'Please enter a valid CVC code';
-  			}
-  			if (!Stripe.card.validateExpiry($scope.expmonth, $scope.expyear)) {
-  				$scope.error = 'Please enter a valid expiration date';
-  			} 
-  			if ($scope.error) {
-  				$scope.validating = false;
-  				return false;
-  			} else {
-  				var card = {
-		          number: $scope.ccnum,
-		          cvc: $scope.cvc,
-		          exp_month: $scope.expmonth,
-		          exp_year: $scope.expyear
-		        };
-		        var billing = {
-		          name: $scope.cardname,
-		          address_line1: $scope.billingaddress1,
-		          address_line2: $scope.billingaddress2,
-		          address_city: $scope.billingcity,
-		          address_state: $scope.billingstate,
-		          address_zip: $scope.billingzip,
-		          country: $scope.billingcountry
-		        };
-		        $scope.meta = {
-		        	name: $scope.name,
-		        	address1: $scope.address1,
-		        	address2: $scope.address2,
-		        	city: $scope.city,
-		        	state: $scope.state,
-		        	zip: $scope.zip,
-		        	country: $scope.country,
-		        	phone: $scope.phone,
-		        	fax: $scope.fax,
-              uses_filler: $scope.uses_filler,
-		        	specialty: $scope.specialty,
-		        	medlicense: $scope.medlicensenum,
-		        	filler_revenue_pct: $scope.filler_revenue_pct,
-		        	filler_procedures: $scope.filler_procedures,
-              training_location: $scope.location,
-		        	training_date: $scope.training_date,
-		        	certname: $scope.certname,
-		        	staff: JSON.stringify($scope.staff)
-		        };
-  				stripeService.addCard(card, billing, function(result, error) {
-  					if (error) {
-  						$scope.error = error.message || error;
-  						$scope.validating = false;
-  						return false;
-  					}
-  					var props = {
-  						email: $scope.email,
-  						metadata: $scope.meta
-  					};            
-  					stripeService.updateGuestCustomer(props, function(customer) {
-  						$scope.validating = false;
-  						$scope.viewState = state;
-  						return true;
-  					});
-  				});
-        }
-
-      } else if (state == 'review') {
+        $scope.validating = false;
+        return false;
+      } else if (state == 'form5') {
         $scope.validating = true;
         if ($scope.password !== $scope.confirmpassword) {
           $scope.error = 'Passwords need to match';
@@ -271,6 +197,80 @@ superApp.controller('RegisterCtrl',
           }, JSON.stringify($scope.meta));
         }
       }
+      } else if (state == 'review') {
+        if ($scope.cctype == 'check') {
+          $scope.validating = false;
+          return true;
+        }
+        if (!$scope.cardname) {
+          $scope.error = 'Please enter your name as it appears on your card';
+        }
+        if (!Stripe.card.validateCardNumber($scope.ccnum)) {
+          $scope.error = 'Please enter a valid credit card number';
+        }
+        if (!Stripe.card.validateCVC($scope.cvc)) {
+          $scope.error = 'Please enter a valid CVC code';
+        }
+        if (!Stripe.card.validateExpiry($scope.expmonth, $scope.expyear)) {
+          $scope.error = 'Please enter a valid expiration date';
+        } 
+        if ($scope.error) {
+          $scope.validating = false;
+          return false;
+        } else {
+          var card = {
+              number: $scope.ccnum,
+              cvc: $scope.cvc,
+              exp_month: $scope.expmonth,
+              exp_year: $scope.expyear
+            };
+            var billing = {
+              name: $scope.cardname,
+              address_line1: $scope.billingaddress1,
+              address_line2: $scope.billingaddress2,
+              address_city: $scope.billingcity,
+              address_state: $scope.billingstate,
+              address_zip: $scope.billingzip,
+              country: $scope.billingcountry
+            };
+            $scope.meta = {
+              name: $scope.name,
+              address1: $scope.address1,
+              address2: $scope.address2,
+              city: $scope.city,
+              state: $scope.state,
+              zip: $scope.zip,
+              country: $scope.country,
+              phone: $scope.phone,
+              fax: $scope.fax,
+              uses_filler: $scope.uses_filler,
+              specialty: $scope.specialty,
+              medlicense: $scope.medlicensenum,
+              filler_revenue_pct: $scope.filler_revenue_pct,
+              filler_procedures: $scope.filler_procedures,
+              training_location: $scope.location,
+              training_date: $scope.training_date,
+              certname: $scope.certname,
+              staff: JSON.stringify($scope.staff)
+            };
+          stripeService.addCard(card, billing, function(result, error) {
+            if (error) {
+              $scope.error = error.message || error;
+              $scope.validating = false;
+              return false;
+            }
+            var props = {
+              email: $scope.email,
+              metadata: $scope.meta
+            };            
+            stripeService.updateGuestCustomer(props, function(customer) {
+              $scope.validating = false;
+              $scope.viewState = state;
+              return true;
+            });
+          });
+        }
+
   	}
 // END VALIDATION
 
