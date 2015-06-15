@@ -345,6 +345,38 @@
 </div>
 
 <div ng-show="viewState == 'form4'" class="small-12 large-6 large-centered columns">
+	<legend>Create Account Login</legend>
+	<div ng-show="error">
+		<p class='error'>{{error}}</p>
+	</div>
+	<form class="regform" novalidate>
+		<fieldset>
+			<div class="row">
+				<div class="small-12 columns">
+					<label>Email </span class="required">*</span>
+						<input type="email" name="email" placeholder="Enter your email" ng-model="loginemail" required>
+					</label>
+					<label>Password </span class="required">*</span>
+						<input type="password" name="password" placeholder="Enter your password" ng-model="password" required>
+					</label>
+					<label>Confirm Password </span class="required">*</span>
+						<input type="password" name="confirmpassword" placeholder="Please confirm your password" ng-model="confirmpassword" required>
+					</label>
+				</div>
+			</div>
+			 <div class="row clearfix">
+			 	<p>By clicking next you agree to our <a ui-sref="terms" target="_blank">Terms & Conditions</a></p>
+			  	<button class="button small right" ng-click="goTo('form5')">
+			  		<span ng-hide="validating">Next</span>
+			  		<span ng-show="validating">Validating...</span>
+			  	</button>
+			  	<button class="button secondary small right" ng-click="backTo('form3')">Back</button>
+			  </div>
+		</fieldset>
+	</form>
+</div>
+
+<div ng-show="viewState == 'form5'" class="small-12 large-6 large-centered columns">
 	<legend>Payment Information</legend>
 	<div ng-show="error">
 		<p class='error'>{{error}}</p>
@@ -468,47 +500,16 @@
 			  </div>
 			</div>
 		  <div class="row clearfix">
-		  	<button class="button small right" ng-click="goTo('form5')">
+		  	<button class="button small right" ng-click="goTo('review')">
 		  		<span ng-hide="validating">Next</span>
 		  		<span ng-show="validating">Validating...</span>
 		  	</button>
-		  	<button class="button secondary small right" ng-click="backTo('form3')">Back</button>
+		  	<!-- <button class="button secondary small right" ng-click="backTo('form3')">Back</button> -->
 		  </div>
 		</fieldset>
 	</form>
 </div>
 
-<div ng-show="viewState == 'form5'" class="small-12 large-6 large-centered columns">
-	<legend>Create Account Login</legend>
-	<div ng-show="error">
-		<p class='error'>{{error}}</p>
-	</div>
-	<form class="regform" novalidate>
-		<fieldset>
-			<div class="row">
-				<div class="small-12 columns">
-					<label>Email </span class="required">*</span>
-						<input type="email" name="email" placeholder="Enter your email" ng-model="loginemail" required>
-					</label>
-					<label>Password </span class="required">*</span>
-						<input type="password" name="password" placeholder="Enter your password" ng-model="password" required>
-					</label>
-					<label>Confirm Password </span class="required">*</span>
-						<input type="password" name="confirmpassword" placeholder="Please confirm your password" ng-model="confirmpassword" required>
-					</label>
-				</div>
-			</div>
-			 <div class="row clearfix">
-			 	<p>By clicking next you agree to our <a ui-sref="terms" target="_blank">Terms & Conditions</a></p>
-			  	<button class="button small right" ng-click="goTo('review')">
-			  		<span ng-hide="validating">Next</span>
-			  		<span ng-show="validating">Validating...</span>
-			  	</button>
-			  	<button class="button secondary small right" ng-click="backTo('form3')">Back</button>
-			  </div>
-		</fieldset>
-	</form>
-</div>
 
 <div ng-show="viewState == 'review'" class="small-12 large-6 large-centered columns">
 	<div ng-show="error">
@@ -517,12 +518,12 @@
 		<ul class="pricing-table">
 		  <li class="title">Purchase Summary</li>
 		  <li class="price">${{total}}</li>
-		  <li class="description">Your registration fee into the YLIFT Network includes:</li>
+		  <li class="description">Your registration fee into the Y LIFT Network includes:</li>
 		  <li class="bullet-item">Live Seminars</li>
 		  <li class="bullet-item">In Person Hands-on Training</li>
-		  <li class="bullet-item">YLIFT Network Pricing</li>
+		  <li class="bullet-item">Y LIFT Network Pricing</li>
 		  <li class="cta-button">
-		  	<a class="button small secondary" ng-click="goTo('form4')">Back</a>
+		  	<a class="button small secondary" ng-click="backTo('form5')">Back</a>
 		  	<a class="button small" ng-click="submit()">
 		  		<span ng-hide="validating">Submit Order</span>
 		  		<span ng-show="validating">Processing...</span>
@@ -533,7 +534,7 @@
 
 <div ng-show="viewState == 'success'" class="small-12 large-6 large-centered columns">
 	<div class="panel clearfix">
-		<h5>Thank you for registering with the YLIFT Network! You will receive an email confirmation shortly, if you have any further questions please reach out to support@ylift.io. 
+		<h5>Thank you for registering with the Y LIFT Network! You will receive an email confirmation shortly, if you have any further questions please reach out to support@ylift.io. 
 			<br>
 			<br>
 			A YLIFT team member will follow up with you shortly regarding the status of your membership and to schedule a training session.</h5>	

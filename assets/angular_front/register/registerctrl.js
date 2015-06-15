@@ -196,7 +196,6 @@ superApp.controller('RegisterCtrl',
             }
           }, JSON.stringify($scope.meta));
         }
-      }
       } else if (state == 'review') {
         if ($scope.cctype == 'check') {
           $scope.validating = false;
@@ -263,13 +262,19 @@ superApp.controller('RegisterCtrl',
               email: $scope.email,
               metadata: $scope.meta
             };            
-            stripeService.updateGuestCustomer(props, function(customer) {
+            stripeService.updateGuestCustomer(props, function(customer, error) {
+              if (error) {
+                $scope.error = error.message || error;
+                $scope.validating = false;
+                return false;
+              }
               $scope.validating = false;
               $scope.viewState = state;
               return true;
             });
           });
         }
+      }
 
   	}
 // END VALIDATION

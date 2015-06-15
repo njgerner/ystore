@@ -16,7 +16,7 @@ module.exports = function(express, app, __dirname) {
 	      port: '587',
 	      auth: {
 	          user: "support@ylift.io",
-	          pass: "yliftDEEZNUTS!"
+	          pass: "yliftDEEZNUTS!!"
 	      }
 	  });  
 

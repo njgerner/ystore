@@ -118,7 +118,8 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
             callback(data.customer);
           })
           .error(function(data, status, headers, config) {
-            callback();
+            console.log('error adding customer', data.err);
+            callback(mull, data.message);
           });
     	};
 
@@ -167,7 +168,7 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
             callback(data.customer);
           })
           .error(function(data, status, headers, config) {
-            callback();
+            callback(null, data);
           });
       };
 
