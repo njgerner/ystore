@@ -1,0 +1,69 @@
+<div class="row">
+	<div style="margin-right:-3%" class="large-5 columns">
+		<h3> Y Lift Store: {{products.length}} products</h3>
+		<table>
+			<thead>
+			    <tr>
+			      <th>Vendor</th>
+			      <th>Product</th>
+			      <th>Date Added</th>
+			      <th>Active</th>
+			    </tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="product in products">
+					<th>{{product.vendorname}}</th>
+					<th><a ng-click="viewProduct(product.productnumber)">{{product.name}}</a></th>
+					<th>{{product.createdAt}}</th>
+					<th>{{product.active}}</th>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div ng-show="mode == 'view' || mode == 'edit'" style="margin-top:30px; padding-right:40px;" class="large-7 end columns">
+		<div class="row">
+		  <hr>
+		  <div class="large-2 columns show-for-medium-up">
+		    <img src="http://placehold.it/400x300&text=[img]">
+		    <br>
+		    <img src="http://placehold.it/400x300&text=[img]">
+		    <br>
+		    <img src="http://placehold.it/400x300&text=[img]">
+		    <br>
+		    <img src="http://placehold.it/400x300&text=[img]">
+		  </div>
+		  <div class="large-5 columns">
+		    <div flow-init="{target: '/upload_image'}" flow-files-submitted="$flow.upload()"
+		         flow-files-success="$file.msg = $message" flow-files-added="onFileAdded($files, $event, $flow)">
+		      <img ng-hide="$flow.files.length" ng-src="{{view_product.img}}" />
+		      <img ng-show="$flow.files.length > 0" flow-img="$flow.files[0]" />
+		      <input ng-show="mode == 'edit'" type="file" flow-btn flow-attrs="{accept:'image/*'}"/>
+		    </div>
+		  </div>
+		  <div class="large-5 columns">
+		    <!-- Edit name -->
+		    <h4>{{view_product.name}}<small ng-click="mode = 'edit'; message = '';" class="right"><i class="i-pencil"></i>Edit</small></h4>
+		    <input ng-show="mode == 'edit'" type="text" ng-model="view_product.name"/>
+		    <!-- Edit description -->
+		    <p ng-show="mode == 'view'">{{view_product.description}}</p>
+		    <textarea ng-show="mode == 'edit'" ng-model="view_product.description" rows="12"></textarea>
+		    <!-- Edit price -->
+		    <div class="panel">
+		      <h5 ng-show="mode == 'view'">${{view_product.price}}</h5>
+		      <input ng-show="mode == 'edit'" type="text" ng-model="view_product.price"/>
+		    </div>
+		    <!-- Save -->
+		    <div ng-show="mode == 'edit'" class="clearfix">
+		      <button class="small secondary right" ng-click="mode = 'view'">Cancel</button>
+		      <button class="small primary right" ng-click="updateProduct()">
+		        <span ng-hide="updating">Save</span>
+		        <span ng-show="updating">Saving...</span>
+		      </button>
+		    </div>
+		    <div style="background:#ecfaff" ng-show="message.length > 0" class="panel callout radius">
+		    	<p>{{message}}</p>
+		    </div>
+		  </div>
+		</div>
+	</div>
+</div>
