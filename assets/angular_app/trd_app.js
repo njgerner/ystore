@@ -15,7 +15,7 @@ var trdApp = angular.module('trdApp', [
   'mm.foundation',
   'angulartics',
   'angulartics.google.analytics',
-  'n3-line-chart',
+  // 'n3-line-chart',
   'angularFileUpload' //https://github.com/nervgh/angular-file-upload
   // 'uiGmapgoogle-maps'
 ]);

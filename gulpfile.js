@@ -26,8 +26,6 @@ var paths = {
 		'assets/angular_front/**/*.js',
 		'assets/angular_app/controllers/*.js',
 		'assets/angular_app/services/*.js',
-		bowerRoot + 'd3/d3.min.js',
-		bowerRoot + 'n3-line-chart/build/line-chart.min.js',
 		bowerRoot + 'angulartics/dist/angulartics.min.js',
 		bowerRoot + 'angulartics/dist/angulartics-ga.min.js',
 		bowerRoot + 'foundation/js/foundation.js'
