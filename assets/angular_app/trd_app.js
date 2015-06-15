@@ -163,6 +163,11 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       templateUrl: "/partials/locations.html",
       controller: "LocationsCtrl"
     })
+    .state('network', {
+      url: "/network",
+      templateUrl: "/partials/network.html",
+      controller: "NetworkCtrl"
+    })
     .state('merchant_inventory', {
       abstract: true,
       url: "/merchant_inventory",
@@ -293,6 +298,35 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       parent: 'techniques',
       url:"/veins",
       templateUrl: "/partials/techniques_veins.html",
+    })
+    .state('zones', {
+      url:"/zones/:zone/:procedure",
+      templateUrl: "/partials/zones.html",
+      controller: "ZonesCtrl"
+    })
+    .state('zones.eyes', {
+      parent: 'zones',
+      templateUrl: "/partials/zones_eyes.html",
+    })
+    .state('zones.face', {
+      parent: 'zones',
+      templateUrl: "/partials/zones_face.html",
+    })
+    .state('zones.hair', {
+      parent: 'zones',
+      templateUrl: "/partials/zones_hair.html",
+    })
+    .state('zones.hands', {
+      parent: 'zones',
+      templateUrl: "/partials/zones_hands.html",
+    })
+    .state('zones.lips', {
+      parent: 'zones',
+      templateUrl: "/partials/zones_lips.html",
+    })
+    .state('zones.skin', {
+      parent: 'zones',
+      templateUrl: "/partials/zones_skin.html",
     })
     .state('before_after', {
       url:"/before_after",
