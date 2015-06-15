@@ -20,23 +20,19 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 				this.authorizationReceived = true;
 				this.authorized = false;
 				callback(this.authorized);
-				console.log('auth loaded', this.authorized);
 				$rootScope.$broadcast('authorizationloaded', this.authorized);
 			} else {
 				// if auth has not been received, and we have a token, check authorization
 				var internalThis = this;
 				$http({method: 'GET', url: "/authorized"}).
 				    success(function(data, status, headers, config) {
-				    	console.log('data from authorized', data);
 				    	if (!data || !data.user || !data.profile) {
-				    		console.log('authorized IF data data.user data.profile');
 				    		// something's wrong, not authorized
 				    		internalThis.authorizationReceived = true;
 				    		internalThis.authorized = false;
 				      		$rootScope.$broadcast('authorizationloaded', internalThis.authorized);
 				    		callback(internalThis.authorized);
 				    	} else {
-				    		console.log('authorized ELSE');
 					      	internalThis.email = data.profile.email;
 					      	internalThis.isAdmin = data.isAdmin;
 					      	internalThis.isYLIFT = data.isYLIFT;
@@ -48,14 +44,12 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 				      		$rootScope.$broadcast('authorizationloaded', internalThis.authorized);
 					      	callback(internalThis.authorized);
 				    	}
-						console.log('auth loaded 2', internalThis.authorized);
 				    }).
 				    error(function(data, status, headers, config) {
 				      	internalThis.authorizationReceived = true;
 				      	internalThis.authorized = false;
-				      	callback(internalThis.authorized);
-						console.log('auth loaded 3', internalThis.authorized);
 				      	$rootScope.$broadcast('authorizationloaded', internalThis.authorized);
+				      	callback(internalThis.authorized);
 				    });
 				}
 		};

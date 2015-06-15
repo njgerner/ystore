@@ -17,15 +17,9 @@ appDirectives.directive('navLinksDir', [ 'authService', '$state', '$rootScope',
 	  			}
 	  		};
 
-			if (authService.authorized) {
+			scope.$on('authorizationloaded', function (evt, args) {
 				scope.handleLoaded();
-			} else {
-				scope.loadedFun = null;
-			    scope.loadedFun = $rootScope.$on('authorizationloaded', function(evt, args) {
-			        scope.handleLoaded();
-			        scope.loadedFun();
-	  			});
-			}
+			});
 		}
 	}
 }]);

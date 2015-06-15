@@ -58,7 +58,6 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 	  		}
 
 	  		scope.handleLoaded = function() {
-	  			console.log('nav bar dir handle loaded authorized', authService.authorized);
 	  			if (authService.authorized) {
 	  				scope.loggedIn = true;
 	  				scope.name = authService.profile.name;
@@ -91,17 +90,9 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 		        });
 			}
 
-			if (authService.authorized) {
-				console.log('nav bar dir handle loaded 1');
+			scope.$on('authorizationloaded', function (evt, args) {
 				scope.handleLoaded();
-			} else {
-				scope.loadedFun = null;
-			    scope.loadedFun = $rootScope.$on('authorizationloaded', function(evt, args) {
-			    	console.log('nav bar dir handle loaded 2')
-			        scope.handleLoaded();
-			        scope.loadedFun();
-	  			});
-			}
+			});
 
 			scope.$watch(function() { return $cookies.pInCart; }, function(newCart, oldCart) { // this makes me hard ... me too
 				if (newCart) {
