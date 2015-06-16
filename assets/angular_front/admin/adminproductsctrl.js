@@ -14,8 +14,20 @@ superApp.controller('AdminProductsCtrl',
   	});
 
   	$scope.products.forEach(function (product) {
-  		product.createdAt = moment(product.createdAt).format("MMMM Do, YYYY");
+  		product.nice_createdAt = moment(product.createdAt).format("MMMM Do, YYYY");
   	});
+
+    $scope.editProduct = function(productnumber, attribute) {
+      $scope.products.forEach(function (product) {
+        if(product.productnumber == productnumber) {
+          if(attribute == 'featured') {
+              product.featured ? product.featured = false:product.featured = true;
+          }else if(attribute == 'active') {
+              product.active == 'Y' ? product.active = 'N':product.active = 'Y';
+          }
+        }
+      });
+    };
 
   	$scope.viewProduct = function(productnumber) {
   		$scope.message = "";
