@@ -1,5 +1,5 @@
 <div ng-hide="order" class="loader locations-loading">Loading...</div>
-<div ng-if="order" class="row admin-users-summary">
+<div ng-show="order" class="row admin-users-summary">
 	<h4>Order Summary</h4>
 	<div class="small-6 large-3 columns text-center">
 		<span>{{getDisplayDate(order.createdAt)}}</span><br>
@@ -18,7 +18,7 @@
 		<small>Order ID</small>
 	</div>
 </div>
-<div ng-if="order" class="row" style="margin-top:1rem;">
+<div ng-show="order" class="row" style="margin-top:1rem;">
 	<h5>Status: <strong>{{order.status}}</strong></h5>
 	<h6>As of <strong>{{getDisplayDate(order.updatedAt)}}</strong></h6>
 	<div ng-show="products.length" ng-repeat="p in products" class="row">
@@ -27,12 +27,12 @@
 		</div>
 		<div class="small-8 large-6 columns">
 			<a ui-sref="product({productnumber:p.productnumber})">{{p.name}}</a><br>
-			<small>Vendor ID: {{p.attributes.merchant}}</small>
+			<small>Vendor ID: {{p.attributes.vendor}}</small>
 		</div>
-		<div ng-show="order.shipTo" class="large-3 show-for-large-up">
-			<h6>Ship To</h6>
+		<div ng-show="order.shipTo" class="large-3 show-for-large-up columns">
+			<p>Ship To</p>
 			<strong>{{order.shipTo.name}}</strong><br>
-			{{order.shipTo.address1 (order.shipTo.address2 || "")}}<br>
+			{{order.shipTo.address1}} {{order.shipTo.address2 || ""}}<br>
 			{{order.shipTo.city}}, {{order.shipTo.state}} {{order.shipTo.zip}}
 		</div>
 	</div>

@@ -20,7 +20,10 @@
 </div>
 <div id="orders-chart"></div>
 <div ng-if="orders.length" class="row" style="margin-top:1rem;">
-	<h4>Order History</h4>
+	<div class="clearfix">
+		<h4 class="left">Order History</h4>
+		<input class="right" style="width:40%" type="search" ng-model="searchQuery" placeholder="Search by any order field">
+	</div>
 	<table class="small-12 columns" style="margin:0 auto">
 		<tbody>
 			<tr>
@@ -29,10 +32,10 @@
 				<th>Customer/Ship To</th>
 				<th>Order ID</th>
 			</tr>
-			<tr ng-repeat="order in orders | orderBy: '-createdAt'" class="pointer" ui-sref="admin.order({orderid:order.id})">
+			<tr ng-repeat="order in orders | filter:searchQuery | orderBy: '-createdAt'" class="pointer" ui-sref="admin.order({orderid:order.id})">
 				<td>{{getDisplayDate(order.createdAt)}}</td>
 				<td>{{formatValue(order.total)}}</td>
-				<td><a class="has-tip" tooltip-html-unsafe="{{formatShipTo(order.shipTo)}}">{{order.customer}}</a></td>
+				<td><a class="has-tip" popover-animation="false" tooltip-html-unsafe="{{formatShipTo(order.shipTo)}}">{{order.customer}}</a></td>
 				<td>{{order.id}}</td>
 			</tr>
 		</tbody>
