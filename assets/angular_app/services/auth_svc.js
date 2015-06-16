@@ -185,7 +185,7 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 				}
 			}).
 			error(function(data, status, headers, config) {
-		    	callback(false, 'There was an error associating your order with a YLIFT account, please reach out to YLIFT support.');
+		    	callback(false, data);
 			});
 		};
 
