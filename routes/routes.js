@@ -7,6 +7,7 @@ module.exports = function(express, app, __dirname) {
       emailHelper     = require('../trd_modules/emailHelper'),
       flow            = require('../assets/js/flow-node')(process.env.TMPDIR),
       config          = require('../trd_modules/config.json'),
+      errorHandler    = require('../trd_modules/errorHandler.js'),
       moment          = require('moment'),
       multer          = require('multer'),
       fs              = require('fs'),
@@ -220,14 +221,17 @@ passport.use('bearer', new BearerStrategy(
                 loginHelper(req, res);
               })
               .fail(function (err) {
-                res.json({message: "Token validation failed. Mitched it."});
+                return next(err);
+                // res.json({message: "Token validation failed. Mitched it."});
               });
           } else {
-            res.json({message: "Invalid token."});
+            return next(new Error('Invalid token.'));
+            // res.json({message: "Invalid token."});
           }
         })
         .fail(function (err) {
-          res.json({message: "That email is not yet registered, please click register and signup."});
+          return next(new Error('That email is not yet registered, please click register and signup.'));
+          // res.json({message: "That email is not yet registered, please click register and signup."});
         });
     } else {
       res.redirect("/home");
@@ -238,8 +242,14 @@ passport.use('bearer', new BearerStrategy(
   var loginHelper = function(req, res, next) {
 
     return passport.authenticate('local-signin', function(err, user, info) {
+      console.log('passport auth result', err, user, info);
       if (err) { return next(err); }
-      if (!user) { return res.json({err:"login helper, no user error", message:info.message, failed:true}); }
+      if (!user) {
+        console.log('login helper error', err, info);
+        var error = new Error(info.message);
+        return next(error);
+      }
+      // if (!user) { return res.json({err:"login helper, no user error", message:info.message, failed:true}); }
 
       // no sessions, don't bother logging in...
       var payload = { user: user.id, expires: moment().add(4, 'days') };
@@ -247,7 +257,7 @@ passport.use('bearer', new BearerStrategy(
 
       // encode
       var token = jwt.encode(payload, secret);
-      return res.json({err:null, tkn:token, tempPwd:req.cookies.tempPwdRedirect || null, stripePubKey:config[stripeEnv].PUBLISH});
+      return res.json({tkn:token, tempPwd:req.cookies.tempPwdRedirect || null});
     })(req, res, next);
   };
 
@@ -398,13 +408,13 @@ passport.use('bearer', new BearerStrategy(
   };
 
   // GET get_order_by_id/:orderid
-  var get_order_by_id = function(req, res) {
+  var get_order_by_id = function(req, res, next) {
     orchHelper.getOrderByID(req.params.orderid)
       .then(function (result) {
         if (result) {
           res.send({order: result});
         } else {
-          res.send({err:'no order in db'});
+          errorHandler.logAndReturn('Not a valid order id', 404, next);
         }
       })
       .fail(function (err) {
@@ -505,17 +515,6 @@ passport.use('bearer', new BearerStrategy(
     });
   };
 
-  var get_all_testimonials = function(req, res) {
-    console.log('in route');
-    orchHelper.getAllTestimonials()
-    .then(function (testimonials) {
-      res.send({testimonials: testimonials});
-    })
-    .fail(function (err) {
-      res.send({error:err});
-    });
-  };
-
   ///GET /404
   var fourofour = function(req, res, next){
     // trigger a 404 since no other middleware
@@ -560,6 +559,7 @@ passport.use('bearer', new BearerStrategy(
   /* ==============================================================
     Here's all the routing
   =============================================================== */
+    // --- ERROR HANDLING
     // --- START USE Routes
     ///////////////////////////////////////////////////////////////
     app.use('/admin', ensureAuthenticated); // ensure that we're authenticated and have a user
@@ -590,7 +590,6 @@ passport.use('bearer', new BearerStrategy(
     app.get('/all_ylift_profiles', all_ylift_profiles);
     app.get('/authorized', ensureAuthenticated, authorized);
     app.get('/cart/:profileid', ensureAuthenticated, get_cart);
-    app.get('/get_all_testimonials', get_all_testimonials);
     app.get('/get_customer/:customerid', ensureAuthenticated, stripeRoutes.get_customer);
     app.get('/merchant_orders/:merchantid', storeRoutes.merchant_orders);
     app.get('/get_product_by_id/:productnumber', get_product_by_id);
@@ -647,18 +646,18 @@ passport.use('bearer', new BearerStrategy(
     // -- START User Routes
     app.post('/user/give_ylift', ensureAuthenticated, userRoutes.give_ylift);
 
+    // -- START Admin Routes
+    ///////////////////////////////////////////////////////////////
+    app.get('/admin/all_profiles', ensureAuthenticated, adminRoutes.all_profiles);
+    app.get('/admin/all_ylift_profiles', ensureAuthenticated, adminRoutes.all_ylift_profiles);
+
     // -- START ERROR Routes
     ///////////////////////////////////////////////////////////////
     app.get('/404', fourofour);
     app.get('/403', fourothree);
     app.get('/500', fivehundred);
-
-    // -- End ERROR Routes
-
-    // -- START Admin Routes
-    ///////////////////////////////////////////////////////////////
-    app.get('/admin/all_profiles', ensureAuthenticated, adminRoutes.all_profiles);
-    app.get('/admin/all_ylift_profiles', ensureAuthenticated, adminRoutes.all_ylift_profiles);
-    // -- End ERROR Routes
+    app.use(function (err, req, res, next) {
+      res.status(err.status || 500).json({error: true, message:err.message || err.body || 'Unknown server error'});
+    });
 
 };

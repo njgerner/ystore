@@ -86,7 +86,7 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 			    	}
 			    }).
 			    error(function(data, status, headers, config) {
-			    	callback(data, null);
+			    	callback(data.message, null);
 			    });
 		};
 

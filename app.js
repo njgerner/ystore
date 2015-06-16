@@ -39,21 +39,25 @@ app.use(require('prerender-node'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(qt.static(__dirname + 'public/img'));
 
-// Session-persisted message middleware
-app.use(function(req, res, next){
-  var err = req.session.error,
-      msg = req.session.notice,
-      success = req.session.success;
+// // Session-persisted message middleware
+// app.use(function(req, res, next){
+//   var err = req.session.error,
+//       msg = req.session.notice,
+//       success = req.session.success;
 
-  delete req.session.error;
-  delete req.session.success;
-  delete req.session.notice;
+//   delete req.session.error;
+//   delete req.session.success;
+//   delete req.session.notice;
 
-  if (err) res.locals.error = err;
-  if (msg) res.locals.notice = msg;
-  if (success) res.locals.success = success;
+//   if (err) res.locals.error = err;
+//   if (msg) res.locals.notice = msg;
+//   if (success) res.locals.success = success;
 
-  next();
+//   next();
+// });
+
+app.get('/', function (req, res) {
+  throw new Error('shit');
 });
 
 // development only
