@@ -141,13 +141,13 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 				}).
 			    success(function(data, status, headers, config) {
 			    	if(data.success) {
-			    		callback("Password has been successfully updated.", null);
+			    		callback(null, "Password has been successfully updated.");
 			    	}else {
-			    		callback(null, data.message || "FAILED TO UPDATE PASSWORD.");
+			    		callback(data.message || "FAILED TO UPDATE PASSWORD.", null);
 			    	}
 			    }).
 			    error(function(data, status, headers, config) {
-			    	callback(null, data.error || "FAILED TO UPDATE PASSWORD");
+			    	callback(data.error || "FAILED TO UPDATE PASSWORD", null);
 			    });
 			}; 
 

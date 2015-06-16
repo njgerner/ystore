@@ -12,7 +12,7 @@ superApp.controller('ResetPasswordCtrl',
     });
 
     $scope.updatePassword = function() {
-      authService.updatePassword($stateParams.resettoken, $scope.password, function(successMessage, failedMessage) {
+      authService.updatePassword($stateParams.resettoken, $scope.password, function(failedMessage, successMessage) {
         if (successMessage) {
           $state.go('login');
         } else {
