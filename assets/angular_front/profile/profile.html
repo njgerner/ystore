@@ -25,7 +25,7 @@
           <div class="large-6 end columns">
             <strong style="margin-left:0;">Addresses</strong>
               <div style="padding-right:0"class="col-md-6" ng-repeat="address in profile.addresses track by $index">
-                <p style="margin-bottom:5px;text-decoration:underline;margin-top:10px">{{address.name}}</p>
+                <p id="profile-address">{{address.name}}</p>
                 <p style="margin-bottom:0"> {{address.address1}} </p>
                 <p style="margin-bottom:0"> {{address.address2}} </p>
                 <p> {{address.city}}, {{address.state}} {{address.zip}} </p>
@@ -46,7 +46,7 @@
        </div>
       <div>
         <div>
-          <table style="margin-right:auto; margin-top:20px; width:80%;" class="table">
+          <table id="profile-orders" class="table">
             <tr>
               <th>Order #</th>
               <th class="show-for-medium-up">Status</th>
@@ -63,12 +63,6 @@
             </tr>
           </table>
         </div>
-        <div class="row text-ylift" style="padding-left:10px; padding-right:10px">
-          <!-- <p>Check back soon for more information and updates to our auto-reordering service</p> -->
-        </div>
       </div>
-  </div>
-  <div class="large-2 large-offset-5 columns">
-    <button class="button small expand" ng-click="logoutNow()">Logout</button>
   </div>
 </div>
