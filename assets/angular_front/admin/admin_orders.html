@@ -29,7 +29,7 @@
 				<th>Customer/Ship To</th>
 				<th>Order ID</th>
 			</tr>
-			<tr ng-repeat="order in orders | orderBy: '-createdAt'">
+			<tr ng-repeat="order in orders | orderBy: '-createdAt'" class="pointer" ui-sref="admin.order({orderid:order.id})">
 				<td>{{getDisplayDate(order.createdAt)}}</td>
 				<td>{{formatValue(order.total)}}</td>
 				<td><a class="has-tip" tooltip-html-unsafe="{{formatShipTo(order.shipTo)}}">{{order.customer}}</a></td>
