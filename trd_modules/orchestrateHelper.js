@@ -89,13 +89,20 @@ exports.updateProfile = function(id, profile) {
 exports.updatePassword = function(resettoken, password) {
   var deferred = Q.defer();
   db.search('local-users', resettoken)
-    .then(function (user){ //reset token is valid
+    .then(function (user){
       var theuser = user.body.results[0].value; //will never not be retarded
       theuser.hash = bcrypt.hashSync(password, 8); 
-      delete theuser.resettoken;
+      delete theuser.resetToken;
+      theuser.updatedAt = new Date();
       db.put('local-users', theuser.id, theuser)
         .then(function (user) {
-          deferred.resolve(user);
+          db.remove('reset-tokens', resettoken)
+          .then(function (result) {
+            deferred.resolve(user);
+          })
+          .fail(function (err) {
+            deferred.reject(new Error("Could not remove reset token"));
+          });
         })
         .fail(function (err) {
           deferred.reject(new Error(err.body));
@@ -104,7 +111,6 @@ exports.updatePassword = function(resettoken, password) {
     .fail(function (err) {
       deferred.reject(new Error(err.body));
     });
-
     return deferred.promise;
 };
 
@@ -281,10 +287,16 @@ exports.generateResetToken = function(email) {
   db.search('local-users', email)
   .then(function(result) {
     var user = result.body.results[0].value;
-    user.resetToken = randomString(20);
+    user.resetToken = {token: randomString(20), createdAt: new Date()};
     db.put('local-users', user.id, user)
-      .then(function(result) {
-        deferred.resolve(user);
+      .then(function (result) {
+        db.put('reset-tokens', user.resetToken.token, user.resetToken)
+        .then(function (results) {
+            deferred.resolve(user);
+        })
+        .fail(function (err) {
+            deferred.reject(new Error('Error creating reset token'));
+        });
       })
       .fail(function(err) {
         deferred.reject(new Error(err.body));
@@ -1064,5 +1076,22 @@ exports.getMostFrequentEvent = function(collection, type, profile) {
     deferred.reject(new Error(err.body));
   });
 
+  return deferred.promise;
+};
+
+exports.validateResetToken = function(tokenid) {
+  var deferred = Q.defer();
+   db.get('reset-tokens', tokenid)
+    .then(function (token){ 
+      var now = new Date();
+      if(Date.parse(token.createdAt) + 86400000 < Date.parse(now)) {  //expired
+        deferred.resolve(false);
+      }else {
+        deferred.resolve(true);
+      }
+    })
+    .fail(function (err) {
+      deferred.reject(new Error("No token found"));
+    });
   return deferred.promise;
 };

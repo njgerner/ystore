@@ -29,5 +29,19 @@ module.exports = function(express, app, __dirname) {
 	  
 	};
 
+	UserRoutes.validate_reset_token = function(req, res) {
+    orchHelper.validateResetToken(req.body.token)
+	    .then(function (valid) {
+	    	if(valid) {
+	    		res.send({valid:true});
+	    	}else {
+	    		res.send({valid:false});
+	    	}
+	    })
+	    .fail(function (err) {
+	    	res.send({error:err});
+	    });
+  	};
+
 	return UserRoutes;
 };
