@@ -660,6 +660,7 @@ passport.use('bearer', new BearerStrategy(
     // -- START Admin Routes
     ///////////////////////////////////////////////////////////////
     app.get('/admin/all_profiles', ensureAuthenticated, adminRoutes.all_profiles);
+    app.get('/admin/all_orders', ensureAuthenticated, adminRoutes.all_orders);
     app.get('/admin/all_ylift_profiles', ensureAuthenticated, adminRoutes.all_ylift_profiles);
     // -- End ERROR Routes
 
