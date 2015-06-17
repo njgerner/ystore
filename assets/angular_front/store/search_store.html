@@ -1,7 +1,0 @@
-<div ng-repeat="product in filteredProducts | orderBy: product.category" class="col-md-4 clickable product-container" ng-click="goToProduct(product.productnumber)">    
-    <a>
-      <product-img-dir pn="product.productnumber"></product-img-dir>
-    </a>
-    <p class="productname"> {{product.name}} </p>
-    <p class="productprice"> ${{product.price}} </p>
-</div>
