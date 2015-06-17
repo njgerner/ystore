@@ -1,0 +1,20 @@
+<!-- <div class="product-card pointer">
+  <div style="height:150px; overflow-y:hidden;">
+    <img ng-src="{{product.remote_img || product.img}}?dim=475x475" class="image" ng-error="defaultImage(product.img)">
+  </div>
+  <div class="content">
+    <h5 class="product-title">{{product.name}}</h5>
+    <h6 class="subheader">${{product.price}}</h6>
+  </div>
+</div> -->
+
+
+<div class="product-card pointer">
+	<div class="row product-img-frame">
+	    <span class="product-helper"></span><img class="xxx" ng-src="{{product.remote_img || product.img}}?dim=475x475"/>
+	</div>
+	<div class="content">
+		 <h5 class="product-title">{{product.name}}</h5>
+	     <h6 class="subheader">${{product.price}}</h6>
+	</div>
+</div>
