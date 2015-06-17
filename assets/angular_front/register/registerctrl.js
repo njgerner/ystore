@@ -94,10 +94,17 @@ superApp.controller('RegisterCtrl',
   	}
 
     $scope.registerIndividual = function() {
+      if ($scope.registering) {
+        $scope.failedMessage = "Processing your registration, please wait...";
+        return;
+      }
       $scope.failedMessage = null;
       if ($scope.password !== $scope.confirmpassword) {
         $scope.failedMessage = "Passwords must match!";
         return;
+      } else if ($scope.password.length < 6) {
+        $scope.failedMessage = "Password must be at least 6 characters";
+        return
       }
       $scope.registering = true;
       authService.register($scope.email, $scope.password, function(err, status) {

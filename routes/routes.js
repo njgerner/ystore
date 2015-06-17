@@ -81,27 +81,11 @@ passport.use('local-signup', new LocalStrategy(
     orchHelper.localReg(req.body.email, req.body.password, req.body.metadata)
       .then(function (user) {
         if (user) {
-          if (!user.error) {
-            emailHelper.sendWelcome(user.name, user.email)
-            .then(function() {
-              emailHelper.newUserTeamNotification(user)
-              .then(function(result) {
-                done(null,user);
-              })
-              .fail(function(err) {
-                done(null, user, err);
-              });
-            })
-            .fail(function(err) {
-              done(null, user, err);
-            });
-          } else {
-            done(user.error);
-          }
-        }
-        if (!user) {
-          req.session.error = 'There was an error on our end, please try registering again or contact the YLift Support Team.'; //inform user could not log them in
-          done(null, false);
+          emailHelper.sendWelcome(user.name, user.email).done();
+          emailHelper.newUserTeamNotification(user).done();
+          done(null,user);
+        } else {
+          done(null, false, 'No user returned from local reg');
         }
       })
       .fail(function (err){
@@ -195,11 +179,11 @@ passport.use('bearer', new BearerStrategy(
             return orchHelper.updateProfile(profile.id, profile);
           })
           .fail(function (err) {
-            console.log('need to decide what data to pass back on err', err);
+            errorHandler.logAndReturn('Error authorizing', 500, next, err);
           }).done();
       })
       .fail(function (err) {
-        console.log('need to decide what data to pass back on err', err);
+        errorHandler.logAndReturn('Error authorizing', 500, next, err);
       });
   };
 
@@ -209,6 +193,7 @@ passport.use('bearer', new BearerStrategy(
       // if there's a token, attempt to authenticate now
       orchHelper.findUserByToken(req.query.token)
         .then(function (user) {
+          console.log('pretty sure this route does absolutely nothing');
           if (user) {
             user.jsonType = "user";
             delete user.token;
@@ -221,17 +206,14 @@ passport.use('bearer', new BearerStrategy(
                 loginHelper(req, res);
               })
               .fail(function (err) {
-                return next(err);
-                // res.json({message: "Token validation failed. Mitched it."});
+                errorHandler.logAndReturn('No Y Lift profiles found', 404, next);
               });
           } else {
-            return next(new Error('Invalid token.'));
-            // res.json({message: "Invalid token."});
+            errorHandler.logAndReturn('Invalid token', 422, next);
           }
         })
         .fail(function (err) {
-          return next(new Error('That email is not yet registered, please click register and signup.'));
-          // res.json({message: "That email is not yet registered, please click register and signup."});
+          errorHandler.logAndReturn('That email is not yet registered, please click register and signup.', 404, next);
         });
     } else {
       res.redirect("/home");
@@ -242,15 +224,8 @@ passport.use('bearer', new BearerStrategy(
   var loginHelper = function(req, res, next) {
 
     return passport.authenticate('local-signin', function(err, user, info) {
-      console.log('passport auth result', err, user, info);
-      if (err) { return next(err); }
-      if (!user) {
-        console.log('login helper error', err, info);
-        var error = new Error(info.message);
-        return next(error);
-      }
-      // if (!user) { return res.json({err:"login helper, no user error", message:info.message, failed:true}); }
-
+      if (err) { return errorHandler.logAndReturn(err, 422, next); }
+      if (!user) { return errorHandler.logAndReturn(info.message, 422, next); }
       // no sessions, don't bother logging in...
       var payload = { user: user.id, expires: moment().add(4, 'days') };
       var secret = app.get("jwtTokenSecret");
@@ -259,6 +234,19 @@ passport.use('bearer', new BearerStrategy(
       var token = jwt.encode(payload, secret);
       return res.json({tkn:token, tempPwd:req.cookies.tempPwdRedirect || null});
     })(req, res, next);
+  };
+
+  //POST /register
+  ///////////////////////////////////////////////////////////////
+  var register = function(req, res, next) {
+    return passport.authenticate('local-signup', function(err, user, info) { 
+      if (err) { return errorHandler.logAndReturn(err.message || 'Error registering, please try again. If this issue continues, please contact support@ylift.io.', 422, next, err); }
+      if (!user) { return errorHandler.logAndReturn(info.message || 'Registration successful but there was an error on the server, please contact support@ylift.io if you have any issues with your account.', 500, next); }
+      var payload = { user: user.id, expires: moment().add(4, 'days') };
+      var secret = app.get("jwtTokenSecret");
+      var token = jwt.encode(payload, secret);
+      return res.json({tkn:token, status:"store"});
+    })(req, res);
   };
 
   //POST /request_pass_reset
@@ -308,38 +296,33 @@ passport.use('bearer', new BearerStrategy(
   };
 
   var update_password = function(req, res) {
-      orchHelper.updatePassword(req.body.resettoken, req.body.password)
-      .then(function (user) {
+    orchHelper.updatePassword(req.body.resettoken, req.body.password)
+    .then(function (user) {
+      if (user) {
         res.send({success:true});
-      })
-      .fail(function (err) {
-        errorHandler.logAndReturn('Error updating account password', 500, next, err);
-      });
+      } else {
+        errorHandler.logAndReturn('Unable to update password, user not found', 404, next);
+      }
+    })
+    .fail(function (err) {
+      errorHandler.logAndReturn('Error updating account password', 500, next, err);
+    });
   };
 
   var update_user = function(req, res) {
     orchHelper.updateUserProfile(req.body.profile, req.body.userid, req.body.property)
     .then(function (profile) {
+      if (profile) {
         res.send({profile: profile});
-      })
+      } else {
+        errorHandler.logAndReturn('Unable to update, user not found', 404, next);
+      }
+    })
     .fail(function (err) {
-      logger.error(err);
-      res.send({err:err});
+      errorHandler.logAndReturn('Error updating user', 500, next, err);
     });
   };
  
-  //POST /register
-  ///////////////////////////////////////////////////////////////
-  var register = function(req, res) {
-    return passport.authenticate('local-signup', function(err, user) { 
-      if (err) { return res.json({err: "there was an error", status:"Error registering, please try again. If this issue continues, please contact support@ylift.io." }); } //TODO: make this better
-      if (!user) { return res.json({err:"login helper, no user error", message:"registered, but there was an error creating a user profile", failed:true}); }
-      var payload = { user: user.id, expires: moment().add(4, 'days') };
-      var secret = app.get("jwtTokenSecret");
-      var token = jwt.encode(payload, secret);
-      return res.json({tkn:token, status:"store"});
-    })(req, res);
-  };
 
   ///GET /all_products
   var all_products = function(req, res, next) {
@@ -578,11 +561,11 @@ passport.use('bearer', new BearerStrategy(
             if (user.isAdmin) {
               next();
             } else {
-              res.status(401).send("Not an admin");
+              errorHandler.logAndReturn('Not an admin', 401, next, err);
             }
           })
           .fail(function (err) {
-            console.log('need to handle err in /admin');
+            errorHandler.logAndReturn('User not found', 404, next, err);
           });
       }); // ensure that we're an admin
 

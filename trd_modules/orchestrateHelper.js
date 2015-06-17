@@ -791,7 +791,6 @@ exports.addMerchantProfile = function(profile) {
     deferred.resolve(profile);
   })
   .fail(function (err) {
-    console.log('error adding merchant profile', err.message, err, profile);
     deferred.reject(new Error(err.message));
   });
    
@@ -1059,7 +1058,6 @@ exports.getMostFrequentEvent = function(collection, type, profile) {
     deferred.resolve(rawDogger.push_values_to_top(result.body.results));
   })
   .fail(function (err) {
-    console.log('error getting most feqe', err.message);
     deferred.reject(new Error(err.message));
   });
 

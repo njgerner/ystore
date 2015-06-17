@@ -35,8 +35,10 @@ exports.sendWelcome = function(name, email) {
 };
 
 exports.newUserTeamNotification = function(user) {
+	console.log('newUserTeamNotification', user);
 	var toArr = process.env.DEFAULT_NOTIFY_LIST.toString().split(';');
     var to = [];
+    console.log('to arr', toArr);
     for (var i = 0; i < toArr.length; i++) {
         var emailSplit = toArr[i].split("@");
         to[i] = {};
@@ -44,6 +46,7 @@ exports.newUserTeamNotification = function(user) {
         to[i].name = emailSplit[0];
         to[i].type = "to";
     }
+    console.log('to result', to);
 	var type = "Individual";
 	if(user.isYLIFT) {
 		type = "YLift";
@@ -80,8 +83,10 @@ exports.newUserTeamNotification = function(user) {
 			}],
 		"tags": ["welcome", "ylift"]
 	};
+	console.log('about to send new user notification', template_content, message);
 	mandrill_client.messages.sendTemplate({"template_name": "new_user_notification", "template_content": template_content, "message": message},
 		function (result) {
+			console.log('result', result);
 			deferred.resolve(result);
 		}, function (err) {
 			console.log('error sending welcome email', err.name, err.message);

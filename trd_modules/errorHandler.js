@@ -1,7 +1,7 @@
 var bunyan = require('bunyan');
-var logPath = '/logs/ylift-prod-error.log';
+var logPath = '../logs/ylift-prod-error.log';
 if (process.env.ENV == 'DEV') {
-  logPath = '/logs/ylift-dev-error.log';
+  logPath = '../logs/ylift-dev-error.log';
 }
 var mitch = bunyan.createLogger({
   name: 'Y Lift',
