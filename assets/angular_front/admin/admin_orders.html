@@ -1,0 +1,43 @@
+<div ng-hide="orders.length" class="loader locations-loading">Loading...</div>
+<div ng-if="orders.length" class="row admin-users-summary">
+	<h4>Orders Summary</h4>
+	<div class="small-6 large-3 columns text-center">
+		<span>{{orders.length}}</span><br>
+		<small>Total Orders</small>
+	</div>
+	<div class="small-6 large-3 end columns text-center">
+		<span>{{formatValue(totalOrderVolume)}}</span><br>
+		<small>Total Volume</small>
+	</div>
+	<div class="small-6 large-3 end columns text-center">
+		<span>{{formatValue(monthOrderVolume)}}</span><br>
+		<small>Last 30 Day Volume</small>
+	</div>
+	<div class="small-6 large-3 end columns text-center text-green">
+		<span>{{formatValue(dailyOrderVolume)}}</span><br>
+		<small>Today's Volume</small>
+	</div>
+</div>
+<div id="orders-chart"></div>
+<div ng-if="orders.length" class="row" style="margin-top:1rem;">
+	<div class="clearfix">
+		<h4 class="left">Order History</h4>
+		<input class="right" style="width:40%" type="search" ng-model="searchQuery" placeholder="Search by any order field">
+	</div>
+	<table class="small-12 columns" style="margin:0 auto">
+		<tbody>
+			<tr>
+				<th>Order Placed</th>
+				<th>Total</th>
+				<th>Customer/Ship To</th>
+				<th>Order ID</th>
+			</tr>
+			<tr ng-repeat="order in orders | filter:searchQuery | orderBy: '-createdAt'" class="pointer" ui-sref="admin.order({orderid:order.id})">
+				<td>{{getDisplayDate(order.createdAt)}}</td>
+				<td>{{formatValue(order.total)}}</td>
+				<td><a class="has-tip" popover-animation="false" tooltip-html-unsafe="{{formatShipTo(order.shipTo)}}">{{order.customer}}</a></td>
+				<td>{{order.id}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

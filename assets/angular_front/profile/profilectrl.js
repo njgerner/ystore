@@ -8,7 +8,19 @@ superApp.controller('ProfileCtrl',
     $scope.createdAt = moment($scope.profile.createdAt).format("MMMM Do, YYYY");
 
     $scope.getDisplayDate = function(date) {
-      return moment(date).format("MMM Do YYYY");
+      if(date) {
+         return moment(date).format("MMM Do YYYY");
+       } else {
+        return "";
+       }
+    }
+
+    $scope.getDisplayTotal = function(total) {
+      if(total) {
+         return "$" + total;
+      }else {
+        return "";
+      }
     }
 
     $scope.onOrdersLoaded = function(orders) {

@@ -23,4 +23,15 @@ trdServices.service("adminService", ['$rootScope', '$http', '$cookieStore',
 	        });
     	}
 
+    	this.getAllOrders = function(callback) {
+    		$http({method: 'GET', url: '/admin/all_orders'})
+	        .success(function (data, status, headers, config) {
+	            callback(data.orders);
+	        })
+	        .error(function (data, status, headers, config) {
+	            console.log('error getting orders', data);
+	            callback();
+	        });
+    	}
+
 }]);

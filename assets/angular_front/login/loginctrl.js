@@ -43,7 +43,6 @@ superApp.controller('LoginCtrl',
       $scope.signingIn = true;
   		authService.login($scope.email, $scope.password, function(failedMessage, successMessage) {
   			if (successMessage) {
-          console.log('success?', successMessage);
   				$scope.loggedin = true;
           if (successMessage == "temp_password") {
             $state.go('pass_reset');
@@ -52,7 +51,6 @@ superApp.controller('LoginCtrl',
           }
   			} else {
           $scope.signingIn = false;
-          console.log('login failed', failedMessage);
           $scope.failedMessage = failedMessage;
         }
 
@@ -66,6 +64,7 @@ superApp.controller('LoginCtrl',
           $scope.failedMessage = null;
           $scope.loginState = "signin";
           $scope.pass_reset = true;
+          $scope.requestingReset = false;
         } else {
           $scope.requestingReset = false;
           $scope.failedMessage = failedMessage;
