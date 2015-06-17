@@ -11,7 +11,7 @@ module.exports = function(express, app, __dirname) {
 		fs 				= require('fs');
 
 	// GET /admin/all_profiles
-	AdminRoutes.all_profiles = function(req, res) {
+	AdminRoutes.all_profiles = function(req, res, next) {
 		orchHelper.getAllProfiles()
 		.then(function (data) {
 			if (data) {
@@ -26,7 +26,7 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	// GET /admin/all_orders
-	AdminRoutes.all_orders = function(req, res) {
+	AdminRoutes.all_orders = function(req, res, next) {
 		orchHelper.getAllOrders()
 		.then(function (data) {
 			if (data) {
@@ -41,7 +41,7 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	// GET /admin/all_ylift_profiles
-	AdminRoutes.all_ylift_profiles = function(req, res) {
+	AdminRoutes.all_ylift_profiles = function(req, res, next) {
 		orchHelper.getAllYLIFTProfiles()
 		.then(function (data) {
 			if (data) {

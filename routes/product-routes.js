@@ -12,6 +12,7 @@ module.exports = function(express, app, __dirname) {
 		S3_BUCKET  		= process.env.S3_BUCKET,
 		Q               = require('q'),
 		flow            = require('../assets/js/flow-node')(process.env.TMPDIR),
+		errorHandler    = require('../trd_modules/errorHandler.js'),
 		fsExtra 		= require('fs.extra');
 		fs 				= require('fs');
 
@@ -31,7 +32,7 @@ module.exports = function(express, app, __dirname) {
 	}
 
 	// GET /product_rating/:productnumber
-	ProductRoutes.get_rating = function(req, res) {
+	ProductRoutes.get_rating = function(req, res, next) {
 		var pn = req.params.productnumber;
 		orchHelper.getProductRating(pn)
 		.then(function (data) {
@@ -47,7 +48,7 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	// GET /product_reviews/:productnumber
-	ProductRoutes.get_reviews = function(req, res) {
+	ProductRoutes.get_reviews = function(req, res, next) {
 		var pn = req.params.productnumber;
 		orchHelper.getProductReviews(pn)
 		.then(function (data) {
@@ -63,7 +64,7 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	// GET /most_viewed_product/:profileid
-	ProductRoutes.most_viewed_product = function(req, res) {
+	ProductRoutes.most_viewed_product = function(req, res, next) {
 		orchHelper.getMostFrequentEvent('products', 'page-view', req.params.profileid)
 		.then(function (data) {
 			if (data) {
@@ -78,7 +79,7 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	// POST /submit_review
-	ProductRoutes.submit_review = function(req, res) {
+	ProductRoutes.submit_review = function(req, res, next) {
 		var review = req.body.review;
 		orchHelper.submitReview(review)
 		.then(function (result) {
@@ -90,7 +91,7 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	// POST /add_product
-	ProductRoutes.add_product = function(req, res) {
+	ProductRoutes.add_product = function(req, res, next) {
 		var merchant = req.body.merchant;
 		var key = merchant.name.substr(0, 1).toLowerCase();
 		var product = req.body.product;
@@ -151,7 +152,7 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	// POST /update_product
-	ProductRoutes.update_product = function(req, res) {
+	ProductRoutes.update_product = function(req, res, next) {
 		var product = req.body.product;
 		orchHelper.findMerchantProfile(req.user.profile)
 		.then(function (res) {
@@ -180,7 +181,7 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	// POST //product_page_view/:productnumber?profile=
-	ProductRoutes.page_view = function(req, res) {
+	ProductRoutes.page_view = function(req, res, next) {
 		var pn = req.params.productnumber;
 		var profile = req.query.profile || 'guest';
 		orchHelper.addPageView('products', pn, profile)

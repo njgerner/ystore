@@ -7,16 +7,21 @@ module.exports = function(express, app, __dirname) {
     	config 			= require('../trd_modules/config.json'), 			//config file contains all tokens and other private info
 		orchHelper      = require('../trd_modules/orchestrateHelper'),
 		Q               = require('q'),
+		errorHandler    = require('../trd_modules/errorHandler.js'),
 		fs 				= require('fs');
 
 	// POST /training_dates
-	TrainingRoutes.get_dates = function(req, res) {
+	TrainingRoutes.get_dates = function(req, res, next) {
 		orchHelper.getTrainingDates()
 		.then(function (result) {
-			res.status(200).json(result);
+			if (result) {
+				res.status(200).json(result);
+			} else {
+				errorHandler.logAndReturn('No training dates found', 404, next);
+			}
 		})
 	  	.fail(function (err) {
-	  		res.status(403).json({err:'could not get training dates'});
+	  		errorHandler.logAndReturn('Error getting training dates', 500, next, err);
 	  	}).done();
 	  
 	};

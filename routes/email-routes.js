@@ -8,6 +8,7 @@ module.exports = function(express, app, __dirname) {
 		orchHelper      = require('../trd_modules/orchestrateHelper'),
 		Q               = require('q'),
 		nodemailer      = require('nodemailer'),
+		errorHandler    = require('../trd_modules/errorHandler.js'),
 		fs 				= require('fs');
 
 	var transport = nodemailer.createTransport({
@@ -21,7 +22,7 @@ module.exports = function(express, app, __dirname) {
 	  });  
 
 	//POST /email_support
-	EmailRoutes.support = function(req, res) {
+	EmailRoutes.support = function(req, res, next) {
 		var host = "http://" + req.get('host');
 		var props = req.body.props;
 	    var options = {

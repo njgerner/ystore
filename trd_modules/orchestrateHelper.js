@@ -514,7 +514,11 @@ exports.getMerchantProductCount = function(merchantid) {
     deferred.resolve(res.body.total_count);
   })
   .fail(function (err) {
-    deferred.reject(new Error(err.body.message));
+    if (err.body.message == 'The requested items could not be found.'){
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
   });
   return deferred.promise;
 };

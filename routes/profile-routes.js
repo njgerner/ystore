@@ -7,10 +7,11 @@ module.exports = function(express, app, __dirname) {
     	config 			= require('../trd_modules/config.json'), 			//config file contains all tokens and other private info
 		orchHelper      = require('../trd_modules/orchestrateHelper'),
 		Merchant 		= require('../models/merchant-profile'),
+		errorHandler    = require('../trd_modules/errorHandler.js'),
 		Q               = require('q');
 
 	// GET /profile/get_merchant/:profileid
-	ProfileRoutes.get_merchant = function(req, res) {
+	ProfileRoutes.get_merchant = function(req, res, next) {
 	  orchHelper.findMerchantProfile(req.params.profileid)
 	  	.then(function (result) {
 	  		if (result) {
@@ -29,7 +30,7 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	// POST /profile/update_profile/:profileid
-	ProfileRoutes.update_profile = function(req, res) {
+	ProfileRoutes.update_profile = function(req, res, next) {
 	  orchHelper.updateProfile(req.params.profileid, req.body.profile)
 	  	.then(function (result) {
 	  		res.status(200).json(result);
@@ -40,7 +41,7 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	// POST /profile/add_merchant/:profileid
-	ProfileRoutes.add_merchant = function(req, res) {
+	ProfileRoutes.add_merchant = function(req, res, next) {
 		var merchant = Merchant.newProfile(req.params.profileid, req.body.category);
 		merchant.name = req.body.name;
 		merchant.regkey = req.body.regkey;
@@ -57,7 +58,7 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	// POST /profile/update_merchant
-	ProfileRoutes.update_merchant = function(req, res) {
+	ProfileRoutes.update_merchant = function(req, res, next) {
 	  orchHelper.updateMerchantProfile(req.body.profile)
 	  	.then(function (result) {
 	  		if (result) {
@@ -72,7 +73,7 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	// POST /profile/delete_merchant/:profileid
-	ProfileRoutes.delete_merchant = function(req, res) {
+	ProfileRoutes.delete_merchant = function(req, res, next) {
 		orchHelper.getMerchantProfile(req.params.profileid)
 		.then(function (result) {
 			if (result) {
