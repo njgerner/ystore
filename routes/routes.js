@@ -507,7 +507,6 @@ passport.use('bearer', new BearerStrategy(
   };
 
   var get_all_testimonials = function(req, res) {
-    console.log('in route');
     orchHelper.getAllTestimonials()
     .then(function (testimonials) {
       res.send({testimonials: testimonials});

@@ -334,7 +334,7 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       templateUrl: "/partials/zones_skin.html",
     })
     .state('before_after', {
-      url:"/before_after",
+      url:"/before_after/:procedure",
       templateUrl: "/partials/before_after.html",
       controller: "BeforeAfterCtrl"
     })
