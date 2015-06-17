@@ -43,7 +43,7 @@ module.exports = function(express, app, __dirname) {
       port: '587',
       auth: {
           user: "support@ylift.io",
-          pass: "yliftDEEZNUTS!"
+          pass: "Wula9252"
       }
   });    
 
@@ -256,14 +256,15 @@ passport.use('bearer', new BearerStrategy(
       .then(function (user) {
         mailOptions.to = user.email;
         mailOptions.subject = 'Password Reset';
-        mailOptions.text = 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+        mailOptions.text = 'A request for a password reset has been made for the account linked to this email address\n\n' +
             'Please click on the following link, or paste into your browser to complete the process' + '\n\n' + 
-            'http://' + req.get('host') + '/home#/reset_password/' + user.resetToken + '\n\n' +
+            'http://' + req.get('host') + '/home#/reset_password/' + user.resetToken.token + '\n\n' +
             'If you did not request this, please ignore this email and your password will remain unchanged.';
 
         transport.sendMail(mailOptions, function(error, info){
             if(error){
-                console.log(error);
+                console.log('pw reset email error', error);
+                res.send('An error occurred. If this persists, please contact support@ylift.io');
             }else{
                 res.send('success');
             }
@@ -625,6 +626,7 @@ passport.use('bearer', new BearerStrategy(
     app.post('/update_product', ensureAuthenticated, productRoutes.update_product);
     app.post('/update_user', ensureAuthenticated, update_user);
     app.post('/upload_image', multipartMiddleware, upload_image);
+    app.post('/validate_reset_token', userRoutes.validate_reset_token);
     
     // -- START Profile Routes
     ///////////////////////////////////////////////////////////////
@@ -641,6 +643,7 @@ passport.use('bearer', new BearerStrategy(
     // -- START Admin Routes
     ///////////////////////////////////////////////////////////////
     app.get('/admin/all_profiles', ensureAuthenticated, adminRoutes.all_profiles);
+    app.get('/admin/all_orders', ensureAuthenticated, adminRoutes.all_orders);
     app.get('/admin/all_ylift_profiles', ensureAuthenticated, adminRoutes.all_ylift_profiles);
 
     // -- START ERROR Routes
@@ -651,5 +654,6 @@ passport.use('bearer', new BearerStrategy(
     app.use(function (err, req, res, next) {
       res.status(err.status || 500).json({error: true, message:err.message || err.body || 'Unknown server error'});
     });
+    // -- End ERROR Routes
 
 };

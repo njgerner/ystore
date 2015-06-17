@@ -15,6 +15,7 @@ var trdApp = angular.module('trdApp', [
   'mm.foundation',
   'angulartics',
   'angulartics.google.analytics',
+  // 'n3-line-chart',
   'angularFileUpload' //https://github.com/nervgh/angular-file-upload
   // 'uiGmapgoogle-maps'
 ]);
@@ -107,18 +108,23 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       templateUrl: "/partials/admin_users.html",
       controller: "AdminUsersCtrl"
     })
-    .state('admin.stripe', {
-      url: "/users",
-      templateUrl: "/partials/admin_stripe.html",
-      controller: "AdminStripeCtrl"
+    .state('admin.orders', {
+      url: "/orders",
+      templateUrl: "/partials/admin_orders.html",
+      controller: "AdminOrdersCtrl"
+    })
+    .state('admin.order', {
+      url: "/order/:orderid",
+      templateUrl: "/partials/admin_order.html",
+      controller: "AdminOrderCtrl"
     })
     .state('admin.products', {
-      url: "/users",
+      url: "/products",
       templateUrl: "/partials/admin_products.html",
       controller: "AdminProductsCtrl"
     })
     .state('admin.metrics', {
-      url: "/users",
+      url: "/metrics",
       templateUrl: "/partials/admin_metrics.html",
       controller: "AdminMetricsCtrl"
     })

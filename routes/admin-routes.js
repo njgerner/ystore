@@ -20,6 +20,17 @@ module.exports = function(express, app, __dirname) {
 		});
 	};
 
+	// GET /admin/all_orders
+	AdminRoutes.all_orders = function(req, res) {
+		orchHelper.getAllOrders()
+		.then(function (data) {
+			res.status(200).json({orders:data});
+		})
+		.fail(function (err) {
+			res.status(500).json({err:err});
+		});
+	};
+
 	// GET /admin/all_ylift_profiles
 	AdminRoutes.all_ylift_profiles = function(req, res) {
 		orchHelper.getAllYLIFTProfiles()
