@@ -10,7 +10,6 @@ var path = require('path');
 var passport = require('passport');
 var session = require('express-session');
 var qt = require('quickthumb');
-// var routes = require('./routes/routes');
 
 var app = express();
 
@@ -19,7 +18,6 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.set('jwtTokenSecret', 'DEEZNUTS');
-
 
 // uncomment after placing your favicon in /public
 app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -38,27 +36,6 @@ app.use(require('prerender-node'));
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(qt.static(__dirname + 'public/img'));
-
-// // Session-persisted message middleware
-// app.use(function(req, res, next){
-//   var err = req.session.error,
-//       msg = req.session.notice,
-//       success = req.session.success;
-
-//   delete req.session.error;
-//   delete req.session.success;
-//   delete req.session.notice;
-
-//   if (err) res.locals.error = err;
-//   if (msg) res.locals.notice = msg;
-//   if (success) res.locals.success = success;
-
-//   next();
-// });
-
-app.get('/', function (req, res) {
-  throw new Error('shit');
-});
 
 // development only
 if ('development' == app.get('env')) {

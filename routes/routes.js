@@ -288,12 +288,16 @@ passport.use('bearer', new BearerStrategy(
 
   // GET /all_ylift_profiles
   var all_ylift_profiles = function(req, res) {
-    orchHelper.getAllYLiftProfiles()
+    orchHelper.getAllYLIFTProfiles()
       .then(function (result) {
-        res.send({profiles:result});
+        if (result) {
+          res.send({profiles:result});
+        } else {
+          errorHandler.logAndReturn('No Y Lift profiles found', 404, next);
+        }
       })
       .fail(function (err) {
-        res.send({err:err});
+        errorHandler.logAndReturn('Error retrieving Y Lift profiles', 500, next, err);
       });
   };
 
@@ -309,7 +313,7 @@ passport.use('bearer', new BearerStrategy(
         res.send({success:true});
       })
       .fail(function (err) {
-        res.send({error:err});
+        errorHandler.logAndReturn('Error updating account password', 500, next, err);
       });
   };
 
@@ -319,6 +323,7 @@ passport.use('bearer', new BearerStrategy(
         res.send({profile: profile});
       })
     .fail(function (err) {
+      logger.error(err);
       res.send({err:err});
     });
   };
@@ -337,73 +342,77 @@ passport.use('bearer', new BearerStrategy(
   };
 
   ///GET /all_products
-  var all_products = function(req, res) {
+  var all_products = function(req, res, next) {
     orchHelper.getAllProducts()
       .then(function (products) {
         if (products) {
           res.send({products: products});
         } else {
-          res.send({err:'no products in db'});
+          errorHandler.logAndReturn('No products found', 404, next);
         }
       })
       .fail(function (err) {
-        res.send({err:err});
+        errorHandler.logAndReturn('Error retrieving products', 500, next, err);
       });
   };
 
-  var get_product_by_id = function(req, res) {
+  // GET get_product_by_id/:productnumber
+  var get_product_by_id = function(req, res, next) {
     orchHelper.getProductByID(req.params.productnumber)
       .then(function (result) {
         if (result) {
           res.send({product: result});
         } else {
-          res.send({err:'no products in db'});
+          errorHandler.logAndReturn('Not a valid product id', 404, next);
         }
       })
       .fail(function (err) {
-        res.send({err:err});
+        errorHandler.logAndReturn('Error retrieving product by id', 500, next, err);
       });
   };
 
-  var get_related_products = function(req, res) {
+  // GET get_related_products/:productnumber
+  var get_related_products = function(req, res, next) {
     orchHelper.getRelatedProducts(req.params.productnumber)
       .then(function (result) {
         if (result) {
           res.send({products: result});
         } else {
-          res.send({err:'no related products in db'});
+          errorHandler.logAndReturn('No products related to that product found', 404, next);
         }
       })
       .fail(function (err) {
-        res.send({err:err});
+        errorHandler.logAndReturn('Error retrieving related products', 500, next, err);
       });
   };
 
-  var get_products_by_category = function(req, res) {
+  // GET get_products_by_category/:category
+  var get_products_by_category = function(req, res, next) {
     orchHelper.getProductsByCategory(req.body.category)
       .then(function (result) {
         if (result) {
           res.send({products: result});
         } else {
-          res.send({err:'no products in db'});
+          errorHandler.logAndReturn('No products found for this category', 404, next);
         }
       })
       .fail(function (err) {
-        res.send({err:err});
+        errorHandler.logAndReturn('Error retrieving products by category', 500, next, err);
       });
   };
 
-  var get_cart = function(req, res) {
+  // GET cart/:profileid
+  var get_cart = function(req, res, next) {
     orchHelper.getCartByID(req.params.profileid)
       .then(function (result) {
         if (result) {
           res.send({cart: result});
         } else {
-          res.send({err:'no cart in db'});
+          errorHandler.logAndReturn('No cart for this user found', 404, next);
         }
       })
       .fail(function (err) {
-        res.send({err:err});
+        errorHandler.logAndReturn('Error retrieving account cart', 500, next, err);
       });
   };
 
@@ -418,35 +427,23 @@ passport.use('bearer', new BearerStrategy(
         }
       })
       .fail(function (err) {
-        res.send({err:err});
+        errorHandler.logAndReturn('Error retrieving order by id', 500, next, err);
       });
   };
 
   // GET get_all_orders/:profileid
-  var get_all_orders = function(req, res) {
+  var get_all_orders = function(req, res, next) {
     orchHelper.getOrdersByUserID(req.params.profileid)
       .then(function (result) {
         if (result) {
           res.send({orders: result});
         } else {
-          res.send({err:'no orders for this user in db'});
+          errorHandler.logAndReturn('No orders for this user found', 404, next);
         }
       })
       .fail(function (err) {
-        res.send({err:err});
+        errorHandler.logAndReturn('Error retrieving orders', 500, next, err);
       });
-  };
-  // GET images/offices/:path
-  var get_office_image = function(req, res, next) {
-    req.body.path = 'office-images/' + req.params.path + '.jpg';
-    fs.exists('./uploads/' + req.body.path, function (exists) {
-      if (exists) {
-        res.sendFile('./uploads/' + req.body.path, { root: __dirname });
-        return;
-      } else {
-        next();
-      }
-    });
   };
 
   // GET images/profiles/:profileid
@@ -466,10 +463,14 @@ passport.use('bearer', new BearerStrategy(
   var add_item_to_cart = function(req, res) {
     orchHelper.addItemToUserCart(req.body.profileid, req.body.productnumber, req.body.quantity)
       .then(function (cart) {
-        res.status(201).json({cart:cart}); // does this work?? // lol
+        if (cart) {
+          res.status(201).json({cart:cart}); // does this work?? // lol
+        } else {
+          errorHandler.logAndReturn('Item not successfully added to cart', 400, next);
+        }
       })
       .fail(function (err) {
-        res.status(500).json({err:err});
+        errorHandler.logAndReturn('Error adding item to cart', 500, next, err);
       });
   };
 
@@ -477,10 +478,14 @@ passport.use('bearer', new BearerStrategy(
   var update_cart = function(req, res) {
     orchHelper.updateUserCart(req.body.profileid, req.body.productnumbers, req.body.quantities)
       .then(function (cart) {
-        res.send({cart:cart});
+        if (cart) {
+          res.status(200).json({cart:cart});
+        } else {
+          errorHandler.logAndReturn('Cart not sucessfully updated', 400, next);
+        }
       })
       .fail(function (err) {
-        res.send({err:err});
+        errorHandler.logAndReturn('Error updating cart', 500, next, err);
       });
   };
 
@@ -488,10 +493,14 @@ passport.use('bearer', new BearerStrategy(
   var empty_cart = function(req, res) {
     orchHelper.emptyUserCart(req.body.profileid)
       .then(function (cart) {
-        res.status(200).json({cart:cart});
+        if (cart) {
+          res.status(200).json({cart:cart});
+        } else {
+          errorHandler.logAndReturn('Cart not sucessfully emptied', 400, next);
+        }
       })
       .fail(function (err) {
-        res.status(500).json({err:err});
+        errorHandler.logAndReturn('Error emptying cart', 500, next, err);
       });
   };
 
