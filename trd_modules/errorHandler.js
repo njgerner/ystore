@@ -1,7 +1,8 @@
 var bunyan = require('bunyan');
-var logPath = '../logs/ylift-prod-error.log';
+var path = require('path');
+var logPath = path.join(__dirname, '../logs/ylift-prod-error.log');
 if (process.env.ENV == 'DEV') {
-  logPath = '../logs/ylift-dev-error.log';
+  logPath = path.join(__dirname, '../logs/ylift-dev-error.log');
 }
 var mitch = bunyan.createLogger({
   name: 'Y Lift',
@@ -12,7 +13,6 @@ var mitch = bunyan.createLogger({
     },
     {
       level: 'error',
-      stream: process.stderr,
       path: logPath  // log ERROR and above to a file
     }
   ]
