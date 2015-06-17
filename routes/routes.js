@@ -279,7 +279,7 @@ passport.use('bearer', new BearerStrategy(
 
   // GET /all_ylift_profiles
   var all_ylift_profiles = function(req, res) {
-    orchHelper.getAllYLiftProfiles()
+    orchHelper.getAllYLIFTProfiles()
       .then(function (result) {
         res.send({profiles:result});
       })
