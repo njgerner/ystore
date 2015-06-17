@@ -14,7 +14,7 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="product in products">
-					<th>{{product.vendorname}}</th>
+					<th>{{vendornames[product.productnumber]}}</th>
 					<th><a ng-click="viewProduct(product.productnumber)">{{product.name}}</a></th>
 					<th>{{product.category}}</th>
 					<th>{{displayDate(product.createdAt)}}</th>
@@ -23,9 +23,6 @@
 				</tr>
 			</tbody>
 		</table>
-		<!-- <div class = "row text-center">
-			<button>Save changes</button>
-		</div> -->
 	</div>
 	<div ng-show="mode == 'view' || mode == 'edit'" style="margin-top:30px; padding-right:40px;" class="large-6 large-offset-1 end columns">
 		<div class="row">
@@ -55,10 +52,10 @@
 		    <label>Category</label>
 		    <p ng-hide="mode == 'edit'">{{view_product.category}}</p>
 		    <select ng-hide="mode == 'view'" ng-model="view_product.category">
-		       <option value="Skin Care">Skin Care</option>
-		       <option value="Cosmetics">Cosmetics</option>
-		       <option value="Y Lift">Y Lift</option>
-		       <option value="Other">Other</option>
+		       <option value="skin care">Skin Care</option>
+		       <option value="cosmetics">Cosmetics</option>
+		       <option value="y lift">Y Lift</option>
+		       <option value="other">Other</option>
 		    </select>
 		    <!-- Edit description -->
 		    <p ng-show="mode == 'view'">{{view_product.description}}</p>

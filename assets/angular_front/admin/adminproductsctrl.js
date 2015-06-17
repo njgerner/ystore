@@ -3,12 +3,13 @@ superApp.controller('AdminProductsCtrl',
   function($rootScope, $scope, $state, authService, profileService, $location, productService, $timeout, storeService) {
 
   	$scope.mode = "";
+    $scope.vendornames = [];
 
   	storeService.getAllProducts(function(products) {
   		$scope.products = products;
   		$scope.products.forEach(function (product) {
   			storeService.getMerchantNameByID(product.attributes.vendor, function(name) {
-  				product.vendorname = name;
+  				$scope.vendornames[product.productnumber] = name;
   			});
   		});
   	});
@@ -30,7 +31,6 @@ superApp.controller('AdminProductsCtrl',
     };
 
   	$scope.viewProduct = function(productnumber) {
-      console.log('viewp');
   		$scope.message = "";
   		storeService.getProductByID(productnumber, function(product) {
   			$scope.view_product = product;
@@ -39,7 +39,6 @@ superApp.controller('AdminProductsCtrl',
   	};
 
   	$scope.updateProduct = function() {
-      console.log('updatep');
   		if ($scope.updating) {
   			return;
   		}
