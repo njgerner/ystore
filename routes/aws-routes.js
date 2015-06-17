@@ -25,7 +25,7 @@ module.exports = function(express, app, __dirname) {
 	    };
 	    s3.getSignedUrl('putObject', s3_params, function(err, data){
 	        if(err){
-	            console.log(err);
+	            errorHandler.logAndReturn('Invalid s3 signing', 422, next, err);
 	        }
 	        else{
 	            var return_data = {
