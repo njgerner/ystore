@@ -448,7 +448,7 @@ passport.use('bearer', new BearerStrategy(
     orchHelper.addItemToUserCart(req.body.profileid, req.body.productnumber, req.body.quantity)
       .then(function (cart) {
         if (cart) {
-          res.status(201).json({cart:cart}); // does this work?? // lol
+          res.status(201).json({cart:cart});
         } else {
           errorHandler.logAndReturn('Item not successfully added to cart', 400, next);
         }

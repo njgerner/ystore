@@ -53,7 +53,6 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 		this.loginWithToken = function(token, callback) {
 			this.clearAuthorization();
 			var internalThis = this;
-			console.log('loggin in with token', token);
 			$http({method: 'GET', url: '/login?token=' + token})
 			    .success(function (data, status, headers, config) {
 			    	if (data.tkn) {
