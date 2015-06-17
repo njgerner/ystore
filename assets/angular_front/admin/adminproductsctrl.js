@@ -13,9 +13,9 @@ superApp.controller('AdminProductsCtrl',
   		});
   	});
 
-  	$scope.products.forEach(function (product) {
-  		product.nice_createdAt = moment(product.createdAt).format("MMMM Do, YYYY");
-  	});
+    $scope.displayDate = function(date) {
+      return moment(date).format("MMMM Do, YYYY");
+    };
 
     $scope.editProduct = function(productnumber, attribute) {
       $scope.products.forEach(function (product) {
@@ -30,6 +30,7 @@ superApp.controller('AdminProductsCtrl',
     };
 
   	$scope.viewProduct = function(productnumber) {
+      console.log('viewp');
   		$scope.message = "";
   		storeService.getProductByID(productnumber, function(product) {
   			$scope.view_product = product;
@@ -38,6 +39,7 @@ superApp.controller('AdminProductsCtrl',
   	};
 
   	$scope.updateProduct = function() {
+      console.log('updatep');
   		if ($scope.updating) {
   			return;
   		}

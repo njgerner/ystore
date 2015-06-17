@@ -6,6 +6,7 @@
 			    <tr>
 			      <th>Vendor</th>
 			      <th>Product</th>
+			      <th>Category</th>
 			      <th>Date Added</th>
 			      <th>Active</th>
 			      <th>Featured</th>
@@ -15,7 +16,8 @@
 				<tr ng-repeat="product in products">
 					<th>{{product.vendorname}}</th>
 					<th><a ng-click="viewProduct(product.productnumber)">{{product.name}}</a></th>
-					<th>{{product.nice_createdAt}}</th>
+					<th>{{product.category}}</th>
+					<th>{{displayDate(product.createdAt)}}</th>
 					<th ng-click="editProduct(product.productnumber, 'active')" style="text-align:center">{{product.active}}</th>
 					<th ng-click="editProduct(product.productnumber, 'featured')"style="text-align:center">{{product.featured || 'N'}}</th>
 				</tr>
@@ -25,7 +27,7 @@
 			<button>Save changes</button>
 		</div> -->
 	</div>
-	<div ng-show="mode == 'view' || mode == 'edit'" style="margin-top:30px; padding-right:40px;" class="large-7 end columns">
+	<div ng-show="mode == 'view' || mode == 'edit'" style="margin-top:30px; padding-right:40px;" class="large-6 large-offset-1 end columns">
 		<div class="row">
 		  <hr>
 		  <div class="large-2 columns show-for-medium-up">
@@ -49,6 +51,15 @@
 		    <!-- Edit name -->
 		    <h4>{{view_product.name}}<small ng-click="mode = 'edit'; message = '';" class="right"><i class="i-pencil"></i>Edit</small></h4>
 		    <input ng-show="mode == 'edit'" type="text" ng-model="view_product.name"/>
+		    <!-- Edit category -->
+		    <label>Category</label>
+		    <p ng-hide="mode == 'edit'">{{view_product.category}}</p>
+		    <select ng-hide="mode == 'view'" ng-model="view_product.category">
+		       <option value="Skin Care">Skin Care</option>
+		       <option value="Cosmetics">Cosmetics</option>
+		       <option value="Y Lift">Y Lift</option>
+		       <option value="Other">Other</option>
+		    </select>
 		    <!-- Edit description -->
 		    <p ng-show="mode == 'view'">{{view_product.description}}</p>
 		    <textarea ng-show="mode == 'edit'" ng-model="view_product.description" rows="12"></textarea>
