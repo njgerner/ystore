@@ -37,7 +37,6 @@ exports.sendWelcome = function(name, email) {
 exports.newUserTeamNotification = function(user) {
 	var toArr = process.env.DEFAULT_NOTIFY_LIST.toString().split(';');
     var to = [];
-    console.log('to arr', toArr);
     for (var i = 0; i < toArr.length; i++) {
         var emailSplit = toArr[i].split("@");
         to[i] = {};

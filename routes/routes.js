@@ -179,11 +179,11 @@ passport.use('bearer', new BearerStrategy(
             return orchHelper.updateProfile(profile.id, profile);
           })
           .fail(function (err) {
-            errorHandler.logAndReturn('Error authorizing', 500, next, err);
+            errorHandler.logAndReturn('Error authorizing', 500, next, err, req.user);
           }).done();
       })
       .fail(function (err) {
-        errorHandler.logAndReturn('Error authorizing', 500, next, err);
+        errorHandler.logAndReturn('Error authorizing', 500, next, err, req.user);
       });
   };
 
@@ -224,15 +224,15 @@ passport.use('bearer', new BearerStrategy(
   var loginHelper = function(req, res, next) {
 
     return passport.authenticate('local-signin', function(err, user, info) {
-      if (err) { return errorHandler.logAndReturn(err, 422, next); }
-      if (!user) { return errorHandler.logAndReturn(info.message, 422, next); }
+      if (err) { return errorHandler.logAndReturn(err, 422, next, null, req.params); }
+      if (!user) { return errorHandler.logAndReturn(info.message, 422, next, null, req.params); }
       // no sessions, don't bother logging in...
       var payload = { user: user.id, expires: moment().add(4, 'days') };
       var secret = app.get("jwtTokenSecret");
 
       // encode
       var token = jwt.encode(payload, secret);
-      return res.json({tkn:token, tempPwd:req.cookies.tempPwdRedirect || null});
+      return res.json({tkn:token});
     })(req, res, next);
   };
 
@@ -240,8 +240,8 @@ passport.use('bearer', new BearerStrategy(
   ///////////////////////////////////////////////////////////////
   var register = function(req, res, next) {
     return passport.authenticate('local-signup', function(err, user, info) { 
-      if (err) { return errorHandler.logAndReturn(err.message || 'Error registering, please try again. If this issue continues, please contact support@ylift.io.', 422, next, err); }
-      if (!user) { return errorHandler.logAndReturn(info.message || 'Registration successful but there was an error on the server, please contact support@ylift.io if you have any issues with your account.', 500, next); }
+      if (err) { return errorHandler.logAndReturn(err.message || 'Error registering, please try again. If this issue continues, please contact support@ylift.io.', 422, next, err, null, req.params); }
+      if (!user) { return errorHandler.logAndReturn(info.message || 'Registration successful but there was an error on the server, please contact support@ylift.io if you have any issues with your account.', 500, next, req.params); }
       var payload = { user: user.id, expires: moment().add(4, 'days') };
       var secret = app.get("jwtTokenSecret");
       var token = jwt.encode(payload, secret);
@@ -302,11 +302,11 @@ passport.use('bearer', new BearerStrategy(
       if (user) {
         res.send({success:true});
       } else {
-        errorHandler.logAndReturn('Unable to update password, user not found', 404, next);
+        errorHandler.logAndReturn('Unable to update password, user not found', 404, next, null, req.body);
       }
     })
     .fail(function (err) {
-      errorHandler.logAndReturn('Error updating account password', 500, next, err);
+      errorHandler.logAndReturn('Error updating account password', 500, next, err, req.body);
     });
   };
 
@@ -316,11 +316,11 @@ passport.use('bearer', new BearerStrategy(
       if (profile) {
         res.send({profile: profile});
       } else {
-        errorHandler.logAndReturn('Unable to update, user not found', 404, next);
+        errorHandler.logAndReturn('Unable to update, user not found', 404, next, null, req.body);
       }
     })
     .fail(function (err) {
-      errorHandler.logAndReturn('Error updating user', 500, next, err);
+      errorHandler.logAndReturn('Error updating user', 500, next, err, req.body);
     });
   };
  
@@ -347,11 +347,11 @@ passport.use('bearer', new BearerStrategy(
         if (result) {
           res.send({product: result});
         } else {
-          errorHandler.logAndReturn('Not a valid product id', 404, next);
+          errorHandler.logAndReturn('Not a valid product id', 404, next, null, req.params);
         }
       })
       .fail(function (err) {
-        errorHandler.logAndReturn('Error retrieving product by id', 500, next, err);
+        errorHandler.logAndReturn('Error retrieving product by id', 500, next, err, req.params);
       });
   };
 
@@ -362,11 +362,11 @@ passport.use('bearer', new BearerStrategy(
         if (result) {
           res.send({products: result});
         } else {
-          errorHandler.logAndReturn('No products related to that product found', 404, next);
+          errorHandler.logAndReturn('No products related to that product found', 404, next, null, req.params);
         }
       })
       .fail(function (err) {
-        errorHandler.logAndReturn('Error retrieving related products', 500, next, err);
+        errorHandler.logAndReturn('Error retrieving related products', 500, next, err, req.params);
       });
   };
 
@@ -377,11 +377,11 @@ passport.use('bearer', new BearerStrategy(
         if (result) {
           res.send({products: result});
         } else {
-          errorHandler.logAndReturn('No products found for this category', 404, next);
+          errorHandler.logAndReturn('No products found for this category', 404, next, null, req.body);
         }
       })
       .fail(function (err) {
-        errorHandler.logAndReturn('Error retrieving products by category', 500, next, err);
+        errorHandler.logAndReturn('Error retrieving products by category', 500, next, err, req.body);
       });
   };
 
@@ -392,11 +392,11 @@ passport.use('bearer', new BearerStrategy(
         if (result) {
           res.send({cart: result});
         } else {
-          errorHandler.logAndReturn('No cart for this user found', 404, next);
+          errorHandler.logAndReturn('No cart for this user found', 404, next, null, req.params);
         }
       })
       .fail(function (err) {
-        errorHandler.logAndReturn('Error retrieving account cart', 500, next, err);
+        errorHandler.logAndReturn('Error retrieving account cart', 500, next, err, req.params);
       });
   };
 
@@ -407,11 +407,11 @@ passport.use('bearer', new BearerStrategy(
         if (result) {
           res.send({order: result});
         } else {
-          errorHandler.logAndReturn('Not a valid order id', 404, next);
+          errorHandler.logAndReturn('Not a valid order id', 404, next, null, req.params);
         }
       })
       .fail(function (err) {
-        errorHandler.logAndReturn('Error retrieving order by id', 500, next, err);
+        errorHandler.logAndReturn('Error retrieving order by id', 500, next, err, req.params);
       });
   };
 
@@ -422,11 +422,11 @@ passport.use('bearer', new BearerStrategy(
         if (result) {
           res.send({orders: result});
         } else {
-          errorHandler.logAndReturn('No orders for this user found', 404, next);
+          errorHandler.logAndReturn('No orders for this user found', 404, next, null, req.params);
         }
       })
       .fail(function (err) {
-        errorHandler.logAndReturn('Error retrieving orders', 500, next, err);
+        errorHandler.logAndReturn('Error retrieving orders', 500, next, err, req.params);
       });
   };
 
@@ -450,11 +450,11 @@ passport.use('bearer', new BearerStrategy(
         if (cart) {
           res.status(201).json({cart:cart});
         } else {
-          errorHandler.logAndReturn('Item not successfully added to cart', 400, next);
+          errorHandler.logAndReturn('Could not add item to cart', 400, next, null, req.body);
         }
       })
       .fail(function (err) {
-        errorHandler.logAndReturn('Error adding item to cart', 500, next, err);
+        errorHandler.logAndReturn('Error adding item to cart', 500, next, err, req.body);
       });
   };
 
@@ -465,11 +465,11 @@ passport.use('bearer', new BearerStrategy(
         if (cart) {
           res.status(200).json({cart:cart});
         } else {
-          errorHandler.logAndReturn('Cart not sucessfully updated', 400, next);
+          errorHandler.logAndReturn('Cart not update cart', 400, next, null, req.body);
         }
       })
       .fail(function (err) {
-        errorHandler.logAndReturn('Error updating cart', 500, next, err);
+        errorHandler.logAndReturn('Error updating cart', 500, next, err, req.body);
       });
   };
 
@@ -480,11 +480,11 @@ passport.use('bearer', new BearerStrategy(
         if (cart) {
           res.status(200).json({cart:cart});
         } else {
-          errorHandler.logAndReturn('Cart not sucessfully emptied', 400, next);
+          errorHandler.logAndReturn('Cart not empty cart', 400, next, null, req.body);
         }
       })
       .fail(function (err) {
-        errorHandler.logAndReturn('Error emptying cart', 500, next, err);
+        errorHandler.logAndReturn('Error emptying cart', 500, next, err, req.body);
       });
   };
 
@@ -562,7 +562,7 @@ passport.use('bearer', new BearerStrategy(
             if (user.isAdmin) {
               next();
             } else {
-              errorHandler.logAndReturn('Not an admin', 401, next, err);
+              errorHandler.logAndReturn('Not an admin', 401, next);
             }
           })
           .fail(function (err) {

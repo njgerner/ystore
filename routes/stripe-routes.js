@@ -55,7 +55,7 @@ module.exports = function(express, app, __dirname) {
 		.then(function (customer) {
 			res.status(201).json({customer:customer, message:"Customer created"});
 		}, function (err) {
-			errorHandler.logAndReturn('Error adding new customer', 500, next, err);
+			errorHandler.logAndReturn('Error adding new customer', 500, next, err, [req.params, req.body]);
 		});
 	};
 
@@ -67,7 +67,6 @@ module.exports = function(express, app, __dirname) {
 		}, function(err, customer) {
 			if (err) {
 				return Q.fcall(function () {
-					console.log('error creating stripe customer', err);
 				  throw new Error(err);
 				});
 			} else {
@@ -77,7 +76,7 @@ module.exports = function(express, app, __dirname) {
 		.then(function (customer) {
 			res.status(201).json({customer:customer, message:"Guest customer created"});
 		}, function (err) {
-			errorHandler.logAndReturn('Error adding guest customer', 500, next, err);
+			errorHandler.logAndReturn('Error adding guest customer', 500, next, err, req.body);
 		});
 	};
 
@@ -131,7 +130,7 @@ module.exports = function(express, app, __dirname) {
 				res.status(200).json({customer:customer});
 			})
 			.fail(function (err) {
-				errorHandler.logAndReturn('Error updating customer', 500, next, err);
+				errorHandler.logAndReturn('Error updating customer', 500, next, err, [req.params, req.body]);
 			});
 	};
 
@@ -146,7 +145,7 @@ module.exports = function(express, app, __dirname) {
 				res.status(200).json({customer:customer});
 			})
 			.fail(function (err) {
-				errorHandler.logAndReturn('Error updating guest customer', 500, next, err);
+				errorHandler.logAndReturn('Error updating guest customer', 500, next, err, req.body);
 			});
 		});
 	};
@@ -161,7 +160,7 @@ module.exports = function(express, app, __dirname) {
 				}
 			})
 			.fail(function (err) {
-				errorHandler.logAndReturn('Error retrieving customer information', 500, next, err);
+				errorHandler.logAndReturn('Error retrieving customer information', 500, next, err, req.params);
 			});
 	};
 
@@ -220,7 +219,7 @@ module.exports = function(express, app, __dirname) {
 							res.status(201).json({order:order, success:result});
 						})
 						.fail(function (err) {
-							errorHandler.logAndReturn('Transaction complete but there was an error processing the order on our end, please contact support@ylift.io', 500, next, err);
+							errorHandler.logAndReturn('Transaction complete but there was an error processing the order on our end, please contact support@ylift.io', 500, next, err, [req.query, req.body]);
 						});
 					// guest account purchase
 					} else {
@@ -228,7 +227,7 @@ module.exports = function(express, app, __dirname) {
 					}
 				})
 				.fail(function (err) {
-					errorHandler.logAndReturn('Transaction complete but there was an error processing the order on our end, please contact support@ylift.io', 500, next, err);
+					errorHandler.logAndReturn('Transaction complete but there was an error processing the order on our end, please contact support@ylift.io', 500, next, err, [req.query, req.body]);
 				});
 			}
 		});

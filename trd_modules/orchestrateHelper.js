@@ -782,7 +782,7 @@ exports.getProfile = function(profileid) {
     deferred.resolve(result.body);
   })
   .fail(function (err) {
-    if (err.code == "items_not_found") {
+    if (err.body.code == "items_not_found") {
       deferred.resolve(false);
     } else {
       deferred.reject(new Error(err.body.message));
@@ -798,7 +798,7 @@ exports.getUser = function(userid) {
     deferred.resolve(result.body);
   })
   .fail(function (err) {
-    if (err.code == "items_not_found") {
+    if (err.body.code == "items_not_found") {
       deferred.resolve(false);
     } else {
       deferred.reject(new Error(err.body.message));
@@ -873,7 +873,7 @@ exports.findMerchantProfile = function(profileid) {
     deferred.resolve(results[0]);
   })
   .fail(function (err) {
-    if (err.code == "items_not_found") {
+    if (err.body.code == "items_not_found") {
       deferred.resolve(false);
     } else {
       deferred.reject(new Error(err.body.message));
@@ -890,7 +890,7 @@ exports.getMerchantProfile = function(profileid) {
     deferred.resolve(result.body);
   })
   .fail(function (err) {
-    if (err.code == "items_not_found") {
+    if (err.body.code == "items_not_found") {
       deferred.resolve(false);
     } else {
       deferred.reject(new Error(err.body.message));
@@ -907,7 +907,7 @@ exports.getMerchantOrders = function(merchantid) {
     deferred.resolve(results);
   })
   .fail(function (err) {
-    if (err.code == "items_not_found") {
+    if (err.body.code == "items_not_found") {
       deferred.resolve(false);
     } else {
       deferred.reject(new Error(err.body.message));
@@ -928,7 +928,7 @@ exports.getMerchantProducts = function(merchantid) {
     deferred.resolve(results);
   })
   .fail(function (err) {
-    if (err.code == "items_not_found") {
+    if (err.body.code == "items_not_found") {
       deferred.resolve(false);
     } else {
       deferred.reject(new Error(err.body.message));
@@ -1017,7 +1017,7 @@ exports.getProductReviews = function(productnumber) {
     deferred.resolve(rawDogger.push_values_to_top(res.body.results));
   })
   .fail(function (err) {
-    if (err.code == "items_not_found") {
+    if (err.body.code == "items_not_found") {
       deferred.resolve(false);
     } else {
       deferred.reject(new Error(err.body.message));
@@ -1097,7 +1097,7 @@ exports.getMostFrequentEvent = function(collection, type, profile) {
     deferred.resolve(rawDogger.push_values_to_top(result.body.results));
   })
   .fail(function (err) {
-    if (err.code == "items_not_found") {
+    if (err.body.code == "items_not_found") {
       deferred.resolve(false);
     } else {
       deferred.reject(new Error(err.body.message));
@@ -1118,7 +1118,7 @@ exports.validateResetToken = function(tokenid) {
     }
   })
   .fail(function (err) {
-    if (err.code == "items_not_found") {
+    if (err.body.code == "items_not_found") {
       deferred.resolve(false);
     } else {
       deferred.reject(new Error(err.body.message));

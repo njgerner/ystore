@@ -37,7 +37,7 @@ module.exports = function(express, app, __dirname) {
 	    };
 	    transport.sendMail(options, function(err, response) {
 	      if (err) {
-	        errorHandler.logAndReturn('Error sending support email', 500, next, err);
+	        errorHandler.logAndReturn('Error sending support email', 500, next, err, req.body);
 	      } else {
 	        res.status(200).json({result:"success"});
 	      }

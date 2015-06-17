@@ -74,10 +74,7 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 					headers:{'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'},
 					data:$.param({email:email, password:password})}).
 			    success(function (data, status, headers, config) {
-			    	if (data.tempPwd && data.tkn) {
-			    		trdInterceptor.setToken(data.tkn);
-			    		callback(null, "temp_password");
-			    	} else if (data.tkn) {
+			    	if (data.tkn) {
 			    		trdInterceptor.setToken(data.tkn);
 			    		callback(null, "success!");
 			    	}

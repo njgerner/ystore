@@ -17,11 +17,11 @@ module.exports = function(express, app, __dirname) {
 			if (data) {
 				res.status(200).json({orders:data});
 			} else {
-				errorHandler.logAndReturn('No merchant orders found for this account', 404, next);
+				errorHandler.logAndReturn('No merchant orders found for this account', 404, next, null, req.params);
 			}
 		})
 		.fail(function (err) {
-			errorHandler.logAndReturn('Error retrieving merchant orders for account', 500, next, err);
+			errorHandler.logAndReturn('Error retrieving merchant orders for account', 500, next, err, req.params);
 		});
 	};
 
@@ -32,11 +32,11 @@ module.exports = function(express, app, __dirname) {
 			if (data) {
 				res.status(200).json({products:data});
 			} else {
-				errorHandler.logAndReturn('No merchant products found for this account', 404, next);
+				errorHandler.logAndReturn('No merchant products found for this account', 404, next, null, req.params);
 			}
 		})
 		.fail(function (err) {
-			errorHandler.logAndReturn('Error retrieving merchant products for account', 500, next, err);
+			errorHandler.logAndReturn('Error retrieving merchant products for account', 500, next, err, req.params);
 		});
 	};
 
@@ -47,7 +47,7 @@ module.exports = function(express, app, __dirname) {
 			res.status(200).json({order:data});
 		})
 		.fail(function (err) {
-			errorHandler.logAndReturn('Error updating order', 500, next, err);
+			errorHandler.logAndReturn('Error updating order', 500, next, err, req.body);
 		});
 	};
 
@@ -59,7 +59,7 @@ module.exports = function(express, app, __dirname) {
 			res.status(200).json({order:data});
 		})
 		.fail(function (err) {
-			errorHandler.logAndReturn('Error creating check order', 500, next, err);
+			errorHandler.logAndReturn('Error creating check order', 500, next, err, req.body);
 		});
 	};
 

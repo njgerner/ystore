@@ -25,7 +25,7 @@ module.exports = function(express, app, __dirname) {
 			res.status(201).json(result);
 		})
 	  	.fail(function (err) {
-	  		errorHandler.logAndReturn('Error converting user account to Y Lift type', 500, next, err);
+	  		errorHandler.logAndReturn('Error converting user account to Y Lift type', 500, next, err, [req.user, req.body]);
 	  	}).done();
 	  
 	};
@@ -40,7 +40,7 @@ module.exports = function(express, app, __dirname) {
 	    	}
 	    })
 	    .fail(function (err) {
-	    	errorHandler.logAndReturn('Error validating reset token', 500, next, err);
+	    	errorHandler.logAndReturn('Error validating reset token', 500, next, err, req.body);
 	    });
   	};
 

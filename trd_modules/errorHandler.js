@@ -18,13 +18,13 @@ var mitch = bunyan.createLogger({
   ]
 });
 
-exports.logAndReturn = function(message, status, next, errObj) {
+exports.logAndReturn = function(message, status, next, errObj, data) {
 	var err = new Error(message || 'Unknown server error');
 	err.status = status;
 	if (process.env.LOG_ERRORS == 'true') {
-		mitch.error(errObj || message || 'Unknown server error');
+		mitch.error(errObj || message || 'Unknown server error', '| data: ' + (data || ""));
 	} else {
-		mitch.info(errObj || message || 'Unknown server error');
+		mitch.info(errObj || message || 'Unknown server error', '| data: ' + (data || ""));
 	}
 	return next(err);
 };

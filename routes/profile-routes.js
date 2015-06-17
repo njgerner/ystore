@@ -21,11 +21,11 @@ module.exports = function(express, app, __dirname) {
 		  		}
 		  		res.status(200).json({profile:result, admin:isAdmin});
 	  		} else {
-	  			errorHandler.logAndReturn('No merchant profile found for account', 404, next);
+	  			errorHandler.logAndReturn('No merchant profile found for account', 404, next, null, req.params);
 	  		}
 	  	})
 	  	.fail(function (err) {
-	  		errorHandler.logAndReturn('Error retrieving merchant profile for account', 500, next, err);
+	  		errorHandler.logAndReturn('Error retrieving merchant profile for account', 500, next, err, req.params);
 	  	});
 	};
 
@@ -36,7 +36,7 @@ module.exports = function(express, app, __dirname) {
 	  		res.status(200).json(result);
 	  	})
 	  	.fail(function (err) {
-	  		errorHandler.logAndReturn('Error updating account profile', 500, next, err);
+	  		errorHandler.logAndReturn('Error updating account profile', 500, next, err, [req.params, req.body]);
 	  	});
 	};
 
@@ -53,7 +53,7 @@ module.exports = function(express, app, __dirname) {
 	  		res.status(200).json(merchant);
 	  	})
 	  	.fail(function (err) {
-	  		errorHandler.logAndReturn('Error addming merchant to account profile', 500, next, err);
+	  		errorHandler.logAndReturn('Error addming merchant to account profile', 500, next, err, [req.params, req.body]);
 	  	});
 	};
 
@@ -64,11 +64,11 @@ module.exports = function(express, app, __dirname) {
 	  		if (result) {
 	  			res.status(200).json(result);
 	  		} else {
-	  			errorHandler.logAndReturn('No merchant profile found to update', 404, next);
+	  			errorHandler.logAndReturn('No merchant profile found to update', 404, next, null, req.body);
 	  		}
 	  	})
 	  	.fail(function (err) {
-	  		errorHandler.logAndReturn('Error updating merchant profile', 500, next, err);
+	  		errorHandler.logAndReturn('Error updating merchant profile', 500, next, err, req.body);
 	  	});
 	};
 
@@ -83,17 +83,17 @@ module.exports = function(express, app, __dirname) {
 				  		res.status(200).json({result:"deleted"});
 				  	})
 				  	.fail(function (err) {
-				  		errorHandler.logAndReturn('Error deleting merchant profile', 500, next, err);
+				  		errorHandler.logAndReturn('Error deleting merchant profile', 500, next, err, [req.params, req.body]);
 				  	});
 				} else {
-			  		errorHandler.logAndReturn('Unauthorized to delete merchant account', 401, next);
+			  		errorHandler.logAndReturn('Unauthorized to delete merchant account', 401, next, null, [req.params, req.body]);
 				}
 			} else {
-				errorHandler.logAndReturn('No merchant account found to delete', 401, next);
+				errorHandler.logAndReturn('No merchant account found to delete', 401, next, null, [req.params, req.body]);
 			}
 		})
 		.fail(function (err) {
-			errorHandler.logAndReturn('Error deleting merchant profile', 500, next, err);
+			errorHandler.logAndReturn('Error deleting merchant profile', 500, next, err, [req.params, req.body]);
 		});
 	};
 

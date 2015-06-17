@@ -39,11 +39,11 @@ module.exports = function(express, app, __dirname) {
 			if (data) {
 				res.status(200).json({data:data});
 			} else {
-				errorHandler.logAndReturn('Not product rating found', 404, next);
+				errorHandler.logAndReturn('Not product rating found', 404, next, null, req.params);
 			}
 		})
 		.fail(function (err) {
-			errorHandler.logAndReturn('Error retrieving product rating', 500, next, err);
+			errorHandler.logAndReturn('Error retrieving product rating', 500, next, err, req.params);
 		});
 	};
 
@@ -55,11 +55,11 @@ module.exports = function(express, app, __dirname) {
 			if (data) {
 				res.status(200).json({data:data});
 			} else {
-				errorHandler.logAndReturn('Not product reviews found', 404, next);
+				errorHandler.logAndReturn('Not product reviews found', 404, next, null, req.params);
 			}
 		})
 		.fail(function (err) {
-			errorHandler.logAndReturn('Error retrieving product reviews', 500, next, err);
+			errorHandler.logAndReturn('Error retrieving product reviews', 500, next, err, req.params);
 		});
 	};
 
@@ -70,11 +70,11 @@ module.exports = function(express, app, __dirname) {
 			if (data) {
 				res.status(200).json(data);
 			} else {
-				errorHandler.logAndReturn('Not most viewed product found', 404, next);
+				errorHandler.logAndReturn('Not most viewed product found', 404, next, null, req.params);
 			}
 		})
 		.fail(function (err) {
-			errorHandler.logAndReturn('Error finding most view product for user', 500, next, err);
+			errorHandler.logAndReturn('Error finding most view product for user', 500, next, err, req.params);
 		});
 	};
 
@@ -86,7 +86,7 @@ module.exports = function(express, app, __dirname) {
 	  		res.status(201).json(result);
 	  	})
 	  	.fail(function (err) {
-	  		errorHandler.logAndReturn('Error submitting review for product', 500, next, err);
+	  		errorHandler.logAndReturn('Error submitting review for product', 500, next, err, req.body);
 	  	});
 	};
 
@@ -147,7 +147,7 @@ module.exports = function(express, app, __dirname) {
 			res.status(201).json(result);
 		})
 	  	.fail(function (err) {
-	  		errorHandler.logAndReturn('There was an error adding the product, view the logs for more information', 500, next, err);
+	  		errorHandler.logAndReturn('There was an error adding the product, view the logs for more information', 500, next, err, req.body);
 	  	}).done();
 	};
 
@@ -176,7 +176,7 @@ module.exports = function(express, app, __dirname) {
 			res.status(201).json(result);
 		})
 	  	.fail(function (err) {
-	  		errorHandler.logAndReturn('There was an error adding updating the product, view the logs for more information', 500, next, err);
+	  		errorHandler.logAndReturn('There was an error adding updating the product, view the logs for more information', 500, next, err, [req.user, req.body]);
 	  	}).done();
 	};
 
@@ -189,7 +189,7 @@ module.exports = function(express, app, __dirname) {
 			res.status(201).json(true);
 		})
 		.fail(function (err) {
-			errorHandler.logAndReturn('Error adding page view event for product', 500, next, err);
+			errorHandler.logAndReturn('Error adding page view event for product', 500, next, err, [req.params, req.query]);
 		}).done();
 	};
 
