@@ -100,7 +100,7 @@ superApp.controller('RegisterCtrl',
       }
       $scope.failedMessage = null;
       if ($scope.password !== $scope.confirmpassword) {
-        $scope.failedMessage = "Passwords must match!";
+        $scope.failedMessage = "Passwords do not match";
         return;
       } else if ($scope.password.length < 6) {
         $scope.failedMessage = "Password must be at least 6 characters";
