@@ -2,7 +2,6 @@ superApp.controller('AdminProductsCtrl',
   ['$rootScope', '$scope', '$state', 'authService', 'profileService', 'merchantService', '$location', 'productService', '$timeout', 'storeService',
   function($rootScope, $scope, $state, authService, profileService, merchantService, $location, productService, $timeout, storeService) {
 
-  	$scope.mode = "";
     $scope.vendornames = [];
 
   	storeService.getAllProducts(function(products) {
@@ -35,22 +34,6 @@ superApp.controller('AdminProductsCtrl',
   		storeService.getProductByID(productnumber, function(product) {
   			$scope.view_product = product;
   		});
-  		$scope.mode = 'view';
-  	};
-
-  	$scope.updateProduct = function() {
-  		if ($scope.updating) {
-  			return;
-  		}
-  		$scope.updating = true;
-  		productService.updateProduct($scope.view_product, function(result) {
-  			if(result.err) {
-  				$scope.message = "Error updating product."
-  			}else {
-  				$scope.message = "Product successfully updated."
-  			}
-  		});
-  		$scope.updating = false;
   		$scope.mode = 'view';
   	};
 
