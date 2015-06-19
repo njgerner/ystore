@@ -2,7 +2,7 @@ superApp.controller('AdminProductsCtrl',
   ['$rootScope', '$scope', '$state', 'authService', 'profileService', 'merchantService', '$location', 'productService', '$timeout', 'storeService',
   function($rootScope, $scope, $state, authService, profileService, merchantService, $location, productService, $timeout, storeService) {
 
-    $scope.vendornames = [];
+    $scope.vendornames = {};
 
   	storeService.getAllProducts(function(products) {
   		$scope.products = products;
