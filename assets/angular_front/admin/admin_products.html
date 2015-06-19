@@ -1,5 +1,5 @@
 <div class="row">
-	<div style="margin-right:-3%" class="large-4 columns">
+	<div ng-hide="mode == 'view' || mode == 'edit'" style="margin-right:-3%" class="large-8 large-offset-1 columns">
 		<h3> Y Lift Store: {{products.length}} products</h3>
 		<table style="width:100%">
 			<thead>
@@ -24,7 +24,8 @@
 			</tbody>
 		</table>
 	</div>
-	<div ng-show="mode == 'view' || mode == 'edit'" style="margin-top:30px; padding-right:40px;" class="large-6 large-offset-1 end columns">
+	<div ng-show="mode == 'view' || mode == 'edit'" style="margin-top:30px; padding-right:40px;" class="large-8 large-offset-1 end columns">
+		<p id="admin-products-showall" class="pointer" ng-click="mode = ''">Show All Products</p>
 		<div class="row">
 		  <hr>
 		  <div class="large-2 columns show-for-medium-up">
