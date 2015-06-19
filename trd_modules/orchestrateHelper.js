@@ -1090,7 +1090,17 @@ exports.getMostFrequentEvent = function(collection, type, profile) {
     console.log('error getting most feqe', err.body);
     deferred.reject(new Error(err.body));
   });
+};
 
+exports.getMerchantByID = function(id) {
+  var deferred = Q.defer();
+  db.get('merchant-profiles', id)
+  .then(function (merchant){
+    deferred.resolve(merchant.body);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body));
+  });
   return deferred.promise;
 };
 
