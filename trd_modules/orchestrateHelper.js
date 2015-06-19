@@ -1092,11 +1092,11 @@ exports.getMostFrequentEvent = function(collection, type, profile) {
   });
 };
 
-exports.getMerchantNameByID = function(id) {
+exports.getMerchantByID = function(id) {
   var deferred = Q.defer();
   db.get('merchant-profiles', id)
   .then(function (merchant){
-    deferred.resolve(merchant.body.name);
+    deferred.resolve(merchant.body);
   })
   .fail(function (err) {
     deferred.reject(new Error(err.body));

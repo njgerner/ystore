@@ -1,6 +1,6 @@
 superApp.controller('AdminProductsCtrl',
-  ['$rootScope', '$scope', '$state', 'authService', 'profileService', '$location', 'productService', '$timeout', 'storeService',
-  function($rootScope, $scope, $state, authService, profileService, $location, productService, $timeout, storeService) {
+  ['$rootScope', '$scope', '$state', 'authService', 'profileService', 'merchantService', '$location', 'productService', '$timeout', 'storeService',
+  function($rootScope, $scope, $state, authService, profileService, merchantService, $location, productService, $timeout, storeService) {
 
   	$scope.mode = "";
     $scope.vendornames = [];
@@ -8,7 +8,7 @@ superApp.controller('AdminProductsCtrl',
   	storeService.getAllProducts(function(products) {
   		$scope.products = products;
   		$scope.products.forEach(function (product) {
-  			storeService.getMerchantNameByID(product.attributes.vendor, function(name) {
+  			   merchantService.getMerchantName(product.attributes.vendor, function(name) {
   				$scope.vendornames[product.productnumber] = name;
   			});
   		});

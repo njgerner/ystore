@@ -313,17 +313,6 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
         });
       };
 
-    this.getMerchantNameByID = function(merchantid, callback) {
-        $http({method: 'POST', url: "/get_merchant_name",
-            data:{id:merchantid}})
-        .success(function(data, status, headers, config) {
-            callback(data.name);
-        })
-        .error(function(data, status, headers, config) {
-            callback("Vendor not found");
-        });
-      };
-
     $rootScope.$on('loggedout', function(evt, args) {
         this.initService;
     });
