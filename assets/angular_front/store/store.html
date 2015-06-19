@@ -32,16 +32,8 @@
   <div class="large-8 columns">
     <div class="row" data-match-height>
 
-      <div class="large-4 small-6 columns" ng-repeat="p in products" ng-click="goToProduct(p.productnumber)">
-        <div class="product-card pointer">
-          <div style="height:150px; overflow-y:hidden;">
-            <img ng-src="{{p.remote_img || p.img}}?dim=475x475" class="image" ng-error="defaultImage(p)">
-          </div>
-          <div class="content">
-            <h5 class="product-title">{{p.name}}</h5>
-            <h6 class="subheader">${{p.price}}</h6>
-          </div>
-        </div>
+      <div class="large-4 small-6 columns" ng-repeat="product in products" ng-click="goToProduct(product.productnumber)">
+        <product-card-dir product="product"></product-card-dir>
       </div>
 
     </div>
