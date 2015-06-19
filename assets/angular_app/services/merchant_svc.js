@@ -4,6 +4,9 @@ trdServices.service("merchantService", ['$http',
     this.merchants = [];
 
     this.getMerchantByID = function(merchantid, callback) {
+        if(this.merchants[merchantid]) {
+            callback(this.merchants[merchantid]);
+        }
     	var internalThis = this;
         $http({method: 'POST', url: "/get_merchant_name",
             data:{id:merchantid}})
@@ -18,7 +21,7 @@ trdServices.service("merchantService", ['$http',
 
      this.getMerchantName = function(id, callback) {
      	if(this.merchants[id]) {	// merchant is already cached
-     		callback(this.merchants[id]);
+     		callback(this.merchants[id].name);
      	}else {						// else need to grab it
      		this.getMerchantByID(id, function(result) {
      			if(result.name) {	// merchant was found
