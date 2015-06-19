@@ -2,9 +2,10 @@ superApp.controller('AdminOrdersCtrl',
   ['$rootScope', '$scope', '$state', 'adminService',
   function($rootScope, $scope, $state, adminService) {
 
-  	$scope.totalOrderVolume = 0;
+    $scope.totalOrderVolume = 0;
     $scope.monthOrderVolume = 0;
-  	$scope.dailyOrderVolume = 0;
+    $scope.dailyOrderVolume = 0;
+    $scope.error = null;
 
     $scope.getDisplayDate = function (date) {
       return moment(date).format('LL');
@@ -59,23 +60,27 @@ superApp.controller('AdminOrdersCtrl',
       });
     }
 
-  	function onOrdersLoaded (orders) {
-      var ordersByDate = {};
-  		for (var i = 0; i < orders.length; i++) {
-        if (ordersByDate[moment(orders[i].createdAt).format("M/D")] === undefined) {
-          ordersByDate[moment(orders[i].createdAt).format("M/D")] = 0;
+  	function onOrdersLoaded (error, orders) {
+      if (error) {
+        $scope.error = error;
+      } else {
+        var ordersByDate = {};
+        for (var i = 0; i < orders.length; i++) {
+          if (ordersByDate[moment(orders[i].createdAt).format("M/D")] === undefined) {
+            ordersByDate[moment(orders[i].createdAt).format("M/D")] = 0;
+          }
+          ordersByDate[moment(orders[i].createdAt).format("M/D")] += parseInt(orders[i].total);
+          $scope.totalOrderVolume += parseInt(orders[i].total);
+          if (moment(orders[i].createdAt).isAfter(moment().subtract(1, 'months'))) {
+            $scope.monthOrderVolume += parseInt(orders[i].total);
+          }
+          if (moment(orders[i].createdAt).isAfter(moment().subtract(1, 'days'))) {
+            $scope.dailyOrderVolume += parseInt(orders[i].total);
+          }
         }
-        ordersByDate[moment(orders[i].createdAt).format("M/D")] += parseInt(orders[i].total);
-        $scope.totalOrderVolume += parseInt(orders[i].total);
-        if (moment(orders[i].createdAt).isAfter(moment().subtract(1, 'months'))) {
-          $scope.monthOrderVolume += parseInt(orders[i].total);
-        }
-        if (moment(orders[i].createdAt).isAfter(moment().subtract(1, 'days'))) {
-          $scope.dailyOrderVolume += parseInt(orders[i].total);
-        }
+        $scope.orders = orders;
+        buildChart(ordersByDate);
       }
-  		$scope.orders = orders;
-      buildChart(ordersByDate);
   	}
 
   	adminService.getAllOrders(onOrdersLoaded);
