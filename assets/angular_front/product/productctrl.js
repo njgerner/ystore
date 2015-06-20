@@ -50,6 +50,9 @@ superApp.controller('ProductCtrl',
     }
 
     function onProductLoaded (error, product) {
+        if (error) {
+            $scope.error = error;
+        }
         $scope.product = product;
         $scope.loading = false;
     }
@@ -76,8 +79,6 @@ superApp.controller('ProductCtrl',
         $scope.ratingLoading = false;
     }
 
-    function onPageViewed (error, data) {} 
-
     if (authService.authorized) {
         $scope.profileid = authService.profile.id;
     }
@@ -86,6 +87,6 @@ superApp.controller('ProductCtrl',
     storeService.getRelatedProducts($scope.productnumber, onRelatedProductsLoaded);
     productService.getReviews($scope.productnumber, onReviewsLoaded);
     productService.getRating($scope.productnumber, onRatingLoaded);
-    productService.addPageView($scope.productnumber, onPageViewed);
+    productService.addPageView($scope.productnumber);
 
 }]);

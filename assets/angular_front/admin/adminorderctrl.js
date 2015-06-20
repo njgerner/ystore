@@ -36,7 +36,10 @@ superApp.controller('AdminOrderCtrl',
         $scope.order = order;
         if ($scope.order.products && $scope.order.products.length) {
           $scope.order.products.forEach(function (p) {
-            storeService.getProductByID(p.productnumber, function (product) {
+            storeService.getProductByID(p.productnumber, function (error, product) {
+              if (error) {
+                $scope.error = error;
+              }
               $scope.products.push(product);
             });
           });

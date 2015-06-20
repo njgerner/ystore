@@ -15,21 +15,12 @@ superApp.controller('ProfileCtrl',
        }
     }
 
-    $scope.getDisplayTotal = function(total) {
-      if(total) {
-         return "$" + total;
-      }else {
+    $scope.getDisplayTotal = function(value) {
+      if (!value) {
         return "";
-      }
-    }
-
-    $scope.onOrdersLoaded = function(orders) {
-      if (Array.isArray(orders)) { // dumb orchestrate return issue, a good intern problem to fix
-        $scope.orders = orders;
       } else {
-        $scope.orders.push(orders);
+        return "$" + value.toString().split( /(?=(?:\d{3})+(?:\.|$))/g ).join( "," );
       }
-      $scope.ordersLoaded = true;
     }
 
     $scope.logoutNow = function() {
@@ -40,7 +31,19 @@ superApp.controller('ProfileCtrl',
       $state.go("order", {orderid:orderid});
     }
 
-    storeService.getProductsInCart(authService.profile.id, function(cart) {});
-    storeService.getOrdersByUserID(authService.profile.id, function(orders) { $scope.onOrdersLoaded(orders); });
+    function onOrdersLoaded (error, orders) {
+      if (error) {
+        $scope.error = error;
+      }
+      if (Array.isArray(orders)) {
+        $scope.orders = orders;
+      } else {
+        $scope.orders.push(orders);
+      }
+      $scope.ordersLoaded = true;
+    }
+
+    // storeService.getProductsInCart(authService.profile.id, function(cart) {}); // why the hell is this here
+    storeService.getOrdersByUserID(authService.profile.id, onOrdersLoaded);
 
 }]);

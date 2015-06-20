@@ -56,7 +56,7 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
 
     this.getProductByID = function(productnumber, callback) {
         if (this.productsByID[productnumber] !== undefined) {
-            callback(this.productsByID[productnumber]);
+            callback(null, this.productsByID[productnumber]);
             return;
         }
         var inThis = this;
@@ -159,12 +159,16 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
                     internalThis.cartReceived = true;
                     internalThis.cart = data.cart;
                     internalThis.updateProductsInCartCookie(internalThis.cart.products);
-                    callback(null, data.cart);
+                    if (callback) {
+                        callback(null, data.cart);
+                    }
                 })
                 .error(function(data, status, headers, config) {
                     internalThis.cartReceived = false;
                     $log.debug('there was an error updating cart', data);
-                    callback(data.message);
+                    if (callback) {
+                        callback(data.message);
+                    }
                 });
         } else {
             var pInCart = [];
@@ -176,7 +180,9 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
                 pInCart.push(pInCartObj);
             });
             this.updateProductsInCartCookie(pInCart);
-            callback(null, null);
+            if (callback) {
+                callback(null, null);
+            }
         }
     }
 
@@ -282,11 +288,15 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
       $http({method: 'POST', url: "/update_order", data:{order:order}})
         .success(function(data, status, headers, config) {
           internalThis.ordersByID[data.order.id] = data.order;
-          callback(null, data.order);
+          if (callback) {
+            callback(null, data.order);
+          }
         })
         .error(function(data, status, headers, config) {
             $log.debug('there was an error updating the order', data);
-            callback(data.message);
+            if (callback) {
+                callback(data.message);
+            }
         });
     }
 

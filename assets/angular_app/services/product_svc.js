@@ -1,5 +1,7 @@
-trdServices.service("productService", ['$rootScope', '$http', '$cookieStore', 'stripeService', 'profileService', 'authService',
-    function ($rootScope, $http, $cookieStore, stripeService, profileService, authService) {
+trdServices.service("productService", ['$rootScope', '$http', '$cookieStore', 'stripeService', 'profileService', 
+    'authService', '$log',
+    function ($rootScope, $http, $cookieStore, stripeService, profileService, 
+        authService, $log) {
 
         this.initService = function() {
             this.mostViewedByProfile = {};
@@ -13,61 +15,78 @@ trdServices.service("productService", ['$rootScope', '$http', '$cookieStore', 's
     		$http({method: 'POST', url: "/submit_review",
     			   data:{review:review}})
             .success(function(data, status, headers, config) {
-                callback({message:"success!"});
+                if (callback) {
+                    callback(null, {message:"success!"});
+                }
             })
             .error(function(data, status, headers, config) {
-                callback({message:"error", err:data});
+                $log.debug('error submitting review', data);
+                if (callback) {
+                    callback(data.message);
+                }
             });
     	}
 
     	this.getRating = function(productnumber, callback) {
     		$http({method: 'GET', url: "/product_rating/" + productnumber})
             .success(function(data, status, headers, config) {
-                callback(data.data);
+                callback(null, data.data);
             })
             .error(function(data, status, headers, config) {
-                callback({message:"error", err:data});
+                $log.debug('error getting rating', data);
+                callback(data.message);
             });
     	}
 
     	this.getReviews = function(productnumber, callback) {
             if (this.reviewsByProduct[productnumber] !== undefined) {
-                callback(this.reviewsByProduct[productnumber]);
+                callback(null, this.reviewsByProduct[productnumber]);
                 return;
             }
             var inThis = this;
     		$http({method: 'GET', url: "/product_reviews/" + productnumber})
             .success(function(data, status, headers, config) {
                 inThis.reviewsByProduct[productnumber] = data.data;
-                callback(data.data);
+                callback(null, data.data);
             })
             .error(function(data, status, headers, config) {
-                callback({message:"error", err:data});
+                $log.debug('error getting reviews', data);
+                callback(data.message);
             });
     	}
 
         this.addPageView = function(productnumber, callback) {
             $http({method: 'POST', url: "/product_page_view/" + productnumber + '?profile=' + authService.profileid})
             .success(function(data, status, headers, config) {
-                callback(data);
+                if (callback) {
+                    callback(null, data);
+                }
             })
             .error(function(data, status, headers, config) {
-                callback({message:"error", err:data});
+                $log.debug('error adding page view', data);
+                if (callback) {
+                    callback(data.message);
+                }
             });
         }
 
         this.addProduct = function(product, callback) {
             if (!profileService.merchant) {
-                callback({message:"error", err:'merchant not authorized'});
+                callback('Merchant not authorized to add product');
                 return;
             }
             $http({method: 'POST', url: "/add_product",
                    data: {product:product, merchant:profileService.merchant}})
             .success(function(data, status, headers, config) {
-                callback(data);
+                if (callback) {
+                    callback(null, data);
+                }
             })
             .error(function(data, status, headers, config) {
-                callback({message:"error", err:data});
+                $log.debug('error adding product', data);
+                if (callback) {
+                    callback(data.message);
+                }
             });
         }
 
@@ -75,10 +94,15 @@ trdServices.service("productService", ['$rootScope', '$http', '$cookieStore', 's
             $http({method: 'POST', url: "/update_product",
                    data: {product:product}})
             .success(function(data, status, headers, config) {
-                callback(data);
+                if (callback) {
+                    callback(data);
+                }
             })
             .error(function(data, status, headers, config) {
-                callback({message:"error", err:data});
+                $log.debug('error updating product', data);
+                if (callback) {
+                    callback(data.message);
+                }
             });
         }
 

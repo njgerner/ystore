@@ -43,5 +43,8 @@
     <li ng-if="isMerchant"><a ui-sref="settings.merchant">Settings</a></li>
     <li class="divider"></li>
     <li><a ui-sref="support"><i class="i-support"></i>    Help</a></li>
+    <li class="divider"></li>
+    <li ng-if="isAdmin"><a ui-sref="admin.users">Admin</a></li>
+    <li ng-if="isMerchant"><a ui-sref="merchant_inventory.view">Manage Merchant</a></li>
   </ul>
 </aside>

@@ -35,6 +35,7 @@ superApp.controller('AdminUsersCtrl',
   	function onYLIFTsLoaded(error, yliftUsers) {
       if (error) {
         $scope.error = error;
+        return;
       }
   		$scope.yliftUsers = yliftUsers;
   	}

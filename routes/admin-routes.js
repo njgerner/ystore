@@ -55,5 +55,15 @@ module.exports = function(express, app, __dirname) {
 		});
 	};
 
+	AdminRoutes.get_merchant_name = function(req, res) {
+		orchHelper.getMerchantByID(req.body.id)
+		.then(function (merchant) {
+			res.send({merchant:merchant});
+		})
+		.fail(function (err) {
+			res.send({error:err});
+		});
+	};
+
 	return AdminRoutes;
 };

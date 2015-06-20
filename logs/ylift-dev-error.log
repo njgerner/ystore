@@ -7,3 +7,14 @@
 {"name":"Y Lift","hostname":"THISISNICKMACBOOK","pid":26240,"level":50,"msg":"No products related to that product found | data: undefined","time":"2015-06-17T15:52:17.533Z","v":0}
 {"name":"Y Lift","hostname":"THISISNICKMACBOOK","pid":26243,"level":50,"msg":"No products related to that product found | data: ","time":"2015-06-17T15:52:48.733Z","v":0}
 {"name":"Y Lift","hostname":"THISISNICKMACBOOK","pid":26243,"level":50,"msg":"No merchant profile found for account | data: ","time":"2015-06-17T16:02:52.651Z","v":0}
+{"name":"Y Lift","hostname":"THISISNICKMACBOOK","pid":7857,"level":50,"msg":"Not product rating found | data: [object Object]","time":"2015-06-19T23:05:57.571Z","v":0}
+{"name":"Y Lift","hostname":"THISISNICKMACBOOK","pid":8086,"level":50,"msg":"Not product rating found | data: [object Object]","time":"2015-06-20T00:29:25.830Z","v":0}
+{"name":"Y Lift","hostname":"THISISNICKMACBOOK","pid":8093,"level":50,"msg":"Not product rating found | data: [object Object]","time":"2015-06-20T00:31:28.388Z","v":0}
+{"name":"Y Lift","hostname":"THISISNICKMACBOOK","pid":8116,"level":50,"msg":"Not product rating found | data: [object Object]","time":"2015-06-20T00:35:35.418Z","v":0}
+{"name":"Y Lift","hostname":"THISISNICKMACBOOK","pid":8128,"level":50,"msg":"Not product rating found | data: {\"productnumber\":\"22-001-06\"}","time":"2015-06-20T00:36:32.568Z","v":0}
+{"name":"Y Lift","hostname":"THISISNICKMACBOOK","pid":8132,"level":50,"msg":"Not product rating found | data: {\"productnumber\":\"22-001-06\"}","time":"2015-06-20T00:37:11.900Z","v":0}
+{"name":"Y Lift","hostname":"THISISNICKMACBOOK","pid":8148,"level":50,"msg":"Not product rating found | data: {\"productnumber\":\"22-001-06\"}","time":"2015-06-20T00:38:24.357Z","v":0}
+{"name":"Y Lift","hostname":"THISISNICKMACBOOK","pid":8152,"level":50,"msg":"Not product rating found | data: {\"productnumber\":\"22-001-06\"}","time":"2015-06-20T00:39:51.251Z","v":0}
+{"name":"Y Lift","hostname":"THISISNICKMACBOOK","pid":8216,"level":50,"msg":"Not product rating found | data: {\"productnumber\":\"01-004-05\"}","time":"2015-06-20T01:00:02.517Z","v":0}
+{"name":"Y Lift","hostname":"THISISNICKMACBOOK","pid":8216,"level":50,"msg":"Not product rating found | data: {\"productnumber\":\"06-001-02\"}","time":"2015-06-20T01:00:19.073Z","v":0}
+{"name":"Y Lift","hostname":"THISISNICKMACBOOK","pid":8216,"level":50,"msg":"Not product rating found | data: {\"productnumber\":\"01-004-01\"}","time":"2015-06-20T01:01:16.669Z","v":0}

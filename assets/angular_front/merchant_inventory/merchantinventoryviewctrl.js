@@ -9,13 +9,13 @@ superApp.controller('MerchantInventoryViewCtrl',
     $scope.deactivateProduct = function(product) {
       if (confirm('Are you sure you want to deactivate this product?')) {
         product.active = "N";
-        productService.updateProduct(product, onProductUpdated);
+        productService.updateProduct(product);
       }
     }
 
     $scope.activateProduct = function(product) {
       product.active = "Y";
-      productService.updateProduct(product, onProductUpdated);
+      productService.updateProduct(product);
     }
 
     $scope.defaultImage = function(product) {
@@ -24,9 +24,6 @@ superApp.controller('MerchantInventoryViewCtrl',
       } else {
         product.img = "http://placehold.it/475x475&text=[img]";
       }
-    }
-
-    function onProductUpdated (product) {
     }
 
 }]);

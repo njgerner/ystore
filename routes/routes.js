@@ -508,6 +508,16 @@ passport.use('bearer', new BearerStrategy(
     });
   };
 
+  var get_all_testimonials = function(req, res) {
+    orchHelper.getAllTestimonials()
+    .then(function (testimonials) {
+      res.send({testimonials: testimonials});
+    })
+    .fail(function (err) {
+      res.send({error:err});
+    });
+  };
+
   ///GET /404
   var fourofour = function(req, res, next){
     // trigger a 404 since no other middleware
@@ -642,6 +652,7 @@ passport.use('bearer', new BearerStrategy(
     // -- START Admin Routes
     ///////////////////////////////////////////////////////////////
     app.get('/admin/all_profiles', ensureAuthenticated, adminRoutes.all_profiles);
+    app.post('/get_merchant_name', ensureAuthenticated, adminRoutes.get_merchant_name);
     app.get('/admin/all_orders', ensureAuthenticated, adminRoutes.all_orders);
     app.get('/admin/all_ylift_profiles', ensureAuthenticated, adminRoutes.all_ylift_profiles);
 

@@ -22,9 +22,9 @@ exports.logAndReturn = function(message, status, next, errObj, data) {
 	var err = new Error(message || 'Unknown server error');
 	err.status = status;
 	if (process.env.LOG_ERRORS == 'true') {
-		mitch.error(errObj || message || 'Unknown server error', '| data: ' + (data || ""));
+		mitch.error(errObj || message || 'Unknown server error', '| data: ' + (JSON.stringify(data) || ""));
 	} else {
-		mitch.info(errObj || message || 'Unknown server error', '| data: ' + (data || ""));
+		mitch.info(errObj || message || 'Unknown server error', '| data: ' + (JSON.stringify(data) || ""));
 	}
 	return next(err);
 };

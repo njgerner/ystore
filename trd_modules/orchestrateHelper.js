@@ -1103,6 +1103,17 @@ exports.getMostFrequentEvent = function(collection, type, profile) {
       deferred.reject(new Error(err.body.message));
     }
   });
+};
+
+exports.getMerchantByID = function(id) {
+  var deferred = Q.defer();
+  db.get('merchant-profiles', id)
+  .then(function (merchant){
+    deferred.resolve(merchant.body);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body));
+  });
   return deferred.promise;
 };
 
