@@ -6,8 +6,6 @@ appDirectives.directive('productCardDir', [ '$state', '$rootScope', '$window', '
 			product: '='
 		},
 		templateUrl: 'directives/product_card_template.html',
-		controller: function($scope) {
-		},
 		link: function(scope, element) {
 			scope.defaultImage = function(product) {
 		      if (product.remote_img) {
