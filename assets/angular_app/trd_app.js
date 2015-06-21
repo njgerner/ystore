@@ -20,16 +20,16 @@ var trdApp = angular.module('trdApp', [
   // 'uiGmapgoogle-maps'
 ]);
 
-trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'authService', // watch these params in bin/www
-    function ($rootScope, $state, $stateParams, $cookies, $location, authService) {
+trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'authService', '$log', // watch these params in bin/www
+    function ($rootScope, $state, $stateParams, $cookies, $location, authService, $log) {
       $rootScope.$state = $state;
       $rootScope.$stateParams = $stateParams;
       $rootScope.isVisible = false;
 
       $rootScope.$on('$stateChangeStart', 
         function(event, toState, toParams, fromState, fromParams){
-          console.log('to:: ' + toState.name, 'from:: ' + fromState.name);
-          console.log('authorized / received', authService.authorized, authService.authorizationReceived);
+          $log.debug('to:: ' + toState.name, 'from:: ' + fromState.name);
+          $log.debug('authorized / received', authService.authorized, authService.authorizationReceived);
 
           var isExceptionalState = function() {
             var exceptionalState = ["terms", "store", "checkout", "order", "support", "locations"];

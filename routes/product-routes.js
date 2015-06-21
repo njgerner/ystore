@@ -39,7 +39,7 @@ module.exports = function(express, app, __dirname) {
 			if (data) {
 				res.status(200).json({data:data});
 			} else {
-				errorHandler.logAndReturn('Not product rating found', 404, next, null, req.params);
+				errorHandler.logAndReturn('No product rating found', 404, next, null, req.params);
 			}
 		})
 		.fail(function (err) {
@@ -55,7 +55,7 @@ module.exports = function(express, app, __dirname) {
 			if (data) {
 				res.status(200).json({data:data});
 			} else {
-				errorHandler.logAndReturn('Not product reviews found', 404, next, null, req.params);
+				errorHandler.logAndReturn('No product reviews found', 404, next, null, req.params);
 			}
 		})
 		.fail(function (err) {
@@ -70,7 +70,7 @@ module.exports = function(express, app, __dirname) {
 			if (data) {
 				res.status(200).json(data);
 			} else {
-				errorHandler.logAndReturn('Not most viewed product found', 404, next, null, req.params);
+				errorHandler.logAndReturn('No most viewed product found', 404, next, null, req.params);
 			}
 		})
 		.fail(function (err) {

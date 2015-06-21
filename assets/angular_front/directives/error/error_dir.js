@@ -1,5 +1,5 @@
-appDirectives.directive('errorDir', ['$window',
-	function($window) { 
+appDirectives.directive('errorDir', ['$window', '$log',
+	function($window, $log) { 
 	return {
 		restrict: 'E',
 		scope: {
@@ -7,7 +7,7 @@ appDirectives.directive('errorDir', ['$window',
 		},
 		templateUrl: 'directives/error_template.html',
 		link: function(scope, element) {
-			 
+			$log.info('displaying client error', scope.msg); 
 		}
 	}
 }]);
