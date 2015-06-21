@@ -53,6 +53,7 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 
 	  		function onProductsLoaded (error, products) {
 	  			if (error) {
+	  				console.log('onProductsLoaded error', err);
 	  				scope.error = error;
 	  				return;
 	  			}
@@ -65,6 +66,7 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 
 	  		function onProductsInCartReceived (error, products) {
 	  			if (error) {
+	  				console.log('onProductsInCartReceived error', err);
 	  				scope.error = error;
 	  				return;
 	  			}
