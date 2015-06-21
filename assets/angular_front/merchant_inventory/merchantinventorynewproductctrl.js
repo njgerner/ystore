@@ -38,7 +38,11 @@ superApp.controller('MerchantInventoryNewProductCtrl',
     function onRemoteFileUpload (url) {
     }
 
-    function onProductAdded (product) {
+    function onProductAdded (error, product) {
+      if (error) {
+        $scope.error = error;
+        return;
+      }
   		$state.go("merchant_inventory.product", {productnumber:product.productnumber});
   	}
 

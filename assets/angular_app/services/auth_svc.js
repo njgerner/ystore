@@ -74,10 +74,7 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 					headers:{'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'},
 					data:$.param({email:email, password:password})}).
 			    success(function (data, status, headers, config) {
-			    	if (data.tempPwd && data.tkn) {
-			    		trdInterceptor.setToken(data.tkn);
-			    		callback(null, "temp_password");
-			    	} else if (data.tkn) {
+			    	if (data.tkn) {
 			    		trdInterceptor.setToken(data.tkn);
 			    		callback(null, "success!");
 			    	}
@@ -86,7 +83,7 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 			    	}
 			    }).
 			    error(function(data, status, headers, config) {
-			    	callback(data, null);
+			    	callback(data.message, null);
 			    });
 		};
 
@@ -100,10 +97,10 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 			 			if(data.tkn) {
 			 				trdInterceptor.setToken(data.tkn);
 			 			}
-			    	callback(data.err, data.status);
+			    	callback(data.error, data.status);
 			    }).
 			    error(function(data, status, headers, config) {
-			    	callback(data);
+			    	callback(data.error, data.message);
 			    });
 		};
 

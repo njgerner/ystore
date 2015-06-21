@@ -91,10 +91,13 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
 
 }]);
 
-trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyticsProvider',
-  function($httpProvider, $stateProvider, $urlRouterProvider, $analyticsProvider) {
+trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyticsProvider', 
+  '$logProvider', 'ENV',
+  function($httpProvider, $stateProvider, $urlRouterProvider, $analyticsProvider, 
+    $logProvider, ENV) {
     $httpProvider.interceptors.push('trdInterceptor');
     $urlRouterProvider.otherwise("/store");
+    $logProvider.debugEnabled(ENV == 'DEV');
     
     $stateProvider
     .state('admin', {

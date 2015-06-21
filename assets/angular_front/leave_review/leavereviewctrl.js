@@ -23,7 +23,10 @@ superApp.controller('LeaveReviewCtrl',
       $state.go("product", {productnumber:$scope.pn});
     }
     
-    function onProductLoaded (product) {
+    function onProductLoaded (error, product) {
+      if (error) {
+        $scope.error = error;
+      }
       $scope.productLoaded = true;
       $scope.product = product;
     }

@@ -14,18 +14,16 @@ superApp.controller('AdminProductCtrl',
         return;
       }
       $scope.updating = true;
-      productService.updateProduct($scope.product, function(result) {
-        if(result.err) {
-          $scope.message = "Error updating product."
-        }else {
-          $scope.message = "Product successfully updated."
+      productService.updateProduct($scope.product, function(error, result) {
+        if(error) {
+          $scope.error = error;
         }
       });
       $scope.updating = false;
       $scope.mode = 'view';
     };
 
-    storeService.getProductByID($stateParams.productnumber, function (product) {
+    storeService.getProductByID($stateParams.productnumber, function (error, product) {
         $scope.product = product;
     });
 

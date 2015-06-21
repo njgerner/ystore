@@ -4,7 +4,11 @@ superApp.controller('AdminProductsCtrl',
 
     $scope.vendornames = {};
 
-  	storeService.getAllProducts(function(products) {
+  	storeService.getAllProducts(function(error, products) {
+      if (error) {
+        $scope.error = error;
+        return;
+      }
   		$scope.products = products;
   		$scope.products.forEach(function (product) {
   			   merchantService.getMerchantName(product.attributes.vendor, function(name) {
@@ -31,7 +35,11 @@ superApp.controller('AdminProductsCtrl',
 
   	$scope.viewProduct = function(productnumber) {
   		$scope.message = "";
-  		storeService.getProductByID(productnumber, function(product) {
+  		storeService.getProductByID(productnumber, function(error, product) {
+        if (error) {
+          $scope.error = error;
+          return;
+        }
   			$scope.view_product = product;
   		});
   		$scope.mode = 'view';

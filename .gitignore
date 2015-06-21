@@ -5,5 +5,6 @@ assets/js/vendor/
 trdstore.sublime-project
 trdstore.sublime-workspace
 uploads/
+logs/
 public/
 npm-debug.log

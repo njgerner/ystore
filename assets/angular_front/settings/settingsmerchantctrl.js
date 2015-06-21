@@ -71,7 +71,7 @@ superApp.controller('SettingsMerchantCtrl',
       }
     }
 
-  	function onMerchantReceived (profile) {
+  	function onMerchantReceived (error, profile) {
       $scope.merchantLoading = false;
       $scope.registering = false;
       if (profile && profile.id) {
@@ -82,7 +82,7 @@ superApp.controller('SettingsMerchantCtrl',
       $rootScope.$broadcast('merchantcreated', profile);
     }
 
-    function onMerchantUpdated (profile, error) {
+    function onMerchantUpdated (error, profile) {
       $scope.updating = false;
       if (error) {
         $scope.error = error;

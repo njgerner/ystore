@@ -3,9 +3,7 @@
 		<!-- <i class="fa fa-truck fa-3x"></i> -->
 		<h3><strong>Review<strong></h3>
 	</div>	
-	<div ng-if="orderError">
-		<small class="error">{{orderError}}</small>
-	</div>
+	<error-dir msg="{{error}}"></error-dir>
 </div>
 <div class="row" ng-click="toggleItems()">
 	<div class="large-7 columns">

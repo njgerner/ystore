@@ -1,5 +1,7 @@
-<div ng-hide="orders.length" class="loader locations-loading">Loading...</div>
-<div ng-if="orders.length" class="row admin-users-summary">
+<div ng-show="error">
+	<p class='error'>{{error}}</p>
+</div>
+<div ng-show="orders.length" class="row admin-users-summary">
 	<h4>Orders Summary</h4>
 	<div class="small-6 large-3 columns text-center">
 		<span>{{orders.length}}</span><br>
@@ -19,7 +21,7 @@
 	</div>
 </div>
 <div id="orders-chart"></div>
-<div ng-if="orders.length" class="row" style="margin-top:1rem;">
+<div ng-show="orders.length" class="row" style="margin-top:1rem;">
 	<div class="clearfix">
 		<h4 class="left">Order History</h4>
 		<input class="right" style="width:40%" type="search" ng-model="searchQuery" placeholder="Search by any order field">
@@ -41,3 +43,4 @@
 		</tbody>
 	</table>
 </div>
+<div ng-hide="orders.length || error" class="loader locations-loading">Loading...</div>

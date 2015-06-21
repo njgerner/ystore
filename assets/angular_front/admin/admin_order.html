@@ -1,4 +1,4 @@
-<div ng-hide="order" class="loader locations-loading">Loading...</div>
+<error-dir msg="{{error}}"></error-dir>
 <div ng-show="order" class="row admin-users-summary">
 	<h4>Order Summary</h4>
 	<div class="small-6 large-3 columns text-center">
@@ -37,3 +37,4 @@
 		</div>
 	</div>
 </div>
+<div ng-hide="order || error" class="loader locations-loading">Loading...</div>

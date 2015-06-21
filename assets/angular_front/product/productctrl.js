@@ -49,12 +49,15 @@ superApp.controller('ProductCtrl',
       }
     }
 
-    function onProductLoaded (product) {
+    function onProductLoaded (error, product) {
+        if (error) {
+            $scope.error = error;
+        }
         $scope.product = product;
         $scope.loading = false;
     }
 
-    function onRelatedProductsLoaded (products) {
+    function onRelatedProductsLoaded (error, products) {
         for (var i = 0; i < products.length; i++) {
             if (products[i].productnumber == $scope.product.productnumber) {
                 products.splice(i, 1);
@@ -64,19 +67,17 @@ superApp.controller('ProductCtrl',
         $scope.relatedLoading = false;
     }
 
-    function onReviewsLoaded (reviews) {
+    function onReviewsLoaded (error, reviews) {
         $scope.reviews = reviews;
         $scope.reviewsLoading = false;
     }
 
-    function onRatingLoaded (data) {
+    function onRatingLoaded (error, data) {
         if (data) {
             $scope.rating = data.mean;
         }
         $scope.ratingLoading = false;
     }
-
-    function onPageViewed (data) {} 
 
     if (authService.authorized) {
         $scope.profileid = authService.profile.id;
@@ -86,6 +87,6 @@ superApp.controller('ProductCtrl',
     storeService.getRelatedProducts($scope.productnumber, onRelatedProductsLoaded);
     productService.getReviews($scope.productnumber, onReviewsLoaded);
     productService.getRating($scope.productnumber, onRatingLoaded);
-    productService.addPageView($scope.productnumber, onPageViewed);
+    productService.addPageView($scope.productnumber);
 
 }]);

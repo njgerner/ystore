@@ -19,9 +19,7 @@
     </div> 
 </div>
 <div ng-show="addPaymentView" class="row">
-	<div ng-if="error" class="val-error">
-		<p class="text-danger">{{error}}</p>
-	</div>
+	<error-dir msg="{{error}}"></error-dir>
 	<form name="ccForm">
 		<fieldset>
 			<legend>Credit Card Info</legend>

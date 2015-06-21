@@ -28,7 +28,11 @@ superApp.controller('MerchantInventoryProductCtrl',
     function onRemoteFileUpload (url) {
     }
 
-  	function onProductLoaded (product) {
+  	function onProductLoaded (error, product) {
+      if (error) {
+        $scope.error = error;
+        return;
+      }
   		$scope.mode = 'view';
   		$scope.updating = false;
   		$scope.product = product;

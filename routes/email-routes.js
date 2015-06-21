@@ -8,6 +8,7 @@ module.exports = function(express, app, __dirname) {
 		orchHelper      = require('../trd_modules/orchestrateHelper'),
 		Q               = require('q'),
 		nodemailer      = require('nodemailer'),
+		errorHandler    = require('../trd_modules/errorHandler.js'),
 		fs 				= require('fs');
 
 	var transport = nodemailer.createTransport({
@@ -21,7 +22,7 @@ module.exports = function(express, app, __dirname) {
 	  });  
 
 	//POST /email_support
-	EmailRoutes.support = function(req, res) {
+	EmailRoutes.support = function(req, res, next) {
 		var host = "http://" + req.get('host');
 		var props = req.body.props;
 	    var options = {
@@ -36,8 +37,7 @@ module.exports = function(express, app, __dirname) {
 	    };
 	    transport.sendMail(options, function(err, response) {
 	      if (err) {
-	        console.log('Message failed:', err);
-	        res.status(500).json({err:err});
+	        errorHandler.logAndReturn('Error sending support email', 500, next, err, req.body);
 	      } else {
 	        res.status(200).json({result:"success"});
 	      }

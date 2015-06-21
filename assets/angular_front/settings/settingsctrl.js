@@ -13,7 +13,7 @@ superApp.controller('SettingsCtrl',
 
     $scope.updateProfile = function(property) {
       $scope.updating = property;
-      profileService.updateProfile($scope.profile, function (profile) {
+      profileService.updateProfile($scope.profile, function (error, profile) {
         $scope.profile = profile;
         $scope.updating = "none";
       });
