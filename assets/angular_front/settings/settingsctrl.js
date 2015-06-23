@@ -9,13 +9,13 @@ superApp.controller('SettingsCtrl',
     $scope.addresses = $scope.profile.addresses;
     $scope.viewState = $state.current.name.split('.')[1];
     $scope.currOffice = {};
-  	$scope.updating = false;
+  	$scope.updating = "none";
 
-    $scope.updateProfile = function() {
-      $scope.updating = true;
-      profileService.updateProfile($scope.profile, function (profile) {
+    $scope.updateProfile = function(property) {
+      $scope.updating = property;
+      profileService.updateProfile($scope.profile, function (error, profile) {
         $scope.profile = profile;
-        $scope.updating = false;
+        $scope.updating = "none";
       });
     };
 

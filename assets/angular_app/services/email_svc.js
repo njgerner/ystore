@@ -1,5 +1,5 @@
-trdServices.service('emailService', ['$http',
-	function($http) {
+trdServices.service('emailService', ['$http', '$log', 
+	function($http, $log) {
 
 	this.sendSupportRequest = function(email, props, callback) {
 		$http({method:'POST', url:'/email_support',
@@ -8,9 +8,8 @@ trdServices.service('emailService', ['$http',
 				callback(data.result);
 			}).
 			error(function(data, status, headers, config) {
-				console.log("getting profile failed:");
-				console.log(data);
-				callback();
+				$log.debug('error sending support request', data);
+				callback(data.message);
 			});
 	};
 }]);

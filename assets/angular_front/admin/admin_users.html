@@ -1,3 +1,4 @@
+<error-dir msg="{{error}}"></error-dir>
 <div ng-if="users.length" class="row admin-users-summary">
 	<h4>User Summary</h4>
 	<div class="small-6 large-3 columns text-center">
@@ -44,4 +45,4 @@
 		</div>
 	</div>
 </div>
-<div ng-hide="users.length" class="loader locations-loading">Loading...</div>
+<div ng-hide="users.length || error" class="loader locations-loading">Loading...</div>

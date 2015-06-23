@@ -3,7 +3,6 @@ appDirectives.directive('mobileNavBarDir', [ 'authService', '$state', '$location
 	return {
 		restrict: 'E',
 		scope: {
-
 		},
 		templateUrl: 'directives/mobile_nav_bar_template.html',
 		link: function(scope, element) {
@@ -11,6 +10,7 @@ appDirectives.directive('mobileNavBarDir', [ 'authService', '$state', '$location
 			scope.name = "";
 			scope.profileid = null;
 			scope.isAdmin = false;
+			scope.isMerchant = false;
 			scope.query = null;
 			scope.productsInCart = [];
 			scope.itemCount = 0;
@@ -28,7 +28,6 @@ appDirectives.directive('mobileNavBarDir', [ 'authService', '$state', '$location
 	  		};
 
 	  		scope.openCart = function() {
-	  			// $rootScope.toggleVisible(function(isVisible) {scope.showCart = isVisible});
 	  			$rootScope.showCart(function(isVisible) {scope.showCart = isVisible});
 	  		};
 
@@ -42,10 +41,12 @@ appDirectives.directive('mobileNavBarDir', [ 'authService', '$state', '$location
 	  				scope.name = authService.profile.name;
 	  				scope.profileid = authService.profile.id;
 	  				scope.isAdmin = authService.isAdmin;
+	  				scope.isMerchant = authService.isMerchant;
 	  			} else {
 	  				scope.loggedIn = false;
 	  				scope.name =  null;
 	  				scope.isAdmin = false;
+	  				scope.isMerchant = false;
 	  			}
 	  		};
 
@@ -64,6 +65,7 @@ appDirectives.directive('mobileNavBarDir', [ 'authService', '$state', '$location
 				scope.name = authService.profile.name;
 				scope.profileid = authService.profile.id;
 				scope.isAdmin = authService.isAdmin;
+	  			scope.isMerchant = authService.isMerchant;
 			} else {
 				scope.loadedFun = null;
 			    scope.loadedFun = $rootScope.$on('authorizationloaded', function(evt, args) {
@@ -76,11 +78,15 @@ appDirectives.directive('mobileNavBarDir', [ 'authService', '$state', '$location
 				onProductsLoaded(products);
 			});
 
-			scope.$watch(function() { return $cookies.pInCart; }, function(newCart, oldCart) { // this makes me hard ... me too
+			var pInCartWatch = scope.$watch(function() { return $cookies.pInCart; }, function(newCart, oldCart) { // this makes me hard ... me too
 				if (newCart) {
 					scope.productsInCart = JSON.parse(newCart);
 				}
 				scope.itemCount = scope.productsInCart.length || 0;
+			});
+
+			scope.$on('$destroy', function () {
+				pInCartWatch();
 			});
 
 		}

@@ -4,4 +4,8 @@ superApp.controller('NetworkCtrl',
     
     $scope.loggedin = authService.profile ? true:false;
 
+    $scope.goToRegistration = function() {
+    	$state.go('register');
+    }
+
 }]);

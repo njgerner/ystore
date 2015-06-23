@@ -21,6 +21,9 @@
     <form class="regform" name="loginForm" ng-submit="registerIndividual()">
       <fieldset>
         <legend>Register</legend>
+        <div ng-show="error">
+			<p class='error'>{{error}}</p>
+		</div>
         <div class="input-wrapper">
           <label>Email
             <input type="email" name="email" placeholder="Enter your email" ng-model="email" required>
@@ -39,11 +42,11 @@
           <small ng-show="failedMessage" class="error">{{failedMessage}}</small>
         </div>
 		<p>By clicking register you agree to our <a ui-sref="terms" target="_blank">Terms & Conditions</a></p>
-        <button class="button small secondary right" ng-click="viewState = 'start'">Back</button>
-        <button type="submit" class="button small right">
+        <button class="button small right" type="submit">
           <span ng-hide="registering">Register</span>
           <span ng-show="registering">Registering...</span>
         </button>
+        <a class="button small secondary right" ng-click="viewState = 'start'">Back</a>
       </fieldset>
     </form>
 </div>

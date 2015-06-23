@@ -1,68 +1,38 @@
-<div class="text-center profile-header">
+<!-- <div class="text-center profile-header">
   <h2>{{profile.name}}</h2>
   <h4>{{profile.email}}</h4>
-</div>
+</div> -->
 
 
   <!-- Personal Info -->
-  <div class="small-12 large-8 large-offset-2 columns profile-content">
+  <div style="margin-top:30px" class="small-12 large-6 large-offset-3 columns">
     <div class="panel">
-
-      <div>
         <div class="row">
           <div>
-              <h3>My Info  <a ui-sref="settings.profile"><small>Edit</small></a></h3>
+              <h3>My Info<a ui-sref="settings.profile"><small style="margin-left:10px;">Edit</small></a></h3>
+              <error-dir msg="{{error}}"></error-dir>
           </div>
+          <hr>
         </div>  
-      </div>
-
-      <div>
         <div class="row">
-          <div>
-            <strong>Name  </strong> 
-          </div>
-          <div>
-            <p> {{profile.name}} </p>
-          </div>
-        </div>
-        <div class="row">
-          <div>
-            <strong>Email  </strong> 
-          </div>
-          <div>
-            <p> {{profile.email}} </p>
-          </div>
-        </div>
-        <div class="row">
-          <div>
-            <strong style="margin-left:0;">Addresses  </strong> 
-          </div>
-        </div>
-
-        <!-- Address information -->
-        <div class="row">
-
-          <div style="padding-right:0"class="col-md-6" ng-repeat="address in profile.addresses track by $index">
-            <p style="margin-bottom:5px;text-decoration:underline;margin-top:10px">{{address.name}}
-            </p>
-            <p style="margin-bottom:0"> {{address.address1}} </p>
-            <p style="margin-bottom:0"> {{address.address2}} </p>
-            <p > {{address.city}}, {{address.state}} {{address.zip}} </p>
-          </div>
-
-        </div>
-
-        <div class="row">
-          <div>
+          <div class="large-6 columns">
+            <strong>Name</strong> 
+            <p>{{profile.name}}</p>
+            <strong>Email</strong> 
+            <p>{{profile.email}}</p>
             <strong>Member since  </strong> 
-          </div>
-          <div>
             <p> {{createdAt}} </p>
+          </div> 
+          <div class="large-6 end columns">
+            <strong style="margin-left:0;">Addresses</strong>
+              <div style="padding-right:0"class="col-md-6" ng-repeat="address in profile.addresses track by $index">
+                <p id="profile-address">{{address.name}}</p>
+                <p style="margin-bottom:0"> {{address.address1}} </p>
+                <p style="margin-bottom:0"> {{address.address2}} </p>
+                <p> {{address.city}}, {{address.state}} {{address.zip}} </p>
+            </div>
           </div>
         </div>
-
-      </div> <!-- panel body -->
-
     </div> <!-- panel  -->
 
     <div ng-show="updateSuccessful" class="alert alert-success">
@@ -71,34 +41,31 @@
 
 
   <!-- Order history -->
-        <div class="panel">
-          <div>
-            <h3> Past Orders </h3>
-           </div>
-          <div>
-            <div>
-              <table class="table">
-                <tr>
-                  <th>Order #</th>
-                  <th class="show-for-medium-up">Status</th>
-                  <th>Date</th>
-                  <th>Total</th>
-                  <th></th>
-                </tr>
-                <tr ng-repeat="order in orders | orderBy: '-createdAt' | limitTo: 5" ng-click="goToOrder(order.id)">
-                  <td>{{order.id}}</td>
-                  <td class="show-for-medium-up">{{order.status}}</td>
-                  <td>{{getDisplayDate(order.createdAt)}}</td>
-                  <td>${{order.total}}</td>
-                  <td><a ui-sref="support">Return</a></td>
-                </tr>
-              </table>
-            </div>
-            <div class="row text-ylift" style="padding-left:10px; padding-right:10px">
-              <p>Check back soon for more information and updates to our auto-reordering service</p>
-            </div>
-          </div>
+    <div class="panel">
+      <div>
+        <div class="row">
+          <h3> Past Orders </h3>
+        </div>
+       </div>
+      <div>
+        <div>
+          <table id="profile-orders" class="table">
+            <tr>
+              <th>Order #</th>
+              <th class="show-for-medium-up">Status</th>
+              <th>Date</th>
+              <th>Total</th>
+              <th></th>
+            </tr>
+            <tr ng-repeat="order in orders | orderBy: '-createdAt' | limitTo: 5" ng-click="goToOrder(order.id)">
+              <td>{{order.id}}</td>
+              <td class="show-for-medium-up">{{order.status}}</td>
+              <td>{{getDisplayDate(order.createdAt)}}</td>
+              <td>{{getDisplayTotal(order.total)}}</td>
+              <td><a ng-show="order.total" ui-sref="support">Return</a></td>
+            </tr>
+          </table>
+        </div>
       </div>
-
-    <button class="button small expand" ng-click="logoutNow()">Logout</button>
+  </div>
 </div>

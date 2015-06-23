@@ -1,5 +1,5 @@
-trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'stripeService', 'authService', 
-    function ($rootScope, $http, $cookieStore, stripeService, authService) {
+trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'stripeService', '$log', 'authService',
+    function ($rootScope, $http, $cookieStore, stripeService, $log, authService) {
 
     this.initService = function() {
         this.productsReceived = false;
@@ -24,22 +24,19 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
 
     this.getStoreFront = function(callback, refresh) {
         if (this.productsReceived && !refresh) {
-            callback(this.products);
+            callback(null, this.products);
             return;
         }
         var internalThis = this;
         $http({method: 'POST', url: "/store", data:{ylift: authService.isYLIFT}})
             .success(function(data, status, headers, config) {
-                if (internalThis.productsReceived && !refresh) {
-                    callback(internalThis.products);
-                } else {
                 internalThis.products = [];
                 internalThis.productsByID = {};
                 internalThis.productsByCategory = {};
                 for(var i = 0; i < data.products.length; i++) {
                     internalThis.productsByID[data.products[i].productnumber] = data.products[i]; 
                     internalThis.products.push(data.products[i]); //seems redundant if we already have productsByID containing all products
-                    if(internalThis.productsByCategory[data.products[i].category]){
+                    if(internalThis.productsByCategory[data.products[i].cate`gory]){
                         internalThis.productsByCategory[data.products[i].category].push(data.products[i]);
                     }else {
                         internalThis.productsByCategory[data.products[i].category] = [];
@@ -48,75 +45,79 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
                 }
                 internalThis.productsReceived = true;
                 $rootScope.$broadcast('productsloaded', internalThis.products);
-                callback(internalThis.products);
-              }
+                callback(null, internalThis.products);
             })
             .error(function(data, status, headers, config) {
+                $log.debug('there was an error getting all products', data);
                 internalThis.productsReceived = false;
-                callback(data);
+                callback(data.message);
             });
     }
 
     this.getProductByID = function(productnumber, callback) {
         if (this.productsByID[productnumber] !== undefined) {
-            callback(this.productsByID[productnumber]);
+            callback(null, this.productsByID[productnumber]);
             return;
         }
         var inThis = this;
         $http({method: 'GET', url: "/get_product_by_id/" + productnumber})
             .success(function(data, status, headers, config) {
                 inThis.productsByID[productnumber] = data.product;
-                callback(data.product);
+                callback(null, data.product);
             })
             .error(function(data, status, headers, config) {
-                callback(data);
+                $log.debug('there was an error getting product by id', data);
+                callback(data.message);
             });
     }
 
     this.getRelatedProducts = function(productnumber, callback) {
         if (this.relatedProductsByID[productnumber] !== undefined) {
-            callback(this.relatedProductsByID[productnumber]);
+            callback(null, this.relatedProductsByID[productnumber]);
             return;
         }
         var inThis = this;
         $http({method: 'GET', url: "/get_related_products/" + productnumber})
             .success(function(data, status, headers, config) {
                 inThis.relatedProductsByID[productnumber] = data.products;
-                callback(data.products);
+                callback(null, data.products);
             })
             .error(function(data, status, headers, config) {
-                callback(data);
+                $log.debug('there was an error getting related products', data);
+                callback(data.message);
             });
     }
 
     this.getProductsByCategory = function(category, callback) {
         if (this.productsReceived) {
-            callback(this.productsByCategory[category]);
+            callback(null, this.productsByCategory[category]);
         } else{
             var inThis = this;
             $http({method: 'POST', url: "/get_products_by_category", data:{category:category}})
             .success(function(data, status, headers, config) {
                 inThis.productsByCategory[category] = data.products;
-                callback(data.products);
+                callback(null, data.products);
             })
             .error(function(data, status, headers, config) {
-                callback(data);
+                $log.debug('there was an error getting products by category', data);
+                callback(data.message);
             });
         }
     }
 
     this.getProductsByMerchant = function(merchantid, callback) {
         if (this.productsByMerchant[merchantid] !== undefined) {
-            callback(this.productsByMerchant[merchantid]);
+            callback(null ,this.productsByMerchant[merchantid]);
         } else{
             var inThis = this;
             $http({method: 'GET', url: "/get_products_by_merchant/" + merchantid})
             .success(function(data, status, headers, config) {
                 inThis.productsByMerchant[merchantid] = data.products;
-                callback(data.products);
+                callback(null, data.products);
             })
             .error(function(data, status, headers, config) {
-                callback(data);
+                $log.debug('there was an error getting products by merchant', data);
+                callback(data.message);
             });
         }
     }
@@ -130,11 +131,12 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
                     internalThis.cartReceived = true;
                     internalThis.cart = data.cart;
                     internalThis.updateProductsInCartCookie(internalThis.cart.products);
-                    callback(data.cart);
+                    callback(null, data.cart);
                 })
                 .error(function(data, status, headers, config) {
                     internalThis.cartReceived = false;
-                    callback(data);
+                    $log.debug('there was an error adding item to cart', data);
+                    callback(data.message);
                 });
         } else {
             var pInCart = $cookieStore.get('pInCart') || [];
@@ -144,7 +146,7 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
             };
             pInCart.push(pInCartObj);
             this.updateProductsInCartCookie(pInCart);
-            callback();
+            callback(null, null);
         }
     }
     
@@ -157,11 +159,16 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
                     internalThis.cartReceived = true;
                     internalThis.cart = data.cart;
                     internalThis.updateProductsInCartCookie(internalThis.cart.products);
-                    callback(data.cart);
+                    if (callback) {
+                        callback(null, data.cart);
+                    }
                 })
                 .error(function(data, status, headers, config) {
                     internalThis.cartReceived = false;
-                    callback(data);
+                    $log.debug('there was an error updating cart', data);
+                    if (callback) {
+                        callback(data.message);
+                    }
                 });
         } else {
             var pInCart = [];
@@ -173,7 +180,9 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
                 pInCart.push(pInCartObj);
             });
             this.updateProductsInCartCookie(pInCart);
-            callback();
+            if (callback) {
+                callback(null, null);
+            }
         }
     }
 
@@ -186,15 +195,16 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
                     internalThis.cartReceived = true;
                     internalThis.cart = data.cart;
                     internalThis.updateProductsInCartCookie(internalThis.cart.products);
-                    callback(data.cart);
+                    callback(null, data.cart);
                 })
                 .error(function(data, status, headers, config) {
+                    $log.debug('there was an error emptying the cart', data);
                     internalThis.cartReceived = false;
-                    callback();
+                    callback(data.message);
                 });
         } else {
             this.updateProductsInCartCookie();
-            callback();
+            callback(null, null);
         }
     }
 
@@ -206,56 +216,55 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
                     internalThis.cartReceived = true;
                     internalThis.cart = data.cart;
                     internalThis.updateProductsInCartCookie(internalThis.cart.products);
-                    callback(data.cart.products);
+                    callback(null, data.cart.products);
                     $rootScope.$broadcast('cartloaded', internalThis.cart);
 
                 })
                 .error(function(data, status, headers, config) {
+                    $log.debug('there was an error getting products in user cart', data);
                     internalThis.cartReceived = false;
-                    callback(data);
+                    callback(data.message);
                 });
         } else {
-            callback($cookieStore.get('pInCart') || []);
+            callback(null, $cookieStore.get('pInCart') || []);
         }
     }
 
     this.getOrderByID = function(orderid, callback) {
         if (typeof this.ordersByID[orderid] != 'undefined') {
-          callback(this.ordersByID[orderid]);
+          callback(null, this.ordersByID[orderid]);
           return;
         }
         var internalThis = this;
         $http({method: 'GET', url: "/order/" + orderid})
             .success(function(data, status, headers, config) {
                 internalThis.ordersByID[orderid] = data.order;
-                callback(data.order);
+                callback(null, data.order);
             })
             .error(function(data, status, headers, config) {
-                callback(data);
+                $log.debug('there was an error getting order by id', data);
+                callback(data.message);
             });
     }
 
     this.getOrdersByUserID = function(profileid, callback) {
       if (this.ordersReceived) {
-        callback(this.orders);
+        callback(null, this.orders);
         return;
       }
       var internalThis = this;
       $http({method: 'GET', url: "/all_orders/" + profileid})
         .success(function(data, status, headers, config) {
-          if(!data.orders) {
-            callback();
-            return;
-          }
           for (var i = 0; i < data.orders.length; i++) {
             internalThis.ordersByID[data.orders[i].id] = data.orders[i];
           }
           internalThis.orders = data.orders;
           internalThis.ordersReceived = true;
-          callback(internalThis.orders);
+          callback(null, internalThis.orders);
         })
         .error(function(data, status, headers, config) {
-            callback(data);
+            $log.debug('there was an error getting orders by user', data);
+            callback(data.message);
         });
     }
 
@@ -263,17 +272,14 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
       var internalThis = this;
       $http({method: 'GET', url: "/merchant_orders/" + merchantid})
         .success(function(data, status, headers, config) {
-          if(!data.orders) {
-            callback();
-            return;
-          }
           for (var i = 0; i < data.orders.length; i++) {
             internalThis.ordersByID[data.orders[i].id] = data.orders[i];
           }
-          callback(data.orders);
+          callback(null, data.orders);
         })
         .error(function(data, status, headers, config) {
-            callback(data);
+            $log.debug('there was an error getting merchant orders', data);
+            callback(data.message);
         });
     }
 
@@ -282,10 +288,15 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
       $http({method: 'POST', url: "/update_order", data:{order:order}})
         .success(function(data, status, headers, config) {
           internalThis.ordersByID[data.order.id] = data.order;
-          callback(data.order);
+          if (callback) {
+            callback(null, data.order);
+          }
         })
         .error(function(data, status, headers, config) {
-            callback(data);
+            $log.debug('there was an error updating the order', data);
+            if (callback) {
+                callback(data.message);
+            }
         });
     }
 
@@ -313,7 +324,8 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
             callback(null, {id: data.order.id});
         })
         .error(function(data, status, headers, config) {
-          callback("There was an error processing your order, please try again. If this issue persists, please contact YLift Support (support@ylift.io).");
+          $log.debug('there was an error submitting the check order', data);
+          callback(data.message);
         });
       };
 

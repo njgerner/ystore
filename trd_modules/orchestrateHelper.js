@@ -19,7 +19,7 @@ exports.uploadTrainingMaterials = function(filename, filecontent, userid) {
     deferred.resolve(true);
   })
   .fail(function(err) {
-    deferred.reject(new Error(err.body));
+    deferred.reject(new Error(err.body.message));
   });
 
   return deferred.promise;
@@ -32,7 +32,7 @@ exports.updateUserDoc = function(user) {
     deferred.resolve(true);
   })
   .fail(function(err) {
-    deferred.reject(new Error(err.body));
+    deferred.reject(new Error(err.body.message));
   });
 
   return deferred.promise;
@@ -54,18 +54,18 @@ exports.updateUserProfile = function(profile, userid, property) {
                   deferred.resolve(profile);
                 })
                 .fail(function (err) {
-                  deferred.reject(new Error(err.body));
+                  deferred.reject(new Error(err.body.message));
                 });
             })
             .fail(function (err) {
-              deferred.reject(new Error(err.body));
+              deferred.reject(new Error(err.body.message));
             });
       } else {  //field is not name or email
         deferred.resolve(profile);
       }
     })
     .fail(function (err) {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     });
     return deferred.promise;
 };
@@ -74,14 +74,14 @@ exports.updateProfile = function(id, profile) {
   var deferred = Q.defer();
   profile.updatedAt = new Date();
   db.put('local-profiles', id, profile)
-    .then(function (result) {
-      deferred.resolve(profile);
-    })
-    .fail(function (err) {
-      deferred.reject(new Error(err.body));
-    });
+  .then(function (result) {
+    deferred.resolve(profile);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body.message));
+  });
    
-    return deferred.promise;
+  return deferred.promise;
 };
  
 // update password
@@ -89,22 +89,28 @@ exports.updateProfile = function(id, profile) {
 exports.updatePassword = function(resettoken, password) {
   var deferred = Q.defer();
   db.search('local-users', resettoken)
-    .then(function (user){ //reset token is valid
+    .then(function (user){
       var theuser = user.body.results[0].value; //will never not be retarded
       theuser.hash = bcrypt.hashSync(password, 8); 
-      delete theuser.resettoken;
+      delete theuser.resetToken;
+      theuser.updatedAt = new Date();
       db.put('local-users', theuser.id, theuser)
         .then(function (user) {
-          deferred.resolve(user);
+          db.remove('reset-tokens', resettoken)
+          .then(function (result) {
+            deferred.resolve(user);
+          })
+          .fail(function (err) {
+            deferred.reject(new Error("Could not remove reset token"));
+          });
         })
         .fail(function (err) {
-          deferred.reject(new Error(err.body));
+          deferred.reject(new Error(err.body.message));
         });
     })
     .fail(function (err) {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     });
-
     return deferred.promise;
 };
 
@@ -129,11 +135,11 @@ exports.changePassword = function(id, password) {
           deferred.resolve(user);
         })
         .fail(function (err) {
-          deferred.reject(new Error(err.body));
+          deferred.reject(new Error(err.body.message));
         });
     })
     .fail(function (err) {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     });
 
   return deferred.promise;
@@ -159,7 +165,7 @@ exports.localReg = function (email, password, metadata) {
       .then(function (result) {
         return user;
       }, function (err) {
-        throw new Error(err.body);
+        throw new Error(err.body.message);
       });
     }
   })
@@ -169,20 +175,20 @@ exports.localReg = function (email, password, metadata) {
     .then (function (result) {
       return profile;
     }, function (err) {
-      throw new Error(err.body);
+      throw new Error(err.body.message);
     });
   }, function (err) {
-      throw new Error(err.body);
+      throw new Error(err.body.message);
   })
   .then(function (profile) {
     return db.put('carts', profile.id, cart)
     .then(function (result) {
       return user;
     }, function (err) {
-      throw new Error(err.body);
+      throw new Error(err.body.message);
     });
   }, function (err) {
-    throw new Error(err.body);
+    throw new Error(err.body.message);
   })
   .fail(function (err) {
     throw err;
@@ -221,7 +227,7 @@ exports.findProfileByID = function(id) { //TODO: decide if we need to store prof
     if (err.body.message == 'The requested items could not be found.'){
       deferred.resolve(false);
     } else {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     }
   });
 
@@ -238,7 +244,7 @@ exports.findUserByToken = function(token) {
     if (err.body.message == 'The requested items could not be found.'){
       deferred.resolve(false);
     } else {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     }
   });
 };
@@ -253,7 +259,7 @@ exports.findUserByEmail = function(email) {
     if (err.body.message == 'The requested items could not be found.'){
       deferred.resolve(false);
     } else {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     }
   });
   return deferred.promise;
@@ -269,7 +275,7 @@ exports.findUserByID = function(id) {
     if (err.body.message == 'The requested items could not be found.'){
       deferred.resolve(false);
     } else {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     }
   });
 
@@ -281,17 +287,23 @@ exports.generateResetToken = function(email) {
   db.search('local-users', email)
   .then(function(result) {
     var user = result.body.results[0].value;
-    user.resetToken = randomString(20);
+    user.resetToken = {token: randomString(20), createdAt: new Date()};
     db.put('local-users', user.id, user)
-      .then(function(result) {
-        deferred.resolve(user);
+      .then(function (result) {
+        db.put('reset-tokens', user.resetToken.token, user.resetToken)
+        .then(function (results) {
+            deferred.resolve(user);
+        })
+        .fail(function (err) {
+            deferred.reject(new Error('Error creating reset token'));
+        });
       })
       .fail(function(err) {
-        deferred.reject(new Error(err.body));
+        deferred.reject(new Error(err.body.message));
       });
   })
   .fail(function (err){
-    deferred.reject(new Error(err.body));
+    deferred.reject(new Error(err.body.message));
   });
   return deferred.promise;
 };
@@ -342,7 +354,7 @@ exports.getPublicProducts = function() {
     if (err.body.message == 'The requested items could not be found.'){
       deferred.resolve(false);
     } else {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     }
   });
   return deferred.promise;
@@ -355,10 +367,10 @@ exports.getProductByID = function(productnumber) {
     deferred.resolve(product.body);
   })
   .fail(function (err){
-    if (err.body.message == 'The requested items could not be found.'){
+    if (err.body.code == 'items_not_found'){
       deferred.resolve(false);
     } else {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     }
   });
   return deferred.promise;
@@ -377,14 +389,14 @@ exports.getRelatedProducts = function(productnumber) {
       deferred.resolve(rawDogger.push_values_to_top(res.body.results));
     })
     .fail(function (err) {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     });
 
     return deferred.promise;
 
   }, function (err) {
     return Q.fcall(function () {
-      throw new Error(err.body);
+      return false;
     });
   });
 };
@@ -402,7 +414,7 @@ exports.getProductsByCategory = function(category) {
     if (err.body.message == 'The requested items could not be found.'){
       deferred.resolve(false);
     } else {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     }
   });
 
@@ -440,14 +452,14 @@ exports.addItemToUserCart = function(userid, productnumber, quantity) {
         deferred.resolve(cart); // item(s) successfully added to cart
       })
       .fail(function (err) {
-        deferred.reject(new Error(err.body));
+        deferred.reject(new Error(err.body.message));
       });
     })
     .fail(function (err) {
       if (err.body.message == 'The requested items could not be found.'){
         deferred.resolve(false);
       } else {
-        deferred.reject(new Error(err.body));
+        deferred.reject(new Error(err.body.message));
       }
     });
   })
@@ -455,7 +467,7 @@ exports.addItemToUserCart = function(userid, productnumber, quantity) {
     if (err.body.message == 'The requested items could not be found.'){
       deferred.resolve(false);
     } else {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     }
   });
   return deferred.promise;
@@ -471,7 +483,7 @@ exports.addProduct = function(product, user) {
       deferred.resolve(product);
     })
     .fail(function (err) {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     });
    
     return deferred.promise;
@@ -487,7 +499,7 @@ exports.getCartByID = function(profileid) {
     if (err.body.message == 'The requested items could not be found.'){
       deferred.resolve(false);
     } else {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     }
   });
   return deferred.promise;
@@ -503,7 +515,7 @@ exports.getProductKeyMap = function(key) {
     if (err.body.message == 'The requested items could not be found.'){
       deferred.resolve(false);
     } else {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     }
   });
   return deferred.promise;
@@ -518,7 +530,11 @@ exports.getMerchantProductCount = function(merchantid) {
     deferred.resolve(res.body.total_count);
   })
   .fail(function (err) {
-    deferred.reject(new Error(err.body));
+    if (err.body.message == 'The requested items could not be found.'){
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
   });
   return deferred.promise;
 };
@@ -532,7 +548,7 @@ exports.incrementCollectionProperty = function(collection, key, prop) {
     deferred.resolve(res.body);
   })
   .fail(function (err) {
-    deferred.reject(new Error(err.body));
+    deferred.reject(new Error(err.body.message));
   });
   return deferred.promise;
 };
@@ -559,11 +575,11 @@ exports.updateUserCart = function(userid, productnumbers, quantities) {
       deferred.resolve(cart);
     })
     .fail(function (err) {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     });
   })
   .fail(function (err) {
-    deferred.reject(new Error(err.body));
+    deferred.reject(new Error(err.body.message));
   });
   return deferred.promise;
 };
@@ -575,7 +591,7 @@ exports.addCustomer = function(stripeCustomer) {
     deferred.resolve(true);
   })
   .fail(function (err) {
-    deferred.reject(new Error(err.body));
+    deferred.reject(new Error(err.body.message));
   });
   return deferred.promise;
 };
@@ -590,7 +606,7 @@ exports.getCustomer = function(customerId) {
     if (err.body.message == 'The requested items could not be found.'){
       deferred.resolve(false);
     } else {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     }
   });
   return deferred.promise;
@@ -603,7 +619,7 @@ exports.addOrder = function(order) {
     deferred.resolve(order);
   })
   .fail(function (err) {
-    deferred.reject(new Error(err.body));
+    deferred.reject(new Error(err.body.message));
   });
   return deferred.promise;
 };
@@ -618,8 +634,23 @@ exports.getOrderByID = function(orderId) {
     if (err.body.message == 'The requested items could not be found.'){
       deferred.resolve(false);
     } else {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     }
+  });
+  return deferred.promise;
+};
+
+exports.getAllOrders = function() {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+  .collection('orders')
+  .limit(100)
+  .query('*')
+  .then(function (result) {
+    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body));
   });
   return deferred.promise;
 };
@@ -635,7 +666,7 @@ exports.addOrderToUser = function(profileid, order) {
       deferred.resolve(order);
     })
     .fail(function (err) {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     });
   })
   .fail(function (err) {
@@ -649,10 +680,10 @@ exports.addOrderToUser = function(profileid, order) {
         deferred.resolve(order);
       })
       .fail(function (err) {
-        deferred.reject(new Error(err.body));
+        deferred.reject(new Error(err.body.message));
       });
     } else {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     }
   });
   return deferred.promise;
@@ -668,7 +699,7 @@ exports.getOrdersByUserID = function(profileid) {
     if (err.body.message == 'The requested items could not be found.'){
       deferred.resolve(false);
     } else {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     }
   });
   return deferred.promise;
@@ -687,11 +718,11 @@ exports.emptyUserCart = function(userid) {
       deferred.resolve(cart);
     })
     .fail(function(err) {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     });
   })
   .fail(function (err) {
-    deferred.reject(new Error(err.body));
+    deferred.reject(new Error(err.body.message));
   });
   return deferred.promise;
 };
@@ -711,7 +742,7 @@ exports.getAllProfiles = function() {
     deferred.resolve(profiles);
   })
   .fail(function (err) {
-    deferred.reject(new Error(err.body));
+    deferred.reject(new Error(err.body.message));
   });
   return deferred.promise;
 };
@@ -748,7 +779,6 @@ exports.getAllYLIFTProfiles = function() {
         return profiles;
       })
       .fail(function (reasons) {
-        console.log('reasons', reasons);
         return false;
       });
   })
@@ -756,7 +786,7 @@ exports.getAllYLIFTProfiles = function() {
     deferred.resolve(result);
   })
   .fail(function (err) {
-    deferred.reject(new Error(err.body));
+    deferred.reject(new Error(err.body.message));
   });
   return deferred.promise;
 };
@@ -764,24 +794,32 @@ exports.getAllYLIFTProfiles = function() {
 exports.getProfile = function(profileid) {
   var deferred = Q.defer();
   db.get('local-profiles', profileid)
-    .then(function (result) {
-      deferred.resolve(result.body);
-    })
-    .fail(function (err) {
-      deferred.reject(new Error(err.body));
-    });
+  .then(function (result) {
+    deferred.resolve(result.body);
+  })
+  .fail(function (err) {
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
+  });
   return deferred.promise;
 };
 
 exports.getUser = function(userid) {
   var deferred = Q.defer();
   db.get('local-users', userid)
-    .then(function (result) {
-      deferred.resolve(result.body);
-    })
-    .fail(function (err) {
-      deferred.reject(new Error(err.body));
-    });
+  .then(function (result) {
+    deferred.resolve(result.body);
+  })
+  .fail(function (err) {
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
+  });
   return deferred.promise;
 };
 
@@ -808,8 +846,7 @@ exports.addMerchantProfile = function(profile) {
     deferred.resolve(profile);
   })
   .fail(function (err) {
-    console.log('error adding merchant profile', err.body, err, profile);
-    deferred.reject(new Error(err.body));
+    deferred.reject(new Error(err.body.message));
   });
    
   return deferred.promise;
@@ -819,14 +856,14 @@ exports.updateMerchantProfile = function(profile) {
   var deferred = Q.defer();
   profile.updatedAt = new Date();
   db.put('merchant-profiles', profile.id, profile)
-    .then(function (result) {
-      deferred.resolve(profile);
-    })
-    .fail(function (err) {
-      deferred.reject(new Error(err.body));
-    });
+  .then(function (result) {
+    deferred.resolve(profile);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body.message));
+  });
    
-    return deferred.promise;
+  return deferred.promise;
 };
 
 exports.deleteMerchantProfile = function(merchantid) {
@@ -836,7 +873,7 @@ exports.deleteMerchantProfile = function(merchantid) {
       deferred.resolve(true);
     })
     .fail(function (err) {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     });
    
     return deferred.promise;
@@ -852,7 +889,11 @@ exports.findMerchantProfile = function(profileid) {
     deferred.resolve(results[0]);
   })
   .fail(function (err) {
-    deferred.reject(new Error(err.body));
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
   });
    
   return deferred.promise;
@@ -861,12 +902,16 @@ exports.findMerchantProfile = function(profileid) {
 exports.getMerchantProfile = function(profileid) {
   var deferred = Q.defer();
   db.get('merchant-profiles', profileid)
-    .then(function (result) {
-      deferred.resolve(result.body);
-    })
-    .fail(function (err) {
-      deferred.reject(new Error(err.body));
-    });
+  .then(function (result) {
+    deferred.resolve(result.body);
+  })
+  .fail(function (err) {
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
+  });
   return deferred.promise;
 };
 
@@ -878,7 +923,11 @@ exports.getMerchantOrders = function(merchantid) {
     deferred.resolve(results);
   })
   .fail(function (err) {
-    deferred.reject(new Error(err.body));
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
   });
    
   return deferred.promise;
@@ -895,7 +944,11 @@ exports.getMerchantProducts = function(merchantid) {
     deferred.resolve(results);
   })
   .fail(function (err) {
-    deferred.reject(new Error(err.body));
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
   });
    
   return deferred.promise;
@@ -905,12 +958,12 @@ exports.updateCustomer = function(customer) {
   var deferred = Q.defer();
   customer.updatedAt = new Date();
   db.put('customers', customer.id, customer)
-    .then(function (result) {
-      deferred.resolve(customer);
-    })
-    .fail(function (err) {
-      deferred.reject(new Error(err.body));
-    });
+  .then(function (result) {
+    deferred.resolve(customer);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body.message));
+  });
    
     return deferred.promise;
 };
@@ -919,12 +972,12 @@ exports.updateOrder = function(order) {
   var deferred = Q.defer();
   order.updatedAt = new Date();
   db.put('orders', order.id, order)
-    .then(function (result) {
-      deferred.resolve(order);
-    })
-    .fail(function (err) {
-      deferred.reject(new Error(err.body));
-    });
+  .then(function (result) {
+    deferred.resolve(order);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body.message));
+  });
    
     return deferred.promise;
 };
@@ -934,12 +987,12 @@ exports.updateProduct = function(product, user) {
   product.updatedAt = new Date();
   product.updatedBy = user;
   db.put('products', product.productnumber, product)
-    .then(function (result) {
-      deferred.resolve(product);
-    })
-    .fail(function (err) {
-      deferred.reject(new Error(err.body));
-    });
+  .then(function (result) {
+    deferred.resolve(product);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body.message));
+  });
    
     return deferred.promise;
 };
@@ -951,7 +1004,7 @@ exports.submitReview = function(review) {
     deferred.resolve(true);
   })
   .fail(function (err) {
-    deferred.reject(new Error(err.body));
+    deferred.reject(new Error(err.body.message));
   });
 
   return deferred.promise;
@@ -967,7 +1020,7 @@ exports.getProductRating = function(productnumber) {
     deferred.resolve(res.body.aggregates[0].statistics);
   })
   .fail(function (err) {
-    deferred.reject(new Error(err.body));
+    deferred.reject(new Error(err.body.message));
   });
 
   return deferred.promise;
@@ -980,7 +1033,11 @@ exports.getProductReviews = function(productnumber) {
     deferred.resolve(rawDogger.push_values_to_top(res.body.results));
   })
   .fail(function (err) {
-    deferred.reject(new Error(err.body));
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
   });
 
   return deferred.promise;
@@ -993,7 +1050,7 @@ exports.getRegKey = function(keyid) {
       deferred.resolve(result.body);
     })
     .fail(function (err) {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     });
   return deferred.promise;
 };
@@ -1012,7 +1069,7 @@ exports.activateRegKey = function(keyid, ownerid) {
     deferred.resolve(result.body);
   })
   .fail(function (err) {
-    deferred.reject(new Error(err.body));
+    deferred.reject(new Error(err.body.message));
   });
   return deferred.promise;
 };
@@ -1030,29 +1087,9 @@ exports.getTrainingDates = function() {
     if (err.body.message == 'The requested items could not be found.'){
       deferred.resolve(false);
     } else {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     }
   });
-  return deferred.promise;
-};
-
-exports.getAllTestimonials = function() {
-  var deferred = Q.defer();
-  db.newSearchBuilder()
-  .collection('testimonials')
-  .limit(100)
-  .query('*')
-  .then(function (results) {
-    var testimonials = [];
-    results.body.results.forEach(function(result) {
-      testimonials.push(result.value);
-    });
-    deferred.resolve(testimonials);
-  })
-  .fail(function (err) {
-    deferred.reject(new Error(err.body));
-  });
-   
   return deferred.promise;
 };
 
@@ -1076,9 +1113,43 @@ exports.getMostFrequentEvent = function(collection, type, profile) {
     deferred.resolve(rawDogger.push_values_to_top(result.body.results));
   })
   .fail(function (err) {
-    console.log('error getting most feqe', err.body);
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
+  });
+};
+
+exports.getMerchantByID = function(id) {
+  var deferred = Q.defer();
+  db.get('merchant-profiles', id)
+  .then(function (merchant){
+    deferred.resolve(merchant.body);
+  })
+  .fail(function (err) {
     deferred.reject(new Error(err.body));
   });
+  return deferred.promise;
+};
 
+exports.validateResetToken = function(tokenid) {
+  var deferred = Q.defer();
+   db.get('reset-tokens', tokenid)
+  .then(function (token){ 
+    var now = new Date();
+    if(Date.parse(token.createdAt) + 86400000 < Date.parse(now)) {  //expired
+      deferred.resolve(false);
+    }else {
+      deferred.resolve(true);
+    }
+  })
+  .fail(function (err) {
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
+  });
   return deferred.promise;
 };

@@ -58,7 +58,7 @@
   </div>
 
   <div class="large-7 columns">
-    <p ng-show="error">{{error}}</p>
+    <error-dir msg="{{error}}"></error-dir>
     <!-- Edit name -->
     <label>Product name
       <input type="text" ng-model="product.name" placeholder="Enter the product name"/>
@@ -66,9 +66,9 @@
     <!-- Edit name -->
     <label>Product category
       <select ng-model="product.category">
-        <option value="skin care">Skin care</option>
+        <option value="skin care">Skin Care</option>
         <option value="cosmetics">Cosmetics</option>
-        <option value="ylift">YLIFT</option>
+        <option value="y lift">Y LIFT</option>
         <option value="other">Other</option>
       </select>
     </label>

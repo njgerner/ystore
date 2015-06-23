@@ -1,7 +1,14 @@
+<div class="row">
+	<div class="small-12 columns">
+		<ul id="before-after-crumbs" class="breadcrumbs">
+		  <li ng-repeat="procedure in procedures" class="b-a-crumb"><a ng-click="filter(procedure)">{{procedure}}</a></li>
+		</ul>
+	</div>
+</div>
 <div id="before-after-container">
 	<div class="row">
 		<div class="large-4 columns">
-			<div ng-repeat="testimonial in testimonials track by $index">
+			<div ng-repeat="testimonial in displayTestimonials track by $index">
 				<div ng-if="$index % 3 == 0" class = "panel before-after-single">
 					<a ng-href="{{path}}" ng-repeat="path in testimonial.img">
 						<img class="before-after-image" ng-src="{{path}}">
@@ -18,7 +25,7 @@
 			</div>
 		</div>
 		<div class="large-4 columns">
-			<div ng-repeat="testimonial in testimonials track by $index">
+			<div ng-repeat="testimonial in displayTestimonials track by $index">
 				<div ng-if="$index % 3 == 1" class = "panel before-after-single">
 					<a ng-href="{{path}}" ng-repeat="path in testimonial.img">
 						<img class="before-after-image" ng-src="{{path}}">
@@ -35,7 +42,7 @@
 			</div>
 		</div>
 		<div class="large-4 columns">
-			<div ng-repeat="testimonial in testimonials track by $index">
+			<div ng-repeat="testimonial in displayTestimonials track by $index">
 				<div ng-if="$index % 3 == 2" class = "panel before-after-single">
 					<a ng-href="{{path}}" ng-repeat="path in testimonial.img">
 						<img class="before-after-image" ng-src="{{path}}">

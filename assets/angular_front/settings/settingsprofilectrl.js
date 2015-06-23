@@ -6,7 +6,7 @@ superApp.controller('SettingsProfileCtrl',
 
     $scope.uploading = false;
     $scope.addAddressView = false;
-    $scope.showAddressView = false;
+    $scope.editAddressView = false;
     $scope.addresses = $scope.profile.addresses;
 
     $scope.clearAddress = function() {
@@ -22,10 +22,12 @@ superApp.controller('SettingsProfileCtrl',
     }
 
     $scope.selectAddress = function(ind) {
+      $scope.buttonText = "Update";
+      $scope.addAddressView = false;
       if ($scope.currAddress == $scope.addresses[ind]) {
         $scope.currAddress = null;
         $scope.currAddressImg = null;
-        $scope.showAddressView = false;
+        $scope.editAddressView = false;
         return;
       }
       $scope.currAddress = $scope.addresses[ind];
@@ -37,10 +39,15 @@ superApp.controller('SettingsProfileCtrl',
       $scope.zip = $scope.currAddress.zip;  
       $scope.yliftInd = $scope.currAddress.yliftInd;
       $scope.addressInd = ind;
-      $scope.showAddressView = true;
+      $scope.editAddressView = true;
     };
 
-    $scope.addAddress = function() {
+    $scope.submitAddress = function() {
+      if($scope.buttonText == "Add") {  //in add mode
+         $scope.buttonText = "Adding";
+      }else {                           //in edit mode
+        $scope.buttonText = "Updating";
+      }
       var address = {
         "name": $scope.addressname,
         "address1": $scope.address1,
@@ -56,34 +63,23 @@ superApp.controller('SettingsProfileCtrl',
       if ($scope.isYLIFT) {
         address.yliftInd = $scope.yliftInd;
       }
-      $scope.addresses.push(address);
-      $scope.profile.addresses = $scope.addresses;
-      $scope.updateProfile();
-      $scope.addAddressView = false;
-      $scope.clearAddress();
-    };
-
-    $scope.updateAddress = function() {
-      var address = {
-        "name": $scope.addressname,
-        "address1": $scope.address1,
-        "address2": $scope.address2,
-        "city": $scope.city,
-        "state": $scope.state,
-        "zip": $scope.zip,
-        "default": $scope.default
-      };
-      if ($scope.addresses.length == 0) {
-        address.default = true;
+      if ($scope.editAddressView) {  // update the address
+        $scope.addresses[$scope.addressInd] = address;
+        $scope.profile.addresses = $scope.addresses;
+        $scope.updateProfile("address");
+        $scope.buttonText = "Update";
+        $scope.editAddressView = false;
+        $scope.clearAddress();
       }
-      if ($scope.isYLIFT) {
-        address.yliftInd = $scope.yliftInd;
+      if ($scope.addAddressView) { // address needs to be added
+        $scope.addresses.push(address);
+        $scope.profile.addresses = $scope.addresses;
+        $scope.updateProfile("address");
+        $scope.buttonText = "Add";
+        $scope.addAddressView = false;
+        $scope.clearAddress();
       }
-      $scope.addresses[$scope.addressInd] = address;
-      $scope.profile.addresses = $scope.addresses;
-      $scope.updateProfile();
-      $scope.showAddressView = false;
-      $scope.clearAddress();
+      
     };
 
     $scope.removeAddress = function(ind) {
@@ -92,7 +88,7 @@ superApp.controller('SettingsProfileCtrl',
         $scope.profile.addresses = $scope.addresses;
         $scope.updateProfile();
       }
-    }
+    };
 
     $scope.makeDefault = function(ind) {
       if ($window.confirm('Make this address the default?')) {
@@ -107,14 +103,22 @@ superApp.controller('SettingsProfileCtrl',
         $scope.profile.addresses = $scope.addresses;
         $scope.updateProfile();
       }
-    }
+    };
 
-    $scope.toggleAddAddress = function() {
-      $scope.addAddressView = !$scope.addAddressView;
+    $scope.enableAddAddress = function() {
+      $scope.buttonText = "Add";
+      $scope.clearAddress();
+      $scope.editAddressView = false;
+      $scope.addAddressView = true;
     };
 
     $scope.toggleShowAddress = function() {
-      $scope.showAddressView = !$scope.showAddressView;
+      $scope.editAddressView = !$scope.editAddressView;
     };
+
+    $scope.cancel = function() {
+      $scope.editAddressView = false;
+      $scope.addAddressView = false;
+    }
 
 }]);

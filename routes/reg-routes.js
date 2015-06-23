@@ -7,6 +7,7 @@ module.exports = function(express, app, __dirname) {
     	config 			= require('../trd_modules/config.json'), 			//config file contains all tokens and other private info
 		orchHelper      = require('../trd_modules/orchestrateHelper'),
 		Q               = require('q'),
+		errorHandler    = require('../trd_modules/errorHandler.js'),
 		fs 				= require('fs');
 
 	RegRoutes.verify_key = function(req, res) {
@@ -27,7 +28,6 @@ module.exports = function(express, app, __dirname) {
 	  		}
 	  	})
 	  	.fail(function (err) {
-	  		console.log('405 error', err.body);
 	  		res.status(405).json({status:"invalid"});
 	  	});
 	};
