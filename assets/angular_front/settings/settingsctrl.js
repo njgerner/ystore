@@ -1,7 +1,7 @@
 superApp.controller('SettingsCtrl',
-  ['$rootScope', '$scope', '$state', 'authService', 'profileService', '$location', '$stateParams', '$timeout', 
+  ['$rootScope', '$scope', '$state', 'authService', 'emailService', 'profileService', '$location', '$stateParams', '$timeout', 
   'storeService', 'FileUploader', '$window',
-  function($rootScope, $scope, $state, authService, profileService, $location, $stateParams, $timeout, 
+  function($rootScope, $scope, $state, authService, emailService, profileService, $location, $stateParams, $timeout, 
   	storeService, FileUploader, $window) {
   
     $scope.profile = authService.profile;
@@ -12,7 +12,22 @@ superApp.controller('SettingsCtrl',
   	$scope.updating = "none";
 
     $scope.updateProfile = function(property) {
+      console.log('ctrl update');
+      console.log('auth', authService.profile);
+      console.log('scope', $scope.profile);
       $scope.updating = property;
+      if($scope.profile.email != authService.profile.email) {
+        if(!confirm("Are you sure you want to change your login email address to " + $scope.profile.email + "?")) {
+          $scope.updating = "none";
+          return;
+        } else {
+          profileService.updateProfile($scope.profile, function (error, profile) {
+            $scope.profile = profile;
+            $scope.updating = "none";
+            emailService.changeUserEmail(authService.profile.email, $scope.profile.email);
+          });
+        }
+      }
       profileService.updateProfile($scope.profile, function (error, profile) {
         $scope.profile = profile;
         $scope.updating = "none";
