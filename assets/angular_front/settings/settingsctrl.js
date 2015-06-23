@@ -12,9 +12,6 @@ superApp.controller('SettingsCtrl',
   	$scope.updating = "none";
 
     $scope.updateProfile = function(property) {
-      console.log('ctrl update');
-      console.log('auth', authService.profile);
-      console.log('scope', $scope.profile);
       $scope.updating = property;
       if($scope.profile.email != authService.profile.email) {
         if(!confirm("Are you sure you want to change your login email address to " + $scope.profile.email + "?")) {
