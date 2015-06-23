@@ -19,9 +19,9 @@ module.exports = function(express, app, __dirname) {
 		.then(function (result) {
 			if (result) {
 				if (result.active && (result.domain == req.body.domain)) {
-					res.status(200).json(result);
+					res.status(200).json({code:result});
 				} else if (result.domain != req.body.domain) {
-					errorHandler.logAndReturn('The entered code is applicable to this order', 400, next);
+					errorHandler.logAndReturn('The entered code is not applicable to this order', 400, next);
 				} else {
 					errorHandler.logAndReturn('The entered code has expired', 400, next);
 				}

@@ -512,12 +512,21 @@
 		  <li class="bullet-item">Live Seminars</li>
 		  <li class="bullet-item">In Person Hands-on Training</li>
 		  <li class="bullet-item">Y LIFT Network Pricing</li>
-		  <li class="cta-button">
-		  	<a class="button small secondary" ng-click="backTo('form5')">Back</a>
-		  	<a class="button small" ng-click="submit()">
-		  		<span ng-hide="validating">Submit Order</span>
-		  		<span ng-show="validating">Processing...</span>
-		  	</a>
+		  <li class="description">
+	  		<div class="row">
+	  		<div class="small-12 large-6 columns">
+	  			<a class="promo-link" ng-hide="showPromo" ng-click="showPromo = true">Promotional code</a>
+		  		<promo-dir ng-show="showPromo" total="total" shipping="0" domain="registration" error="error" show-label="false"></promo-dir>
+	  		</div>	
+	  		<div class="small-12 large-6 columns">
+	  				
+			  	<a class="button small secondary" ng-click="backTo('form5')">Back</a>
+			  	<a class="button small" ng-click="submit()">
+			  		<span ng-hide="validating">Submit Order</span>
+			  		<span ng-show="validating">Processing...</span>
+			  	</a>
+	  		</div>	
+	  		</div>
 		  </li>
 		</ul>
 </div>

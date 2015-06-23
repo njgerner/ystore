@@ -70,6 +70,9 @@ superApp.controller('CheckoutBillingCtrl',
    	}
 
     $scope.addPayment = function() {
+      if ($scope.customerUpdating) {
+        return;
+      }
       $scope.customerUpdating = true;
       if ($scope.creditCardFieldsComplete) {
         var exp = $scope.exp.split("/");
@@ -95,11 +98,11 @@ superApp.controller('CheckoutBillingCtrl',
     }
 
     function onPaymentAdded (customer, error) {
+      $scope.customerUpdating = false;
       if (error) {
         $scope.error = error;
       } else {
         onCustomerLoaded(customer);
-        $scope.customerUpdating = false;
         $scope.toggleAddPayment();
       }
     }
