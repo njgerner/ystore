@@ -12,7 +12,6 @@ module.exports = {
 			"hash": hash,
 			"tempPwd" : false,
 			"token": token,
-			"name": null,
 			"isAdmin": false,
 			"jsonType": "user",
 			"createdAt": new Date(),

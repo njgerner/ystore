@@ -1,5 +1,5 @@
-trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdInterceptor',
-    function ($rootScope, $http, $cookieStore, trdInterceptor) {
+trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdInterceptor', '$log',
+    function ($rootScope, $http, $cookieStore, trdInterceptor, $log) {
 	    this.authorizationReceived = false;
 		this.authorized = false;
 
@@ -79,10 +79,12 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 			    		callback(null, "success!");
 			    	}
 			    	else {
+			    		$log.debug('error login in', data);
 			    		callback(data.message, null);
 			    	}
 			    }).
 			    error(function(data, status, headers, config) {
+			    	$log.debug('error login in', data);
 			    	callback(data.message, null);
 			    });
 		};
@@ -100,6 +102,7 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 			    	callback(data.error, data.status);
 			    }).
 			    error(function(data, status, headers, config) {
+			    	$log.debug('error registering user', data);
 			    	callback(data.error, data.message);
 			    });
 		};

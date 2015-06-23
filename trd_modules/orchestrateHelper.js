@@ -148,6 +148,7 @@ exports.changePassword = function(id, password) {
 
 //used in local-signup strategy
 exports.localReg = function (email, password, metadata) {
+  var deferred = Q.defer();
   var user = User.newUser(email, password);
   var profile = Profile.newProfile(email);
   if (metadata) {
@@ -155,7 +156,7 @@ exports.localReg = function (email, password, metadata) {
   }
   var cart = Cart.newCart();
     //check if email is already assigned in our database
-  return db.search('local-users', user.email)
+  db.search('local-users', user.email)
   .then(function (result) {
     if (result.body.count > 0) {
         throw new Error('That email is already registered, please login.');
@@ -177,22 +178,20 @@ exports.localReg = function (email, password, metadata) {
     }, function (err) {
       throw new Error(err.body.message);
     });
-  }, function (err) {
-      throw new Error(err.body.message);
   })
   .then(function (profile) {
     return db.put('carts', profile.id, cart)
     .then(function (result) {
-      return user;
+      deferred.resolve(user);
     }, function (err) {
       throw new Error(err.body.message);
     });
-  }, function (err) {
-    throw new Error(err.body.message);
   })
   .fail(function (err) {
-    throw err;
+    deferred.reject(err);
   });
+
+  return deferred.promise;
 };
 
 exports.localAuth = function (email, password) {

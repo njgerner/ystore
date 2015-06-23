@@ -20,6 +20,7 @@ module.exports = function(express, app, __dirname) {
 		var transaction = req.body;
 		var card = transaction.card;
 		var email = transaction.email;
+		var customer = {};
 		stripe.customers.create({
 			card: card,
 			description: "ylift customer",
@@ -35,27 +36,25 @@ module.exports = function(express, app, __dirname) {
 		})
 		.then(function (customer) {
 			return orchHelper.getProfile(profileid)
-				.then(function (profile) {
-					profile.customerid = customer.id;
-					profile.updatedAt = new Date();
-					return orchHelper.updateProfile(profile.id, profile)
-						.then(function (result) {
-							return customer;
-						})
-						.fail(function (err) {
-							return new Error(err.body);
-						});
+			.then(function (profile) {
+				profile.customerid = customer.id;
+				profile.updatedAt = new Date();
+				return orchHelper.updateProfile(profile.id, profile)
+				.then(function (result) {
+					return customer;
 				})
 				.fail(function (err) {
-					return new Error(err);
+					throw new Error(err.body.message);
 				});
-		}, function (err) {
-			return new Error(err);
+			})
+			.fail(function (err) {
+				throw new Error(err.body.message);
+			});
 		})
-		.then(function (customer) {
-			res.status(201).json({customer:customer, message:"Customer created"});
+		.then(function (result) {
+			res.status(201).json({customer:result, message:"Customer created"});
 		}, function (err) {
-			errorHandler.logAndReturn('Error adding new customer', 500, next, err, [req.params, req.body]);
+			errorHandler.logAndReturn(err.message || 'Error adding new customer', 422, next, err, [req.params, req.body]);
 		});
 	};
 
@@ -76,7 +75,7 @@ module.exports = function(express, app, __dirname) {
 		.then(function (customer) {
 			res.status(201).json({customer:customer, message:"Guest customer created"});
 		}, function (err) {
-			errorHandler.logAndReturn('Error adding guest customer', 500, next, err, req.body);
+			errorHandler.logAndReturn(err.message || 'Error adding guest customer', 500, next, err, req.body);
 		});
 	};
 
@@ -135,6 +134,10 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	StripeRoutes.update_guest_customer = function(req, res, next) {	
+		if (!req.body.customerid) {
+			errorHandler.logAndReturn('Error updating customer, missing id', 400, next, null, req.body);
+			return;
+		}
 		stripe.customers.update(req.body.customerid, req.body.props, function(err, result) {
 			if (err) {
 				errorHandler.logAndReturn('Error updating guest customer, please contact support@ylift.io', 500, next, err);

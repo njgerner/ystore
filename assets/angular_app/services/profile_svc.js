@@ -6,11 +6,15 @@ trdServices.service("profileService", ['$rootScope', '$http', '$cookieStore', 'a
     this.updateProfile = function(profile, callback) {
         $http({method: 'POST', url: '/profile/update/' + profile.id, data:{profile:profile}})
         .success(function (data, status, headers, config) {
-            callback(null, data);
+            if (callback) {
+                callback(null, data);
+            }
         })
         .error(function (data, status, headers, config) {
             $log.debug('error updating profile', data);
-            callback(data.message);
+            if (callback) {
+                callback(data.message);
+            }
         });
     }
 

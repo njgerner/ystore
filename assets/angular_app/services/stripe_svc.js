@@ -1,5 +1,5 @@
-trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'authService', 'PUBLISH',
-    function ($rootScope, $http, $cookieStore, authService, stripePubKey) {
+trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'authService', 'PUBLISH', '$log',
+    function ($rootScope, $http, $cookieStore, authService, stripePubKey, $log) {
 
       Stripe.setPublishableKey(stripePubKey);
 
@@ -60,7 +60,8 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
               callback(inThis.customer);
             })
             .error(function(data, status, headers, config) {
-              callback(null, data.err);
+              $log.debug('error adding card', data);
+              callback(null, data.message);
             });
           } else {
             $http({method: 'POST', url: "/add_token_to_customer/" + authService.profile.id + "/" + authService.profile.customerid, data: {token:response.id}})
@@ -70,7 +71,8 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
               callback(inThis.customer);
             })
             .error(function(data, status, headers, config) {
-              callback(null, data.err);
+              $log.debug('error adding token to customer', data);
+              callback(null, data.message);
             });
           }
         });
@@ -118,7 +120,8 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
             callback(data.customer);
           })
           .error(function(data, status, headers, config) {
-            callback();
+            console.log('error adding customer', data.err);
+            callback(mull, data.message);
           });
     	};
 
@@ -167,13 +170,13 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
             callback(data.customer);
           })
           .error(function(data, status, headers, config) {
-            callback();
+            callback(null, data);
           });
       };
 
     	this.submitOrder = function(addressShipTo, productsInCart, merchants, shipping, total, callback) {
         if (!this.card) {
-           callback({message: "Invalid credit card info, please check that the information provided is correct and try again." }, null);
+           callback("Invalid credit card info, please check that the information provided is correct and try again.", null);
         } else { // i need a dolla dolla, a dolla is all i neeeeeeed
           var inThis = this;
           $http({method: 'POST', url: "/process_transaction?profile=" + authService.profileid,
