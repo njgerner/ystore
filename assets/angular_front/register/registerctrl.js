@@ -133,6 +133,7 @@ superApp.controller('RegisterCtrl',
       };
       $scope.profile.addresses.push(address);
       $scope.profile.phone = $scope.phone;
+      $scope.profile.name = $scope.name;
       profileService.updateProfile($scope.profile);
     }
 
