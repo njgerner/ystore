@@ -36,7 +36,7 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
                 for(var i = 0; i < data.products.length; i++) {
                     internalThis.productsByID[data.products[i].productnumber] = data.products[i]; 
                     internalThis.products.push(data.products[i]); //seems redundant if we already have productsByID containing all products
-                    if(internalThis.productsByCategory[data.products[i].cate`gory]){
+                    if(internalThis.productsByCategory[data.products[i].category]){
                         internalThis.productsByCategory[data.products[i].category].push(data.products[i]);
                     }else {
                         internalThis.productsByCategory[data.products[i].category] = [];
