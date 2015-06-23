@@ -330,8 +330,11 @@ passport.use('bearer', new BearerStrategy(
   var all_products = function(req, res, next) {
     orchHelper.getAllProducts()
       .then(function (products) {
-        if (products) {
-          res.send({products: products});
+        if (products && req.user && req.user.isYLIFT) {
+          req.body.products = products;
+          next();
+        } else if (products) {
+          res.status(200).json({products: products});
         } else {
           errorHandler.logAndReturn('No products found', 404, next);
         }
@@ -628,6 +631,7 @@ passport.use('bearer', new BearerStrategy(
     app.post('/promo/:code', promoRoutes.get_promo_code);
     app.post('/register', register);
     app.post('/remove_card_from_customer/:profileid/:customerid', ensureAuthenticated, stripeRoutes.remove_card_from_customer, stripeRoutes.update_customer);
+    app.post('/store', storeRoutes.get_storefront);
     app.post('/submit_review', ensureAuthenticated, productRoutes.submit_review);
     app.post('/verify_key', ensureAuthenticated, regRoutes.verify_key);
     app.post('/update_cart', update_cart);

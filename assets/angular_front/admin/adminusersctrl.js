@@ -9,7 +9,6 @@ superApp.controller('AdminUsersCtrl',
   	}
 
   	$scope.getMonthlyUserCount = function() {
-
   		return $scope.users.filter(isMonthlyUser).length;
   	}
 

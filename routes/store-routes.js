@@ -63,5 +63,26 @@ module.exports = function(express, app, __dirname) {
 		});
 	};
 
+	// POST /store
+	StoreRoutes.get_storefront = function(req, res, next) {
+		if (req.body.ylift) {
+			orchHelper.getAllProducts()
+			.then(function (data) {
+				res.status(200).json({products:data});
+			})
+			.fail(function (err) {
+				errorHandler.logAndReturn('Error retrieving store front', 500, next, err, req.body);
+			});
+		} else {
+			orchHelper.getPublicProducts()
+			.then(function (data) {
+				res.status(200).json({products:data});
+			})
+			.fail(function (err) {
+				errorHandler.logAndReturn('Error retrieving public store front', 500, next, err, req.body);
+			});			
+		}
+	};
+
 	return StoreRoutes;
 };

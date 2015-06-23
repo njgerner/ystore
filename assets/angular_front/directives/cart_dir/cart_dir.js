@@ -47,42 +47,16 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 				$state.go("checkout");
 			}
 
-			function updatePInCartCookie () {
-  			$cookieStore.put('pInCart', scope.productsInCart);
-			}
-
-	  		function onProductsLoaded (error, products) {
-	  			if (error) {
-	  				scope.error = error;
-	  				return;
-	  			}
-	  			scope.products = storeService.productsByID;
-	  			if (scope.productsInCart.length > 0) {
-	  				scope.updateTotal();
-	  			}
-	  			scope.cartProductsLoading = false;
-	  		}
-
-	  		function onProductsInCartReceived (error, products) {
-	  			if (error) {
-	  				scope.error = error;
-	  				return;
-	  			}
-	  			scope.productsInCart = products;
-	  			storeService.getAllProducts(onProductsLoaded); // as the store grows we may want to load only products currently in cart
-	  		};
-
 	  		var productsInCartWatch = null;
-				productsInCartWatch = scope.$watch('productsInCart', function(newValue, oldValue) {
-					if (!newValue) {
-						scope.updateTotal();
-						scope.updatePInCartCookie();
-						productsInCartWatch();
-					}
-				});
+			productsInCartWatch = scope.$watch('productsInCart', function(newValue, oldValue) {
+				if (!newValue) {
+					scope.updateTotal();
+					scope.updatePInCartCookie();
+					productsInCartWatch();
+				}
+			});
 
-			storeService.getProductsInCart(authService.profileid, onProductsInCartReceived);
-
+			var cartWatch = null;
 			var cartWatch = scope.$watch(function() { return $cookies.pInCart; }, function(newCart, oldCart) { // this makes me hard
 				if (newCart !== undefined) {
 					onProductsInCartReceived(null, JSON.parse(newCart));
@@ -91,7 +65,29 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 				}
 			});
 
+			function updatePInCartCookie () {
+  				$cookieStore.put('pInCart', scope.productsInCart);
+			}
+
+	  		function onProductsLoaded (error, products) {
+	  			scope.products = storeService.productsByID;
+	  			if (scope.productsInCart.length > 0) {
+	  				scope.updateTotal();
+	  			}
+	  			scope.cartProductsLoading = false;
+	  		}
+
+	  		function onProductsInCartReceived (error, products) {
+	  			scope.productsInCart = products;
+	  			scope.$on('productsloaded', function (evt, products) {
+	  				onProductsLoaded(products);
+	  			});
+	  		};
+
+			storeService.getProductsInCart(authService.profileid, onProductsInCartReceived);
+
 			scope.$on('$destroy', function () {
+				productsInCartWatch();
 				cartWatch();
 			});
 

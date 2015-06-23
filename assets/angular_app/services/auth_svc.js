@@ -11,6 +11,7 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 			this.profile = null;
 			this.profileid = null;
 			this.isAdmin = null;
+			this.isYLIFT = null;
 		};
 
 		this.getAuthorization = function(callback) {
@@ -19,6 +20,7 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 				this.authorizationReceived = true;
 				this.authorized = false;
 				callback(this.authorized);
+				$rootScope.$broadcast('authorizationloaded', this.authorized);
 			} else {
 				// if auth has not been received, and we have a token, check authorization
 				var internalThis = this;
@@ -28,6 +30,7 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 				    		// something's wrong, not authorized
 				    		internalThis.authorizationReceived = true;
 				    		internalThis.authorized = false;
+				      		$rootScope.$broadcast('authorizationloaded', internalThis.authorized);
 				    		callback(internalThis.authorized);
 				    	} else {
 					      	internalThis.email = data.profile.email;
@@ -38,13 +41,14 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 					      	internalThis.authorizationReceived = true;
 					      	internalThis.authorized = true;
 					      	internalThis.loggedin = true;
+				      		$rootScope.$broadcast('authorizationloaded', internalThis.authorized);
 					      	callback(internalThis.authorized);
-					      	$rootScope.$broadcast('authorizationloaded', internalThis.authorized);
 				    	}
 				    }).
 				    error(function(data, status, headers, config) {
 				      	internalThis.authorizationReceived = true;
 				      	internalThis.authorized = false;
+				      	$rootScope.$broadcast('authorizationloaded', internalThis.authorized);
 				      	callback(internalThis.authorized);
 				    });
 				}

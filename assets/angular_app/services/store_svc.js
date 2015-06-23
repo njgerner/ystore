@@ -1,5 +1,5 @@
-trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'stripeService', '$log',
-    function ($rootScope, $http, $cookieStore, stripeService, $log) {
+trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'stripeService', '$log', 'authService',
+    function ($rootScope, $http, $cookieStore, stripeService, $log, authService) {
 
     this.initService = function() {
         this.productsReceived = false;
@@ -22,17 +22,17 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
         return this.productsByID[productid].attributes.vendor;
     }
 
-    this.getAllProducts = function(callback) {
-        if (this.productsReceived) {
+    this.getStoreFront = function(callback, refresh) {
+        if (this.productsReceived && !refresh) {
             callback(null, this.products);
-        } else {
+            return;
+        }
         var internalThis = this;
-        $http({method: 'GET', url: "/all_products"})
+        $http({method: 'POST', url: "/store", data:{ylift: authService.isYLIFT}})
             .success(function(data, status, headers, config) {
-                if (internalThis.productsReceived) {
-                    callback(null, internalThis.products);
-                } else{
-                internalThis.productsReceived = true;
+                internalThis.products = [];
+                internalThis.productsByID = {};
+                internalThis.productsByCategory = {};
                 for(var i = 0; i < data.products.length; i++) {
                     internalThis.productsByID[data.products[i].productnumber] = data.products[i]; 
                     internalThis.products.push(data.products[i]); //seems redundant if we already have productsByID containing all products
@@ -43,15 +43,15 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
                         internalThis.productsByCategory[data.products[i].category].push(data.products[i]);
                     }
                 }
+                internalThis.productsReceived = true;
+                $rootScope.$broadcast('productsloaded', internalThis.products);
                 callback(null, internalThis.products);
-              }
             })
             .error(function(data, status, headers, config) {
                 $log.debug('there was an error getting all products', data);
                 internalThis.productsReceived = false;
                 callback(data.message);
             });
-        }
     }
 
     this.getProductByID = function(productnumber, callback) {

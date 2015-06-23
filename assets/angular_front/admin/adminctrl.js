@@ -7,6 +7,5 @@ superApp.controller('AdminCtrl',
     if (!authService.isAdmin) {
       $state.go("store");
     }
-    
 
 }]);
