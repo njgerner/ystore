@@ -4,7 +4,7 @@ superApp.controller('SettingsCtrl',
   function($rootScope, $scope, $state, authService, emailService, profileService, $location, $stateParams, $timeout, 
   	storeService, FileUploader, $window) {
   
-    $scope.profile = authService.profile;
+    $scope.profile = angular.copy(authService.profile);
   	$scope.isYLIFT = authService.isYLIFT;
     $scope.addresses = $scope.profile.addresses;
     $scope.viewState = $state.current.name.split('.')[1];
