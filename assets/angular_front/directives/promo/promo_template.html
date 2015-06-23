@@ -1,0 +1,12 @@
+<div ng-hide="success" class="row collapse postfix-radius">
+	<div class="small-9 columns">
+		<input type="search" placeholder="Enter a promo code" ng-model="code">
+	</div>
+	<div class="small-3 columns">
+		<a class="button postfix" ng-click="applyCode()">
+			<span ng-hide="validating">Add</span>
+			<span ng-show="validating">Validating...</span>
+		</a>
+	</div>
+</div>
+<span ng-show="success" data-alert class="alert-box success radius"> Success, {{message}}! The code you entered has been applied to your order.</span>

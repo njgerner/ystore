@@ -110,7 +110,7 @@ superApp.controller('CheckoutBillingCtrl',
       $scope.loadingCustomer = false;
     }
 
-    if ($scope.profile.customerid) {
+    if ($scope.profile && $scope.profile.customerid) {
       stripeService.getCustomer($scope.profile.customerid, onCustomerLoaded);
     } else {
       $scope.loadingCustomer = false;

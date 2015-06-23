@@ -20,6 +20,7 @@ module.exports = function(express, app, __dirname) {
       emailRoutes     = require('./email-routes.js')(express, app, __dirname),
       profileRoutes   = require('./profile-routes.js')(express, app, __dirname),
       productRoutes   = require('./product-routes.js')(express, app, __dirname),
+      promoRoutes     = require('./promo-routes.js')(express, app, __dirname),
       regRoutes       = require('./reg-routes.js')(express, app, __dirname),
       storeRoutes     = require('./store-routes.js')(express, app, __dirname),
       stripeRoutes    = require('./stripe-routes.js')(express, app, __dirname),
@@ -624,6 +625,7 @@ passport.use('bearer', new BearerStrategy(
     app.post('/login', loginHelper);
     app.post('/process_transaction?:profileid', stripeRoutes.process_transaction);
     app.post('/product_page_view/:productnumber', productRoutes.page_view);
+    app.post('/promo/:code', promoRoutes.get_promo_code);
     app.post('/register', register);
     app.post('/remove_card_from_customer/:profileid/:customerid', ensureAuthenticated, stripeRoutes.remove_card_from_customer, stripeRoutes.update_customer);
     app.post('/submit_review', ensureAuthenticated, productRoutes.submit_review);
