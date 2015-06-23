@@ -23,7 +23,6 @@ module.exports = function(express, app, __dirname) {
 
 	//POST /email_support
 	EmailRoutes.support = function(req, res, next) {
-		var host = "http://" + req.get('host');
 		var props = req.body.props;
 	    var options = {
 	      from: 'support@ylift.io',
@@ -42,7 +41,37 @@ module.exports = function(express, app, __dirname) {
 	        res.status(200).json({result:"success"});
 	      }
 	    });
+	};
 
+	//POST /change_email
+	EmailRoutes.change_email = function(req, res, next) {
+		if(!req.body.newemail) {
+			errorHandler.logAndReturn('Invalid email address', 500, next, err, req.body);
+			return;
+		}
+		var options = {
+			from: 'support@ylift.io',
+			subject: 'Y Lift Account Email Change',
+			to: req.body.oldemail,
+			text: 'This is a confirmation that the ylift.io account associated with ' + req.body.oldemail + ' now belongs to ' + req.body.newemail + '\n\n' + 
+				  'Please check ' + req.body.newemail + ' for a confirmation. If this change was made in error, please contact support@ylift.io'
+		};
+		transport.sendMail(options, function(err, response) {
+			if (err) {
+	        errorHandler.logAndReturn('Error sending notifcation of email address change to old email', 500, next, err, req.body);
+		    } else {
+		      options.to = req.body.newemail;
+		      options.text = 'This is a confirmation that the ylift.io account previosuly associated with ' + req.body.oldemail + ' now belongs to this address.' + '\n\n' + 
+				  'If this change was made in error, please contact support@ylift.io';
+		    }
+		    transport.sendMail(options, function(err, response) {
+		    	if (err) {
+	        		errorHandler.logAndReturn('Error sending notifcation of email address change to new email', 500, next, err, req.body);
+		    	} else {
+		    		res.status(200).json({result:"success"});
+		    	}
+		    });
+		});
 	};
 
 	return EmailRoutes;

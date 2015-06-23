@@ -3,6 +3,7 @@
   <legend>My Info</legend>
     <fieldset>
       <div>
+        <span ng-show="emailchange" data-alert class="alert-box info radius"> Your email has been changed. Reminder: your email is used to login.</span>
         <label for="inputName">Name</label>
         <div>
           <input type="text" ng-model="profile.name" placeholder="Add your name">
