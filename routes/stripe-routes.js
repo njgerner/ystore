@@ -11,10 +11,11 @@ module.exports = function(express, app, __dirname) {
 		crypto 			= require('crypto'),
 		Q               = require('q'),
 		routes 			= require('./routes.js'),
+		errorHandler    = require('../trd_modules/errorHandler.js'),
     	stripeEnv		= process.env.STRIPE,
 		stripe 			= require('stripe')(config[stripeEnv].SECRET);
 
-	StripeRoutes.add_customer = function(req, res) {
+	StripeRoutes.add_customer = function(req, res, next) {
 		var profileid = req.params.profileid;
 		var transaction = req.body;
 		var card = transaction.card;
@@ -26,32 +27,38 @@ module.exports = function(express, app, __dirname) {
 			email: email
 		}, function(err, customer) {
 			if (err) {
-				console.log('error creating stripe customer', err);
-				throw new Error(err);
+				return Q.fcall(function () {
+				  return new Error(err);
+				});
 			} else {
 				return orchHelper.addCustomer(customer);
 			}
 		})
 		.then(function (customer) {
-			customer = customer;
-			return orchHelper.getProfile(profileid);
-		})
-		.then(function (profile) {
-			profile.customerid = customer.id;
-			profile.updatedAt = new Date();
-			return orchHelper.updateProfile(profile.id, profile);
+			return orchHelper.getProfile(profileid)
+			.then(function (profile) {
+				profile.customerid = customer.id;
+				profile.updatedAt = new Date();
+				return orchHelper.updateProfile(profile.id, profile)
+				.then(function (result) {
+					return customer;
+				})
+				.fail(function (err) {
+					throw new Error(err.body.message);
+				});
+			})
+			.fail(function (err) {
+				throw new Error(err.body.message);
+			});
 		})
 		.then(function (result) {
-			console.log('result from adding customer', result);
-			res.status(201).json({customer:customer, message:"Customer created"});
-		})
-		.fail(function (err) {
-			console.log('error adding customer', err);
-			res.status(500).json({err:err, message:err.message});
-		}).done();
+			res.status(201).json({customer:result, message:"Customer created"});
+		}, function (err) {
+			errorHandler.logAndReturn(err.message || 'Error adding new customer', 422, next, err, [req.params, req.body]);
+		});
 	};
 
-	StripeRoutes.add_guest_customer = function(req, res) {
+	StripeRoutes.add_guest_customer = function(req, res, next) {
 		var card = req.body.card;
 		stripe.customers.create({
 			card: card.id,
@@ -59,7 +66,6 @@ module.exports = function(express, app, __dirname) {
 		}, function(err, customer) {
 			if (err) {
 				return Q.fcall(function () {
-					console.log('error creating stripe customer', err);
 				  throw new Error(err);
 				});
 			} else {
@@ -69,8 +75,7 @@ module.exports = function(express, app, __dirname) {
 		.then(function (customer) {
 			res.status(201).json({customer:customer, message:"Guest customer created"});
 		}, function (err) {
-			console.log('error creating stripe customer', err.message);
-			res.status(500).json({err:err.body, message:"Charge create error"});
+			errorHandler.logAndReturn(err.message || 'Error adding guest customer', 500, next, err, req.body);
 		});
 	};
 
@@ -85,7 +90,6 @@ module.exports = function(express, app, __dirname) {
 					stripe.customers.retrieve(req.params.customerid, function (err, customer) {
 						req.body.customer = customer;
 						next();
-						// res.status(200).json({card:card, message:"Token associated to customer"});
 					});
 				}
 			}
@@ -103,14 +107,13 @@ module.exports = function(express, app, __dirname) {
 					stripe.customers.retrieve(req.params.customerid, function (err, customer) {
 						req.body.customer = customer;
 						next();
-						// res.status(200).json({card:card, message:"Token associated to customer"});
 					});
 				}
 			}
 		);
 	};
 
-	StripeRoutes.update_customer = function(req, res) {
+	StripeRoutes.update_customer = function(req, res, next) {
 		orchHelper.getProfile(req.params.profileid)
 			.then(function (profile) {
 				if (profile.customerid == req.body.customer.id) {
@@ -120,44 +123,52 @@ module.exports = function(express, app, __dirname) {
 				}
 			})
 			.then(function (result) {
-				orchHelper.updateCustomer(req.body.customer)
-					.then(function (customer) {
-						res.status(200).json({customer:customer});
-					})
-					.fail(function (err) {
-						res.status(500).json({err:err.body, message:"Stripe customer update error"});
-					});
+				return orchHelper.updateCustomer(req.body.customer);
+			})
+			.then(function (customer) {
+				res.status(200).json({customer:customer});
 			})
 			.fail(function (err) {
-				console.log('error updating customer', err);
-				res.status(500).json({err:err, message:"Error retrieving customer information"});
+				errorHandler.logAndReturn('Error updating customer', 500, next, err, [req.params, req.body]);
 			});
 	};
 
-	StripeRoutes.update_guest_customer = function(req, res) {	
-		stripe.customers.update(req.body.customerid, req.body.props, function(err, result){
+	StripeRoutes.update_guest_customer = function(req, res, next) {	
+		if (!req.body.customerid) {
+			errorHandler.logAndReturn('Error updating customer, missing id', 400, next, null, req.body);
+			return;
+		}
+		stripe.customers.update(req.body.customerid, req.body.props, function(err, result) {
+			if (err) {
+				errorHandler.logAndReturn('Error updating guest customer, please contact support@ylift.io', 500, next, err);
+				return;
+			}
 			orchHelper.updateCustomer(result)
 			.then(function (customer) {
 				res.status(200).json({customer:customer});
 			})
 			.fail(function (err) {
-				res.status(500).json({err:err.body, message:"Stripe customer update error"});
+				errorHandler.logAndReturn('Error updating guest customer', 500, next, err, req.body);
 			});
 		});
 	};
 
-	StripeRoutes.get_customer = function(req, res) {
+	StripeRoutes.get_customer = function(req, res, next) {
 		orchHelper.getCustomer(req.params.customerid)
 			.then(function (customer) {
-				res.status(200).json({customer:customer});
+				if (customer) {
+					res.status(200).json({customer:customer});
+				} else {
+					errorHandler.logAndReturn('No customer data found', 404, next);
+				}
 			})
 			.fail(function (err) {
-				res.status(500).json({err:err, message:"Error retrieving customer information"});
+				errorHandler.logAndReturn('Error retrieving customer information', 500, next, err, req.params);
 			});
 	};
 
 	// POST /process_transaction?profile=
-	StripeRoutes.process_transaction = function(req, res) {
+	StripeRoutes.process_transaction = function(req, res, next) {
 		var transaction = req.body;
 		var profileid = req.query.profile;
 		var card = transaction.card;
@@ -178,7 +189,7 @@ module.exports = function(express, app, __dirname) {
 
 		stripe.charges.create(charge, function(err, charge) {
 			if(err) {
-				res.status(500).json({err:err, message:"Stripe Charge Create Error"});
+				errorHandler.logAndReturn('Error processing transaction, please contact support@ylift.io', 500, next, err);
 			} else {
 				var order = {
 					id: crypto.randomBytes(5).toString('hex'),
@@ -211,8 +222,7 @@ module.exports = function(express, app, __dirname) {
 							res.status(201).json({order:order, success:result});
 						})
 						.fail(function (err) {
-							console.log('error adding user order', err);
-							res.status(500).json({err:err, message:"Put User Order Error"});
+							errorHandler.logAndReturn('Transaction complete but there was an error processing the order on our end, please contact support@ylift.io', 500, next, err, [req.query, req.body]);
 						});
 					// guest account purchase
 					} else {
@@ -220,8 +230,7 @@ module.exports = function(express, app, __dirname) {
 					}
 				})
 				.fail(function (err) {
-					console.log('error adding single order', err);
-					res.status(500).json({err:err, message:"Put Order Error"});
+					errorHandler.logAndReturn('Transaction complete but there was an error processing the order on our end, please contact support@ylift.io', 500, next, err, [req.query, req.body]);
 				});
 			}
 		});

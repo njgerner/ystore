@@ -12,12 +12,15 @@ superApp.controller('CheckoutReviewCtrl',
 		$scope.confEmail = authService.profile.email;
 	}
 
+	$scope.formatValue = function (value) {
+      return "$" + value.toString().split( /(?=(?:\d{3})+(?:\.|$))/g ).join( "," );
+    }
+
 	$scope.addEmail = function() {
 		if (!customer) {
 			var customer = stripeService.customer;
 		}
 		customer.email = $scope.confEmail;
-		console.log('setting customer', customer);
 		stripeService.setCustomer(customer);
 		$scope.emailEntered = true;
 	}

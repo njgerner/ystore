@@ -1,5 +1,5 @@
-trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdInterceptor',
-    function ($rootScope, $http, $cookieStore, trdInterceptor) {
+trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdInterceptor', '$log',
+    function ($rootScope, $http, $cookieStore, trdInterceptor, $log) {
 	    this.authorizationReceived = false;
 		this.authorized = false;
 
@@ -74,19 +74,18 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 					headers:{'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'},
 					data:$.param({email:email, password:password})}).
 			    success(function (data, status, headers, config) {
-			    	if (data.tempPwd && data.tkn) {
-			    		trdInterceptor.setToken(data.tkn);
-			    		callback(null, "temp_password");
-			    	} else if (data.tkn) {
+			    	if (data.tkn) {
 			    		trdInterceptor.setToken(data.tkn);
 			    		callback(null, "success!");
 			    	}
 			    	else {
+			    		$log.debug('error login in', data);
 			    		callback(data.message, null);
 			    	}
 			    }).
 			    error(function(data, status, headers, config) {
-			    	callback(data, null);
+			    	$log.debug('error login in', data);
+			    	callback(data.message, null);
 			    });
 		};
 
@@ -100,10 +99,11 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 			 			if(data.tkn) {
 			 				trdInterceptor.setToken(data.tkn);
 			 			}
-			    	callback(data.err, data.status);
+			    	callback(data.error, data.status);
 			    }).
 			    error(function(data, status, headers, config) {
-			    	callback(data);
+			    	$log.debug('error registering user', data);
+			    	callback(data.error, data.message);
 			    });
 		};
 
@@ -126,11 +126,11 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 			    	if (data == 'success') {
 			    		callback(null, "Please check your email for instructions on resetting your password.");
 			    	} else {
-			    		callback(data);
+			    		callback(data, null);
 			    	}
 			    }).
 			    error(function(data, status, headers, config) {
-			    	callback("FAILED TO RESET");
+			    	callback(data, null);
 			    });
 		};
 
@@ -143,11 +143,11 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 			    	if(data.success) {
 			    		callback(null, "Password has been successfully updated.");
 			    	}else {
-			    		callback(data.message || "FAILED TO UPDATE PASSWORD.");
+			    		callback(data.message || "FAILED TO UPDATE PASSWORD.", null);
 			    	}
 			    }).
 			    error(function(data, status, headers, config) {
-			    	callback("FAILED TO UPDATE PASSWORD");
+			    	callback(data.error || "FAILED TO UPDATE PASSWORD", null);
 			    });
 			}; 
 
@@ -173,6 +173,20 @@ trdServices.service("authService", ['$rootScope', '$http', '$cookieStore', 'trdI
 			error(function(data, status, headers, config) {
 		    	callback('There was an error associating your order with a YLIFT account, please reach out to YLIFT support.');
 			});
-		}
+		};
+
+		this.validateResetToken = function(tokenid, callback) {
+			$http({method: 'POST', url:"/validate_reset_token", data:{token:tokenid}}).
+			success(function (data, status, headers, config) {
+				if(data.valid) {
+					callback(true);
+				}else {
+					callback(false, "Your reset token has expired. Please return to the login page to request another.");
+				}
+			}).
+			error(function(data, status, headers, config) {
+		    	callback(false, data);
+			});
+		};
 
 }]);

@@ -12,8 +12,7 @@ superApp.controller('MerchantOrdersCtrl',
     }
 
     $scope.updateOrder = function(order) {
-      storeService.updateOrder(order, function(order) {
-      });
+      storeService.updateOrder(order);
     }
 
     $scope.getMerchantProducts = function(products) {
@@ -26,11 +25,19 @@ superApp.controller('MerchantOrdersCtrl',
       return filtered;
     }
 
-    function onOrdersLoaded (orders) {
+    function onOrdersLoaded (error, orders) {
+      if (error) {
+        $scope.error = error;
+        return;
+      }
       $scope.orders = orders;
   	}
 
-  	function onProfileLoaded (profile) {
+  	function onProfileLoaded (error, profile) {
+      if (error) {
+        $scope.error = error;
+        return;
+      }
   		$scope.merchant = profile;
   		storeService.getMerchantOrders($scope.merchant.id, onOrdersLoaded);
   	}

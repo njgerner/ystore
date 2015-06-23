@@ -8,12 +8,13 @@ module.exports = function(express, app, __dirname) {
 		orchHelper      = require('../trd_modules/orchestrateHelper'),
 		Q               = require('q'),
 		aws             = require('aws-sdk'),
+		errorHandler    = require('../trd_modules/errorHandler.js'),
 		AWS_ACCESS_KEY  = process.env.AWS_ACCESS,
 		AWS_SECRET_KEY  = process.env.AWS_SECRET,
 		S3_BUCKET  		= process.env.S3_BUCKET,
 		fs 				= require('fs');
 
-	AWSRoutes.sign_s3 = function(req, res) {
+	AWSRoutes.sign_s3 = function(req, res, next) {
 		aws.config.update({accessKeyId: AWS_ACCESS_KEY, secretAccessKey: AWS_SECRET_KEY});
 	    var s3 = new aws.S3();
 	    var s3_params = {
@@ -25,7 +26,7 @@ module.exports = function(express, app, __dirname) {
 	    };
 	    s3.getSignedUrl('putObject', s3_params, function(err, data){
 	        if(err){
-	            console.log(err);
+	            errorHandler.logAndReturn('Invalid s3 signing', 422, next, err);
 	        }
 	        else{
 	            var return_data = {

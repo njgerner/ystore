@@ -12,6 +12,7 @@ module.exports = function(express, app, __dirname) {
 		S3_BUCKET  		= process.env.S3_BUCKET,
 		Q               = require('q'),
 		flow            = require('../assets/js/flow-node')(process.env.TMPDIR),
+		errorHandler    = require('../trd_modules/errorHandler.js'),
 		fsExtra 		= require('fs.extra');
 		fs 				= require('fs');
 
@@ -31,55 +32,66 @@ module.exports = function(express, app, __dirname) {
 	}
 
 	// GET /product_rating/:productnumber
-	ProductRoutes.get_rating = function(req, res) {
+	ProductRoutes.get_rating = function(req, res, next) {
 		var pn = req.params.productnumber;
 		orchHelper.getProductRating(pn)
 		.then(function (data) {
-			res.status(200).json({data:data});
+			if (data) {
+				res.status(200).json({data:data});
+			} else {
+				errorHandler.logAndReturn('No product rating found', 404, next, null, req.params);
+			}
 		})
 		.fail(function (err) {
-			res.status(500).json({err:err});
+			errorHandler.logAndReturn('Error retrieving product rating', 500, next, err, req.params);
 		});
 	};
 
 	// GET /product_reviews/:productnumber
-	ProductRoutes.get_reviews = function(req, res) {
+	ProductRoutes.get_reviews = function(req, res, next) {
 		var pn = req.params.productnumber;
 		orchHelper.getProductReviews(pn)
 		.then(function (data) {
-			res.status(200).json({data:data});
+			if (data) {
+				res.status(200).json({data:data});
+			} else {
+				errorHandler.logAndReturn('No product reviews found', 404, next, null, req.params);
+			}
 		})
 		.fail(function (err) {
-			res.status(500).json({err:err});
+			errorHandler.logAndReturn('Error retrieving product reviews', 500, next, err, req.params);
 		});
 	};
 
 	// GET /most_viewed_product/:profileid
-	ProductRoutes.most_viewed_product = function(req, res) {
+	ProductRoutes.most_viewed_product = function(req, res, next) {
 		orchHelper.getMostFrequentEvent('products', 'page-view', req.params.profileid)
 		.then(function (data) {
-			res.status(200).json(data);
+			if (data) {
+				res.status(200).json(data);
+			} else {
+				errorHandler.logAndReturn('No most viewed product found', 404, next, null, req.params);
+			}
 		})
 		.fail(function (err) {
-			console.log('error trying to get most viewed prduct', err);
-			res.status(500).json({err:err});
+			errorHandler.logAndReturn('Error finding most view product for user', 500, next, err, req.params);
 		});
 	};
 
 	// POST /submit_review
-	ProductRoutes.submit_review = function(req, res) {
+	ProductRoutes.submit_review = function(req, res, next) {
 		var review = req.body.review;
 		orchHelper.submitReview(review)
 		.then(function (result) {
 	  		res.status(201).json(result);
 	  	})
 	  	.fail(function (err) {
-	  		res.status(500).json({err:err});
+	  		errorHandler.logAndReturn('Error submitting review for product', 500, next, err, req.body);
 	  	});
 	};
 
 	// POST /add_product
-	ProductRoutes.add_product = function(req, res) {
+	ProductRoutes.add_product = function(req, res, next) {
 		var merchant = req.body.merchant;
 		var key = merchant.name.substr(0, 1).toLowerCase();
 		var product = req.body.product;
@@ -135,27 +147,12 @@ module.exports = function(express, app, __dirname) {
 			res.status(201).json(result);
 		})
 	  	.fail(function (err) {
-	  		console.log('error from something', err);
-	  		res.status(403).json({err:'profile not authorized to add product'});
-	  	}).done();
-	};
-
-	// POST /deactivate_product
-	ProductRoutes.deactivate_product = function(req, res) {
-		orchHelper.findMerchantProfile(req.user.profile)
-		.then(function (res) {
-			return orchHelper.deactivateProduct(req.body.productid);
-		})
-		.then(function (result) {
-			res.status(201).json(result);
-		})
-	  	.fail(function (err) {
-	  		res.status(403).json({err:'profile not authorized to delete product'});
+	  		errorHandler.logAndReturn('There was an error adding the product, view the logs for more information', 500, next, err, req.body);
 	  	}).done();
 	};
 
 	// POST /update_product
-	ProductRoutes.update_product = function(req, res) {
+	ProductRoutes.update_product = function(req, res, next) {
 		var product = req.body.product;
 		orchHelper.findMerchantProfile(req.user.profile)
 		.then(function (res) {
@@ -179,13 +176,12 @@ module.exports = function(express, app, __dirname) {
 			res.status(201).json(result);
 		})
 	  	.fail(function (err) {
-	  		console.log('error updating product', err);
-	  		res.status(403).json({err:'profile not authorized to edit product'});
+	  		errorHandler.logAndReturn('There was an error adding updating the product, view the logs for more information', 500, next, err, [req.user, req.body]);
 	  	}).done();
 	};
 
 	// POST //product_page_view/:productnumber?profile=
-	ProductRoutes.page_view = function(req, res) {
+	ProductRoutes.page_view = function(req, res, next) {
 		var pn = req.params.productnumber;
 		var profile = req.query.profile || 'guest';
 		orchHelper.addPageView('products', pn, profile)
@@ -193,7 +189,7 @@ module.exports = function(express, app, __dirname) {
 			res.status(201).json(true);
 		})
 		.fail(function (err) {
-			res.status(500).json({err:err});
+			errorHandler.logAndReturn('Error adding page view event for product', 500, next, err, [req.params, req.query]);
 		}).done();
 	};
 

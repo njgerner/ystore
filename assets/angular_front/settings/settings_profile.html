@@ -21,9 +21,9 @@
         </div>
       </div>
       <div>
-        <button ng-hide="addAddressView || showAddressView" type="submit" class="button small" ng-click="updateProfile()">
-          <span ng-hide="updating">Save Changes</span>
-          <span ng-show="updating">Saving....</span>
+        <button type="submit" class="button small" ng-click="updateProfile('info')">
+          <span ng-hide="updating == 'info'">Save Changes</span>
+          <span ng-show="updating == 'info'">Saving....</span>
         </button>
       </div>
     </fieldset>
@@ -31,11 +31,11 @@
   <div>
     <div class="row">
         <div class="large-3 small-6 columns">
-          My Addresss
+          My Addresses
         </div>
         <div class="large-3 large-offset-6 small-6 columns text-right">
-          <div ng-hide="addAddressView" class="i-plus" ng-click="toggleAddAddress()"></div>
-          <div ng-show="addAddressView" class="i-cancel-circled" ng-click="toggleAddAddress()"></div>
+          <div ng-hide="addAddressView" class="i-plus" ng-click="enableAddAddress()"></div>
+          <div ng-show="addAddressView" class="i-cancel-circled" ng-click="cancel()"></div>
         </div>
     </div>
     <div class="row address-list" ng-repeat="address in addresses">
@@ -49,47 +49,35 @@
         <a class="address-edit-link" ng-click="removeAddress($index)">Delete</a>
       </div>
     </div> 
-    <form ng-show="addAddressView || showAddressView">
+    <form ng-show="addAddressView || editAddressView" novalidate>
       <fieldset>
         <div>
-            <input type="text" ng-model="addressname" placeholder="Address Name" required/>
+            <input type="text" ng-model="addressname" placeholder="Address Name"/>
         </div>
         <div>
-            <input type="text" ng-model="address1" placeholder="Address" required/>
+            <input type="text" ng-model="address1" placeholder="Address"/>
         </div>
         <div>
             <input type="text" ng-model="address2" placeholder="Suite # (If relevant)"/>
         </div>
         <div>
-            <input type="text" ng-model="city" placeholder="City" required/>
+            <input type="text" ng-model="city" placeholder="City"/>
         </div>
         <div>
-            <input type="text" ng-model="state" placeholder="State" required/>
+            <input type="text" ng-model="state" placeholder="State"/>
         </div>
         <div>
-            <input type="text" ng-model="zip" placeholder="Zip" required/>
+            <input type="text" ng-model="zip" placeholder="Zip"/>
         </div>
         <div ng-show="isYLIFT">
           <label>Check if this location is a Y LIFT Network practice
             <input type="checkbox" ng-model="yliftInd" ng-true-value="YES" ng-false-value="NO">
           </label>
         </div>
-        <!-- <div class="row"> -->
-          <button ng-show="addAddressView" type="submit" class="button small" ng-click="addAddress()">
-            <span ng-hide="updating">Add</span>
-            <span ng-show="updating">Adding...</span>
+          <button type="submit" class="button small" ng-click="submitAddress()">
+            {{buttonText}}
           </button>
-          <button ng-show="addAddressView && !updating" class="button secondary small" ng-click="toggleAddAddress()"/>
-            <span>Cancel</span>
-          </button>
-          <button ng-show="showAddressView" type="submit" class="button small" ng-click="updateAddress()">
-            <span ng-hide="updating">Update</span>
-            <span ng-show="updating">Updating...</span>
-          </button>
-          <button ng-show="showAddressView && !updating" class="button secondary small" ng-click="toggleShowAddress()">
-            <span>Cancel</span>
-          </button>
-        <!-- </div> -->
+          <button ng-show="updating == 'none'" class="button secondary small" ng-click="cancel()"/>Cancel</button>
       </fieldset>
     </form>
   </div>

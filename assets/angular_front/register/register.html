@@ -21,6 +21,7 @@
     <form class="regform" name="loginForm" ng-submit="registerIndividual()">
       <fieldset>
         <legend>Register</legend>
+        <error-dir msg="{{error}}"></error-dir>
         <div class="input-wrapper">
           <label>Email
             <input type="email" name="email" placeholder="Enter your email" ng-model="email" required>
@@ -39,20 +40,18 @@
           <small ng-show="failedMessage" class="error">{{failedMessage}}</small>
         </div>
 		<p>By clicking register you agree to our <a ui-sref="terms" target="_blank">Terms & Conditions</a></p>
-        <button class="button small secondary right" ng-click="viewState = 'start'">Back</button>
-        <button type="submit" class="button small right">
+        <button class="button small right" type="submit">
           <span ng-hide="registering">Register</span>
           <span ng-show="registering">Registering...</span>
         </button>
+        <a class="button small secondary right" ng-click="viewState = 'start'">Back</a>
       </fieldset>
     </form>
 </div>
 
 <div ng-show="viewState == 'form1'" class="small-12 large-6 large-centered columns">
 	<legend>Basic Information</legend>
-	<div ng-show="error">
-		<p class='error'>{{error}}</p>
-	</div>
+	<error-dir msg="{{error}}"></error-dir>
 	<form class="regform" novalidate>
 		<fieldset>
 			<div class="row">
@@ -195,9 +194,7 @@
 </div>
 
 <div ng-show="viewState == 'form2'" class="small-12 large-6 large-centered columns">
-	<div ng-show="error">
-		<p class='error'>{{error}}</p>
-	</div>
+	<error-dir msg="{{error}}"></error-dir>
 	<form class="regform" novalidate>
 		<legend>Practice Information</legend>
 		<fieldset>
@@ -273,9 +270,7 @@
 
 <div ng-show="viewState == 'form3'" class="small-12 large-6 large-centered columns">
 	<legend>Schedule Training</legend>
-	<div ng-show="error">
-		<p class='error'>{{error}}</p>
-	</div>
+	<error-dir msg="{{error}}"></error-dir>
 	<form class="regform" novalidate>
 		<fieldset>
 		  <div class="row">
@@ -346,9 +341,7 @@
 
 <div ng-show="viewState == 'form4'" class="small-12 large-6 large-centered columns">
 	<legend>Create Account Login</legend>
-	<div ng-show="error">
-		<p class='error'>{{error}}</p>
-	</div>
+	<error-dir msg="{{error}}"></error-dir>
 	<form class="regform" novalidate>
 		<fieldset>
 			<div class="row">
@@ -378,9 +371,7 @@
 
 <div ng-show="viewState == 'form5'" class="small-12 large-6 large-centered columns">
 	<legend>Payment Information</legend>
-	<div ng-show="error">
-		<p class='error'>{{error}}</p>
-	</div>
+	<error-dir msg="{{error}}"></error-dir>
 	<form class="regform" novalidate>
 		<fieldset>
 			<div class="row">
@@ -501,7 +492,7 @@
 			</div>
 		  <div class="row clearfix">
 		  	<button class="button small right" ng-click="goTo('review')">
-		  		<span ng-hide="validating">Next</span>
+		  		<span ng-hide="validating">Validate</span>
 		  		<span ng-show="validating">Validating...</span>
 		  	</button>
 		  	<!-- <button class="button secondary small right" ng-click="backTo('form3')">Back</button> -->
@@ -512,9 +503,7 @@
 
 
 <div ng-show="viewState == 'review'" class="small-12 large-6 large-centered columns">
-	<div ng-show="error">
-		<p class='error'>{{error}}</p>
-	</div>
+	<error-dir msg="{{error}}"></error-dir>
 		<ul class="pricing-table">
 		  <li class="title">Purchase Summary</li>
 		  <li class="price">${{total}}</li>
@@ -538,6 +527,6 @@
 			<br>
 			<br>
 			A YLIFT team member will follow up with you shortly regarding the status of your membership and to schedule a training session.</h5>	
-		<button class="small right" ng-click="resetScope()">Back to start</button>
+		<button class="small right" ng-click="resetScope()">Back to store</button>
 	</div>
 </div>

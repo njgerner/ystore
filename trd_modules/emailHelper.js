@@ -84,7 +84,6 @@ exports.newUserTeamNotification = function(user) {
 		function (result) {
 			deferred.resolve(result);
 		}, function (err) {
-			console.log('error sending welcome email', err.name, err.message);
 			deferred.reject(new Error(err.message));
 		});
 

@@ -12,7 +12,12 @@ superApp.controller('OrderCtrl',
       return moment(time).format("MMMM Do, YYYY");
     }
     
-    storeService.getOrderByID($scope.orderid, function(order) {
+    storeService.getOrderByID($scope.orderid, function(error, order) {
+      if (error) {
+        $scope.error = error;
+        $scope.loading = false;
+        return;
+      }
       $scope.order = order;
       $scope.createdAt = $scope.displayCreatedAt($scope.order.createdAt);
       $scope.loading = false;

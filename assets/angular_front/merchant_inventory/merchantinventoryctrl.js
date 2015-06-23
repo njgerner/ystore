@@ -24,7 +24,11 @@ superApp.controller('MerchantInventoryCtrl',
       }
     }
 
-    function onProductsLoaded (products) {
+    function onProductsLoaded (error, products) {
+      if (error) {
+        $scope.error = error;
+        return;
+      }
       $scope.products = products;
       $scope.filteredProducts = products;
       products.forEach(function(product, index) {
@@ -33,7 +37,11 @@ superApp.controller('MerchantInventoryCtrl',
       $scope.productsLoading = false;
     }
 
-  	function onProfileLoaded (profile) {
+  	function onProfileLoaded (error, profile) {
+      if (error) {
+        $scope.error = error;
+        return;
+      }
       $scope.merchant = profile;
       $scope.profileLoading = false;
       storeService.getProductsByMerchant($scope.merchant.id, onProductsLoaded);

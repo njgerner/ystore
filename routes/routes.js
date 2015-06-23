@@ -7,6 +7,7 @@ module.exports = function(express, app, __dirname) {
       emailHelper     = require('../trd_modules/emailHelper'),
       flow            = require('../assets/js/flow-node')(process.env.TMPDIR),
       config          = require('../trd_modules/config.json'),
+      errorHandler    = require('../trd_modules/errorHandler.js'),
       moment          = require('moment'),
       multer          = require('multer'),
       fs              = require('fs'),
@@ -42,7 +43,7 @@ module.exports = function(express, app, __dirname) {
       port: '587',
       auth: {
           user: "support@ylift.io",
-          pass: "yliftDEEZNUTS!!"
+          pass: "Wula9252"
       }
   });    
 
@@ -80,27 +81,11 @@ passport.use('local-signup', new LocalStrategy(
     orchHelper.localReg(req.body.email, req.body.password, req.body.metadata)
       .then(function (user) {
         if (user) {
-          if (!user.error) {
-            emailHelper.sendWelcome(user.name, user.email)
-            .then(function() {
-              emailHelper.newUserTeamNotification(user)
-              .then(function(result) {
-                done(null,user);
-              })
-              .fail(function(err) {
-                done(null, user, err);
-              });
-            })
-            .fail(function(err) {
-              done(null, user, err);
-            });
-          } else {
-            done(user.error);
-          }
-        }
-        if (!user) {
-          req.session.error = 'There was an error on our end, please try registering again or contact the YLift Support Team.'; //inform user could not log them in
-          done(null, false);
+          emailHelper.sendWelcome(user.name, user.email).done();
+          emailHelper.newUserTeamNotification(user).done();
+          done(null,user);
+        } else {
+          done(null, false, 'No user returned from local reg');
         }
       })
       .fail(function (err){
@@ -194,11 +179,11 @@ passport.use('bearer', new BearerStrategy(
             return orchHelper.updateProfile(profile.id, profile);
           })
           .fail(function (err) {
-            console.log('need to decide what data to pass back on err', err);
+            errorHandler.logAndReturn('Error authorizing', 500, next, err, req.user);
           }).done();
       })
       .fail(function (err) {
-        console.log('need to decide what data to pass back on err', err);
+        errorHandler.logAndReturn('Error authorizing', 500, next, err, req.user);
       });
   };
 
@@ -208,6 +193,7 @@ passport.use('bearer', new BearerStrategy(
       // if there's a token, attempt to authenticate now
       orchHelper.findUserByToken(req.query.token)
         .then(function (user) {
+          console.log('pretty sure this route does absolutely nothing');
           if (user) {
             user.jsonType = "user";
             delete user.token;
@@ -220,14 +206,14 @@ passport.use('bearer', new BearerStrategy(
                 loginHelper(req, res);
               })
               .fail(function (err) {
-                res.json({message: "Token validation failed. Mitched it."});
+                errorHandler.logAndReturn('No Y Lift profiles found', 404, next);
               });
           } else {
-            res.json({message: "Invalid token."});
+            errorHandler.logAndReturn('Invalid token', 422, next);
           }
         })
         .fail(function (err) {
-          res.json({message: "That email is not yet registered, please click register and signup."});
+          errorHandler.logAndReturn('That email is not yet registered, please click register and signup.', 404, next);
         });
     } else {
       res.redirect("/home");
@@ -238,17 +224,29 @@ passport.use('bearer', new BearerStrategy(
   var loginHelper = function(req, res, next) {
 
     return passport.authenticate('local-signin', function(err, user, info) {
-      if (err) { return next(err); }
-      if (!user) { return res.json({err:"login helper, no user error", message:info.message, failed:true}); }
-
+      if (err) { return errorHandler.logAndReturn(err, 422, next, null, req.params); }
+      if (!user) { return errorHandler.logAndReturn(info.message, 422, next, null, req.params); }
       // no sessions, don't bother logging in...
       var payload = { user: user.id, expires: moment().add(4, 'days') };
       var secret = app.get("jwtTokenSecret");
 
       // encode
       var token = jwt.encode(payload, secret);
-      return res.json({err:null, tkn:token, tempPwd:req.cookies.tempPwdRedirect || null, stripePubKey:config[stripeEnv].PUBLISH});
+      return res.json({tkn:token});
     })(req, res, next);
+  };
+
+  //POST /register
+  ///////////////////////////////////////////////////////////////
+  var register = function(req, res, next) {
+    return passport.authenticate('local-signup', function(err, user, info) { 
+      if (err) { return errorHandler.logAndReturn(err.message || 'Error registering, please try again. If this issue continues, please contact support@ylift.io.', 422, next, err, null, req.params); }
+      if (!user) { return errorHandler.logAndReturn(info.message || 'Registration successful but there was an error on the server, please contact support@ylift.io if you have any issues with your account.', 500, next, req.params); }
+      var payload = { user: user.id, expires: moment().add(4, 'days') };
+      var secret = app.get("jwtTokenSecret");
+      var token = jwt.encode(payload, secret);
+      return res.json({tkn:token, status:"store"});
+    })(req, res);
   };
 
   //POST /request_pass_reset
@@ -258,14 +256,15 @@ passport.use('bearer', new BearerStrategy(
       .then(function (user) {
         mailOptions.to = user.email;
         mailOptions.subject = 'Password Reset';
-        mailOptions.text = 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+        mailOptions.text = 'A request for a password reset has been made for the account linked to this email address\n\n' +
             'Please click on the following link, or paste into your browser to complete the process' + '\n\n' + 
-            'http://' + req.get('host') + '/home#/reset_password/' + user.resetToken + '\n\n' +
+            'http://' + req.get('host') + '/home#/reset_password/' + user.resetToken.token + '\n\n' +
             'If you did not request this, please ignore this email and your password will remain unchanged.';
 
         transport.sendMail(mailOptions, function(error, info){
             if(error){
-                console.log(error);
+                console.log('pw reset email error', error);
+                res.send('An error occurred. If this persists, please contact support@ylift.io');
             }else{
                 res.send('success');
             }
@@ -278,12 +277,16 @@ passport.use('bearer', new BearerStrategy(
 
   // GET /all_ylift_profiles
   var all_ylift_profiles = function(req, res) {
-    orchHelper.getAllYLiftProfiles()
+    orchHelper.getAllYLIFTProfiles()
       .then(function (result) {
-        res.send({profiles:result});
+        if (result) {
+          res.send({profiles:result});
+        } else {
+          errorHandler.logAndReturn('No Y Lift profiles found', 404, next);
+        }
       })
       .fail(function (err) {
-        res.send({err:err});
+        errorHandler.logAndReturn('Error retrieving Y Lift profiles', 500, next, err);
       });
   };
 
@@ -294,149 +297,137 @@ passport.use('bearer', new BearerStrategy(
   };
 
   var update_password = function(req, res) {
-      orchHelper.updatePassword(req.body.resettoken, req.body.password)
-      .then(function (user) {
+    orchHelper.updatePassword(req.body.resettoken, req.body.password)
+    .then(function (user) {
+      if (user) {
         res.send({success:true});
-      })
-      .fail(function (err) {
-        res.send({error:err});
-      });
+      } else {
+        errorHandler.logAndReturn('Unable to update password, user not found', 404, next, null, req.body);
+      }
+    })
+    .fail(function (err) {
+      errorHandler.logAndReturn('Error updating account password', 500, next, err, req.body);
+    });
   };
 
   var update_user = function(req, res) {
     orchHelper.updateUserProfile(req.body.profile, req.body.userid, req.body.property)
     .then(function (profile) {
+      if (profile) {
         res.send({profile: profile});
-      })
+      } else {
+        errorHandler.logAndReturn('Unable to update, user not found', 404, next, null, req.body);
+      }
+    })
     .fail(function (err) {
-      res.send({err:err});
+      errorHandler.logAndReturn('Error updating user', 500, next, err, req.body);
     });
   };
  
-  //POST /register
-  ///////////////////////////////////////////////////////////////
-  var register = function(req, res) {
-    return passport.authenticate('local-signup', function(err, user) { 
-      if (err) { return res.json({err: "there was an error", status:"Error registering, please try again. If this issue continues, please contact support@ylift.io." }); } //TODO: make this better
-      if (!user) { return res.json({err:"login helper, no user error", message:"registered, but there was an error creating a user profile", failed:true}); }
-      var payload = { user: user.id, expires: moment().add(4, 'days') };
-      var secret = app.get("jwtTokenSecret");
-      var token = jwt.encode(payload, secret);
-      return res.json({tkn:token, status:"store"});
-    })(req, res);
-  };
 
   ///GET /all_products
-  var all_products = function(req, res) {
+  var all_products = function(req, res, next) {
     orchHelper.getAllProducts()
       .then(function (products) {
         if (products) {
           res.send({products: products});
         } else {
-          res.send({err:'no products in db'});
+          errorHandler.logAndReturn('No products found', 404, next);
         }
       })
       .fail(function (err) {
-        res.send({err:err});
+        errorHandler.logAndReturn('Error retrieving products', 500, next, err);
       });
   };
 
-  var get_product_by_id = function(req, res) {
+  // GET get_product_by_id/:productnumber
+  var get_product_by_id = function(req, res, next) {
     orchHelper.getProductByID(req.params.productnumber)
       .then(function (result) {
         if (result) {
           res.send({product: result});
         } else {
-          res.send({err:'no products in db'});
+          errorHandler.logAndReturn('Not a valid product id', 404, next, null, req.params);
         }
       })
       .fail(function (err) {
-        res.send({err:err});
+        errorHandler.logAndReturn('Error retrieving product by id', 500, next, err, req.params);
       });
   };
 
-  var get_related_products = function(req, res) {
+  // GET get_related_products/:productnumber
+  var get_related_products = function(req, res, next) {
     orchHelper.getRelatedProducts(req.params.productnumber)
       .then(function (result) {
         if (result) {
           res.send({products: result});
         } else {
-          res.send({err:'no related products in db'});
+          errorHandler.logAndReturn('No products related to that product found', 404, next, null, req.params);
         }
       })
       .fail(function (err) {
-        res.send({err:err});
+        errorHandler.logAndReturn('Error retrieving related products', 500, next, err, req.params);
       });
   };
 
-  var get_products_by_category = function(req, res) {
+  // GET get_products_by_category/:category
+  var get_products_by_category = function(req, res, next) {
     orchHelper.getProductsByCategory(req.body.category)
       .then(function (result) {
         if (result) {
           res.send({products: result});
         } else {
-          res.send({err:'no products in db'});
+          errorHandler.logAndReturn('No products found for this category', 404, next, null, req.body);
         }
       })
       .fail(function (err) {
-        res.send({err:err});
+        errorHandler.logAndReturn('Error retrieving products by category', 500, next, err, req.body);
       });
   };
 
-  var get_cart = function(req, res) {
+  // GET cart/:profileid
+  var get_cart = function(req, res, next) {
     orchHelper.getCartByID(req.params.profileid)
       .then(function (result) {
         if (result) {
           res.send({cart: result});
         } else {
-          res.send({err:'no cart in db'});
+          errorHandler.logAndReturn('No cart for this user found', 404, next, null, req.params);
         }
       })
       .fail(function (err) {
-        res.send({err:err});
+        errorHandler.logAndReturn('Error retrieving account cart', 500, next, err, req.params);
       });
   };
 
   // GET get_order_by_id/:orderid
-  var get_order_by_id = function(req, res) {
+  var get_order_by_id = function(req, res, next) {
     orchHelper.getOrderByID(req.params.orderid)
       .then(function (result) {
         if (result) {
           res.send({order: result});
         } else {
-          res.send({err:'no order in db'});
+          errorHandler.logAndReturn('Not a valid order id', 404, next, null, req.params);
         }
       })
       .fail(function (err) {
-        res.send({err:err});
+        errorHandler.logAndReturn('Error retrieving order by id', 500, next, err, req.params);
       });
   };
 
   // GET get_all_orders/:profileid
-  var get_all_orders = function(req, res) {
+  var get_all_orders = function(req, res, next) {
     orchHelper.getOrdersByUserID(req.params.profileid)
       .then(function (result) {
         if (result) {
           res.send({orders: result});
         } else {
-          res.send({err:'no orders for this user in db'});
+          errorHandler.logAndReturn('No orders for this user found', 404, next, null, req.params);
         }
       })
       .fail(function (err) {
-        res.send({err:err});
+        errorHandler.logAndReturn('Error retrieving orders', 500, next, err, req.params);
       });
-  };
-  // GET images/offices/:path
-  var get_office_image = function(req, res, next) {
-    req.body.path = 'office-images/' + req.params.path + '.jpg';
-    fs.exists('./uploads/' + req.body.path, function (exists) {
-      if (exists) {
-        res.sendFile('./uploads/' + req.body.path, { root: __dirname });
-        return;
-      } else {
-        next();
-      }
-    });
   };
 
   // GET images/profiles/:profileid
@@ -456,10 +447,14 @@ passport.use('bearer', new BearerStrategy(
   var add_item_to_cart = function(req, res) {
     orchHelper.addItemToUserCart(req.body.profileid, req.body.productnumber, req.body.quantity)
       .then(function (cart) {
-        res.status(201).json({cart:cart}); // does this work?? // lol
+        if (cart) {
+          res.status(201).json({cart:cart});
+        } else {
+          errorHandler.logAndReturn('Could not add item to cart', 400, next, null, req.body);
+        }
       })
       .fail(function (err) {
-        res.status(500).json({err:err});
+        errorHandler.logAndReturn('Error adding item to cart', 500, next, err, req.body);
       });
   };
 
@@ -467,10 +462,14 @@ passport.use('bearer', new BearerStrategy(
   var update_cart = function(req, res) {
     orchHelper.updateUserCart(req.body.profileid, req.body.productnumbers, req.body.quantities)
       .then(function (cart) {
-        res.send({cart:cart});
+        if (cart) {
+          res.status(200).json({cart:cart});
+        } else {
+          errorHandler.logAndReturn('Cart not update cart', 400, next, null, req.body);
+        }
       })
       .fail(function (err) {
-        res.send({err:err});
+        errorHandler.logAndReturn('Error updating cart', 500, next, err, req.body);
       });
   };
 
@@ -478,10 +477,14 @@ passport.use('bearer', new BearerStrategy(
   var empty_cart = function(req, res) {
     orchHelper.emptyUserCart(req.body.profileid)
       .then(function (cart) {
-        res.status(200).json({cart:cart});
+        if (cart) {
+          res.status(200).json({cart:cart});
+        } else {
+          errorHandler.logAndReturn('Cart not empty cart', 400, next, null, req.body);
+        }
       })
       .fail(function (err) {
-        res.status(500).json({err:err});
+        errorHandler.logAndReturn('Error emptying cart', 500, next, err, req.body);
       });
   };
 
@@ -506,7 +509,6 @@ passport.use('bearer', new BearerStrategy(
   };
 
   var get_all_testimonials = function(req, res) {
-    console.log('in route');
     orchHelper.getAllTestimonials()
     .then(function (testimonials) {
       res.send({testimonials: testimonials});
@@ -560,6 +562,7 @@ passport.use('bearer', new BearerStrategy(
   /* ==============================================================
     Here's all the routing
   =============================================================== */
+    // --- ERROR HANDLING
     // --- START USE Routes
     ///////////////////////////////////////////////////////////////
     app.use('/admin', ensureAuthenticated); // ensure that we're authenticated and have a user
@@ -569,11 +572,11 @@ passport.use('bearer', new BearerStrategy(
             if (user.isAdmin) {
               next();
             } else {
-              res.status(401).send("Not an admin");
+              errorHandler.logAndReturn('Not an admin', 401, next);
             }
           })
           .fail(function (err) {
-            console.log('need to handle err in /admin');
+            errorHandler.logAndReturn('User not found', 404, next, err);
           });
       }); // ensure that we're an admin
 
@@ -590,7 +593,6 @@ passport.use('bearer', new BearerStrategy(
     app.get('/all_ylift_profiles', all_ylift_profiles);
     app.get('/authorized', ensureAuthenticated, authorized);
     app.get('/cart/:profileid', ensureAuthenticated, get_cart);
-    app.get('/get_all_testimonials', get_all_testimonials);
     app.get('/get_customer/:customerid', ensureAuthenticated, stripeRoutes.get_customer);
     app.get('/merchant_orders/:merchantid', storeRoutes.merchant_orders);
     app.get('/get_product_by_id/:productnumber', get_product_by_id);
@@ -617,7 +619,6 @@ passport.use('bearer', new BearerStrategy(
     app.post('/add_token_to_customer/:profileid/:customerid', ensureAuthenticated, stripeRoutes.add_token_to_customer, stripeRoutes.update_customer);
     app.post('/empty_cart', empty_cart);
     app.post('/email_support', emailRoutes.support);
-    app.post('/deactivate_product', ensureAuthenticated, productRoutes.deactivate_product);
     app.post('/get_products_by_category/:category', get_products_by_category);
     app.post('/login', loginHelper);
     app.post('/process_transaction?:profileid', stripeRoutes.process_transaction);
@@ -634,6 +635,7 @@ passport.use('bearer', new BearerStrategy(
     app.post('/update_product', ensureAuthenticated, productRoutes.update_product);
     app.post('/update_user', ensureAuthenticated, update_user);
     app.post('/upload_image', multipartMiddleware, upload_image);
+    app.post('/validate_reset_token', userRoutes.validate_reset_token);
     
     // -- START Profile Routes
     ///////////////////////////////////////////////////////////////
@@ -647,18 +649,21 @@ passport.use('bearer', new BearerStrategy(
     // -- START User Routes
     app.post('/user/give_ylift', ensureAuthenticated, userRoutes.give_ylift);
 
+    // -- START Admin Routes
+    ///////////////////////////////////////////////////////////////
+    app.get('/admin/all_profiles', ensureAuthenticated, adminRoutes.all_profiles);
+    app.post('/get_merchant_name', ensureAuthenticated, adminRoutes.get_merchant_name);
+    app.get('/admin/all_orders', ensureAuthenticated, adminRoutes.all_orders);
+    app.get('/admin/all_ylift_profiles', ensureAuthenticated, adminRoutes.all_ylift_profiles);
+
     // -- START ERROR Routes
     ///////////////////////////////////////////////////////////////
     app.get('/404', fourofour);
     app.get('/403', fourothree);
     app.get('/500', fivehundred);
-
-    // -- End ERROR Routes
-
-    // -- START Admin Routes
-    ///////////////////////////////////////////////////////////////
-    app.get('/admin/all_profiles', ensureAuthenticated, adminRoutes.all_profiles);
-    app.get('/admin/all_ylift_profiles', ensureAuthenticated, adminRoutes.all_ylift_profiles);
+    app.use(function (err, req, res, next) {
+      res.status(err.status || 500).json({error: true, message:err.message || err.body || 'Unknown server error'});
+    });
     // -- End ERROR Routes
 
 };

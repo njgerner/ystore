@@ -12,7 +12,10 @@ superApp.controller('LocationsCtrl',
 
     $scope.toggleFocus = function(index) {
       $scope.locations[index].focused = !$scope.locations[index].focused;
-      $scope.$apply();
+      if ($scope.locations[index].focused) {
+        $scope.map.panTo(new google.maps.LatLng($scope.locations[index].location.A, $scope.locations[index].location.F));
+      }
+      // $scope.$apply(); // need to add back for appts
     }
 
     $scope.toggleSearch = function() {
@@ -35,7 +38,7 @@ superApp.controller('LocationsCtrl',
           $scope.map.setCenter(latlng);
           $scope.showSearch = false;
         } else {
-          console.log('bad zip');
+          $scope.zipError = "Enter a valid zip code";
         }
       });
     }
@@ -54,8 +57,9 @@ superApp.controller('LocationsCtrl',
   				title: location.name,
   				icon: img
   			});
-        google.maps.event.addListener($scope.markers[index], 'click', function() {
+        google.maps.event.addListener($scope.markers[index], 'click', function(e) {
           $scope.toggleFocus(index);
+          $scope.map.panTo(e.latLng);
         });
       });
   	}
@@ -82,5 +86,16 @@ superApp.controller('LocationsCtrl',
         streetViewControl: false
       });
 		  $scope.onMapLoaded(map);
-		});
+		}, function (error) {
+      if (error.code == error.PERMISSION_DENIED) {
+        var latlng = new google.maps.LatLng(40.7127, 74.0059);
+        var map = new google.maps.Map(document.getElementById("map-canvas"), { 
+          center: latlng, 
+          zoom: 12,
+          mapTypeControl: false,
+          streetViewControl: false
+        });
+        $scope.onMapLoaded(map);
+      }
+    });
 }]);

@@ -1,22 +1,26 @@
-trdServices.service("profileService", ['$rootScope', '$http', '$cookieStore', 'authService',
-    function ($rootScope, $http, $cookieStore, authService) {
+trdServices.service("profileService", ['$rootScope', '$http', '$cookieStore', 'authService', '$log',
+    function ($rootScope, $http, $cookieStore, authService, $log) {
 
     this.adminOf = {};
 
     this.updateProfile = function(profile, callback) {
         $http({method: 'POST', url: '/profile/update/' + profile.id, data:{profile:profile}})
         .success(function (data, status, headers, config) {
-            callback(data);
+            if (callback) {
+                callback(null, data);
+            }
         })
         .error(function (data, status, headers, config) {
-            console.log('error updating profile', data);
-            callback();
+            $log.debug('error updating profile', data);
+            if (callback) {
+                callback(data.message);
+            }
         });
     }
 
     this.getMerchantProfile = function(callback) {
         if (this.merchant !== undefined) {
-            callback(this.merchant);
+            callback(null, this.merchant);
             return;
         }
         var inThis = this;
@@ -26,10 +30,11 @@ trdServices.service("profileService", ['$rootScope', '$http', '$cookieStore', 'a
                 inThis.adminOf[data.profile.id] = true;
             }
             inThis.merchant = data.profile;
-            callback(data.profile);
+            callback(null, data.profile);
         })
         .error(function (data, status, headers, config) {
-            callback();
+            $log.debug('error getting merchant profile', data);
+            callback(data.message);
         });
     }
 
@@ -40,11 +45,11 @@ trdServices.service("profileService", ['$rootScope', '$http', '$cookieStore', 'a
         .success(function (data, status, headers, config) {
             inThis.merchant = data;
             inThis.adminOf[data.id] = true;
-            callback(data);
+            callback(null, data);
         })
         .error(function (data, status, headers, config) {
-            console.log('error updating profile', data);
-            callback();
+            $log.debug('error adding merchant profile', data);
+            callback(data.message);
         });
     }
 
@@ -57,11 +62,11 @@ trdServices.service("profileService", ['$rootScope', '$http', '$cookieStore', 'a
                 inThis.adminOf[data.profile.id] = true;
             }
             inThis.merchant = data.profile;
-            callback(data.profile);
+            callback(null, data.profile);
         })
         .error(function (data, status, headers, config) {
-            console.log('error updating profile', data);
-            callback();
+            $log.debug('error updating merchant profile', data);
+            callback(data.message);
         });
     }
 
@@ -76,11 +81,11 @@ trdServices.service("profileService", ['$rootScope', '$http', '$cookieStore', 'a
             }
             inThis.adminOf[inThis.merchant.id] = false;
             inThis.merchant = null;
-            callback();
+            callback(null, null);
         })
         .error(function (data, status, headers, config) {
-            console.log('error deleting profile', data);
-            callback('Error deleting profile, please try again');
+            $log.debug('error deleting profile', data);
+            callback(data.message);
         });
     }
 

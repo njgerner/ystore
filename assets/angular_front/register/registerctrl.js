@@ -1,12 +1,12 @@
 superApp.controller('RegisterCtrl',
   ['$rootScope', '$scope', '$state', 'authService', '$location', '$window', '$timeout', 
-  		'stripeService', 'storeService', 'trainingService', 'REG_FEE',
+  		'stripeService', 'storeService', 'trainingService', 'REG_FEE', 'profileService',
   function($rootScope, $scope, $state, authService, $location, $window, $timeout, 
-  		stripeService, storeService, trainingService, reg_fee) {
+  		stripeService, storeService, trainingService, REG_FEE, profileService) {
 
   	$scope.staff = [];
   	$scope.viewState = 'start';
-    $scope.total = reg_fee;
+    $scope.total = REG_FEE;
 
   	$scope.$watch('billingsame', function(newValue, oldValue) {
 		if (newValue && $scope.billingsame) {
@@ -94,10 +94,17 @@ superApp.controller('RegisterCtrl',
   	}
 
     $scope.registerIndividual = function() {
+      if ($scope.registering) {
+        $scope.failedMessage = "Processing your registration, please wait...";
+        return;
+      }
       $scope.failedMessage = null;
       if ($scope.password !== $scope.confirmpassword) {
-        $scope.failedMessage = "Passwords must match!";
+        $scope.failedMessage = "Passwords do not match";
         return;
+      } else if ($scope.password.length < 6) {
+        $scope.failedMessage = "Password must be at least 6 characters";
+        return
       }
       $scope.registering = true;
       authService.register($scope.email, $scope.password, function(err, status) {
@@ -112,6 +119,21 @@ superApp.controller('RegisterCtrl',
 
     function onTrainingDatesLoaded(dates) {
       $scope.dates = dates;
+    }
+
+    function addContactInfoToProfile() {
+      var address = {
+        "address1": $scope.address1,
+        "address2": $scope.address2,
+        "city": $scope.city,
+        "state": $scope.state,
+        "zip": $scope.zip,
+        "country": $scope.country,
+        "default": true
+      };
+      $scope.profile.addresses.push(address);
+      $scope.profile.phone = $scope.phone;
+      profileService.updateProfile($scope.profile);
     }
 
 // START VALIDATION
@@ -188,7 +210,8 @@ superApp.controller('RegisterCtrl',
             } else {
               return authService.getAuthorization(function (authorized) {
                 if (authorized) {
-                  $scope.profile = authService.profile;
+                  $scope.profile = angular.copy(authService.profile);
+                  addContactInfoToProfile();
                 }
                 $scope.viewState = state;
                 return true;
@@ -223,35 +246,35 @@ superApp.controller('RegisterCtrl',
               exp_month: $scope.expmonth,
               exp_year: $scope.expyear
             };
-            var billing = {
-              name: $scope.cardname,
-              address_line1: $scope.billingaddress1,
-              address_line2: $scope.billingaddress2,
-              address_city: $scope.billingcity,
-              address_state: $scope.billingstate,
-              address_zip: $scope.billingzip,
-              country: $scope.billingcountry
-            };
-            $scope.meta = {
-              name: $scope.name,
-              address1: $scope.address1,
-              address2: $scope.address2,
-              city: $scope.city,
-              state: $scope.state,
-              zip: $scope.zip,
-              country: $scope.country,
-              phone: $scope.phone,
-              fax: $scope.fax,
-              uses_filler: $scope.uses_filler,
-              specialty: $scope.specialty,
-              medlicense: $scope.medlicensenum,
-              filler_revenue_pct: $scope.filler_revenue_pct,
-              filler_procedures: $scope.filler_procedures,
-              training_location: $scope.location,
-              training_date: $scope.training_date,
-              certname: $scope.certname,
-              staff: JSON.stringify($scope.staff)
-            };
+          var billing = {
+            name: $scope.cardname,
+            address_line1: $scope.billingaddress1,
+            address_line2: $scope.billingaddress2,
+            address_city: $scope.billingcity,
+            address_state: $scope.billingstate,
+            address_zip: $scope.billingzip,
+            country: $scope.billingcountry
+          };
+          $scope.meta = {
+            name: $scope.name,
+            address1: $scope.address1,
+            address2: $scope.address2,
+            city: $scope.city,
+            state: $scope.state,
+            zip: $scope.zip,
+            country: $scope.country,
+            phone: $scope.phone,
+            fax: $scope.fax,
+            uses_filler: $scope.uses_filler,
+            specialty: $scope.specialty,
+            medlicense: $scope.medlicensenum,
+            filler_revenue_pct: $scope.filler_revenue_pct,
+            filler_procedures: $scope.filler_procedures,
+            training_location: $scope.location,
+            training_date: $scope.training_date,
+            certname: $scope.certname,
+            staff: JSON.stringify($scope.staff)
+          };
           stripeService.addCard(card, billing, function(result, error) {
             if (error) {
               $scope.error = error.message || error;

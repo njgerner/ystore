@@ -22,7 +22,7 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 					productnumbers[i] = scope.productsInCart[i].productnumber;
 					quantities[i] = scope.productsInCart[i].quantity;
 				}
-				storeService.updateCart(authService.profileid, productnumbers, quantities, function(cart) {});
+				storeService.updateCart(authService.profileid, productnumbers, quantities);
 			}
 			
 			scope.hide = function() {
@@ -31,7 +31,7 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 
 			scope.removeItemFromCart = function(index) {
 				scope.productsInCart.splice(index, 1);
-  			scope.persistCartItems();
+  				scope.persistCartItems();
 				scope.updateTotal();
 			}
 
@@ -51,36 +51,48 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
   			$cookieStore.put('pInCart', scope.productsInCart);
 			}
 
-  		function onProductsLoaded (products) {
-  			scope.products = storeService.productsByID;
-  			if (scope.productsInCart.length > 0) {
-  				scope.updateTotal();
-  			}
-  			scope.cartProductsLoading = false;
-  		}
+	  		function onProductsLoaded (error, products) {
+	  			if (error) {
+	  				scope.error = error;
+	  				return;
+	  			}
+	  			scope.products = storeService.productsByID;
+	  			if (scope.productsInCart.length > 0) {
+	  				scope.updateTotal();
+	  			}
+	  			scope.cartProductsLoading = false;
+	  		}
 
-  		function onProductsInCartReceived (products) {
-  			scope.productsInCart = products;
-  			storeService.getAllProducts(onProductsLoaded); // as the store grows we may want to load only products currently in cart
-  		};
+	  		function onProductsInCartReceived (error, products) {
+	  			if (error) {
+	  				scope.error = error;
+	  				return;
+	  			}
+	  			scope.productsInCart = products;
+	  			storeService.getAllProducts(onProductsLoaded); // as the store grows we may want to load only products currently in cart
+	  		};
 
-  		var productsInCartWatch = null;
-			productsInCartWatch = scope.$watch('productsInCart', function(newValue, oldValue) {
-				if (!newValue) {
-					scope.updateTotal();
-					scope.updatePInCartCookie();
-					productsInCartWatch();
-				}
-			});
+	  		var productsInCartWatch = null;
+				productsInCartWatch = scope.$watch('productsInCart', function(newValue, oldValue) {
+					if (!newValue) {
+						scope.updateTotal();
+						scope.updatePInCartCookie();
+						productsInCartWatch();
+					}
+				});
 
 			storeService.getProductsInCart(authService.profileid, onProductsInCartReceived);
 
-			scope.$watch(function() { return $cookies.pInCart; }, function(newCart, oldCart) { // this makes me hard
+			var cartWatch = scope.$watch(function() { return $cookies.pInCart; }, function(newCart, oldCart) { // this makes me hard
 				if (newCart !== undefined) {
-					onProductsInCartReceived(JSON.parse(newCart));
+					onProductsInCartReceived(null, JSON.parse(newCart));
 				} else {
-					onProductsInCartReceived([]);
+					onProductsInCartReceived(null, []);
 				}
+			});
+
+			scope.$on('$destroy', function () {
+				cartWatch();
 			});
 
 		}

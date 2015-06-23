@@ -22,7 +22,6 @@ superApp.controller('SupportCtrl',
   			message: $scope.message
   		};
   		emailService.sendSupportRequest($scope.email, $scope.data, function(result) {
-  			console.log('result from email request');
   			$scope.submitted = true;
   			$scope.submitting = false;
   		});

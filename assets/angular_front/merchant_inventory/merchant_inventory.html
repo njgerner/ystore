@@ -1,6 +1,7 @@
 <div class="large-6 large-offset-3 small-12 columns">
 	<div class="row clearfix">
 		<h4 class="left">{{merchant.name}} Inventory</h4>
+		<error-dir msg="{{error}}"></error-dir>
 		<input name="orders-search" type="text" ng-model="query" class="right" typeahead="name for name in productNames.length ? [$viewValue].concat(productNames) : [] | filter:$viewValue | limitTo:6" ng-change="filter(query)" placeholder="Search Inventory" autoselect>
 	</div>
 	<div class="row">

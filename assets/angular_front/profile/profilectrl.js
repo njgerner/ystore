@@ -8,16 +8,19 @@ superApp.controller('ProfileCtrl',
     $scope.createdAt = moment($scope.profile.createdAt).format("MMMM Do, YYYY");
 
     $scope.getDisplayDate = function(date) {
-      return moment(date).format("MMM Do YYYY");
+      if(date) {
+         return moment(date).format("MMM Do YYYY");
+       } else {
+        return "";
+       }
     }
 
-    $scope.onOrdersLoaded = function(orders) {
-      if (Array.isArray(orders)) { // dumb orchestrate return issue, a good intern problem to fix
-        $scope.orders = orders;
+    $scope.getDisplayTotal = function(value) {
+      if (!value) {
+        return "";
       } else {
-        $scope.orders.push(orders);
+        return "$" + value.toString().split( /(?=(?:\d{3})+(?:\.|$))/g ).join( "," );
       }
-      $scope.ordersLoaded = true;
     }
 
     $scope.logoutNow = function() {
@@ -28,7 +31,19 @@ superApp.controller('ProfileCtrl',
       $state.go("order", {orderid:orderid});
     }
 
-    storeService.getProductsInCart(authService.profile.id, function(cart) {});
-    storeService.getOrdersByUserID(authService.profile.id, function(orders) { $scope.onOrdersLoaded(orders); });
+    function onOrdersLoaded (error, orders) {
+      if (error) {
+        $scope.error = error;
+      }
+      if (Array.isArray(orders)) {
+        $scope.orders = orders;
+      } else {
+        $scope.orders.push(orders);
+      }
+      $scope.ordersLoaded = true;
+    }
+
+    // storeService.getProductsInCart(authService.profile.id, function(cart) {}); // why the hell is this here
+    storeService.getOrdersByUserID(authService.profile.id, onOrdersLoaded);
 
 }]);

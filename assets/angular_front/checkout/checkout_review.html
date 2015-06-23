@@ -3,9 +3,7 @@
 		<!-- <i class="fa fa-truck fa-3x"></i> -->
 		<h3><strong>Review<strong></h3>
 	</div>	
-	<div ng-if="orderError">
-		<small class="error">{{orderError}}</small>
-	</div>
+	<error-dir msg="{{error}}"></error-dir>
 </div>
 <div class="row" ng-click="toggleItems()">
 	<div class="large-7 columns">
@@ -34,7 +32,7 @@
 </div>	
 <div class="row checkout-cost-text">
 	<span class="large-6 columns"><strong>Total</strong></span>
-	<span class="large-6 columns">${{total}}</span>
+	<span class="large-6 columns">{{formatValue(total)}}</span>
 </div>	
 <div class="row email-submit">
 	<div class="small-10 columns">

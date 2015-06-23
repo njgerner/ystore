@@ -72,7 +72,7 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 	  		};
 
 	  		function onProfileLoaded () {
-	  			profileService.getMerchantProfile(function (profile) {
+	  			profileService.getMerchantProfile(function (error, profile) {
 	  				if (profile && profile.name) {
 	  					scope.merchantName = profile.name;
 	  					scope.isMerchant = true;
@@ -94,7 +94,7 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 	  			});
 			}
 
-			storeService.getAllProducts(function(products) {
+			storeService.getAllProducts(function(error, products) {
 				products.forEach(function(product, index) {
 					if (scope.productCategories[product.category] === undefined) {
 						scope.productCategories[product.category] = 0;
@@ -104,7 +104,7 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 		        });
 			});
 
-			scope.$watch(function() { return $cookies.pInCart; }, function(newCart, oldCart) { // this makes me hard ... me too
+			var pInCartWatch = scope.$watch(function() { return $cookies.pInCart; }, function(newCart, oldCart) { // this makes me hard ... me too
 				if (newCart) {
 					scope.productsInCart = JSON.parse(newCart);
 				}
@@ -113,6 +113,10 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 
 			$rootScope.$on('merchantcreated', function(evt, args) {
 				onProfileLoaded();
+			});
+
+			scope.$on('$destroy', function () {
+				pInCartWatch();
 			});
 
 		}

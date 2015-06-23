@@ -15,23 +15,24 @@ var trdApp = angular.module('trdApp', [
   'mm.foundation',
   'angulartics',
   'angulartics.google.analytics',
+  // 'n3-line-chart',
   'angularFileUpload' //https://github.com/nervgh/angular-file-upload
   // 'uiGmapgoogle-maps'
 ]);
 
-trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'authService', // watch these params in bin/www
-    function ($rootScope, $state, $stateParams, $cookies, $location, authService) {
+trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'authService', '$log', // watch these params in bin/www
+    function ($rootScope, $state, $stateParams, $cookies, $location, authService, $log) {
       $rootScope.$state = $state;
       $rootScope.$stateParams = $stateParams;
       $rootScope.isVisible = false;
 
       $rootScope.$on('$stateChangeStart', 
         function(event, toState, toParams, fromState, fromParams){
-          console.log('to:: ' + toState.name, 'from:: ' + fromState.name);
-          console.log('authorized / received', authService.authorized, authService.authorizationReceived);
+          $log.debug('to:: ' + toState.name, 'from:: ' + fromState.name);
+          $log.debug('authorized / received', authService.authorized, authService.authorizationReceived);
 
           var isExceptionalState = function() {
-            var exceptionalState = ["terms", "store", "store.search", "checkout", "order", "support", "locations"];
+            var exceptionalState = ["terms", "store", "checkout", "order", "support", "locations"];
             return exceptionalState.indexOf(toState.name) >= 0;
           }
 
@@ -90,10 +91,13 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
 
 }]);
 
-trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyticsProvider',
-  function($httpProvider, $stateProvider, $urlRouterProvider, $analyticsProvider) {
+trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyticsProvider', 
+  '$logProvider', 'ENV',
+  function($httpProvider, $stateProvider, $urlRouterProvider, $analyticsProvider, 
+    $logProvider, ENV) {
     $httpProvider.interceptors.push('trdInterceptor');
     $urlRouterProvider.otherwise("/store");
+    $logProvider.debugEnabled(ENV == 'DEV');
     
     $stateProvider
     .state('admin', {
@@ -107,18 +111,28 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       templateUrl: "/partials/admin_users.html",
       controller: "AdminUsersCtrl"
     })
-    .state('admin.stripe', {
-      url: "/users",
-      templateUrl: "/partials/admin_stripe.html",
-      controller: "AdminStripeCtrl"
+    .state('admin.orders', {
+      url: "/orders",
+      templateUrl: "/partials/admin_orders.html",
+      controller: "AdminOrdersCtrl"
+    })
+    .state('admin.order', {
+      url: "/order/:orderid",
+      templateUrl: "/partials/admin_order.html",
+      controller: "AdminOrderCtrl"
     })
     .state('admin.products', {
-      url: "/users",
+      url: "/products/",
       templateUrl: "/partials/admin_products.html",
       controller: "AdminProductsCtrl"
     })
+    .state('admin.product', {
+      url: "/product/:productnumber",
+      templateUrl: "/partials/admin_product.html",
+      controller: "AdminProductCtrl"
+    })
     .state('admin.metrics', {
-      url: "/users",
+      url: "/metrics",
       templateUrl: "/partials/admin_metrics.html",
       controller: "AdminMetricsCtrl"
     })
@@ -202,11 +216,6 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       url:"/store",
       templateUrl:"/partials/store.html",
       controller: "StoreCtrl"
-    })
-    .state('store.search', {
-      url:"/store",
-      templateUrl:"/partials/search_store.html",
-      controller: "SearchStoreCtrl"
     })
     .state('product', {
       url:"/product/:productnumber",
@@ -328,7 +337,7 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       templateUrl: "/partials/zones_skin.html",
     })
     .state('before_after', {
-      url:"/before_after",
+      url:"/before_after/:procedure",
       templateUrl: "/partials/before_after.html",
       controller: "BeforeAfterCtrl"
     })

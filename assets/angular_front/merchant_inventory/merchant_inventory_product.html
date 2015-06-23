@@ -18,6 +18,7 @@
     </div>
   </div>
   <div class="large-5 columns">
+    <error-dir msg="{{error}}"></error-dir>
     <!-- Edit name -->
     <h4>{{product.name}}<small ng-click="mode = 'edit'" class="right"><i class="i-pencil"></i>Edit</small></h4>
     <input ng-show="mode == 'edit'" type="text" ng-model="product.name"/>
