@@ -12,6 +12,7 @@ superApp.controller('SettingsCtrl',
   	$scope.updating = "none";
 
     $scope.updateProfile = function(property) {
+      $scope.emailchange = false;
       $scope.updating = property;
       if($scope.profile.email != authService.profile.email) {
         if(!confirm("Are you sure you want to change your login email address to " + $scope.profile.email + "?")) {
@@ -21,6 +22,7 @@ superApp.controller('SettingsCtrl',
           profileService.updateProfile($scope.profile, function (error, profile) {
             $scope.profile = profile;
             $scope.updating = "none";
+            $scope.emailchange = true;
             emailService.changeUserEmail(authService.profile.email, $scope.profile.email);
           });
         }

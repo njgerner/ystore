@@ -25,7 +25,7 @@
           <span ng-hide="updating == 'info'">Save Changes</span>
           <span ng-show="updating == 'info'">Saving....</span>
         </button>
-        <span> Reminder that email is used for login. </span>
+        <span ng-show="emailchange" data-alert class="alert-box info radius"> Your email has been changed. Reminder: your email is used to login. </span>
       </div>
     </fieldset>
   </form>
