@@ -3,10 +3,10 @@
 		<li>
 			<a ui-sref="about">About</a>
 		</li>
-		<li>
+		<li ng-hide="isYLIFT">
 			<a ui-sref="network">Network</a>
 		</li>
-		<li>
+		<li ng-hide="isYLIFT">
 			<a dropdown-toggle="#techniquesdrop">Techniques</a>
 			<ul style="width:20%!important" id="techniquesdrop" class="f-dropdown" data-dropdown-content aria-hidden="true" tabindex="-1">
 				<li><a ui-sref="techniques.ylift">Y LIFT</a></li>
@@ -21,7 +21,7 @@
 				<li><a ui-sref="techniques.veins">Veins</a></li>
 			</ul>
 		</li>
-		<li>
+		<li ng-hide="isYLIFT">
 			<a dropdown-toggle="#zonesdrop">Zones</a>
 			<ul style="width:20%!important" id="zonesdrop" class="f-dropdown" data-dropdown-content aria-hidden="true" tabindex="-1">
 				<li><a ui-sref="zones.eyes({'zone':'eyes', 'procedure':'eyebrowlift'})">Eyes</a></li>
@@ -39,6 +39,9 @@
 			<a href="http://www.ylift.com/press-and-media/">News</a>
 		</li>
 		<li>
+			<a ui-sref="support">Contact Us</a>
+		</li>
+		<li ng-hide="isYLIFT">
 			<a ui-sref="locations">Find A Provider</a>
 		</li>
 <!-- 		<li>

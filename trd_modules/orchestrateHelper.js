@@ -327,11 +327,27 @@ exports.getAllProducts = function() {
     .limit(100)
     .query('value.active: "Y"')
   .then(function(result) {
-    var products = [];
-    for (var i = 0; i < result.body.results.length; i++) {
-      products[i] = result.body.results[i].value;
+    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
+  })
+  .fail(function (err){
+    if (err.body.message == 'The requested items could not be found.'){
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body));
     }
-    deferred.resolve(products);
+  });
+  return deferred.promise;
+};
+
+//get all products
+exports.getPublicProducts = function() {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+    .collection('products')
+    .limit(100)
+    .query('value.active: "Y" AND NOT value.isYLIFT: "Y"')
+  .then(function(result) {
+    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
   })
   .fail(function (err){
     if (err.body.message == 'The requested items could not be found.'){

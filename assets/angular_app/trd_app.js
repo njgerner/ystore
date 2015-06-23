@@ -45,8 +45,10 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
             var unauthedStates = ["login", "login_by_token", "email_sent", "email_taken", "resend_email", "new_password", "reset_password", "register"];
             return unauthedStates.indexOf(toState.name) >= 0;
           };
+
+          if (toState.name == "authorizing") {
           
-          if (authService.authorizationReceived) {
+          } else if (authService.authorizationReceived) {
 
             if (isExceptionalState()) {
               return;
@@ -62,6 +64,7 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
 
           } else {
             event.preventDefault();
+            $state.go("authorizing");
             authService.getAuthorization(function(authorized) {
 
               if (isExceptionalState()) {
@@ -91,15 +94,20 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
 
 }]);
 
-trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyticsProvider', 
+trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyticsProvider', '$locationProvider',
   '$logProvider', 'ENV',
-  function($httpProvider, $stateProvider, $urlRouterProvider, $analyticsProvider, 
+  function($httpProvider, $stateProvider, $urlRouterProvider, $analyticsProvider, $locationProvider,
     $logProvider, ENV) {
     $httpProvider.interceptors.push('trdInterceptor');
     $urlRouterProvider.otherwise("/store");
+    $locationProvider.hashPrefix('!'); // makes site crawlable 
     $logProvider.debugEnabled(ENV == 'DEV');
     
     $stateProvider
+    .state('authorizing', {
+      url: "/authorizing",
+      templateUrl: "partials/authorizing.html"
+    })
     .state('admin', {
       abstract: true,
       url: "/admin",

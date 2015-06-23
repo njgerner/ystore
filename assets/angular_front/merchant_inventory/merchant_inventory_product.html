@@ -16,6 +16,14 @@
       <img ng-show="$flow.files.length > 0" flow-img="$flow.files[0]" />
       <input ng-show="mode == 'edit'" type="file" flow-btn flow-attrs="{accept:'image/*'}"/>
     </div>
+    <div class="row">
+      <div class="small-12 columns">
+        <span ng-show="mode == 'view' && product.isYLIFT">Y LIFT Network Product</span>
+        <label ng-show="mode == 'edit'">Is this a Y LIFT Network only product?
+          <input type="checkbox" ng-model="product.isYLIFT" ng-true-value="Y" ng-false-value="N">
+        </label>
+      </div>
+    </div>
   </div>
   <div class="large-5 columns">
     <error-dir msg="{{error}}"></error-dir>

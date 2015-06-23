@@ -4,14 +4,14 @@ superApp.controller('AdminProductsCtrl',
 
     $scope.vendornames = {};
 
-  	storeService.getAllProducts(function(error, products) {
+  	storeService.getStoreFront(function(error, products) {
       if (error) {
         $scope.error = error;
         return;
       }
   		$scope.products = products;
   		$scope.products.forEach(function (product) {
-  			   merchantService.getMerchantName(product.attributes.vendor, function(name) {
+  			  merchantService.getMerchantName(product.attributes.vendor, function(name) {
   				$scope.vendornames[product.productnumber] = name;
   			});
   		});
@@ -23,12 +23,13 @@ superApp.controller('AdminProductsCtrl',
 
     $scope.editProduct = function(productnumber, attribute) {
       $scope.products.forEach(function (product) {
-        if(product.productnumber == productnumber) {
-          if(attribute == 'featured') {
-              product.featured ? product.featured = false:product.featured = true;
-          }else if(attribute == 'active') {
-              product.active == 'Y' ? product.active = 'N':product.active = 'Y';
+        if (product.productnumber == productnumber) {
+          if (attribute == 'featured') {
+              product.featured ? product.featured = false : product.featured = true;
+          } else if (attribute == 'active' || attribute == 'isYLIFT') {
+              product[attribute] == 'Y' ? product[attribute] = 'N' : product[attribute] = 'Y';
           }
+          productService.updateProduct(product);
         }
       });
     };

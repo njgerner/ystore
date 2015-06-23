@@ -10,6 +10,7 @@
 			      <th>Category</th>
 			      <th>Date Added</th>
 			      <th>Active</th>
+			      <th>Y Lift</th>
 			      <th>Featured</th>
 			    </tr>
 			</thead>
@@ -20,6 +21,7 @@
 					<th>{{product.category}}</th>
 					<th>{{displayDate(product.createdAt)}}</th>
 					<th ng-click="editProduct(product.productnumber, 'active')" style="text-align:center">{{product.active}}</th>
+					<th ng-click="editProduct(product.productnumber, 'isYLIFT')" style="text-align:center">{{product.isYLIFT || 'N'}}</th>
 					<th ng-click="editProduct(product.productnumber, 'featured')"style="text-align:center">{{product.featured || 'N'}}</th>
 				</tr>
 			</tbody>

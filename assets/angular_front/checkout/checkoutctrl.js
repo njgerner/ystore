@@ -58,7 +58,7 @@ superApp.controller('CheckoutCtrl',
 
     $scope.onProductsLoaded = function() {
       $scope.products = storeService.productsByID;
-      storeService.getProductsInCart($scope.profileid, function (products) { 
+      storeService.getProductsInCart($scope.profileid, function (error, products) { 
         $scope.merchants = [];
         $scope.productsInCart = products;
         for (var i = 0; i < $scope.productsInCart.length; i++) {
@@ -91,7 +91,7 @@ superApp.controller('CheckoutCtrl',
     if (storeService.productsRetrieved) {
       $scope.onProductsLoaded();
     } else {
-      storeService.getAllProducts(function() { $scope.onProductsLoaded(); })
+      storeService.getStoreFront($scope.onProductsLoaded);
     }
 
 }]);
