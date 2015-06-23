@@ -45,6 +45,9 @@ module.exports = function(express, app, __dirname) {
 
 	//POST /change_email
 	EmailRoutes.change_email = function(req, res, next) {
+		if(!req.body.newemail) {
+			errorHandler.logAndReturn('Invalid email address', 500, next, err, req.body);
+		}
 		var options = {
 			from: 'support@ylift.io',
 			subject: 'Y Lift Account Email Change',

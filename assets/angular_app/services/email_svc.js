@@ -24,7 +24,7 @@ trdServices.service('emailService', ['$http', '$log',
 			error(function(data, status, headers, config) {
 				$log.debug('error sending email', data);
 				if(callback) {
-					callback("Fail");
+					callback(data.message);
 				}
 			});
 	};

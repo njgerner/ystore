@@ -617,7 +617,7 @@ passport.use('bearer', new BearerStrategy(
     app.post('/add_item_to_cart', add_item_to_cart);
     app.post('/add_product', ensureAuthenticated, productRoutes.add_product);
     app.post('/add_token_to_customer/:profileid/:customerid', ensureAuthenticated, stripeRoutes.add_token_to_customer, stripeRoutes.update_customer);
-    app.post('/change_email', emailRoutes.change_email);
+    app.post('/change_email', ensureAuthenticated, emailRoutes.change_email);
     app.post('/empty_cart', empty_cart);
     app.post('/email_support', emailRoutes.support);
     app.post('/get_products_by_category/:category', get_products_by_category);

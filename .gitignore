@@ -8,3 +8,4 @@ uploads/
 logs/ylift-dev-error.log
 public/
 npm-debug.log
+.bash_profile
