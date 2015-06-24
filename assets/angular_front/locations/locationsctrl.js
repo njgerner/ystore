@@ -3,7 +3,9 @@ superApp.controller('LocationsCtrl',
   function($rootScope, $scope, $state, $location, locationService) {
 		$scope.locationsLoaded = false;
     $scope.showLocationsRight = true;
+    $scope.selectedLocation = null;
     $scope.showSearch = false;
+    $scope.viewBooking = false;
 		$scope.mapLoaded = false;
   	$scope.locations = [];
     $scope.locationFocused = {};
@@ -75,6 +77,13 @@ superApp.controller('LocationsCtrl',
 
     $scope.toggleLocationPanel = function() {
       $scope.showLocationsRight = !$scope.showLocationsRight;
+    }
+
+    $scope.openBooking = function(location, $event) {
+      $scope.selectedLocation = location;
+      $scope.viewBooking = true;
+      console.log('open booking', $scope.selectedLocation, $scope.viewBooking);
+      $event.stopPropagation();
     }
 
 	  navigator.geolocation.getCurrentPosition(function (position) {

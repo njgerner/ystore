@@ -57,7 +57,7 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 			});
 
 			var cartWatch = null;
-			var cartWatch = scope.$watch(function() { return $cookies.pInCart; }, function(newCart, oldCart) { // this makes me hard
+			cartWatch = scope.$watch(function() { return $cookies.pInCart; }, function(newCart, oldCart) { // this makes me hard
 				if (newCart !== undefined) {
 					onProductsInCartReceived(null, JSON.parse(newCart));
 				} else {
