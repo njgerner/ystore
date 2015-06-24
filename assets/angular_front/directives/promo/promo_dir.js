@@ -21,6 +21,9 @@ appDirectives.directive('promoDir', ['$window', 'promoService',
 			}
 
 			scope.applyCode = function() {
+				if (scope.validating) {
+					return;
+				}
 				scope.validating = true;
 				promoService.getPromoCode(scope.code, scope.domain, onCodeLoaded);
 			}
