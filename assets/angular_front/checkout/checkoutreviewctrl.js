@@ -8,12 +8,18 @@ superApp.controller('CheckoutReviewCtrl',
 	var customer = stripeService.customer;
 	if (customer && customer.email) {
 		$scope.confEmail = customer.email;
+		$scope.emailEntered = true;
 	} else if (authService.authorized) {
 		$scope.confEmail = authService.profile.email;
+		$scope.emailEntered = true;
 	}
 
 	$scope.formatValue = function (value) {
-      return "$" + value.toString().split( /(?=(?:\d{3})+(?:\.|$))/g ).join( "," );
+		if (value) {
+      		return "$" + value.toString().split( /(?=(?:\d{3})+(?:\.|$))/g ).join( "," );
+		} else {
+			return "";
+		}
     }
 
 	$scope.addEmail = function() {

@@ -1102,24 +1102,6 @@ exports.addPageView = function(type, id, profile) {
   .create();
 };
 
-exports.getMostFrequentEvent = function(collection, type, profile) {
-  var deferred = Q.defer();
-  db.newSearchBuilder()
-  .collection('products')
-  .aggregate('top_values', 'value.productnumber')
-  .query('@path.kind:event AND @path.type:' + type)
-  .then(function (result) {
-    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
-  })
-  .fail(function (err) {
-    if (err.body.code == "items_not_found") {
-      deferred.resolve(false);
-    } else {
-      deferred.reject(new Error(err.body.message));
-    }
-  });
-};
-
 exports.getMerchantByID = function(id) {
   var deferred = Q.defer();
   db.get('merchant-profiles', id)
@@ -1127,7 +1109,11 @@ exports.getMerchantByID = function(id) {
     deferred.resolve(merchant.body);
   })
   .fail(function (err) {
-    deferred.reject(new Error(err.body));
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
   });
   return deferred.promise;
 };
@@ -1152,3 +1138,40 @@ exports.validateResetToken = function(tokenid) {
   });
   return deferred.promise;
 };
+
+// ABSTRACTED METHODS BELOW ONLY
+/////////////////////////////////////////////////////////////////////////////////////
+exports.getDocFromCollection = function(collection, key) {
+  var deferred = Q.defer();
+  db.get(collection, key)
+  .then(function (result){
+    deferred.resolve(result.body);
+  })
+  .fail(function (err) {
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
+  });
+  return deferred.promise;
+};
+
+exports.getMostFrequentEvent = function(collection, type, profile) {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+  .collection('products')
+  .aggregate('top_values', 'value.productnumber')
+  .query('@path.kind:event AND @path.type:' + type)
+  .then(function (result) {
+    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
+  })
+  .fail(function (err) {
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
+  });
+};
+
