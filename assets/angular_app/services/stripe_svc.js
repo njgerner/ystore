@@ -1,5 +1,7 @@
-trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'authService', 'PUBLISH', '$log',
-    function ($rootScope, $http, $cookieStore, authService, stripePubKey, $log) {
+trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'authService', 'PUBLISH', 
+  '$log', 'promoService',
+    function ($rootScope, $http, $cookieStore, authService, stripePubKey, 
+      $log, promoService) {
 
       Stripe.setPublishableKey(stripePubKey);
 
@@ -136,7 +138,7 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
             callback(data.customer);
           })
           .error(function(data, status, headers, config) {
-            callback(null, data);
+            callback(null, data.message);
           });
       };
 
@@ -170,7 +172,7 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
             callback(data.customer);
           })
           .error(function(data, status, headers, config) {
-            callback(null, data);
+            callback(null, data.message);
           });
       };
 
@@ -179,14 +181,14 @@ trdServices.service('stripeService', ['$rootScope', '$http', '$cookieStore', 'au
            callback("Invalid credit card info, please check that the information provided is correct and try again.", null);
         } else { // i need a dolla dolla, a dolla is all i neeeeeeed
           var inThis = this;
-          $http({method: 'POST', url: "/process_transaction?profile=" + authService.profileid,
+          $http({method: 'POST', url: "/process_transaction?profile=" + (authService.profileid || ""),
         		data:{card:inThis.card, customer:inThis.customer, addressShipTo:addressShipTo, productsInCart:productsInCart,
-                  total:total, shipping:shipping, merchants:merchants}})
+                  total:total, shipping:shipping, merchants:merchants, promo:promoService.currentPromo}})
             .success(function(data, status, headers, config) {
                 callback(null, {id: data.order.id, success: data.success});
             })
             .error(function(data, status, headers, config) {
-              callback("There was an error processing your order, please try again. If this issue persists, please contact YLift Support (support@ylift.io).");
+              callback(data.message || "There was an error processing your order, please try again. If this issue persists, please contact YLift Support (support@ylift.io).");
             });
         }
       }

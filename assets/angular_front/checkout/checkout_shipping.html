@@ -44,7 +44,7 @@
             <input type="text" name="zip" ng-model="zip" placeholder="Zip" ng-minlength="5" ng-maxlength="5" ng-class="{'trd-invalid':shipForm.zip.$invalid && shipForm.zip.$dirty}" required/>
         </div>
         <div>
-            <button type="submit" ng-disabled="shipForm.$invalid">
+            <button type="submit" class="button small" ng-disabled="shipForm.$invalid">
                 <span ng-hide="updatingAddress">Add Shipping</span>
                 <span ng-show="updatingAddress">Adding...</span>
             </button>

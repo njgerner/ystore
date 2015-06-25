@@ -175,6 +175,7 @@ module.exports = function(express, app, __dirname) {
 		var productsInCart = transaction.productsInCart;
 		var total = transaction.total;
 		var shipping = transaction.shipping;
+		var promo = transaction.promo;
 		var shipTo = transaction.addressShipTo;
 		var merchants = transaction.merchants;
 		var customer = transaction.customer;
@@ -189,13 +190,14 @@ module.exports = function(express, app, __dirname) {
 
 		stripe.charges.create(charge, function(err, charge) {
 			if(err) {
-				errorHandler.logAndReturn('Error processing transaction, please contact support@ylift.io', 500, next, err);
+				errorHandler.logAndReturn(err.message || 'Error processing transaction, please contact support@ylift.io', 500, next, err, charge);
 			} else {
 				var order = {
 					id: crypto.randomBytes(5).toString('hex'),
 					charge: charge.id || charge,
 					total: total,
 					shipping: shipping,
+					promo: promo,
 					products: productsInCart,
 					shipTo: shipTo,
 					merchants: merchants,

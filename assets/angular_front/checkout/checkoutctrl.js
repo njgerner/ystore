@@ -70,7 +70,7 @@ superApp.controller('CheckoutCtrl',
       });
     }
 
-    $scope.submitOrder = function() {
+    $scope.submitOrder = function(shipping, total) {
       if ($scope.orderSubmitted == true) {
         return;
       }

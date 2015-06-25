@@ -3,7 +3,7 @@
 		<!-- <i class="fa fa-truck fa-3x"></i> -->
 		<h3><strong>Review<strong></h3>
 	</div>	
-	<error-dir msg="{{error}}"></error-dir>
+	<error-dir msg="{{error || $parent.orderError}}"></error-dir>
 </div>
 <div class="row" ng-click="toggleItems()">
 	<div class="large-7 columns">
@@ -34,18 +34,21 @@
 	<span class="large-6 columns"><strong>Total</strong></span>
 	<span class="large-6 columns">{{formatValue(total)}}</span>
 </div>	
-<div class="row email-submit">
-	<div class="small-10 columns">
-	  <input type="text" ng-model="confEmail" placeholder="Enter confirmation email address">
+
+<div style="margin-top:1rem;" class="row collapse postfix-radius">
+	<label>Confirmation Email</label>
+	<div class="small-9 columns">
+		<input type="email" placeholder="Enter confirmation email address" ng-model="confEmail">
 	</div>
-	<div class="small-2 columns">
-	  <a ng-click="addEmail()" class="button postfix">
-	  	<span ng-hide="emailEntered">Add</span>
-	  	<span ng-show="emailEntered">Done!</span>
-	  </a>
+	<div class="small-3 columns">
+		<a class="button postfix" ng-click="addEmail()">
+			<span ng-hide="emailEntered">Add</span>
+	  		<span ng-show="emailEntered">Done!</span>
+		</a>
 	</div>
 </div>
-<button class="button small expand" ng-click="submitOrder()">
+<promo-dir total="$parent.total" shipping="$parent.shippingCost" domain="order" error="error" show-label="true"></promo-dir>
+<button class="button small expand" ng-click="submitOrder()" ng-disabled="!emailEntered">
 	<span ng-hide="orderSubmitted">Submit Order</span>
 	<span ng-show="orderSubmitted">Processing...</span>
 </button>
