@@ -17,8 +17,6 @@ superApp.controller('MainCtrl',
   function($rootScope, $scope, $window, $location, $cookies, $state, authService, trdInterceptor, 
     stripeService) {
 
-    $scope.title = $rootScope.pageTitle;
-
     $scope.handleLoaded = function() {
       $scope.loaded = true;
       $scope.authorized = authService.authorized;

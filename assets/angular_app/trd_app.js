@@ -22,7 +22,7 @@ var trdApp = angular.module('trdApp', [
   // 'uiGmapgoogle-maps'
 ]);
 
-trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'authService', '$log', // watch these params in bin/www
+trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'authService', '$log',// watch these params in bin/www
     function ($rootScope, $state, $stateParams, $cookies, $location, authService, $log) {
       $rootScope.$state = $state;
       $rootScope.$stateParams = $stateParams;
@@ -82,6 +82,11 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
           }
       });
 
+      $rootScope.$on('$stateChangeSuccess', 
+        function(currentRoute, previousRoute) {
+          $rootScope.title = $state.current.title;
+      });
+
       $rootScope.hideCart = function(callback) {
         $('#cart').foundation('reveal', 'close');
         this.isVisible = false;
@@ -119,42 +124,50 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
     .state('admin.users', {
       url: "/users",
       templateUrl: "/partials/admin_users.html",
-      controller: "AdminUsersCtrl"
+      controller: "AdminUsersCtrl",
+      title: "Admin Users"
     })
     .state('admin.orders', {
       url: "/orders",
       templateUrl: "/partials/admin_orders.html",
-      controller: "AdminOrdersCtrl"
+      controller: "AdminOrdersCtrl",
+      title: "Admin Orders"
     })
     .state('admin.order', {
       url: "/order/:orderid",
       templateUrl: "/partials/admin_order.html",
-      controller: "AdminOrderCtrl"
+      controller: "AdminOrderCtrl",
+      title: "Admin Order"
     })
     .state('admin.products', {
       url: "/products/",
       templateUrl: "/partials/admin_products.html",
-      controller: "AdminProductsCtrl"
+      controller: "AdminProductsCtrl",
+      title: "Admin Products"
     })
     .state('admin.product', {
       url: "/product/:productnumber",
       templateUrl: "/partials/admin_product.html",
-      controller: "AdminProductCtrl"
+      controller: "AdminProductCtrl",
+      title: "Admin Product"
     })
     .state('admin.metrics', {
       url: "/metrics",
       templateUrl: "/partials/admin_metrics.html",
-      controller: "AdminMetricsCtrl"
+      controller: "AdminMetricsCtrl",
+      title: "Admin Metrics"
     })
     .state('login', {
       url: "/login",
       templateUrl: "/partials/login.html",
-      controller: "LoginCtrl"
+      controller: "LoginCtrl",
+      title: "Login"
     })
     .state('register', {
       url: "/register",
       templateUrl: "/partials/register.html",
-      controller: "RegisterCtrl"
+      controller: "RegisterCtrl",
+      title: "Register"
     })
     .state('register.home', {
       url: "/intro",
@@ -174,22 +187,28 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
     .state('order', {
       url: "/order/:orderid",
       templateUrl: "/partials/order.html",
-      controller: "OrderCtrl"
+      controller: "OrderCtrl",
+      title: function ($stateParams) {
+        return 'Order #' + $stateParams.orderid;
+      }
     })
     .state('orders', {
       url: "/orders/:orderid",
       templateUrl: "/partials/orders.html",
-      controller: "OrdersCtrl"
+      controller: "OrdersCtrl",
+      title: "Account Orders"
     })
     .state('locations', {
       url: "/locations",
       templateUrl: "/partials/locations.html",
-      controller: "LocationsCtrl"
+      controller: "LocationsCtrl",
+      title: "Provider Locations"
     })
     .state('network', {
       url: "/network",
       templateUrl: "/partials/network.html",
-      controller: "NetworkCtrl"
+      controller: "NetworkCtrl",
+      title: "Network Information"
     })
     .state('merchant_inventory', {
       abstract: true,
@@ -225,7 +244,8 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
     .state('store', {
       url:"/store",
       templateUrl:"/partials/store.html",
-      controller: "StoreCtrl"
+      controller: "StoreCtrl",
+      title: "Store"
     })
     .state('product', {
       url:"/product/:productnumber",
