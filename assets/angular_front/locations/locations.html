@@ -1,19 +1,19 @@
 <div class="off-canvas-wrap">
-	<div class="inner-wrap">
+	<div class="inner-wrap" ng-click="closeBooking()">
 		<a class="right-off-canvas-toggle menu-icon"><span></span></a>
 		<div ng-show="mapLoaded" id="map-canvas" class="ylift-locations"></div>
 		<i ng-hide="showLocationsRight" class="i-map pointer" ng-click="toggleLocationPanel()"></i>
 		<div ng-hide="mapLoaded" class="loader locations-loading">Loading...</div>
 	</div>
 </div>
-<booking-modal-dir ng-if="locationsLoaded" ng-show="viewBooking" class="booking-modal animated" ng-class="{fadeInDown:viewBooking, fadeOutUp:!viewBooking}" office="selectedLocation"></booking-modal-dir>
+<booking-modal-dir ng-if="locationsLoaded" ng-show="viewBooking" class="booking-modal animated" ng-class="{fadeInDown:viewBooking, fadeOutUp:!viewBooking}" office="selectedLocation" close="closeBooking()"></booking-modal-dir>
 <div ng-show="locationsLoaded" ng-show="showLocationsRight" class="locations-panel animated" ng-class="{bounceOutRight:!showLocationsRight,bounceInRight:showLocationsRight}">
 	<div class="locations-header">
       <i ng-hide="showSearch" class="i-right-open-big clickable" ng-click="toggleLocationPanel()"></i>
-      <i ng-show="showSearch" class="i-cancel clickable" ng-click="toggleSearch()"></i>
       <h3 ng-hide="showSearch">Y Lift Locations</h3>
       <i ng-hide="showSearch" class="i-search location-search" ng-click="toggleSearch()"></i>
 		<div class="row" ng-show="showSearch">
+      		<i ng-show="showSearch" class="i-cancel clickable" ng-click="toggleSearch()"></i>
 		    <div class="large-12 columns">
 		      <div class="row collapse">
 		        <div class="small-10 columns">

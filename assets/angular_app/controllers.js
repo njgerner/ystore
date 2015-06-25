@@ -12,8 +12,12 @@ superApp.constant('USER_ROLES', {
 });
 
 superApp.controller('MainCtrl',
-  ['$rootScope', '$scope', '$window', '$location', '$cookies', '$state', 'authService', 'trdInterceptor', 'stripeService',
-  function($rootScope, $scope, $window, $location, $cookies, $state, authService, trdInterceptor, stripeService) {
+  ['$rootScope', '$scope', '$window', '$location', '$cookies', '$state', 'authService', 'trdInterceptor', 
+  'stripeService',
+  function($rootScope, $scope, $window, $location, $cookies, $state, authService, trdInterceptor, 
+    stripeService) {
+
+    $scope.title = $rootScope.pageTitle;
 
     $scope.handleLoaded = function() {
       $scope.loaded = true;

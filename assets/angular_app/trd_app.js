@@ -7,6 +7,8 @@ var trdApp = angular.module('trdApp', [
   'trdApp.services',
   'trdApp.directives',
   'trdApp.controllers',
+  'trdApp.factories',
+  'trdApp.filters',
   'ui.slider',
   'ngTagsInput',
   'ngError',
@@ -106,13 +108,13 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
     $stateProvider
     .state('authorizing', {
       url: "/authorizing",
-      templateUrl: "partials/authorizing.html"
+      templateUrl: "partials/authorizing.html",
     })
     .state('admin', {
       abstract: true,
       url: "/admin",
       templateUrl: "/partials/admin.html",
-      controller: "AdminCtrl"
+      controller: "AdminCtrl",
     })
     .state('admin.users', {
       url: "/users",
