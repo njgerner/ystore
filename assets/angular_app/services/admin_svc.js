@@ -45,4 +45,15 @@ trdServices.service("adminService", ['$rootScope', '$http', '$cookieStore', '$lo
 	        });
     	}
 
+    	this.addProduct = function(product, callback) {
+    		$http({method: 'POST', url: '/admin/add_product', data: {product:product} })
+	        .success(function (data, status, headers, config) {
+	            callback(null, data.product);
+	        })
+	        .error(function (data, status, headers, config) {
+	            $log.debug('error getting ylift profiles', data);
+	            callback(data.message);
+	        });
+    	}
+
 }]);

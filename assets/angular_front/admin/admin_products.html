@@ -1,6 +1,10 @@
 <div class="row">
 	<div style="margin-right:-3%" class="large-8 large-offset-1 columns">
-		<h3> Y Lift Store: {{products.length}} products</h3>
+		<h3> Y Lift Store: {{products.length}} products
+			<span>
+				<h6 style="margin-top:12px" class="right"><a ui-sref="admin.addproduct">Add A Product</a></h6>
+			</span>
+		</h3>
 		<error-dir msg="{{error}}"></error-dir>
 		<table style="width:100%">
 			<thead>

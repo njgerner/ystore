@@ -80,5 +80,19 @@ module.exports = function(express, app, __dirname) {
 		});
 	};
 
+	AdminRoutes.add_product = function(req, res, next) {
+		// orchHelper.getAllOrders()
+		// .then(function (data) {
+		// 	if (data) {
+		// 		res.status(200).json({orders:data});
+		// 	} else {
+		// 		errorHandler.logAndReturn('No orders found from admin', 404, next);
+		// 	}
+		// })
+		// .fail(function (err) {
+		// 	errorHandler.logAndReturn('Error getting all orders from admin', 500, next, err);
+		// });
+	}
+
 	return AdminRoutes;
 };
