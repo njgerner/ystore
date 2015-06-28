@@ -1,0 +1,62 @@
+<div ng-if="userloaded" style="margin-top:30px;" class="large-8 large-offset-1 end columns">
+	<div class="row">
+		<h4 class="text-center">Basic Info</h4>
+	</div>
+	<div class="row">
+		<error-dir msg="{{error}}"></error-dir>
+		<table style="width:100%">
+			<thead>
+			    <tr>
+			      <th>Name</th>
+			      <th>Email</th>
+			      <th>Member Since</th>
+			      <th>Last Login</th>
+			    </tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th>{{profile.name}}</th>
+					<th>{{profile.email}}</th>
+					<th>{{displayDate(profile.createdAt)}}</th>
+					<th>{{displayDate(profile.last_login)}}</th>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="row">
+		<h4 class="text-center">Addresses</h4>
+	</div>
+	<div class="row">
+		<div class="large-6 columns" ng-repeat="address in addresses">
+			<fieldset>
+				{{address.name}}<hr class="small-break">
+				{{address.address1}}<br>
+				<div ng-if="address.address2">
+					{{address.address2}}<br>
+				</div>
+				{{address.city}}, {{address.state}} {{address.zip}}<br>
+			</fieldset>
+		</div>
+	</div>
+	<div class="row">
+		<h4 class="text-center">Cart</h4>
+	</div>
+	<div class="row">
+		<table class="large-8 large-offset-2 columns">
+			<thead>
+				<tr>
+					<th>Product</th>
+					<th>Price</th>
+					<th>Quantity</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="product in cart">
+					<th>{{product.productnumber}}</th>
+					<th>$</th>
+					<th>{{product.quantity}}</th>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

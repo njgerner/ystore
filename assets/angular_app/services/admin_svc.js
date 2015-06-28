@@ -1,6 +1,17 @@
 trdServices.service("adminService", ['$rootScope', '$http', '$cookieStore', '$log',
     function ($rootScope, $http, $cookieStore, $log) {
 
+    	this.getProfileByID = function(id, callback) {
+    		$http({method: 'POST', url: '/admin/profile', data: {id:id} })
+	        .success(function (data, status, headers, config) {
+	            callback(null, data.profile);
+	        })
+	        .error(function (data, status, headers, config) {
+	            $log.debug('error getting profile', data);
+            	callback(data.message);
+	        });
+    	}
+
     	this.getAllProfiles = function(callback) {
 	        $http({method: 'GET', url: '/admin/all_profiles'})
 	        .success(function (data, status, headers, config) {
