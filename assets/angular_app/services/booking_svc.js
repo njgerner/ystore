@@ -5,6 +5,11 @@ trdServices.service("bookingService", ['$rootScope', '$http', '$cookieStore', '$
     	this.apptsByProvider = {};
 
     	this.sendApptRequest = function(date, providerid, procedure, callback) {
+    		if (!authService.profileid) {
+    			callback('Please login to request an appointment');
+    			return;
+    		}
+    		console.log('sending appt request', date, providerid, procedure);
     		var inThis = this;
 	        $http({method: 'POST', url: '/booking/request_appt/' + providerid, 
 	    		   data: {patientid: authService.profileid, date:date, procedure:procedure}})
@@ -21,6 +26,10 @@ trdServices.service("bookingService", ['$rootScope', '$http', '$cookieStore', '$
     	}
 
     	this.getPatientAppts = function(callback) {
+    		if (!authService.profileid) {
+    			callback('Please login to request an appointment');
+    			return;
+    		}
     		var inThis = this;
     		$http({method: 'GET', url: '/booking/patient_appts/' + authService.profileid})
 	        .success(function (data, status, headers, config) {

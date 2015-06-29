@@ -665,9 +665,9 @@ passport.use('bearer', new BearerStrategy(
     app.get('/admin/all_ylift_profiles', ensureAuthenticated, adminRoutes.all_ylift_profiles);
 
     // -- START Booking Routes
-    app.get('booking/patient_appts/:patientid', ensureAuthenticated, bookingRoutes.get_patient_appts);
-    app.get('booking/provider_appts/:providerid', bookingRoutes.get_provider_appts);
-    app.post('booking/request_appt/:providerid', ensureAuthenticated, bookingRoutes.request_appt);
+    app.get('/booking/patient_appts/:patientid', ensureAuthenticated, bookingRoutes.get_patient_appts);
+    app.get('/booking/provider_appts/:providerid', bookingRoutes.get_provider_appts);
+    app.post('/booking/request_appt/:providerid', ensureAuthenticated, bookingRoutes.request_appt);
 
     // -- START ERROR Routes
     ///////////////////////////////////////////////////////////////

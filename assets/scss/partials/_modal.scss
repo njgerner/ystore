@@ -3,7 +3,7 @@
 	width: 60%;
 	top: 100px;
 	left: 20%;
-	height: 650px;
+	min-height: 650px;
 	background-color: $white;
 	z-index: 4;
 	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
@@ -19,6 +19,8 @@
 	float: none !important;
 	color: $white;
 	background-color: $success-color;
+	@extend .pointer;
+	
 	&:hover {
 		background-color: scale-color($success-color, $lightness: -14%);
 		span {
@@ -37,7 +39,22 @@
 			display: none;
 		}
 
-		content: "Requested";
+		&:after {
+			content: "Pending";
+		}
+
+
+		&:hover {
+			span {
+				display: inline;
+			}
+			&:after {
+				content: none;
+			}
+			&:before {
+				content: none;
+			}
+		}
 	}
 
 	&.confirmed {
@@ -47,6 +64,20 @@
 			display: none;
 		}
 
-		content: "Confirmed";
+		&:after {
+			content: "Confirmed";
+		}
+
+		&:hover {
+			span {
+				display: inline;
+			}
+			&:after {
+				content: none;
+			}
+			&:before {
+				content: none;
+			}
+		}
 	}
 }

@@ -8,23 +8,17 @@ appDirectives.directive('bookingModalDir', ['$window', 'authService', 'bookingSe
 		},
 		templateUrl: 'directives/booking_modal_template.html',
 		link: function(scope, element) {
-
+			scope.appts = [];
 			scope.dateOffset = 0;
 			scope.startDate = moment().startOf('week').add(1, 'days'); // always want this weeks monday
 			scope.error = null;
 			scope.success = null;
-			scope.disabled = false;
-			if (!authService.authorized) {
-				scope.error = 'Please login to request an appointment';
-				scope.disabled = true;
-			}
 
 			scope.getUnix = function (offset, hour) {
 				return moment().startOf('week').add(1, 'days').add(scope.dateOffset + offset, 'days').hours(hour).format('X-');
 			}
 
 			scope.getDisplayDay = function(offset) {
-				console.log('date offset', offset);
 				return moment().startOf('week').add(1, 'days').add(scope.dateOffset + offset, 'days').format('ddd');
 			}
 
@@ -37,11 +31,9 @@ appDirectives.directive('bookingModalDir', ['$window', 'authService', 'bookingSe
 			}
 
 			scope.selectSlot = function(offset, hour, $event) {
-				if (scope.disabled) {
-					return;
-				}
 				scope.error = null;
-				bookingService.sendApptRequest($event.target.id, scope.office.id, scope.procedure, onApptRequested);
+				scope.success = null;
+				bookingService.sendApptRequest($event.target.id, scope.office.profileid, scope.procedure, onApptRequested);
 			}
 
 			scope.previous = function() {
@@ -54,23 +46,33 @@ appDirectives.directive('bookingModalDir', ['$window', 'authService', 'bookingSe
 				scope.dateOffset += 7;
 			}
 
-			function onApptRequest (error, success) {
+			function onApptRequested (error, appt) {
+				console.log('appt requested', error, appt);
 				if (error) {
 					scope.error = error;
 				} else {
-					scope.success = success;
+					scope.success = true;
+					scope.appts.push(appt);
+					var apptElement = angular.element(document.getElementById(appt.date));
+					apptElement.addClass(appt.status); // may need to compile this
 				}
 			}
 
 			function onApptsLoaded (error, appts) {
-				scope.appts = appts;
-				for (var i = 0; i < appts.length; i++) {
-					var apptElement = angular.element(document.querySelector('#' + appts[i].date));
-					apptElement.addClass(appts[i].status); // may need to compile this
-				}
+				scope.appts = appts || [];
 			}
 
 			bookingService.getPatientAppts(onApptsLoaded);
+
+			var apptsWatch = null;
+			apptsWatch = scope.$watch('appts', function (newVal, oldVal) {
+				if (newVal && newVal.length) {
+					for (var i = 0; i < newVal.length; i++) {
+						var apptElement = angular.element(document.getElementById(newVal[i].date));
+						apptElement.addClass(newVal[i].status); // may need to compile this
+					}
+				}
+			});
 
 			var officeWatch = null;
 			officeWatch = scope.$watch('office', function (newVal, oldVal) {
@@ -81,6 +83,7 @@ appDirectives.directive('bookingModalDir', ['$window', 'authService', 'bookingSe
 
 			scope.$on('$destroy', function() {
 				officeWatch();
+				apptsWatch();
 			});
 			
 		}

@@ -1155,6 +1155,7 @@ exports.findPatientAppts = function(profileid) {
       deferred.reject(new Error(err.body.message));
     }
   });
+  return deferred.promise;
 };
 
 // ABSTRACTED METHODS BELOW ONLY
@@ -1179,7 +1180,7 @@ exports.postDocToCollection = function(collection, doc) {
   var deferred = Q.defer();
   db.post(collection, doc)
   .then(function (result) {
-    deferred.resolve(result.body);
+    deferred.resolve(result.path);
   })
   .fail(function (err) {
     deferred.reject(new Error(err.body.message));

@@ -11,13 +11,13 @@ module.exports = function(express, app, __dirname) {
 		fs 				= require('fs');
 
 	BookingRoutes.request_appt = function(req, res, next) {
-		if (!req.body.patientid || !req.body.date) {
+		if (!req.params.providerid || !req.body.patientid || !req.body.date) {
 			errorHandler.logAndReturn('Missing appointment request data', 400, next, null, [req.params, req.body]);
 		}
 		var apptDoc = {
 			patient: req.body.patientid,
 			date: req.body.date,
-			provider: req.user.profile,
+			provider: req.params.providerid,
 			procedure: req.body.procedure,
 			status: "requested",
 			createdAt: new Date(),
@@ -25,8 +25,7 @@ module.exports = function(express, app, __dirname) {
 		};
 		orchHelper.postDocToCollection('appointments', apptDoc)
 		.then(function (result) {
-			apptDoc.id = result.id;
-			apptDoc.rev = result.rev;
+			apptDoc.id = result.key;
 			res.status(201).json({appt:apptDoc});
 		})
 		.fail(function (err) {
@@ -35,11 +34,12 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	BookingRoutes.get_patient_appts = function(req, res, next) {
-		orchHelper.findPatientAppts(req.params.profileid)
+		orchHelper.findPatientAppts(req.params.patientid)
 		.then(function (result) {
 			res.status(200).json({appts:result});
 		})
 		.fail(function (err) {
+			console.log('error getting patient appts', err);
 			errorHandler.logAndReturn('Error fetching patient appointments', 500, next, err, req.params);
 		});
 	};
