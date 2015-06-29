@@ -12,10 +12,10 @@ superApp.controller('AdminNewVendorCtrl',
     };
 
     $scope.checkPassword = function() {
-      console.log('checking');
-      console.log('try', bcrypt.hashSync($scope.attempt, 8));
-      console.log('hash', $scope.hash);
-      console.log(bcrypt.compareSync($scope.attempt, $scope.hash));
+      // console.log('checking');
+      // console.log('try', bcrypt.hashSync($scope.attempt, 8));
+      // console.log('hash', $scope.hash);
+      // console.log(bcrypt.compareSync($scope.attempt, $scope.hash));
     };
 
     adminService.getAvailableRegKeys(function (err, keys) {

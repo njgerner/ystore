@@ -27,7 +27,6 @@ module.exports = function(express, app, __dirname) {
 
 	// GET /admin/profile
 	AdminRoutes.get_profile = function(req, res, next) {
-		console.log('in route', req.params.profileid);
 		orchHelper.getProfile(req.params.profileid)
 		.then(function (data) {
 			if (data) {
