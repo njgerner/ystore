@@ -1145,12 +1145,8 @@ exports.getAllTestimonials = function() {
   .collection('testimonials')
   .limit(100)
   .query('*')
-  .then(function (results) {
-    var testimonials = [];
-    results.body.results.forEach(function(result) {
-      testimonials.push(result.value);
-    });
-    deferred.resolve(testimonials);
+  .then(function (result) {
+    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
   })
   .fail(function (err) {
     deferred.reject(new Error(err.body));

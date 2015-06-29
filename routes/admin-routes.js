@@ -25,9 +25,10 @@ module.exports = function(express, app, __dirname) {
 		});
 	};
 
-	// POST /admin/profile
+	// GET /admin/profile
 	AdminRoutes.get_profile = function(req, res, next) {
-		orchHelper.getProfile(req.body.id)
+		console.log('in route', req.params.profileid);
+		orchHelper.getProfile(req.params.profileid)
 		.then(function (data) {
 			if (data) {
 				res.status(200).json({profile:data});
@@ -92,7 +93,7 @@ module.exports = function(express, app, __dirname) {
 		// .fail(function (err) {
 		// 	errorHandler.logAndReturn('Error getting all orders from admin', 500, next, err);
 		// });
-	}
+	};
 
 	return AdminRoutes;
 };

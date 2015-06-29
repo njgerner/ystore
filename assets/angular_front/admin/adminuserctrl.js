@@ -11,12 +11,13 @@ superApp.controller('AdminUserCtrl',
       $scope.profile = profile;
       $scope.userloaded = true;
       $scope.addresses = $scope.profile.addresses;
-      storeService.getProductsInCart($stateParams.profileid, function (err, products) {
+    });
+
+    storeService.getProductsInCart($stateParams.profileid, function (err, products) {
         if(err) {
           $scope.error = err;
         }
         $scope.cart = products;
-      })
     });
 
 }]);

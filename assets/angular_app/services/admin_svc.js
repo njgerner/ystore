@@ -2,7 +2,7 @@ trdServices.service("adminService", ['$rootScope', '$http', '$cookieStore', '$lo
     function ($rootScope, $http, $cookieStore, $log) {
 
     	this.getProfileByID = function(id, callback) {
-    		$http({method: 'POST', url: '/admin/profile', data: {id:id} })
+    		$http({method: 'GET', url: '/admin/profile/' + id})
 	        .success(function (data, status, headers, config) {
 	            callback(null, data.profile);
 	        })
