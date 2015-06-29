@@ -1,0 +1,29 @@
+<error-dir msg="{{error}}"></error-dir>
+<div class="row">
+	<div ng-if="merchantsLoaded" style="margin-right:-3%" class="large-8 large-offset-1 columns">
+		<h3> Y Lift Store: {{merchantProfiles.length}} vendors
+			<span>
+				<h6 style="margin-top:12px" class="right"><a ui-sref="admin.new_vendor">Add Vendor</a></h6>
+			</span>
+		</h3>
+		<error-dir msg="{{error}}"></error-dir>
+		<table style="width:100%">
+			<thead>
+			    <tr>
+			      <th>Vendor</th>
+			      <th>Vendor Since</th>
+			      <th>Product Key</th>
+			      <th>Registration Key</th>
+			    </tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="merchant in merchantProfiles">
+					<th>{{merchant.name}}</th>
+					<th>{{displayDate(merchant.createdAt)}}</th>
+					<th>{{merchant.productKey}}</th>
+					<th>{{merchant.regkey}}</th>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

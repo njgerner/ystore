@@ -8,4 +8,8 @@ superApp.controller('AdminCtrl',
       $state.go("store");
     }
 
+    $scope.displayDate = function(date) {
+      return moment(date).format("MMM Do YYYY");
+    }
+
 }]);

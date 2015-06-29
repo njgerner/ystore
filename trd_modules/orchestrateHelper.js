@@ -1139,6 +1139,22 @@ exports.validateResetToken = function(tokenid) {
   return deferred.promise;
 };
 
+exports.getAllTestimonials = function() {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+  .collection('testimonials')
+  .limit(100)
+  .query('*')
+  .then(function (result) {
+    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body));
+  });
+   
+  return deferred.promise;
+};
+
 // ABSTRACTED METHODS BELOW ONLY
 /////////////////////////////////////////////////////////////////////////////////////
 exports.getDocFromCollection = function(collection, key) {
