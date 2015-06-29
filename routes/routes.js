@@ -665,6 +665,7 @@ passport.use('bearer', new BearerStrategy(
     app.get('/admin/all_ylift_profiles', ensureAuthenticated, adminRoutes.all_ylift_profiles);
     app.post('/admin/regkeys', ensureAuthenticated, adminRoutes.get_available_keys);
     app.post('/admin/hash', ensureAuthenticated, adminRoutes.get_hash);
+    app.post('/admin/add_regkey', ensureAuthenticated, adminRoutes.add_regkey);
 
     // -- START ERROR Routes
     ///////////////////////////////////////////////////////////////

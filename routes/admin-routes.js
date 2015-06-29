@@ -107,5 +107,19 @@ module.exports = function(express, app, __dirname) {
 		});
 	};
 
+	AdminRoutes.add_regkey = function(req, res, next) {
+		orchHelper.addRegKey(req.body.regkey)
+		.then(function (regkey) {
+			if (regkey) {
+				res.status(200).json({regkey:regkey});				
+			} else {
+				errorHandler.logAndReturn('Reg key not added from admin', 404, next);
+			}
+		})
+		.fail(function (err) {
+			errorHandler.logAndReturn('Error adding regkey from admin', 500, next, err);
+		});
+	};
+
 	return AdminRoutes;
 };

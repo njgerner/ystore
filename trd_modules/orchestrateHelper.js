@@ -1177,6 +1177,19 @@ exports.getUserHashByProfileID = function(profileid) {
   return deferred.promise;
 };
 
+exports.addRegKey = function(regkey) {
+  var deferred = Q.defer();
+  var key = {'key':regkey, 'status':'verified', 'isActive':false, 'activationDate':null, 'owner':null};
+  db.put('registration-keys', regkey, key)
+  .then(function (result) {
+    deferred.resolve(result);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body.message));
+  });
+  return deferred.promise;
+};
+
 exports.validateResetToken = function(tokenid) {
   var deferred = Q.defer();
    db.get('reset-tokens', tokenid)

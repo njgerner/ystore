@@ -8,6 +8,7 @@ var trdApp = angular.module('trdApp', [
   'trdApp.directives',
   'trdApp.controllers',
   'ui.slider',
+  'dtrw.bcrypt',
   'ngTagsInput',
   'ngError',
   'flow',

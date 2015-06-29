@@ -48,7 +48,11 @@ trdServices.service("adminService", ['$rootScope', '$http', '$cookieStore', '$lo
     	this.getAvailableRegKeys = function(callback) {
     		$http({method: 'POST', url: '/admin/regkeys'})
 	        .success(function (data, status, headers, config) {
-	            callback(null, data.keys);
+	        	var keys = [];
+	        	for(var i = 0; i < data.keys.length; i++) {
+	        		keys.push(data.keys[i].key);
+	        	}
+	            callback(null, keys);
 	        })
 	        .error(function (data, status, headers, config) {
 	            $log.debug('error getting available keys', data);
@@ -63,6 +67,17 @@ trdServices.service("adminService", ['$rootScope', '$http', '$cookieStore', '$lo
 	        })
 	        .error(function (data, status, headers, config) {
 	            $log.debug('error getting hash', data);
+	            callback(data.message);
+	        });
+    	}
+
+    	this.addRegKey = function(regkey, callback) {
+    		$http({method: 'POST', url: '/admin/add_regkey', data: {regkey:regkey} })
+	        .success(function (data, status, headers, config) {
+	            callback(null, data.regkey);
+	        })
+	        .error(function (data, status, headers, config) {
+	            $log.debug('error adding key', data);
 	            callback(data.message);
 	        });
     	}
