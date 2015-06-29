@@ -607,6 +607,7 @@ passport.use('bearer', new BearerStrategy(
     app.get('/order/:orderid', get_order_by_id);
     app.get('/product_rating/:productnumber', productRoutes.get_rating);
     app.get('/product_reviews/:productnumber', productRoutes.get_reviews);
+    app.get('/profile/:profileid', ensureAuthenticated, profileRoutes.get_profile);
     app.get('/request_pass_reset/:email', request_pass_reset);
     app.get('/reset_password/:userid', reset_password);
     app.get('/sign_s3', awsRoutes.sign_s3);

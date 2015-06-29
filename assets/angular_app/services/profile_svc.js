@@ -18,6 +18,17 @@ trdServices.service("profileService", ['$rootScope', '$http', '$cookieStore', 'a
         });
     }
 
+    this.getProfileByID = function(id, callback) {
+        $http({method: 'GET', url: '/profile/' + id})
+        .success(function (data, status, headers, config) {
+            callback(null, data.profile);
+        })
+        .error(function (data, status, headers, config) {
+            $log.debug('error getting profile', data);
+            callback(data.message);
+        });
+    }
+
     this.getMerchantProfile = function(callback) {
         if (this.merchant !== undefined) {
             callback(null, this.merchant);

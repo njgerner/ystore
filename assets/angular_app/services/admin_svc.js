@@ -1,10 +1,17 @@
-trdServices.service("adminService", ['$rootScope', '$http', '$cookieStore', '$log',
-    function ($rootScope, $http, $cookieStore, $log) {
+trdServices.service("adminService", ['$rootScope', '$http', 'merchantService', 'profileService', '$cookieStore', '$log',
+    function ($rootScope, $http, merchantService, profileService, $cookieStore, $log) {
+
+    	this.merchantProfilesByID = {};
+    	this.profilesByID = {};
 
     	this.getAllProfiles = function(callback) {
+    		var inThis = this;
 	        $http({method: 'GET', url: '/admin/all_profiles'})
 	        .success(function (data, status, headers, config) {
 	            callback(null, data.profiles);
+	            for(var i = 0; i < data.profiles.length; i++) {
+	            	inThis.profilesByID[data.profiles[i].id] = data.profiles[i];
+	            } 
 	        })
 	        .error(function (data, status, headers, config) {
 	            $log.debug('error getting all profiles', data);
@@ -12,15 +19,35 @@ trdServices.service("adminService", ['$rootScope', '$http', '$cookieStore', '$lo
 	        });
     	}
 
+    	this.getProfile = function(id, callback) {
+    		if(Object.keys(this.profilesByID).length > 0) {
+    			callback(this.profilesByID[id]);
+    		}else{
+    			profileService.getProfileByID(id, callback);
+    		}
+    	}
+
     	this.getAllMerchantProfiles = function(callback) {
+    		var inThis = this;
     		$http({method: 'GET', url: '/admin/all_merchants'})
 	        .success(function (data, status, headers, config) {
 	            callback(null, data.profiles);
+	            for(var i = 0; i < data.profiles.length; i++) {
+	            	inThis.merchantProfilesByID[data.profiles[i].id] = data.profiles[i];
+	            } 
 	        })
 	        .error(function (data, status, headers, config) {
 	            $log.debug('error getting all merchant profiles', data);
             	callback(data.message);
 	        });
+    	}
+
+    	this.getMerchantProfile = function(id, callback) {
+    		if(this.merchantProfilesByID[id]) {
+    			callback(this.merchantProfilesByID[id]);
+    		}else{
+    			merchantService.getMerchantByID(id, callback);
+    		}
     	}
 
     	this.getAllYLIFTProfiles = function(callback) {

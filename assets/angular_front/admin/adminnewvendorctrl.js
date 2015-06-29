@@ -14,6 +14,8 @@ superApp.controller('AdminNewVendorCtrl',
     $scope.checkPassword = function() {
       if(bcrypt.compareSync($scope.attempt, $scope.hash)) {
         $scope.authorized = true;
+      }else {
+        $scope.authorized = false;
       }
     };
 
