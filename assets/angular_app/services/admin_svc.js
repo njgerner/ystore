@@ -4,6 +4,17 @@ trdServices.service("adminService", ['$rootScope', '$http', 'merchantService', '
     	this.merchantProfilesByID = {};
     	this.profilesByID = {};
 
+    	this.getProfileByID = function(id, callback) {
+    		$http({method: 'GET', url: '/admin/profile/' + id})
+	        .success(function (data, status, headers, config) {
+	            callback(null, data.profile);
+	        })
+	        .error(function (data, status, headers, config) {
+	            $log.debug('error getting profile', data);
+            	callback(data.message);
+	        });
+    	}
+
     	this.getAllProfiles = function(callback) {
     		var inThis = this;
 	        $http({method: 'GET', url: '/admin/all_profiles'})
@@ -107,6 +118,17 @@ trdServices.service("adminService", ['$rootScope', '$http', 'merchantService', '
 	            $log.debug('error adding key', data);
 	            callback(data.message);
 	        });
-    	}
+	    };
+
+    	this.addProduct = function(product, callback) {
+    		$http({method: 'POST', url: '/admin/add_product', data: {product:product} })
+	        .success(function (data, status, headers, config) {
+	            callback(null, data.product);
+	        })
+	        .error(function (data, status, headers, config) {
+	            $log.debug('error getting ylift profiles', data);
+	            callback(data.message);
+	        });
+    	};
 
 }]);

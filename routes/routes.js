@@ -597,6 +597,7 @@ passport.use('bearer', new BearerStrategy(
     app.get('/all_ylift_profiles', all_ylift_profiles);
     app.get('/authorized', ensureAuthenticated, authorized);
     app.get('/cart/:profileid', ensureAuthenticated, get_cart);
+    app.get('/get_all_testimonials', get_all_testimonials);
     app.get('/get_customer/:customerid', ensureAuthenticated, stripeRoutes.get_customer);
     app.get('/merchant_orders/:merchantid', storeRoutes.merchant_orders);
     app.get('/get_product_by_id/:productnumber', get_product_by_id);
@@ -660,6 +661,8 @@ passport.use('bearer', new BearerStrategy(
     // -- START Admin Routes
     ///////////////////////////////////////////////////////////////
     app.get('/admin/all_profiles', ensureAuthenticated, adminRoutes.all_profiles);
+    app.post('/admin/add_product', ensureAuthenticated, adminRoutes.add_product);
+    app.get('/admin/profile/:profileid', ensureAuthenticated, adminRoutes.get_profile);
     app.post('/get_merchant_name', ensureAuthenticated, adminRoutes.get_merchant_name);
     app.get('/admin/all_merchants', ensureAuthenticated, adminRoutes.all_merchants);
     app.get('/admin/all_orders', ensureAuthenticated, adminRoutes.all_orders);
