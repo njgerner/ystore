@@ -129,6 +129,16 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       templateUrl: "/partials/admin_order.html",
       controller: "AdminOrderCtrl"
     })
+    .state('admin.vendors', {
+      url: "/vendors",
+      templateUrl: "/partials/admin_vendors.html",
+      controller: "AdminVendorsCtrl"
+    })
+    .state('admin.new_vendor', {
+      url: "/vendors/add",
+      templateUrl: "/partials/admin_new_vendor.html",
+      controller: "AdminNewVendorCtrl"
+    })
     .state('admin.products', {
       url: "/products/",
       templateUrl: "/partials/admin_products.html",

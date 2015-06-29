@@ -660,8 +660,11 @@ passport.use('bearer', new BearerStrategy(
     ///////////////////////////////////////////////////////////////
     app.get('/admin/all_profiles', ensureAuthenticated, adminRoutes.all_profiles);
     app.post('/get_merchant_name', ensureAuthenticated, adminRoutes.get_merchant_name);
+    app.get('/admin/all_merchants', ensureAuthenticated, adminRoutes.all_merchants);
     app.get('/admin/all_orders', ensureAuthenticated, adminRoutes.all_orders);
     app.get('/admin/all_ylift_profiles', ensureAuthenticated, adminRoutes.all_ylift_profiles);
+    app.post('/admin/regkeys', ensureAuthenticated, adminRoutes.get_available_keys);
+    app.post('/admin/hash', ensureAuthenticated, adminRoutes.get_hash);
 
     // -- START ERROR Routes
     ///////////////////////////////////////////////////////////////
