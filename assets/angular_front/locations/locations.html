@@ -1,12 +1,12 @@
 <div class="off-canvas-wrap">
-	<div class="inner-wrap" ng-click="closeBooking()">
+	<div class="inner-wrap" ng-click="closeBooking($event)">
 		<a class="right-off-canvas-toggle menu-icon"><span></span></a>
 		<div ng-show="mapLoaded" id="map-canvas" class="ylift-locations"></div>
 		<i ng-hide="showLocationsRight" class="i-map pointer" ng-click="toggleLocationPanel()"></i>
 		<div ng-hide="mapLoaded" class="loader locations-loading">Loading...</div>
 	</div>
 </div>
-<booking-modal-dir ng-if="locationsLoaded" ng-show="viewBooking" class="booking-modal animated" ng-class="{fadeInDown:viewBooking, fadeOutUp:!viewBooking}" office="selectedLocation" close="closeBooking()"></booking-modal-dir>
+<booking-modal-dir ng-if="locationsLoaded" ng-show="viewBooking" class="booking-modal animated" ng-class="{fadeInDown:viewBooking, fadeOutUp:!viewBooking}" office="selectedLocation" close="closeBooking"></booking-modal-dir>
 <div ng-show="locationsLoaded" ng-show="showLocationsRight" class="locations-panel animated" ng-class="{bounceOutRight:!showLocationsRight,bounceInRight:showLocationsRight}">
 	<div class="locations-header">
       <i ng-hide="showSearch" class="i-right-open-big clickable" ng-click="toggleLocationPanel()"></i>

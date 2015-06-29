@@ -1139,6 +1139,24 @@ exports.validateResetToken = function(tokenid) {
   return deferred.promise;
 };
 
+exports.findPatientAppts = function(profileid) {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+  .collection('appointments')
+  .limit(20)
+  .query('value.patient: ' + profileid)
+  .then(function (result) {
+    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
+  })
+  .fail(function (err) {
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
+  });
+};
+
 // ABSTRACTED METHODS BELOW ONLY
 /////////////////////////////////////////////////////////////////////////////////////
 exports.getDocFromCollection = function(collection, key) {
@@ -1153,6 +1171,18 @@ exports.getDocFromCollection = function(collection, key) {
     } else {
       deferred.reject(new Error(err.body.message));
     }
+  });
+  return deferred.promise;
+};
+
+exports.postDocToCollection = function(collection, doc) {
+  var deferred = Q.defer();
+  db.post(collection, doc)
+  .then(function (result) {
+    deferred.resolve(result.body);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body.message));
   });
   return deferred.promise;
 };

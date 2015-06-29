@@ -16,6 +16,7 @@ module.exports = function(express, app, __dirname) {
       jwt             = require('jwt-simple'),
       nodemailer      = require('nodemailer'),
       adminRoutes     = require('./admin-routes.js')(express, app, __dirname),
+      bookingRoutes   = require('./booking-routes.js')(express, app, __dirname),
       awsRoutes       = require('./aws-routes.js')(express, app, __dirname),
       emailRoutes     = require('./email-routes.js')(express, app, __dirname),
       profileRoutes   = require('./profile-routes.js')(express, app, __dirname),
@@ -662,6 +663,11 @@ passport.use('bearer', new BearerStrategy(
     app.post('/get_merchant_name', ensureAuthenticated, adminRoutes.get_merchant_name);
     app.get('/admin/all_orders', ensureAuthenticated, adminRoutes.all_orders);
     app.get('/admin/all_ylift_profiles', ensureAuthenticated, adminRoutes.all_ylift_profiles);
+
+    // -- START Booking Routes
+    app.get('booking/patient_appts/:patientid', ensureAuthenticated, bookingRoutes.get_patient_appts);
+    app.get('booking/provider_appts/:providerid', bookingRoutes.get_provider_appts);
+    app.post('booking/request_appt/:providerid', ensureAuthenticated, bookingRoutes.request_appt);
 
     // -- START ERROR Routes
     ///////////////////////////////////////////////////////////////

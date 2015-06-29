@@ -1,13 +1,47 @@
 <div class="clearfix">
-	<h3>Request an Appointment <small>Note: Appointments are confirmed within 24 hours of booking</small></h3>
-	<i class="i-cancel-circled left" ng-click="close()"></i>
+	<h3 class="left">Request an Appointment <small>Note: Appointments are confirmed within 24 hours of booking</small></h3>
+	<error-dir error="{{error}}"></error-dir>
+	<i class="i-cancel-circled right" ng-click="close($event)"></i>
 	<div class="row">
-		<div class="small-4 columns">
-			<h5>{{office.name}} <small>{{office.doctorname}}</small></h5>
+		<div class="small-6 columns">
+			<h4>{{office.name}} <small>{{office.doctorname}}</small></h4>
 			<p>{{office.formattedaddress}}</p>
 		</div>
-		<div class="small-8 columns">
-			
+		<div class="small-6 columns">
+			<h5>What type of procedure are you interested in?</h5>
+			<select ng-model="procedure">
+				<option value="y lift">Y Lift</option>
+				<option value="y eye">Y eYe</option>
+				<option value="y neck">Y Neck</option>
+				<option value="skynjection">skYnjection</option>
+				<option value="chynjection">chYnjection</option>
+			</select>
+		</div>
+	</div>
+	<div class="row">
+		<span data-alert class="alert-box info radius"> Appointment successfully requested. You should receive a confirmation within 24 hours</span>
+		<div class="small-1 columns">
+			<i class="i-arrow-left" ng-click="previous()"></i>
+		</div>
+		<table class="small-10 columns">
+			<thead>
+				<tr>
+					<th ng-repeat="dow in [] | range: 5">
+						<strong>{{getDisplayDay(dow)}}</strong><br>
+						{{getDisplayDate(dow)}}
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="time in [] | range: 9">
+					<td id="{{getUnix(dow, time+9)}}" class="date-column" ng-repeat="dow in [] | range: 5" ng-click="selectSlot(dow, time+9, $event)">
+						<span>{{getDisplayTime(dow, time+9)}}</span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="small-1 columns">
+			<i class="i-arrow-right-1" ng-click="next()"></i>
 		</div>
 	</div>
 </div>
