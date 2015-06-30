@@ -81,3 +81,87 @@
 		}
 	}
 }
+
+.date-column-provider {
+	text-align: center;
+	float: none !important;
+	color: #333;
+	background-color: $secondary-color;
+	@extend .pointer;
+
+	&:hover {
+		span {
+			display: none;
+		}
+		&:before {
+			content: "Open";
+		}
+	}
+
+	&.requested {
+		color: $white;
+		background-color: $primary-color;
+
+		span {
+			display: none;
+		}
+
+		&:before {
+			content: "Pending";
+		}
+
+
+		&:hover {
+			span {
+				display: inline;
+			}
+			&:before {
+				content: "Confirm ";
+			}
+		}
+	}
+
+	&.confirmed {
+		color: $white;
+		background-color: $success-color;
+
+		span {
+			display: none;
+		}
+
+		&:before {
+			content: "Confirmed";
+		}
+
+		&:hover {
+			span {
+				display: inline;
+			}
+			&:before {
+				content: none;
+			}
+		}
+	}
+}
+
+.appt-confirm-modal {
+	position: absolute;
+	width: 60%;
+	top: 100px;
+	left: 20%;
+	min-height: 350px;
+	background-color: $white;
+	z-index: 4;
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  	border-radius: 2px;
+  	padding: 2rem 1rem;
+  	.content {
+
+  	}
+}
+
+.cal-nav {
+	@extend .pointer;
+	font-size: 200%;
+	margin-top:1rem;
+}

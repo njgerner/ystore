@@ -39,7 +39,8 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
           }
 
           var isAuthorizedState = function() {
-            var authStates = ["profile", "settings", "settings.profile", "settings.store", "settings.notifications", "orders", "leave_review", "merchant_orders", "merchant_inventory"];
+            var authStates = ["profile", "settings", "settings.profile", "settings.store", "settings.notifications", "orders", "leave_review", "merchant_orders", 
+            "merchant_inventory", "office_scheduling"];
             return authStates.indexOf(toState.name) >= 0;
           }
 
@@ -210,6 +211,12 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       controller: "NetworkCtrl",
       title: "Network Information"
     })
+    .state('office_scheduling', {
+      url: "/scheduling",
+      templateUrl: "/partials/office_scheduling.html",
+      controller: "OfficeSchedulingCtrl",
+      title: "Scheduling"
+    })
     .state('merchant_inventory', {
       abstract: true,
       url: "/merchant_inventory",
@@ -265,22 +272,26 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
     .state('profile', {
       url:"/profile",
       templateUrl: "/partials/profile.html",
-      controller: "ProfileCtrl"
+      controller: "ProfileCtrl",
+      title: "Profile"
     })
     .state('reset_password', {
       url:"/reset_password/:resettoken",
       templateUrl: "/partials/reset_password.html",
-      controller: "ResetPasswordCtrl"
+      controller: "ResetPasswordCtrl",
+      title: "Password Assistance"
     })
     .state('sell_info', {
       url:"/sell_info",
       templateUrl: "/partials/sell_with_us.html",
-      controller: "SellInfoCtrl"
+      controller: "SellInfoCtrl",
+      title: "Sell with Y Lift"
     })
     .state('about', {
       url:"/about",
       templateUrl: "/partials/about.html",
-      controller: "AboutCtrl"
+      controller: "AboutCtrl",
+      title: "About"
     })
     .state('techniques', {
       url:"/techniques",
@@ -297,45 +308,47 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       url:"/y-eye",
       templateUrl: "/partials/techniques_yeye.html",
     })
-    .state('techniques.beautylift', {
-      parent: 'techniques',
-      url:"/beauty-lift",
-      templateUrl: "/partials/techniques_beautylift.html",
-    })
     .state('techniques.botox', {
       parent: 'techniques',
       url:"/botox",
       templateUrl: "/partials/techniques_botox.html",
+      title: "Techniques: Botox"
     })
     .state('techniques.skynjection', {
       parent: 'techniques',
-      url:"/botox",
-      templateUrl: "/partials/techniques_botox.html",
+      url:"/skynjection",
+      templateUrl: "/partials/techniques_skynjection.html",
+      title: "Techniques: skYnjection"
     })
     .state('techniques.chynjection', {
       parent: 'techniques',
       url:"/chynjection",
       templateUrl: "/partials/techniques_chynjection.html",
+      title: "Techniques: chYnjection"
     })
     .state('techniques.hands', {
       parent: 'techniques',
       url:"/hands",
       templateUrl: "/partials/techniques_hands.html",
+      title: "Techniques: Hands"
     })
     .state('techniques.injectables', {
       parent: 'techniques',
       url:"/injectables",
       templateUrl: "/partials/techniques_injectables.html",
+      title: "Techniques: Injectables"
     })
     .state('techniques.laser', {
       parent: 'techniques',
       url:"/laser",
       templateUrl: "/partials/techniques_laser.html",
+      title: "Techniques: Laser"
     })
     .state('techniques.veins', {
       parent: 'techniques',
       url:"/veins",
       templateUrl: "/partials/techniques_veins.html",
+      title: "Techniques: Veins"
     })
     .state('zones', {
       url:"/zones/:zone/:procedure",
@@ -345,37 +358,45 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
     .state('zones.eyes', {
       parent: 'zones',
       templateUrl: "/partials/zones_eyes.html",
+      title: "Zones: Eyes"
     })
     .state('zones.face', {
       parent: 'zones',
       templateUrl: "/partials/zones_face.html",
+      title: "Zones: Face"
     })
     .state('zones.hair', {
       parent: 'zones',
       templateUrl: "/partials/zones_hair.html",
+      title: "Zones: Hair"
     })
     .state('zones.hands', {
       parent: 'zones',
       templateUrl: "/partials/zones_hands.html",
+      title: "Zones: Hands"
     })
     .state('zones.lips', {
       parent: 'zones',
       templateUrl: "/partials/zones_lips.html",
+      title: "Zones: Lips"
     })
     .state('zones.skin', {
       parent: 'zones',
       templateUrl: "/partials/zones_skin.html",
+      title: "Zones: Skin"
     })
     .state('before_after', {
       url:"/before_after/:procedure",
       templateUrl: "/partials/before_after.html",
-      controller: "BeforeAfterCtrl"
+      controller: "BeforeAfterCtrl",
+      title: "Before & After"
     })
     .state('settings', {
       abstract: true,
       url:"/settings",
       templateUrl: "/partials/settings.html",
-      controller: "SettingsCtrl"
+      controller: "SettingsCtrl",
+      title: "Settings"
     })
     .state('settings.profile', {
       url:"/profile",
@@ -400,19 +421,22 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
     .state('support', {
       url:"/support",
       templateUrl: "/partials/support.html",
-      controller: "SupportCtrl"
+      controller: "SupportCtrl",
+      title: "Support"
     })
     .state('terms', {
       url:"/terms",
       templateUrl: "/partials/terms.html",
-      controller: "TermsCtrl"
+      controller: "TermsCtrl",
+      title: "Terms & Conditions"
     })
     .state('checkout', {
       url: "/checkout",
       views: {
         '': {
           templateUrl: "/partials/checkout.html",
-          controller: "CheckoutCtrl"
+          controller: "CheckoutCtrl",
+          title: "Checkout"
         },
         'shipping@checkout': {
           templateUrl: "/partials/checkout_shipping.html",

@@ -49,6 +49,10 @@
           <li ng-if="isAdmin" class="divider"></li>
           <li><a ui-sref="profile">Profile</a></li>
           <li><a ui-sref="settings.profile">Settings</a></li>
+          <li ng-if="isYLIFT" class="divider"></li>
+          <li class="nav-sub-header" ng-if="isYLIFT">Office</li>
+          <li ng-if="isYLIFT"><a ui-sref="office_scheduling">Scheduling</a></li>
+          <li class="divider"></li>
           <li ng-if="isMerchant" class="divider"></li>
           <li class="nav-sub-header" ng-if="isMerchant">Merchant</li>
           <li ng-if="isMerchant"><a ui-sref="merchant_orders">View Orders</a></li>

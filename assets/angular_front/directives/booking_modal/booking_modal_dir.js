@@ -9,13 +9,23 @@ appDirectives.directive('bookingModalDir', ['$window', 'authService', 'bookingSe
 		templateUrl: 'directives/booking_modal_template.html',
 		link: function(scope, element) {
 			scope.appts = [];
+			scope.apptsByTimestamp = {};
 			scope.dateOffset = 0;
 			scope.startDate = moment().startOf('week').add(1, 'days'); // always want this weeks monday
 			scope.error = null;
 			scope.success = null;
 
+			scope.reset = function () {
+				scope.appts = [];
+				scope.apptsByTimestamp = {};
+				scope.dateOffset = 0;
+				scope.startDate = moment().startOf('week').add(1, 'days'); // always want this weeks monday
+				scope.error = null;
+				scope.success = null;
+			}
+
 			scope.getUnix = function (offset, hour) {
-				return moment().startOf('week').add(1, 'days').add(scope.dateOffset + offset, 'days').hours(hour).format('X-');
+				return moment().startOf('week').add(1, 'days').add(scope.dateOffset + offset, 'days').hours(hour).format('X');
 			}
 
 			scope.getDisplayDay = function(offset) {
@@ -30,10 +40,19 @@ appDirectives.directive('bookingModalDir', ['$window', 'authService', 'bookingSe
 				return moment().startOf('week').add(1, 'days').add(scope.dateOffset + offset, 'days').hours(hour).format('LT');
 			}
 
+			scope.getSlotClass = function(offset, hour) {
+				var appt = scope.apptsByTimestamp[scope.getUnix(offset, hour)];
+				if (appt && appt.status) {
+					return appt.status;
+				} else {
+					return '';
+				}
+			}
+
 			scope.selectSlot = function(offset, hour, $event) {
 				scope.error = null;
 				scope.success = null;
-				bookingService.sendApptRequest($event.target.id, scope.office.profileid, scope.procedure, onApptRequested);
+				bookingService.sendApptRequest(scope.getUnix(offset, hour), scope.office.profileid, scope.procedure, onApptRequested);
 			}
 
 			scope.previous = function() {
@@ -47,14 +66,12 @@ appDirectives.directive('bookingModalDir', ['$window', 'authService', 'bookingSe
 			}
 
 			function onApptRequested (error, appt) {
-				console.log('appt requested', error, appt);
 				if (error) {
 					scope.error = error;
 				} else {
 					scope.success = true;
 					scope.appts.push(appt);
-					var apptElement = angular.element(document.getElementById(appt.date));
-					apptElement.addClass(appt.status); // may need to compile this
+					scope.apptsByTimestamp[appt.date] = appt;
 				}
 			}
 
@@ -68,8 +85,7 @@ appDirectives.directive('bookingModalDir', ['$window', 'authService', 'bookingSe
 			apptsWatch = scope.$watch('appts', function (newVal, oldVal) {
 				if (newVal && newVal.length) {
 					for (var i = 0; i < newVal.length; i++) {
-						var apptElement = angular.element(document.getElementById(newVal[i].date));
-						apptElement.addClass(newVal[i].status); // may need to compile this
+						scope.apptsByTimestamp[newVal[i].date] = newVal[i];
 					}
 				}
 			});
@@ -77,7 +93,8 @@ appDirectives.directive('bookingModalDir', ['$window', 'authService', 'bookingSe
 			var officeWatch = null;
 			officeWatch = scope.$watch('office', function (newVal, oldVal) {
 				if (newVal) {
-					// logic to get office specific availability
+					scope.reset();
+					bookingService.getPatientAppts(onApptsLoaded);
 				}
 			});
 

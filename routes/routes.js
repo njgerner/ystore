@@ -648,6 +648,7 @@ passport.use('bearer', new BearerStrategy(
     // -- START Profile Routes
     ///////////////////////////////////////////////////////////////
     app.get('/profile/get_merchant/:profileid', ensureAuthenticated, profileRoutes.get_merchant);
+    app.get('/profile/:profileid', ensureAuthenticated, profileRoutes.get_profile);
     app.post('/profile/update/:profileid', ensureAuthenticated, profileRoutes.update_profile);
     app.post('/profile/get_merchant/:profileid', ensureAuthenticated, profileRoutes.get_merchant);
     app.post('/profile/add_merchant/:profileid', ensureAuthenticated, profileRoutes.add_merchant);
@@ -666,8 +667,9 @@ passport.use('bearer', new BearerStrategy(
 
     // -- START Booking Routes
     app.get('/booking/patient_appts/:patientid', ensureAuthenticated, bookingRoutes.get_patient_appts);
-    app.get('/booking/provider_appts/:providerid', bookingRoutes.get_provider_appts);
+    app.post('/booking/provider_appts/:providerid', bookingRoutes.get_provider_appts);
     app.post('/booking/request_appt/:providerid', ensureAuthenticated, bookingRoutes.request_appt);
+    app.post('/booking/update_appt', ensureAuthenticated, bookingRoutes.update_appt);
 
     // -- START ERROR Routes
     ///////////////////////////////////////////////////////////////

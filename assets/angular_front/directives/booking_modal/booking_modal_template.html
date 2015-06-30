@@ -20,7 +20,7 @@
 	<div class="row">
 		<span ng-if="error" data-alert class="alert-box info radius">{{error}}</span>
 		<span ng-if="success" data-alert class="alert-box info radius"> Appointment successfully requested. You should receive a confirmation within 24 hours</span>
-		<div class="small-1 columns">
+		<div class="small-1 columns cal-nav">
 			<i class="i-arrow-left" ng-click="previous()"></i>
 		</div>
 		<table class="small-10 columns">
@@ -34,13 +34,13 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="time in [] | range: 9">
-					<td id="{{getUnix(dow, time+9)}}" class="date-column" ng-repeat="dow in [] | range: 5" ng-click="selectSlot(dow, time+9, $event)">
+					<td class="date-column" ng-class="getSlotClass(dow, time+9)" ng-repeat="dow in [] | range: 5" ng-click="selectSlot(dow, time+9, $event)">
 						<span>{{getDisplayTime(dow, time+9)}}</span>
 					</td>
 				</tr>
 			</tbody>
 		</table>
-		<div class="small-1 columns">
+		<div class="small-1 columns cal-nav">
 			<i class="i-arrow-right-1" ng-click="next()"></i>
 		</div>
 	</div>

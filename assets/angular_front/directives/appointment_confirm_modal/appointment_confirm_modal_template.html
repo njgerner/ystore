@@ -1,0 +1,25 @@
+<div class="row clearfix">
+	<h3 class="left">Confirm Appointment</h3>
+	<i class="i-cancel-circled right pointer" style="font-size: 150%;" ng-click="close($event)"></i>
+</div>
+<div class="row">
+	<h5>Date: {{getDisplayDate(appt.date)}}</h5>
+	<error-dir error="error"></error-dir>
+</div>
+<div class="row">
+	<h5>Patient Information</h5>
+	<div class="small-6 columns">
+		<h6><strong>Name: </strong>{{patient.name || 'N/A'}}</h6>
+		<h6><strong>Email: </strong><a ng-href="mailto:{{patient.email}}">{{patient.email || 'N/A'}}</a></h6>
+		<h6><strong>Phone: </strong><a ng-href="tel:{{patient.phone}}">{{patient.phone || 'N/A'}}</a></h6>
+	</div>
+	<div class="small-6 columns">
+		<h6><strong>Requested Procedure: </strong>{{toTitleCase(appt.type) || 'N/A'}}</h6>
+	</div>
+</div>
+<div class="row" style="margin-top: 50px;">
+	<div class="small-4 small-offset-4 columns">
+		<a class="button small alert" ng-click="updateStatus('rejected')">Reject</a>
+		<a class="button small success" ng-click="updateStatus('confirmed')">Confirm</a>
+	</div>
+</div>

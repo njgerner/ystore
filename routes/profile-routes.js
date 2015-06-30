@@ -21,11 +21,29 @@ module.exports = function(express, app, __dirname) {
 		  		}
 		  		res.status(200).json({profile:result, admin:isAdmin});
 	  		} else {
-	  			errorHandler.logAndReturn('No merchant profile found for account', 404, next, null, req.params);
+	  			errorHandler.logAndReturn('No profile found for account', 404, next, null, [req.params, req.user]);
 	  		}
 	  	})
 	  	.fail(function (err) {
-	  		errorHandler.logAndReturn('Error retrieving merchant profile for account', 500, next, err, req.params);
+	  		errorHandler.logAndReturn('Error retrieving profile for account', 500, next, err, [req.params, req.user]);
+	  	});
+	};
+
+	// GET /profile/:profileid
+	ProfileRoutes.get_profile = function(req, res, next) {
+		if (!req.user.isYLIFT) {
+	  	errorHandler.logAndReturn('User not authorized to request profile', 401, next, null, [req.params, req.user]);
+		}
+	  orchHelper.getProfile(req.params.profileid)
+	  	.then(function (result) {
+	  		if (result) {
+		  		res.status(200).json({profile:result});
+	  		} else {
+	  			errorHandler.logAndReturn('No merchant profile found for account', 404, next, null, [req.params, req.user]);
+	  		}
+	  	})
+	  	.fail(function (err) {
+	  		errorHandler.logAndReturn('Error retrieving merchant profile for account', 500, next, err, [req.params, req.user]);
 	  	});
 	};
 
