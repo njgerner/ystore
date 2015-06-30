@@ -1173,13 +1173,23 @@ exports.addPromo = function(promo) {
   var deferred = Q.defer();
   db.put('promo-codes', promo.key, promo)
   .then(function (result) {
-    console.log('orch then', result);
-    console.log('body', result.body);
-    deferred.resolve(result);
+    deferred.resolve(promo.key);
   })
   .fail(function (err) {
     deferred.reject(new Error(err.body.message));
   });
+    return deferred.promise;
+};
+
+exports.deletePromo = function(promo) {
+  var deferred = Q.defer();
+  db.remove('promo-codes', promo)
+    .then(function (result) {
+      deferred.resolve(promo);
+    })
+    .fail(function (err) {
+      deferred.reject(new Error(err.body.message));
+    });
     return deferred.promise;
 };
 

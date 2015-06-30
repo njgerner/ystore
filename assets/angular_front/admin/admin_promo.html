@@ -1,11 +1,12 @@
 <div style="padding-left:0;margin:10px" class="large-6 large-offset-2 columns text-center">
 	<h3>Promo Codes</h3>
+	<div ng-if="notify" style="margin-top:1rem;" data-alert class="alert-box info radius"> {{notify}}</div>
 	<table style="width:100%">
 		<tbody>
 			<tr ng-repeat="promo in promos">
 				<th>{{promo.key}}</th>
 				<th>{{displayPromo(promo.value, promo.type)}}</th>
-				<th>{{promo.active ? 'Active' : 'Inactive'}}</th>
+				<th>{{promo.active ? 'Active' : 'Inactive'}} <span><div ng-click="promptDelete(promo.key)"class="i-delete-garbage-streamline right pointer"></div></span></th>
 			</tr>
 		</tbody>
 	</table>

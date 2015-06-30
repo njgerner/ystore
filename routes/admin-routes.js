@@ -108,6 +108,20 @@ module.exports = function(express, app, __dirname) {
 		});
 	};
 
+	AdminRoutes.delete_promo = function(req, res, next) {
+		orchHelper.deletePromo(req.body.promo)
+		.then(function (data) {
+			if (data) {
+				res.status(200).json({success:true});
+			} else {
+				errorHandler.logAndReturn('Error deleting promo code from admin', 404, next);
+			}
+		})
+		.fail(function (err) {
+			errorHandler.logAndReturn('Error deleting promo code from admin', 500, next, err);
+		});
+	};
+
 	AdminRoutes.add_product = function(req, res, next) {
 		// orchHelper.getAllOrders()
 		// .then(function (data) {

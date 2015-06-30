@@ -67,6 +67,17 @@ trdServices.service("adminService", ['$rootScope', '$http', '$cookieStore', '$lo
 	        });
     	}
 
+    	this.deletePromo = function(promo, callback) {
+    		$http({method: 'POST', url: '/admin/delete_promo', data: {promo:promo} })
+	        .success(function (data, status, headers, config) {
+	            callback(null, data.success);
+	        })
+	        .error(function (data, status, headers, config) {
+	            $log.debug('error deleting promo', data);
+	            callback(data.message);
+	        });
+    	}
+
     	this.getAllPromoCodes = function(callback) {
     		$http({method: 'GET', url: '/admin/promos'})
 	        .success(function (data, status, headers, config) {

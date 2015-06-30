@@ -12,6 +12,25 @@ superApp.controller('AdminPromoCtrl',
       }
     };
 
+    $scope.promptDelete = function(promo) {
+      if(confirm('Are you sure you want to delete ' + promo + '?')) {
+        adminService.deletePromo(promo, function (err, success) {
+          if(err) {
+            $scope.error = err;
+          }
+          if(success) {
+            $scope.notify = "Promo code '" + promo + "'' was successfully deleted.";
+            for(var i = 0; i < $scope.promos.length; i++) {
+              if($scope.promos[i].key == promo) {
+                $scope.promos.splice(i,1);
+                return;
+              }
+            }
+          }
+        });
+      }
+    };
+
     // $scope.confirmPassword = function(attempt) {
     //   if(bcrypt.compareSync(attempt, $scope.hash)) {
     //     $scope.authorized = true;
@@ -65,20 +84,27 @@ superApp.controller('AdminPromoCtrl',
           promo.value = $scope.value;
         }
         promo.active = $scope.makeactive;
+        $scope.activating = true;
         adminService.addPromoCode(promo, function (err, code) {
           if(err) {
             $scope.error = err;
           }
-
+          $scope.notify = "Promo code '" + code + "' was successfully activated";
+          $scope.activating = false;
+          $scope.promos.push(promo);
         });
       }
     };
 
-    adminService.getAllPromoCodes(function (err, codes) {
-      if(err) {
-        $scope.error = err;
-      }
-      $scope.promos = codes;
-    })
+    $scope.loadCodes = function() {
+      adminService.getAllPromoCodes(function (err, codes) {
+        if(err) {
+          $scope.error = err;
+        }
+        $scope.promos = codes;
+      })
+    };
+    
+    $scope.loadCodes();
 
 }]);
