@@ -1,0 +1,20 @@
+<div style="padding-left:0;margin-top:20px" class="large-6 large-offset-2 columns text-center">
+	<ul ng-if="availableKeys">Currently available registration keys:
+		<li ng-repeat="key in availableKeys">{{key}}</li>
+	</ul>
+	<p ng-if="availableKeys.length == 0">There are no available registration keys at this time.</p>
+	<button style="border-radius: 8px" ng-click="generateKey()">Generate Registration Key</button>
+	<h5>{{regkey}}</h5>
+	<hr>
+	<div ng-if="regkey">
+		<p ng-if="regkey">Please confirm your password before activating this key.</p>
+		<div class="row">
+			<div class="large-5 large-offset-2 columns">
+				<input ng-change="checkPassword()" type="password" ng-model="attempt"></input>
+			</div>
+		</div>
+		<div ng-if="authorized">
+			<button>Activate</button>
+		</div>
+	</div>
+</div>

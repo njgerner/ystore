@@ -1178,6 +1178,27 @@ exports.findProviderAppts = function(profileid, start, end) {
       deferred.reject(new Error(err.body.message));
     }
   });
+   
+  return deferred.promise;
+};
+
+exports.getAllTestimonials = function() {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+  .collection('testimonials')
+  .limit(100)
+  .query('*')
+  .then(function (result) {
+    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
+  })
+  .fail(function (err) {
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
+  });
+   
   return deferred.promise;
 };
 

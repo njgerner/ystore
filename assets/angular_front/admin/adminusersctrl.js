@@ -5,40 +5,36 @@ superApp.controller('AdminUsersCtrl',
     $scope.error = null;
 
   	$scope.getActiveUserCount = function() {
-  		return $scope.users.filter(isActiveUser).length;
+  		return $scope.profiles.filter(isActiveUser).length;
   	}
 
   	$scope.getMonthlyUserCount = function() {
-  		return $scope.users.filter(isMonthlyUser).length;
-  	}
-
-  	$scope.getDisplayDate = function(date) {
-  		return moment(date).format("MMM Do YYYY");
+  		return $scope.profiles.filter(isMonthlyUser).length;
   	}
 
   	function isActiveUser(user) {
   		return moment().diff(user.last_login, 'days') < 5;
   	}
 
-    	function isMonthlyUser(user) {
+    function isMonthlyUser(user) {
   		return moment().diff(user.last_login, 'months') <= 1;
   	}
 
-  	function onUsersLoaded(error, users) {
+  	function onProfilesLoaded(error, profiles) {
       if (error) {
         $scope.error = error;
       }
-  		$scope.users = users;
+  		$scope.profiles = profiles;
   	}
 
-  	function onYLIFTsLoaded(error, yliftUsers) {
+  	function onYLIFTsLoaded(error, yliftProfiles) {
       if (error) {
         $scope.error = error;
         return;
       }
-  		$scope.yliftUsers = yliftUsers;
+  		$scope.yliftProfiles = yliftProfiles;
   	}
 
-  	adminService.getAllProfiles(onUsersLoaded);
+  	adminService.getAllProfiles(onProfilesLoaded);
   	adminService.getAllYLIFTProfiles(onYLIFTsLoaded);
 }]);

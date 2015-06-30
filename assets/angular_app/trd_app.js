@@ -128,6 +128,11 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       controller: "AdminUsersCtrl",
       title: "Admin Users"
     })
+    .state('admin.user', {
+      url: "/user/:profileid",
+      templateUrl: "/partials/admin_user.html",
+      controller: "AdminUserCtrl"
+    })
     .state('admin.orders', {
       url: "/orders",
       templateUrl: "/partials/admin_orders.html",
@@ -151,6 +156,11 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       templateUrl: "/partials/admin_product.html",
       controller: "AdminProductCtrl",
       title: "Admin Product"
+    })
+    .state('admin.addproduct', {
+      url: "/add_product",
+      templateUrl: "/partials/admin_new_product.html",
+      controller: "AdminNewProductCtrl"
     })
     .state('admin.metrics', {
       url: "/metrics",
