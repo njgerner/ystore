@@ -23,6 +23,7 @@ superApp.controller('AdminNewVendorCtrl',
       adminService.addRegKey($scope.regkey, function (err, data) {
         if(err) {
           $scope.error = err;
+          return;
         }
         $state.go('admin.new_vendor');
       });
@@ -32,7 +33,10 @@ superApp.controller('AdminNewVendorCtrl',
       if(err) {
         $scope.error = err;
       }
-      $scope.availableKeys = keys;
+      $scope.availableKeys = [];
+      for(var i = 0; i < keys.length; i++) {
+        $scope.availableKeys.push(keys[i].key);
+      }
     });
 
 }]);

@@ -31,10 +31,10 @@ trdServices.service("adminService", ['$rootScope', '$http', 'merchantService', '
     	}
 
     	this.getProfile = function(id, callback) {
-    		if(Object.keys(this.profilesByID).length > 0) {
+    		if(this.profilesByID[id] !== undefined) {
     			callback(this.profilesByID[id]);
     		}else{
-    			profileService.getProfileByID(id, callback);
+    			this.getProfileByID(id, callback);
     		}
     	}
 
@@ -54,7 +54,7 @@ trdServices.service("adminService", ['$rootScope', '$http', 'merchantService', '
     	}
 
     	this.getMerchantProfile = function(id, callback) {
-    		if(this.merchantProfilesByID[id]) {
+    		if(this.merchantProfilesByID[id] !== undefined) {
     			callback(this.merchantProfilesByID[id]);
     		}else{
     			merchantService.getMerchantByID(id, callback);
@@ -86,11 +86,8 @@ trdServices.service("adminService", ['$rootScope', '$http', 'merchantService', '
     	this.getAvailableRegKeys = function(callback) {
     		$http({method: 'POST', url: '/admin/regkeys'})
 	        .success(function (data, status, headers, config) {
-	        	var keys = [];
-	        	for(var i = 0; i < data.keys.length; i++) {
-	        		keys.push(data.keys[i].key);
-	        	}
-	            callback(null, keys);
+	        	if(data.keys) {callback(null, data.keys);}
+	        	else 		  {callback(null, data);}
 	        })
 	        .error(function (data, status, headers, config) {
 	            $log.debug('error getting available keys', data);

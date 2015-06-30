@@ -6,7 +6,7 @@ superApp.controller('AdminCtrl',
       $state.go("store");
     }
 
-  	$scope.profile = authService.profile;
+  	$scope.profile = angular.copy(authService.profile);
 
     $scope.displayDate = function(date) {
   		return moment(date).format("MMM Do YYYY");

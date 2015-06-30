@@ -797,14 +797,14 @@ exports.getAllMerchantProfiles = function() {
   .limit(100)
   .query('*')
   .then(function (result) {
-    var profiles = [];
-    for (var i = 0; i < result.body.results.length; i++) {
-      profiles[i] = result.body.results[i].value;
-    }
-    deferred.resolve(profiles);
+    deferred.resolve(rawDogger.push_values_to_top(result));
   })
   .fail(function (err) {
-    deferred.reject(new Error(err.body.message));
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
   });
   return deferred.promise;
 };
@@ -1150,7 +1150,7 @@ exports.getAvailableRegKeys = function() {
     if (err.body.message == 'The requested items could not be found.'){
       deferred.resolve(false);
     } else {
-      deferred.reject(new Error(err.body));
+      deferred.reject(new Error(err.body.message));
     }
   });
   return deferred.promise;
