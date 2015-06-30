@@ -86,8 +86,7 @@ trdServices.service("adminService", ['$rootScope', '$http', 'merchantService', '
     	this.getAvailableRegKeys = function(callback) {
     		$http({method: 'POST', url: '/admin/regkeys'})
 	        .success(function (data, status, headers, config) {
-	        	if(data.keys) {callback(null, data.keys);}
-	        	else 		  {callback(null, data);}
+	        	callback(null, data.keys);
 	        })
 	        .error(function (data, status, headers, config) {
 	            $log.debug('error getting available keys', data);
