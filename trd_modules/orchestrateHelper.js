@@ -797,7 +797,7 @@ exports.getAllMerchantProfiles = function() {
   .limit(100)
   .query('*')
   .then(function (result) {
-    deferred.resolve(rawDogger.push_values_to_top(result));
+    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
   })
   .fail(function (err) {
     if (err.body.code == "items_not_found") {
