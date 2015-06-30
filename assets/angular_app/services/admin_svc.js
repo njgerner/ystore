@@ -56,4 +56,26 @@ trdServices.service("adminService", ['$rootScope', '$http', '$cookieStore', '$lo
 	        });
     	}
 
+    	this.addPromoCode = function(promo, callback) {
+    		$http({method: 'POST', url: '/admin/add_promo', data: {promo:promo} })
+	        .success(function (data, status, headers, config) {
+	            callback(null, data.promo);
+	        })
+	        .error(function (data, status, headers, config) {
+	            $log.debug('error adding promo', data);
+	            callback(data.message);
+	        });
+    	}
+
+    	this.getAllPromoCodes = function(callback) {
+    		$http({method: 'GET', url: '/admin/promos'})
+	        .success(function (data, status, headers, config) {
+	            callback(null, data.promos);
+	        })
+	        .error(function (data, status, headers, config) {
+	            $log.debug('error getting promo codes', data);
+	            callback(data.message);
+	        });
+    	}
+
 }]);

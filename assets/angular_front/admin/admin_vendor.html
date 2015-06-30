@@ -1,0 +1,24 @@
+<div ng-if="vendor">
+	<div class="row">
+		<div class="large-10 columns text-center">
+			<h3>{{vendor.name}} <span><small>(vendor since {{displayDate(vendor.createdAt)}})</small></span></h3>
+		</div>
+	</div>
+	<div class="row">
+		<div class="panel large-10 columns">
+			<div class="row">
+				<div class="large-4 large-offset-1 columns">
+					<h5>Contact Info</h5>
+					<p>{{vendor.phone}}</p>
+					<p>{{vendor.email}}</p>
+					<h5>Members</h5>
+					<li ng-if="members" ng-repeat="member in members"><a ui-sref="admin.user({profileid:member.id})">{{member.name}}</a>: {{member.email}}</li>
+				</div>
+				<div style="border-left: 1px solid" class="large-4 end columns">
+					<h4>Products</h4>
+					<li ng-repeat="product in merchantProducts"><a ui-sref="admin.product({productnumber:product.productnumber})">{{product.name}}</a></li>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

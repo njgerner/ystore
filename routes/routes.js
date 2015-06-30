@@ -660,7 +660,9 @@ passport.use('bearer', new BearerStrategy(
     // -- START Admin Routes
     ///////////////////////////////////////////////////////////////
     app.get('/admin/all_profiles', ensureAuthenticated, adminRoutes.all_profiles);
+    app.get('/admin/promos', ensureAuthenticated, adminRoutes.get_promos);
     app.post('/admin/add_product', ensureAuthenticated, adminRoutes.add_product);
+    app.post('/admin/add_promo', ensureAuthenticated, adminRoutes.add_promo);
     app.get('/admin/profile/:profileid', ensureAuthenticated, adminRoutes.get_profile);
     app.post('/get_merchant_name', ensureAuthenticated, adminRoutes.get_merchant_name);
     app.get('/admin/all_orders', ensureAuthenticated, adminRoutes.all_orders);

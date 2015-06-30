@@ -80,6 +80,34 @@ module.exports = function(express, app, __dirname) {
 		});
 	};
 
+	AdminRoutes.get_promos = function(req, res, next) {
+		orchHelper.getAllPromoCodes()
+		.then(function (data) {
+			if (data) {
+				res.status(200).json({promos:data});
+			} else {
+				errorHandler.logAndReturn('No promo codes found from admin', 404, next);
+			}
+		})
+		.fail(function (err) {
+			errorHandler.logAndReturn('Error getting promo codes from admin', 500, next, err);
+		});
+	};
+
+	AdminRoutes.add_promo = function(req, res, next) {
+		orchHelper.addPromo(req.body.promo)
+		.then(function (data) {
+			if (data) {
+				res.status(200).json({promo:data});
+			} else {
+				errorHandler.logAndReturn('Error adding promo code from admin', 404, next);
+			}
+		})
+		.fail(function (err) {
+			errorHandler.logAndReturn('Error adding promo code from admin', 500, next, err);
+		});
+	};
+
 	AdminRoutes.add_product = function(req, res, next) {
 		// orchHelper.getAllOrders()
 		// .then(function (data) {

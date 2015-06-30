@@ -977,7 +977,6 @@ exports.updateOrder = function(order) {
   .fail(function (err) {
     deferred.reject(new Error(err.body.message));
   });
-   
     return deferred.promise;
 };
 
@@ -1151,8 +1150,37 @@ exports.getAllTestimonials = function() {
   .fail(function (err) {
     deferred.reject(new Error(err.body));
   });
+  return deferred.promise;
+};
+
+exports.getAllPromoCodes = function() {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+  .collection('promo-codes')
+  .limit(100)
+  .query('*')
+  .then(function (result) {
+    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body));
+  });
    
   return deferred.promise;
+};
+
+exports.addPromo = function(promo) {
+  var deferred = Q.defer();
+  db.put('promo-codes', promo.key, promo)
+  .then(function (result) {
+    console.log('orch then', result);
+    console.log('body', result.body);
+    deferred.resolve(result);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body.message));
+  });
+    return deferred.promise;
 };
 
 // ABSTRACTED METHODS BELOW ONLY
