@@ -5,14 +5,18 @@ trdServices.service("adminService", ['$rootScope', '$http', 'merchantService', '
     	this.profilesByID = {};
 
     	this.getProfileByID = function(id, callback) {
-    		$http({method: 'GET', url: '/admin/profile/' + id})
-	        .success(function (data, status, headers, config) {
-	            callback(null, data.profile);
-	        })
-	        .error(function (data, status, headers, config) {
-	            $log.debug('error getting profile', data);
-            	callback(data.message);
-	        });
+    		if(this.profilesByID[id] !== undefined) {
+    			callback(this.profilesByID[id]);
+    		}else {
+    			$http({method: 'GET', url: '/admin/profile/' + id})
+		        .success(function (data, status, headers, config) {
+		            callback(null, data.profile);
+		        })
+		        .error(function (data, status, headers, config) {
+		            $log.debug('error getting profile', data);
+	            	callback(data.message);
+		        });
+    		}
     	}
 
     	this.getAllProfiles = function(callback) {
@@ -28,14 +32,6 @@ trdServices.service("adminService", ['$rootScope', '$http', 'merchantService', '
 	            $log.debug('error getting all profiles', data);
             	callback(data.message);
 	        });
-    	}
-
-    	this.getProfile = function(id, callback) {
-    		if(this.profilesByID[id] !== undefined) {
-    			callback(this.profilesByID[id]);
-    		}else{
-    			this.getProfileByID(id, callback);
-    		}
     	}
 
     	this.getAllMerchantProfiles = function(callback) {

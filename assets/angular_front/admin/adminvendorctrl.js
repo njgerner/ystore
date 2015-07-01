@@ -11,7 +11,7 @@ superApp.controller('AdminVendorCtrl',
       if($scope.vendor.members && $scope.vendor.members.length > 0) {
         $scope.members = [];
         $scope.vendor.members.forEach(function (member) {
-          adminService.getProfile(member, function (err, profile) {
+          adminService.getProfileByID(member, function (err, profile) {
             if(err) {
               $scope.error = err;
             }else {

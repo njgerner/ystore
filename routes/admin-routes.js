@@ -80,7 +80,7 @@ module.exports = function(express, app, __dirname) {
 			}
 		})
 		.fail(function (err) {
-			errorHandler.logAndReturn('Error getting merchant profiles from admin. User = ' + req.user, 500, next, err);
+			errorHandler.logAndReturn('Error getting merchant profiles from admin', 500, next, err, {'user':req.user});
 		});
 	};
 
@@ -104,7 +104,7 @@ module.exports = function(express, app, __dirname) {
 			}
 		})
 		.fail(function (err) {
-			errorHandler.logAndReturn('Error getting available keys from admin. User = ' + req.user, 500, next, err);
+			errorHandler.logAndReturn('Error getting available keys from admin', 500, next, err, {'user':req.user});
 		});
 	};
 
@@ -118,8 +118,7 @@ module.exports = function(express, app, __dirname) {
 			}
 		})
 		.fail(function (err) {
-			errorHandler.logAndReturn('Error getting user hash from admin. User = ' + req.user + 
-									  '. Body = ' + req.body, 500, next, err);
+			errorHandler.logAndReturn('Error getting user hash from admin', 500, next, err, {'user':req.user,'body':req.body});
 		});
 	};
 
@@ -133,8 +132,7 @@ module.exports = function(express, app, __dirname) {
 			}
 		})
 		.fail(function (err) {
-			errorHandler.logAndReturn('Error adding regkey from admin. User = ' + req.user + 
-									  '. Body = ' + req.body, 500, next, err);
+			errorHandler.logAndReturn('Error adding regkey from admin', 500, next, err, {'user':req.user,'body':req.body});
 		});
 	};
 
