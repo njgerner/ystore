@@ -8,9 +8,11 @@ trdServices.service("adminService", ['$rootScope', '$http', 'merchantService', '
     		if(this.profilesByID[id] !== undefined) {
     			callback(this.profilesByID[id]);
     		}else {
+    			var inThis = this;
     			$http({method: 'GET', url: '/admin/profile/' + id})
 		        .success(function (data, status, headers, config) {
 		            callback(null, data.profile);
+		            inThis.profilesByID[data.profile.id] = data.profile;
 		        })
 		        .error(function (data, status, headers, config) {
 		            $log.debug('error getting profile', data);
