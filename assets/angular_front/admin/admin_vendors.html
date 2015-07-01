@@ -18,7 +18,7 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="merchant in merchantProfiles">
-					<th>{{merchant.name}}</th>
+					<th><a ui-sref="admin.vendor({merchantid:merchant.id})">{{merchant.name}}</a></th>
 					<th>{{displayDate(merchant.createdAt)}}</th>
 					<th>{{merchant.productKey}}</th>
 					<th>{{merchant.regkey}}</th>

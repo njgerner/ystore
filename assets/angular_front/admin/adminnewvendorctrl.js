@@ -1,6 +1,6 @@
 superApp.controller('AdminNewVendorCtrl',
-  ['$rootScope', '$scope', '$state', 'authService', 'profileService', 'adminService', '$stateParams', '$timeout', 'storeService',
-  function($rootScope, $scope, $state, authService, profileService, adminService, $stateParams, $timeout, storeService) {
+  ['$rootScope', '$scope', '$state', 'bcrypt', 'authService', 'profileService', 'adminService', '$stateParams', '$timeout', 'storeService',
+  function($rootScope, $scope, $state, bcrypt, authService, profileService, adminService, $stateParams, $timeout, storeService) {
 
     $scope.authorized = false;
 
@@ -12,17 +12,35 @@ superApp.controller('AdminNewVendorCtrl',
     };
 
     $scope.checkPassword = function() {
-      // console.log('checking');
-      // console.log('try', bcrypt.hashSync($scope.attempt, 8));
-      // console.log('hash', $scope.hash);
-      // console.log(bcrypt.compareSync($scope.attempt, $scope.hash));
+      if(bcrypt.compareSync($scope.attempt, $scope.hash)) {
+        $scope.authorized = true;
+      }else {
+        $scope.authorized = false;
+      }
+    };
+
+    $scope.activate = function() {
+      console.log('activate');
+      if($scope.authorized = false) {
+        return;
+      }
+      adminService.addRegKey($scope.regkey, function (err, data) {
+        if(err) {
+          $scope.error = err;
+          return;
+        }
+        $state.go('admin.new_vendor');
+      });
     };
 
     adminService.getAvailableRegKeys(function (err, keys) {
       if(err) {
         $scope.error = err;
       }
-      $scope.availableKeys = keys;
+      $scope.availableKeys = [];
+      for(var i = 0; i < keys.length; i++) {
+        $scope.availableKeys.push(keys[i].key);
+      }
     });
 
 }]);

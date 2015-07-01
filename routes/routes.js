@@ -608,6 +608,7 @@ passport.use('bearer', new BearerStrategy(
     app.get('/order/:orderid', get_order_by_id);
     app.get('/product_rating/:productnumber', productRoutes.get_rating);
     app.get('/product_reviews/:productnumber', productRoutes.get_reviews);
+    app.get('/profile/:profileid', ensureAuthenticated, profileRoutes.get_profile);
     app.get('/request_pass_reset/:email', request_pass_reset);
     app.get('/reset_password/:userid', reset_password);
     app.get('/sign_s3', awsRoutes.sign_s3);
@@ -666,8 +667,12 @@ passport.use('bearer', new BearerStrategy(
     app.post('/admin/delete_promo', ensureAuthenticated, adminRoutes.delete_promo);
     app.get('/admin/profile/:profileid', ensureAuthenticated, adminRoutes.get_profile);
     app.post('/get_merchant_name', ensureAuthenticated, adminRoutes.get_merchant_name);
+    app.get('/admin/all_merchants', ensureAuthenticated, adminRoutes.all_merchants);
     app.get('/admin/all_orders', ensureAuthenticated, adminRoutes.all_orders);
     app.get('/admin/all_ylift_profiles', ensureAuthenticated, adminRoutes.all_ylift_profiles);
+    app.post('/admin/regkeys', ensureAuthenticated, adminRoutes.get_available_keys);
+    app.post('/admin/hash', ensureAuthenticated, adminRoutes.get_hash);
+    app.post('/admin/add_regkey', ensureAuthenticated, adminRoutes.add_regkey);
 
     // -- START ERROR Routes
     ///////////////////////////////////////////////////////////////

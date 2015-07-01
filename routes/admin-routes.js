@@ -70,6 +70,20 @@ module.exports = function(express, app, __dirname) {
 		});
 	};
 
+	AdminRoutes.all_merchants = function(req, res, next) {
+		orchHelper.getAllMerchantProfiles()
+		.then(function (data) {
+			if (data) {
+				res.status(200).json({profiles:data});				
+			} else {
+				errorHandler.logAndReturn('No merchant profiles found from admin', 404, next);
+			}
+		})
+		.fail(function (err) {
+			errorHandler.logAndReturn('Error getting merchant profiles from admin', 500, next, err, [req.user]);
+		});
+	};
+
 	AdminRoutes.get_merchant_name = function(req, res) {
 		orchHelper.getMerchantByID(req.body.id)
 		.then(function (merchant) {
@@ -119,6 +133,48 @@ module.exports = function(express, app, __dirname) {
 		})
 		.fail(function (err) {
 			errorHandler.logAndReturn('Error deleting promo code from admin', 500, next, err);
+		});
+	};
+
+	AdminRoutes.get_available_keys = function(req, res, next) {
+		orchHelper.getAvailableRegKeys()
+		.then(function (keys) {
+			if (keys) {
+				res.status(200).json({keys:keys});				
+			} else {
+				errorHandler.logAndReturn('No available keys found from admin', 404, next);
+			}
+		})
+		.fail(function (err) {
+			errorHandler.logAndReturn('Error getting available keys from admin', 500, next, err, [req.user]);
+		});
+	};
+
+	AdminRoutes.get_hash = function(req, res, next) {
+		orchHelper.getUserHashByProfileID(req.body.profileid)
+		.then(function (hash) {
+			if (hash) {
+				res.status(200).json({hash:hash});				
+			} else {
+				errorHandler.logAndReturn('No hash found from admin', 404, next);
+			}
+		})
+		.fail(function (err) {
+			errorHandler.logAndReturn('Error getting user hash from admin', 500, next, err, [req.user, req.body]);
+		});
+	};
+
+	AdminRoutes.add_regkey = function(req, res, next) {
+		orchHelper.addRegKey(req.body.regkey)
+		.then(function (regkey) {
+			if (regkey) {
+				res.status(200).json({regkey:regkey});				
+			} else {
+				errorHandler.logAndReturn('Reg key not added from admin', 404, next);
+			}
+		})
+		.fail(function (err) {
+			errorHandler.logAndReturn('Error adding regkey from admin', 500, next, err, [req.user, req.body]);
 		});
 	};
 

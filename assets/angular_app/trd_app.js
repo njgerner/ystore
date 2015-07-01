@@ -8,6 +8,7 @@ var trdApp = angular.module('trdApp', [
   'trdApp.directives',
   'trdApp.controllers',
   'ui.slider',
+  'dtrw.bcrypt',
   'ngTagsInput',
   'ngError',
   'flow',
@@ -138,6 +139,21 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       url: "/order/:orderid",
       templateUrl: "/partials/admin_order.html",
       controller: "AdminOrderCtrl"
+    })
+    .state('admin.vendors', {
+      url: "/vendors",
+      templateUrl: "/partials/admin_vendors.html",
+      controller: "AdminVendorsCtrl"
+    })
+    .state('admin.vendor', {
+      url: "/vendor/:merchantid",
+      templateUrl: "/partials/admin_vendor.html",
+      controller: "AdminVendorCtrl"
+    })
+    .state('admin.new_vendor', {
+      url: "/vendors/add",
+      templateUrl: "/partials/admin_new_vendor.html",
+      controller: "AdminNewVendorCtrl"
     })
     .state('admin.products', {
       url: "/products/",

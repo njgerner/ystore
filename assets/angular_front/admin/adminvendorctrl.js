@@ -10,14 +10,15 @@ superApp.controller('AdminVendorCtrl',
       $scope.vendor = merchant;
       if($scope.vendor.members && $scope.vendor.members.length > 0) {
         $scope.members = [];
-        for(var i = 0; i < $scope.vendor.members.length; i++) {
-          adminService.getProfile($scope.vendor.members[i], function (err, profile) {
+        $scope.vendor.members.forEach(function (member) {
+          adminService.getProfileByID(member, function (err, profile) {
             if(err) {
               $scope.error = err;
+            }else {
+              $scope.members.push(profile);
             }
-            $scope.members.push(profile);
-          })
-        };
+          });
+        });
       }
     });
 
