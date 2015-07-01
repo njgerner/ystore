@@ -790,6 +790,25 @@ exports.getAllYLIFTProfiles = function() {
   return deferred.promise;
 };
 
+exports.getAllMerchantProfiles = function() {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+  .collection('merchant-profiles')
+  .limit(100)
+  .query('*')
+  .then(function (result) {
+    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
+  })
+  .fail(function (err) {
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
+  });
+  return deferred.promise;
+};
+
 exports.getProfile = function(profileid) {
   var deferred = Q.defer();
   db.get('local-profiles', profileid)
@@ -1118,6 +1137,59 @@ exports.getMerchantByID = function(id) {
   return deferred.promise;
 };
 
+exports.getAvailableRegKeys = function() {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+    .collection('registration-keys')
+    .limit(100)
+    .query('value.isActive: false')
+  .then(function(result) {
+    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
+  })
+  .fail(function (err){
+    if (err.body.message == 'The requested items could not be found.'){
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
+  });
+  return deferred.promise;
+};
+
+exports.getUserHashByProfileID = function(profileid) {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+  .collection('local-users')
+  .limit(1)
+  .query('value.profile: ' + profileid)
+  .then(function (res) {
+    var results = rawDogger.push_values_to_top(res.body.results);
+    deferred.resolve(results[0].hash);
+  })
+  .fail(function (err) {
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
+  });
+   
+  return deferred.promise;
+};
+
+exports.addRegKey = function(regkey) {
+  var deferred = Q.defer();
+  var key = {'key':regkey, 'status':'verified', 'isActive':false, 'activationDate':null, 'owner':null};
+  db.put('registration-keys', regkey, key)
+  .then(function (result) {
+    deferred.resolve(result);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body.message));
+  });
+  return deferred.promise;
+};
+
 exports.validateResetToken = function(tokenid) {
   var deferred = Q.defer();
    db.get('reset-tokens', tokenid)
@@ -1190,4 +1262,3 @@ exports.getMostFrequentEvent = function(collection, type, profile) {
     }
   });
 };
-
