@@ -32,6 +32,7 @@ superApp.controller('AdminPromoCtrl',
     };
 
     $scope.activate = function() {
+      $scope.error = null;
       if($scope.activating) {
         $scope.error = "Please wait";
         return;
