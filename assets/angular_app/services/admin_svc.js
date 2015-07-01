@@ -125,4 +125,18 @@ trdServices.service("adminService", ['$rootScope', '$http', 'merchantService', '
 	        });
     	};
 
+    	this.updateMerchantProfile = function(profile, callback) {
+	        var inThis = this;
+	        $http({method: 'POST', url: '/admin/profile/update_merchant', 
+	               data:{profile:profile}})
+	        .success(function (data, status, headers, config) {
+	            inThis.merchant = data.profile;
+	            callback(null, data.profile);
+	        })
+	        .error(function (data, status, headers, config) {
+	            $log.debug('error updating merchant profile', data);
+	            callback(data.message);
+	        });
+	    }
+
 }]);

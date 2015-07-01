@@ -670,6 +670,7 @@ passport.use('bearer', new BearerStrategy(
     app.post('/admin/regkeys', ensureAuthenticated, adminRoutes.get_available_keys);
     app.post('/admin/hash', ensureAuthenticated, adminRoutes.get_hash);
     app.post('/admin/add_regkey', ensureAuthenticated, adminRoutes.add_regkey);
+    app.post('/admin/profile/update_merchant', ensureAuthenticated, profileRoutes.update_merchant);
 
     // -- START ERROR Routes
     ///////////////////////////////////////////////////////////////
