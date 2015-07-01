@@ -1,6 +1,6 @@
 superApp.controller('AdminCtrl',
-  ['$rootScope', '$scope', '$state', 'authService', 'profileService', '$location', '$stateParams', '$timeout', 'adminService',
-  function($rootScope, $scope, $state, authService, profileService, $location, $stateParams, $timeout, adminService) {
+  ['$rootScope', '$scope', '$state', 'authService', 'profileService', '$stateParams', 'adminService',
+  function($rootScope, $scope, $state, authService, profileService, $stateParams, adminService) {
 
     if (!authService.isAdmin) {
       $state.go("store");

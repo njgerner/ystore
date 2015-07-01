@@ -1,14 +1,14 @@
 superApp.controller('AdminPromoCtrl',
-  ['$rootScope', '$scope', '$state', 'adminService',
-  function($rootScope, $scope, $state, adminService) {
+  ['$rootScope', '$scope', '$state', 'bcrypt', 'adminService',
+  function($rootScope, $scope, $state, bcrypt, adminService) {
 
     $scope.displayPromo = function(value, type) {
       if(type == 'percent_off') {
         return Number(value)*100 + "% off";
       }else if(type == 'new_price') {
-        return "New price: $" + value;
+        return "New price: $" + value.toString().split( /(?=(?:\d{3})+(?:\.|$))/g ).join( "," );
       }else if(type == 'money_off') {
-        return "$" + value + " off";
+        return "$" + value.toString().split( /(?=(?:\d{3})+(?:\.|$))/g ).join( "," ) + " off";
       }
     };
 
@@ -31,14 +31,6 @@ superApp.controller('AdminPromoCtrl',
       }
     };
 
-    // $scope.confirmPassword = function(attempt) {
-    //   if(bcrypt.compareSync(attempt, $scope.hash)) {
-    //     $scope.authorized = true;
-    //   }else {
-    //     $scope.authorized = false;
-    //   }
-    // };
-
     $scope.activate = function() {
       if($scope.activating) {
         $scope.error = "Please wait";
@@ -55,6 +47,9 @@ superApp.controller('AdminPromoCtrl',
         return;
       }else if(!$scope.makeactive) {
         $scope.error = "Choose whether to make the promo code active upon submission";
+        return;
+      }else if(!$scope.message) {
+        $scope.error = "Please provide a message to display upon use of code";
         return;
       }
       else{
@@ -77,17 +72,18 @@ superApp.controller('AdminPromoCtrl',
         var promo = {};
         promo.key = $scope.newcode;
         promo.type = $scope.promotype;
-        if($scope.message) {promo.message = $scope.message};
         if($scope.promotype == 'percent_off') {
-          promo.value = Number($scope.value)*.01;
+          promo.value = parseFloat($scope.value).toFixed(2);
         }else {
           promo.value = $scope.value;
         }
         promo.active = $scope.makeactive;
+        promo.message = $scope.message;
         $scope.activating = true;
         adminService.addPromoCode(promo, function (err, code) {
           if(err) {
             $scope.error = err;
+            return;
           }
           $scope.notify = "Promo code '" + code + "' was successfully activated";
           $scope.activating = false;
@@ -96,15 +92,11 @@ superApp.controller('AdminPromoCtrl',
       }
     };
 
-    $scope.loadCodes = function() {
-      adminService.getAllPromoCodes(function (err, codes) {
-        if(err) {
-          $scope.error = err;
-        }
-        $scope.promos = codes;
-      })
-    };
-    
-    $scope.loadCodes();
+    adminService.getAllPromoCodes(function (err, codes) {
+      if(err) {
+        $scope.error = err;
+      }
+      $scope.promos = codes;
+    });
 
 }]);

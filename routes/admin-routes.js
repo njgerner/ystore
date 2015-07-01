@@ -104,7 +104,7 @@ module.exports = function(express, app, __dirname) {
 			}
 		})
 		.fail(function (err) {
-			errorHandler.logAndReturn('Error getting promo codes from admin', 500, next, err);
+			errorHandler.logAndReturn('Error getting promo codes from admin', 500, next, err, [req.user]);
 		});
 	};
 
@@ -118,7 +118,7 @@ module.exports = function(express, app, __dirname) {
 			}
 		})
 		.fail(function (err) {
-			errorHandler.logAndReturn('Error adding promo code from admin', 500, next, err);
+			errorHandler.logAndReturn('Error adding promo code from admin', 500, next, err, [req.user, req.body]);
 		});
 	};
 
@@ -132,7 +132,7 @@ module.exports = function(express, app, __dirname) {
 			}
 		})
 		.fail(function (err) {
-			errorHandler.logAndReturn('Error deleting promo code from admin', 500, next, err);
+			errorHandler.logAndReturn('Error deleting promo code from admin', 500, next, err, [req.user, req.body]);
 		});
 	};
 

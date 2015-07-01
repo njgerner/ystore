@@ -1235,9 +1235,12 @@ exports.getAllPromoCodes = function() {
     deferred.resolve(rawDogger.push_values_to_top(result.body.results));
   })
   .fail(function (err) {
-    deferred.reject(new Error(err.body));
-  });
-   
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
+  });   
   return deferred.promise;
 };
 

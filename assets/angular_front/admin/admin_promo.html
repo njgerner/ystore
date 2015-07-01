@@ -1,5 +1,5 @@
 <div style="padding-left:0;margin:10px" class="large-6 large-offset-2 columns text-center">
-	<h3>Promo Codes</h3>
+	<h3>Active Promo Codes</h3>
 	<div ng-if="notify" style="margin-top:1rem;" data-alert class="alert-box info radius"> {{notify}}</div>
 	<table style="width:100%">
 		<tbody>
@@ -10,20 +10,9 @@
 			</tr>
 		</tbody>
 	</table>
-	<button ng-click="confirmPassword()">Add a code</button> <!-- ng-hide="authorized" -->
+	<h3>Add a Code</h3>
 	<error-dir msg="{{error}}"></error-dir>
-	<!-- <div ng-show="authorized"> -->
 	<div class="row">
-		<!-- <div style="padding-right:0" class="large-4 large-offset-1 columns">
-			<input type="text" ng-model="newcode"></input>
-		</div>
-		<div style="padding-left:0" class="large-2 end columns">
-			<select class="postfix animated" ng-class="{fadeIn:authorized}" ng-click="activate()" ng-model="promotype">
-				<option value="percent_off">% off</option>
-				<option value="new_price">New price</option>
-				<option value"money_off">$ off</option>
-			</select>
-		</div> -->
 		<form novalidate>
 		<fieldset>
 			<div class="row">
@@ -52,14 +41,16 @@
 		    <div class="row">
 		    	<div class="small-8 small-offset-2 columns">
 		    		<label>Optional: add a message to display after successful use
-		    			<input type="text" ng-model="message" name="message" required/>
+		    			<input type="text" ng-model="message" name="message"/>
 			      </label>
 		    	</div>
 		    </div>
 		    <div class="row">
 		    	<div class="small-8 small-offset-2 columns">
-		    		<input type="radio" value="yes" name="turnon" ng-model="makeactive">Activate this promo code immediately <br>
-		    		<input type="radio" value="no" name="turnon" ng-model="makeactive">Add the promo code to the database but do not make it active
+		    		<p>Should the promo code be activated immediately?</p>
+		    		<span>
+		    		<input type="radio" value="yes" name="turnon" ng-model="makeactive"> Yes <input style="margin-left:15px" type="radio" value="no" name="turnon" ng-model="makeactive"> No
+		    	</span>
 		    	</div>
 		    </div>
 		</fieldset>
