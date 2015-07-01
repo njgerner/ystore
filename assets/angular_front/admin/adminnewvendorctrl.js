@@ -20,6 +20,10 @@ superApp.controller('AdminNewVendorCtrl',
     };
 
     $scope.activate = function() {
+      console.log('activate');
+      if($scope.authorized = false) {
+        return;
+      }
       adminService.addRegKey($scope.regkey, function (err, data) {
         if(err) {
           $scope.error = err;

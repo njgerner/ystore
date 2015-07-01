@@ -14,9 +14,10 @@ superApp.controller('AdminVendorCtrl',
           adminService.getProfile(member, function (err, profile) {
             if(err) {
               $scope.error = err;
+            }else {
+              $scope.members.push(profile);
             }
-            $scope.members.push(profile);
-          })
+          });
         });
       }
     });
