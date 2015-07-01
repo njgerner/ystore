@@ -6,6 +6,7 @@ trdServices.service("productService", ['$rootScope', '$http', '$cookieStore', 's
         this.initService = function() {
             this.mostViewedByProfile = {};
             this.reviewsByProduct = {};
+            this.merchantByProduct = {};
         }
 
         this.initService();
@@ -54,6 +55,23 @@ trdServices.service("productService", ['$rootScope', '$http', '$cookieStore', 's
                 callback(data.message);
             });
     	}
+
+        this.getMerchant = function(productnumber, callback) {
+            if (this.merchantByProduct[productnumber] !== undefined) {
+                callback(null, this.merchantByProduct[productnumber]);
+                return;
+            }
+            var inThis = this;
+            $http({method: 'GET', url: "/product_merchant/" + productnumber})
+            .success(function(data, status, headers, config) {
+                inThis.merchantByProduct[productnumber] = data.merchant;
+                callback(null, data.merchant);
+            })
+            .error(function(data, status, headers, config) {
+                $log.debug('error getting merchant', data);
+                callback(data.message);
+            });
+        }
 
         this.addPageView = function(productnumber, callback) {
             $http({method: 'POST', url: "/product_page_view/" + productnumber + '?profile=' + authService.profileid})
