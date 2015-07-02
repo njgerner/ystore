@@ -26,7 +26,6 @@ superApp.controller('AdminOrdersCtrl',
     }
 
     function buildChart (ordersByDate) {
-
       var data = [];
       for (date in ordersByDate) {     
         data.push(ordersByDate[date]);   
