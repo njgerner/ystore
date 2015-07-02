@@ -14,11 +14,11 @@
 		<h6><strong>Phone: </strong><a ng-href="tel:{{patient.phone}}">{{patient.phone || 'N/A'}}</a></h6>
 	</div>
 	<div class="small-6 columns">
-		<h6><strong>Requested Procedure: </strong>{{toTitleCase(appt.type) || 'N/A'}}</h6>
+		<h6><strong>Requested Procedure: </strong>{{toTitleCase(appt.procedure) || 'N/A'}}</h6>
 	</div>
 </div>
 <div class="row" style="margin-top: 50px;">
-	<div class="small-4 small-offset-4 columns">
+	<div class="small-12 large-4 large-offset-4 columns">
 		<a class="button small alert" ng-click="updateStatus('rejected')">Reject</a>
 		<a class="button small success" ng-click="updateStatus('confirmed')">Confirm</a>
 	</div>

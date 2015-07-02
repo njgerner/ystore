@@ -39,11 +39,11 @@ module.exports = function(express, app, __dirname) {
 	  		if (result) {
 		  		res.status(200).json({profile:result});
 	  		} else {
-	  			errorHandler.logAndReturn('No merchant profile found for account', 404, next, null, [req.params, req.user]);
+	  			errorHandler.logAndReturn('No profile found for account', 404, next, null, [req.params, req.user]);
 	  		}
 	  	})
 	  	.fail(function (err) {
-	  		errorHandler.logAndReturn('Error retrieving merchant profile for account', 500, next, err, [req.params, req.user]);
+	  		errorHandler.logAndReturn('Error retrieving profile for account', 500, next, err, [req.params, req.user]);
 	  	});
 	};
 
@@ -71,7 +71,7 @@ module.exports = function(express, app, __dirname) {
 	  		res.status(200).json(merchant);
 	  	})
 	  	.fail(function (err) {
-	  		errorHandler.logAndReturn('Error addming merchant to account profile', 500, next, err, [req.params, req.body]);
+	  		errorHandler.logAndReturn('Error adding merchant to account profile', 500, next, err, [req.params, req.body]);
 	  	});
 	};
 

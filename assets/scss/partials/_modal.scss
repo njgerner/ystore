@@ -97,7 +97,7 @@
 			content: "Open";
 		}
 	}
-
+j
 	&.requested {
 		color: $white;
 		background-color: $primary-color;
@@ -113,10 +113,10 @@
 
 		&:hover {
 			span {
-				display: inline;
+				display: none;
 			}
 			&:before {
-				content: "Confirm ";
+				content: "Respond";
 			}
 		}
 	}

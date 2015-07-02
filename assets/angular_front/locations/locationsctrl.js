@@ -81,17 +81,14 @@ superApp.controller('LocationsCtrl',
     }
 
     $scope.openBooking = function(location, $event) {
-      console.log('open booking', location, $event);
       $event.stopPropagation();
       $scope.selectedLocation = location;
       $scope.viewBooking = true;
     }
 
     $scope.closeBooking = function($event) {
-      console.log('close booking', $event);
       $scope.selectedLocation = null;
       $scope.viewBooking = false;
-      // $event.stopPropagation();
     }
 
 	  navigator.geolocation.getCurrentPosition(function (position) {
