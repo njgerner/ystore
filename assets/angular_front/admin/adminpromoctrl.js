@@ -74,7 +74,7 @@ superApp.controller('AdminPromoCtrl',
         promo.key = $scope.newcode;
         promo.type = $scope.promotype;
         if($scope.promotype == 'percent_off') {
-          promo.value = parseFloat($scope.value).toFixed(2);
+          promo.value = Number($scope.value)*.01;
         }else {
           promo.value = $scope.value;
         }
