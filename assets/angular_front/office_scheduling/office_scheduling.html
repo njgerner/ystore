@@ -1,0 +1,57 @@
+<div ng-click="closeConfirm()">
+	<div class="row clearfix">
+		<div class="left">
+			<i class="i-left-circled" ng-click="prev()"></i>
+			{{getNavDisplay()}}
+			<i class="i-right-circled" ng-click="next()"></i>
+		</div>
+		<div class="right">
+			<a class="button small split">
+				View {{viewState}}
+				<span dropdown-toggle="#view-dropdown"></span>
+			</a>
+			<ul id="view-dropdown">
+				<li ng-click="viewState = 'Week'">Week</li>
+				<li ng-click="viewState = 'Month'">Month</li>
+			</ul>
+		</div>
+	</div>
+	<div class="row">
+		<table class="small-12 columns" ng-if="viewState == 'Week'">
+			<thead>
+				<tr>
+					<th ng-repeat="dow in [] | range: 7">
+						<strong>{{getDisplayDay(dow)}}</strong><br>
+						{{getDisplayDate(dow)}}
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="time in [] | range: 9">
+					<td class="date-column-provider" ng-repeat="dow in [] | range: 7" ng-class="getSlotClass(dow, time+9)" ng-click="selectAppt(dow, time+9, $event)">
+						<span>{{getDisplayTime(dow, time+9)}}</span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<table class="small-12 columns" ng-if="viewState == 'Month'" ng-repeat="week in [] | range: 5">
+			<thead>
+				<tr>
+					<th ng-repeat="dow in [] | range: 7">
+						<strong>{{getDisplayDay(dow+(week*7))}}</strong><br>
+						{{getDisplayDate(dow+(week*7))}}
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="time in [] | range: 9">
+					<td class="date-column-provider" ng-repeat="dow in [] | range: 7" ng-class="getSlotClass(dow+(week*7), time+9)" ng-click="selectAppt(dow, time+9, $event)">
+						{{getDisplayTime(dow+(week*7), time+9)}}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<appointment-confirm-modal-dir appt="selectedAppt" close="closeConfirm" ng-if="apptsLoaded" ng-show="selectedAppt" class="appt-confirm-modal animated" ng-class="{fadeInDown:selectedAppt, fadeOutUp:!selectedAppt}"></appointment-confirm-modal-dir>

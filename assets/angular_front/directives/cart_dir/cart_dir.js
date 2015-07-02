@@ -40,7 +40,7 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 				for (var i = 0; i < scope.productsInCart.length; i++) {
   				scope.cartTotal += ( scope.products[scope.productsInCart[i].productnumber].price * scope.productsInCart[i].quantity );
   			}
-  			scope.persistCartItems();
+  				scope.persistCartItems();
 			}
 
 			scope.goToCheckout = function() {
@@ -57,7 +57,7 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 			});
 
 			var cartWatch = null;
-			var cartWatch = scope.$watch(function() { return $cookies.pInCart; }, function(newCart, oldCart) { // this makes me hard
+			cartWatch = scope.$watch(function() { return $cookies.pInCart; }, function(newCart, oldCart) { // this makes me hard
 				if (newCart !== undefined) {
 					onProductsInCartReceived(null, JSON.parse(newCart));
 				} else {

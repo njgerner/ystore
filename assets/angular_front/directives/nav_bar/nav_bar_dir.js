@@ -18,6 +18,7 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 				scope.profileid = null;
 				scope.isAdmin = false;
 				scope.isMerchant = false;
+				scope.isYLIFT = false;
 				scope.query = null;
 				scope.productsInCart = [];
 				scope.productCategories = {};
@@ -63,6 +64,7 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 	  				scope.name = authService.profile.name;
 	  				scope.profileid = authService.profile.id;
 	  				scope.isAdmin = authService.isAdmin;
+	  				scope.isYLIFT = authService.isYLIFT;
 	  				onProfileLoaded();
 	  			} else {
 	  				scope.loggedIn = false;
@@ -101,6 +103,7 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 				scope.loggedIn = true;
 				scope.name = authService.profile.name;
 				scope.profileid = authService.profile.id;
+	  			scope.isYLIFT = authService.isYLIFT;
 				scope.isAdmin = authService.isAdmin;
 				onProfileLoaded();
 			} else {

@@ -2,6 +2,7 @@ trdServices.service("profileService", ['$rootScope', '$http', '$cookieStore', 'a
     function ($rootScope, $http, $cookieStore, authService, $log) {
 
     this.adminOf = {};
+    this.profilesByID = {};
 
     this.updateProfile = function(profile, callback) {
         $http({method: 'POST', url: '/profile/update/' + profile.id, data:{profile:profile}})
@@ -15,6 +16,25 @@ trdServices.service("profileService", ['$rootScope', '$http', '$cookieStore', 'a
             if (callback) {
                 callback(data.message);
             }
+        });
+    }
+
+    this.getProfileByID = function(id, callback) {
+        if (this.profilesByID[id] !== undefined) {
+            callback(this.profilesByID[id]);
+            return;
+        } else if (!authService.isYLIFT) { // until another use case comes up, only Y Lift members can request profiles
+            callback('Not authorized to make this request');
+            return;
+        }
+        var inThis = this;
+        $http({method: 'GET', url: '/profile/' + id})
+        .success(function (data, status, headers, config) {
+            callback(null, data.profile);
+        })
+        .error(function (data, status, headers, config) {
+            $log.debug('error getting profile', data);
+            callback(data.message);
         });
     }
 

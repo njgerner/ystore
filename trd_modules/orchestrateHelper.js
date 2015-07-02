@@ -1210,6 +1210,49 @@ exports.validateResetToken = function(tokenid) {
   return deferred.promise;
 };
 
+exports.findPatientAppts = function(profileid) {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+  .collection('appointments')
+  .limit(20)
+  .query('value.patient: ' + profileid + ' AND NOT value.status: \'rejected\'')
+  .then(function (result) {
+    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
+  })
+  .fail(function (err) {
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
+  });
+  return deferred.promise;
+};
+
+exports.findProviderAppts = function(profileid, start, end) {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+  .collection('appointments')
+  .limit(100)
+  .range('value.date', function (builder) {
+    return builder
+    .between(start, end);
+  })
+  .query('value.provider: ' + profileid)
+  .then(function (result) {
+    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
+  })
+  .fail(function (err) {
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
+  });
+   
+  return deferred.promise;
+};
+
 exports.getAllTestimonials = function() {
   var deferred = Q.defer();
   db.newSearchBuilder()
@@ -1220,7 +1263,11 @@ exports.getAllTestimonials = function() {
     deferred.resolve(rawDogger.push_values_to_top(result.body.results));
   })
   .fail(function (err) {
-    deferred.reject(new Error(err.body));
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
   });
   return deferred.promise;
 };
@@ -1282,6 +1329,30 @@ exports.getDocFromCollection = function(collection, key) {
     } else {
       deferred.reject(new Error(err.body.message));
     }
+  });
+  return deferred.promise;
+};
+
+exports.postDocToCollection = function(collection, doc) {
+  var deferred = Q.defer();
+  db.post(collection, doc)
+  .then(function (result) {
+    deferred.resolve(result.path);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body.message));
+  });
+  return deferred.promise;
+};
+
+exports.putDocToCollection = function(collection, id, doc) {
+  var deferred = Q.defer();
+  db.put(collection, id, doc)
+  .then(function (result) {
+    deferred.resolve(result.path);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body.message));
   });
   return deferred.promise;
 };
