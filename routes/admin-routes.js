@@ -94,6 +94,48 @@ module.exports = function(express, app, __dirname) {
 		});
 	};
 
+	AdminRoutes.get_promos = function(req, res, next) {
+		orchHelper.getAllPromoCodes()
+		.then(function (data) {
+			if (data) {
+				res.status(200).json({promos:data});
+			} else {
+				errorHandler.logAndReturn('No promo codes found from admin', 404, next);
+			}
+		})
+		.fail(function (err) {
+			errorHandler.logAndReturn('Error getting promo codes from admin', 500, next, err, [req.user]);
+		});
+	};
+
+	AdminRoutes.add_promo = function(req, res, next) {
+		orchHelper.addPromo(req.body.promo)
+		.then(function (data) {
+			if (data) {
+				res.status(200).json({promo:data});
+			} else {
+				errorHandler.logAndReturn('Error adding promo code from admin', 404, next);
+			}
+		})
+		.fail(function (err) {
+			errorHandler.logAndReturn('Error adding promo code from admin', 500, next, err, [req.user, req.body]);
+		});
+	};
+
+	AdminRoutes.delete_promo = function(req, res, next) {
+		orchHelper.deletePromo(req.body.promo)
+		.then(function (data) {
+			if (data) {
+				res.status(200).json({success:true});
+			} else {
+				errorHandler.logAndReturn('Error deleting promo code from admin', 404, next);
+			}
+		})
+		.fail(function (err) {
+			errorHandler.logAndReturn('Error deleting promo code from admin', 500, next, err, [req.user, req.body]);
+		});
+	};
+
 	AdminRoutes.get_available_keys = function(req, res, next) {
 		orchHelper.getAvailableRegKeys()
 		.then(function (keys) {

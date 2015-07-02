@@ -996,7 +996,6 @@ exports.updateOrder = function(order) {
   .fail(function (err) {
     deferred.reject(new Error(err.body.message));
   });
-   
     return deferred.promise;
 };
 
@@ -1223,8 +1222,50 @@ exports.getAllTestimonials = function() {
   .fail(function (err) {
     deferred.reject(new Error(err.body));
   });
-   
   return deferred.promise;
+};
+
+exports.getAllPromoCodes = function() {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+  .collection('promo-codes')
+  .limit(100)
+  .query('*')
+  .then(function (result) {
+    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
+  })
+  .fail(function (err) {
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
+  });   
+  return deferred.promise;
+};
+
+exports.addPromo = function(promo) {
+  var deferred = Q.defer();
+  db.put('promo-codes', promo.key, promo)
+  .then(function (result) {
+    deferred.resolve(promo.key);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body.message));
+  });
+    return deferred.promise;
+};
+
+exports.deletePromo = function(promo) {
+  var deferred = Q.defer();
+  db.remove('promo-codes', promo)
+    .then(function (result) {
+      deferred.resolve(promo);
+    })
+    .fail(function (err) {
+      deferred.reject(new Error(err.body.message));
+    });
+    return deferred.promise;
 };
 
 // ABSTRACTED METHODS BELOW ONLY
