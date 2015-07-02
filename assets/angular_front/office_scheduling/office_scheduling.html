@@ -38,15 +38,15 @@
 			<thead>
 				<tr>
 					<th ng-repeat="dow in [] | range: 7">
-						<strong>{{getDisplayDay(dow)}}</strong><br>
-						{{getDisplayDate(dow)}}
+						<strong>{{getDisplayDay(dow+(week*7))}}</strong><br>
+						{{getDisplayDate(dow+(week*7))}}
 					</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="time in [] | range: 4">
-					<td class="date-column-provider" ng-repeat="dow in [] | range: 7" ng-class="getSlotClass(dow, time+9)" ng-click="selectAppt(dow, time+9, $event)">
-						{{getDisplayDate(dow)}}
+				<tr ng-repeat="time in [] | range: 9">
+					<td class="date-column-provider" ng-repeat="dow in [] | range: 7" ng-class="getSlotClass(dow+(week*7), time+9)" ng-click="selectAppt(dow, time+9, $event)">
+						{{getDisplayTime(dow+(week*7), time+9)}}
 					</td>
 				</tr>
 			</tbody>
