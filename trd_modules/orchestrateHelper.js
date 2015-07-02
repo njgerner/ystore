@@ -996,7 +996,6 @@ exports.updateOrder = function(order) {
   .fail(function (err) {
     deferred.reject(new Error(err.body.message));
   });
-   
     return deferred.promise;
 };
 
@@ -1211,6 +1210,49 @@ exports.validateResetToken = function(tokenid) {
   return deferred.promise;
 };
 
+exports.findPatientAppts = function(profileid) {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+  .collection('appointments')
+  .limit(20)
+  .query('value.patient: ' + profileid + ' AND NOT value.status: \'rejected\'')
+  .then(function (result) {
+    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
+  })
+  .fail(function (err) {
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
+  });
+  return deferred.promise;
+};
+
+exports.findProviderAppts = function(profileid, start, end) {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+  .collection('appointments')
+  .limit(100)
+  .range('value.date', function (builder) {
+    return builder
+    .between(start, end);
+  })
+  .query('value.provider: ' + profileid)
+  .then(function (result) {
+    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
+  })
+  .fail(function (err) {
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
+  });
+   
+  return deferred.promise;
+};
+
 exports.getAllTestimonials = function() {
   var deferred = Q.defer();
   db.newSearchBuilder()
@@ -1221,9 +1263,12 @@ exports.getAllTestimonials = function() {
     deferred.resolve(rawDogger.push_values_to_top(result.body.results));
   })
   .fail(function (err) {
-    deferred.reject(new Error(err.body));
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
   });
-   
   return deferred.promise;
 };
 
@@ -1243,6 +1288,49 @@ exports.findProductMerchant = function() {
   return deferred.promise;
 };
 
+exports.getAllPromoCodes = function() {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+  .collection('promo-codes')
+  .limit(100)
+  .query('*')
+  .then(function (result) {
+    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
+  })
+  .fail(function (err) {
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
+  });   
+  return deferred.promise;
+};
+
+exports.addPromo = function(promo) {
+  var deferred = Q.defer();
+  db.put('promo-codes', promo.key, promo)
+  .then(function (result) {
+    deferred.resolve(promo.key);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body.message));
+  });
+    return deferred.promise;
+};
+
+exports.deletePromo = function(promo) {
+  var deferred = Q.defer();
+  db.remove('promo-codes', promo)
+    .then(function (result) {
+      deferred.resolve(promo);
+    })
+    .fail(function (err) {
+      deferred.reject(new Error(err.body.message));
+    });
+    return deferred.promise;
+};
+
 // ABSTRACTED METHODS BELOW ONLY
 /////////////////////////////////////////////////////////////////////////////////////
 exports.getDocFromCollection = function(collection, key) {
@@ -1257,6 +1345,30 @@ exports.getDocFromCollection = function(collection, key) {
     } else {
       deferred.reject(new Error(err.body.message));
     }
+  });
+  return deferred.promise;
+};
+
+exports.postDocToCollection = function(collection, doc) {
+  var deferred = Q.defer();
+  db.post(collection, doc)
+  .then(function (result) {
+    deferred.resolve(result.path);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body.message));
+  });
+  return deferred.promise;
+};
+
+exports.putDocToCollection = function(collection, id, doc) {
+  var deferred = Q.defer();
+  db.put(collection, id, doc)
+  .then(function (result) {
+    deferred.resolve(result.path);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body.message));
   });
   return deferred.promise;
 };

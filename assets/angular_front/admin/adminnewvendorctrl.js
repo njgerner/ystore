@@ -1,6 +1,6 @@
 superApp.controller('AdminNewVendorCtrl',
-  ['$rootScope', '$scope', '$state', 'bcrypt', 'authService', 'profileService', 'adminService', '$stateParams', '$timeout', 'storeService',
-  function($rootScope, $scope, $state, bcrypt, authService, profileService, adminService, $stateParams, $timeout, storeService) {
+  ['$rootScope', '$scope', '$state', 'authService', 'profileService', 'adminService', '$stateParams', 'bcrypt', 'storeService',
+  function($rootScope, $scope, $state, authService, profileService, adminService, $stateParams, bcrypt, storeService) {
 
     $scope.authorized = false;
 
@@ -11,16 +11,7 @@ superApp.controller('AdminNewVendorCtrl',
       $scope.regkey = result;
     };
 
-    $scope.checkPassword = function() {
-      if(bcrypt.compareSync($scope.attempt, $scope.hash)) {
-        $scope.authorized = true;
-      }else {
-        $scope.authorized = false;
-      }
-    };
-
     $scope.activate = function() {
-      console.log('activate');
       if($scope.authorized = false) {
         return;
       }
@@ -31,6 +22,14 @@ superApp.controller('AdminNewVendorCtrl',
         }
         $state.go('admin.new_vendor');
       });
+    };
+
+    $scope.checkPassword = function() {
+      if(bcrypt.compareSync($scope.attempt, $scope.hash)) {
+        $scope.authorized = true;
+      }else {
+        $scope.authorized = false;
+      }
     };
 
     adminService.getAvailableRegKeys(function (err, keys) {

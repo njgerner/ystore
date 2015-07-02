@@ -75,7 +75,7 @@ module.exports = function(express, app, __dirname) {
 				})
 				.fail(function (err) {
 					throw new Error(err.body.message);
-				})
+				});
 			} else {
 				errorHandler.logAndReturn('No product found', 404, next, null, req.params);
 			}

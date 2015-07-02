@@ -1,6 +1,8 @@
 superApp.controller('CheckoutCtrl',
-  ['$rootScope', '$scope', '$state', '$stateParams', '$timeout', 'storeService', 'authService', 'stripeService',
-  function($rootScope, $scope, $state, $stateParams, $timeout, storeService, authService, stripeService) {
+  ['$rootScope', '$scope', '$state', '$stateParams', '$timeout', 'storeService', 'authService', 
+   'stripeService', 'productService',
+  function($rootScope, $scope, $state, $stateParams, $timeout, storeService, authService, 
+    stripeService, productService) {
 
     // address vars
     $scope.shippingCost = 5; // flat fee for now
@@ -66,6 +68,7 @@ superApp.controller('CheckoutCtrl',
             $scope.merchants.push(storeService.getProductMerchant($scope.productsInCart[i].productnumber));
           }
           $scope.total += ( $scope.products[$scope.productsInCart[i].productnumber].price * $scope.productsInCart[i].quantity );
+          onProductsInCartLoaded();
         }
       });
     }
@@ -83,6 +86,17 @@ superApp.controller('CheckoutCtrl',
           $state.go("order", {orderid: result.id});
           storeService.emptyCart($scope.profileid, function(cart) {});
         }
+      });
+    }
+
+    function onProductsInCartLoaded () {
+      $scope.productsInCart.forEach(function (product, index) {
+        productService.getMerchant(product.productnumber, function (error, merchant) {
+          if (merchant.yliftCanAcceptPayment == 'N') {
+            $scope.total -= ( $scope.products[product.productnumber].price * product.quantity );
+            $scope.note = "Note: You will receive a separate invoice in your inbox for some items in your cart due to the terms of the Y Lift Network.";
+          }
+        });
       });
     }
 

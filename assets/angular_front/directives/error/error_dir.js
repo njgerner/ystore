@@ -3,11 +3,11 @@ appDirectives.directive('errorDir', ['$window', '$log',
 	return {
 		restrict: 'E',
 		scope: {
-			msg: '@'
+			msg: '@',
+			level: '='
 		},
 		templateUrl: 'directives/error_template.html',
 		link: function(scope, element) {
-			$log.info('displaying client error', scope.msg); 
 		}
 	}
 }]);

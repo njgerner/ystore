@@ -31,7 +31,7 @@
     <h4>{{product.name}}</h4>
     <p>{{product.description}}</p>
     <div class="panel">
-      <h5>${{product.price}} <small ng-show="note">{{note}}</small></h5>
+      <h5>${{product.price}} <br><small ng-show="note">{{note}}</small></h5>
       <div ng-if="added" data-alert class="alert-box success radius">
         <strong>Item Added!</strong> View it and the rest of your items from the cart icon above.
         <a class="close" ng-click="reset()">&times;</a>

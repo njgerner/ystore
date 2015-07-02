@@ -2,6 +2,7 @@ trdServices.service("locationService", ['$rootScope', '$http', '$cookieStore', '
     function ($rootScope, $http, $cookieStore, $q) {
     	this.locationsRetrieved = false;
     	this.locations = [];
+    	this.locationsByDoctor = {};
 
     	this.addressToLatLong = function(lookup, address) {
 
@@ -53,6 +54,9 @@ trdServices.service("locationService", ['$rootScope', '$http', '$cookieStore', '
 				    				var locations = result.filter(function(n) { return n != null });
 				    				inThis.locationsRetrieved = true;
 				    				inThis.locations = locations;
+				    				for (var i = 0; i < locations.length; i++) {
+				    					inThis.locationsByDoctor[locations[i].profileid] = locations[i];
+				    				}
 				    				callback(inThis.locations);
 				    			}, function (reason) {
 				    				callback();

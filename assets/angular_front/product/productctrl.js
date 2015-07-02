@@ -70,8 +70,8 @@ superApp.controller('ProductCtrl',
     }
 
     function onMerchantLoaded (error, merchant) {
-        if (merchant && !merchant.yliftCanAcceptPayment) {
-            $scope.note = "Note: This product will not be billed at checkout, purchase will result in a separate invoice from the vendor directly.";
+        if (merchant && merchant.yliftCanAcceptPayment == 'N') {
+            $scope.note = "Note: This product will not be billed at checkout, purchase will result in a separate invoice from the vendor.";
         }
     }
 

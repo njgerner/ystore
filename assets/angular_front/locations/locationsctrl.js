@@ -1,14 +1,17 @@
 superApp.controller('LocationsCtrl',
   ['$rootScope', '$scope', '$state', '$location', 'locationService',
   function($rootScope, $scope, $state, $location, locationService) {
-		$scope.locationsLoaded = false;
+    $rootScope.pageTitle = 'Locations';
+    $scope.locationsLoaded = false;
     $scope.showLocationsRight = true;
+    $scope.selectedLocation = null;
     $scope.showSearch = false;
-		$scope.mapLoaded = false;
-  	$scope.locations = [];
+    $scope.viewBooking = false;
+    $scope.mapLoaded = false;
+    $scope.locations = [];
     $scope.locationFocused = {};
-  	$scope.map = {};
-  	$scope.markers = [];
+    $scope.map = {};
+    $scope.markers = [];
 
     $scope.toggleFocus = function(index) {
       $scope.locations[index].focused = !$scope.locations[index].focused;
@@ -75,6 +78,17 @@ superApp.controller('LocationsCtrl',
 
     $scope.toggleLocationPanel = function() {
       $scope.showLocationsRight = !$scope.showLocationsRight;
+    }
+
+    $scope.openBooking = function(location, $event) {
+      $event.stopPropagation();
+      $scope.selectedLocation = location;
+      $scope.viewBooking = true;
+    }
+
+    $scope.closeBooking = function($event) {
+      $scope.selectedLocation = null;
+      $scope.viewBooking = false;
     }
 
 	  navigator.geolocation.getCurrentPosition(function (position) {

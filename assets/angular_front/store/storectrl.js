@@ -4,6 +4,7 @@ superApp.controller('StoreCtrl',
   function($rootScope, $scope, $window, $location, $state, $stateParams, storeService,
     authService) {
 
+    $rootScope.pageTitle = 'Store';
     $scope.filteredProducts = [];
     $scope.products = [];
     $scope.productsInCart = [];
