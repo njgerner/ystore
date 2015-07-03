@@ -1,8 +1,8 @@
 superApp.controller('SettingsCtrl',
   ['$rootScope', '$scope', '$state', 'authService', 'emailService', 'profileService', '$location', '$stateParams', '$timeout', 
-  'storeService', 'FileUploader', '$window',
+  'storeService', 'FileUploader', '$window', 'locationService',
   function($rootScope, $scope, $state, authService, emailService, profileService, $location, $stateParams, $timeout, 
-  	storeService, FileUploader, $window) {
+  	storeService, FileUploader, $window, locationService) {
   
     $scope.profile = angular.copy(authService.profile);
   	$scope.isYLIFT = authService.isYLIFT;
@@ -31,6 +31,10 @@ superApp.controller('SettingsCtrl',
         $scope.profile = profile;
         $scope.updating = "none";
       });
+    };
+
+    $scope.updateAddress = function(address) {
+      locationService.updateAddress(address);
     };
 
     $scope.isCurrAddress = function(ind) {

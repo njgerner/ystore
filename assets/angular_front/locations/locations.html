@@ -31,7 +31,7 @@
 			<li ng-repeat="location in locations" class="location-list-item" ng-class="{'location-focused':location.focused}">
 				<div class="row location-row" style="margin:0" ng-click="toggleFocus($index)">
 					<div>
-						<h5>{{location.name}} <small>{{location.doctorname}}</small></h5>
+						<h5>{{location.name}} <small><name-dir id="location.profile"></name-dir></small></h5>
 						<p>{{location.formattedaddress}}</p>
 					</div>
 				</div>

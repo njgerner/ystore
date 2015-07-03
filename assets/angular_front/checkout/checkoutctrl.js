@@ -1,6 +1,8 @@
 superApp.controller('CheckoutCtrl',
-  ['$rootScope', '$scope', '$state', '$stateParams', '$timeout', 'storeService', 'authService', 'stripeService',
-  function($rootScope, $scope, $state, $stateParams, $timeout, storeService, authService, stripeService) {
+  ['$rootScope', '$scope', '$state', '$stateParams', '$timeout', 'storeService', 'authService', 
+   'stripeService', 'locationService',
+  function($rootScope, $scope, $state, $stateParams, $timeout, storeService, authService, 
+    stripeService, locationService) {
 
     // address vars
     $scope.shippingCost = 5; // flat fee for now
@@ -9,8 +11,10 @@ superApp.controller('CheckoutCtrl',
     $scope.addresseshipTo = null;
     $scope.productsInCart = [];
     $scope.products = [];
+    $scope.addresses = [];
     $scope.checkoutState = 'shipping';
     $scope.orderError = null;
+    $scope.addressesLoaded = false;
     $scope.orderSubmitted = false;
     $scope.states = {
       shipping: {
@@ -29,9 +33,10 @@ superApp.controller('CheckoutCtrl',
     if (authService.authorized) {
       $scope.profile = authService.profile;
       $scope.profileid = authService.profile.id;
-      $scope.addresses = authService.profile.addresses;
+      locationService.getProfileAddresses(onAddressesLoaded);
     } else {
       $scope.addresses = [];
+      $scope.addressesLoaded = true;
     }
 
     $scope.nextState = function() {
@@ -84,6 +89,12 @@ superApp.controller('CheckoutCtrl',
           storeService.emptyCart($scope.profileid, function(cart) {});
         }
       });
+    }
+
+    function onAddressesLoaded (error, addresses) {
+      console.log('on addresses loaded', addresses);
+      $scope.addresses = addresses;
+      $scope.addressesLoaded = true;
     }
 
     $rootScope.hideCart(function() {}); // want cart to hide when checkout page is brought up

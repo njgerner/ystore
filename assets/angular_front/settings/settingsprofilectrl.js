@@ -1,13 +1,16 @@
 superApp.controller('SettingsProfileCtrl',
   ['$rootScope', '$scope', '$state', 'authService', 'profileService', '$location', '$stateParams', '$timeout', 
-  'storeService', '$window',
+  'storeService', '$window', 'locationService',
   function($rootScope, $scope, $state, authService, profileService, $location, $stateParams, $timeout, 
-  	storeService, $window) {
+  	storeService, $window, locationService) {
 
     $scope.uploading = false;
     $scope.addAddressView = false;
     $scope.editAddressView = false;
-    $scope.addresses = $scope.profile.addresses;
+    $scope.loadingAddresses = true;
+    $scope.adding = false;
+    $scope.updating = false;
+    $scope.addresses = [];
 
     $scope.clearAddress = function() {
       $scope.addressname = null;
@@ -22,7 +25,6 @@ superApp.controller('SettingsProfileCtrl',
     }
 
     $scope.selectAddress = function(ind) {
-      $scope.buttonText = "Update";
       $scope.addAddressView = false;
       if ($scope.currAddress == $scope.addresses[ind]) {
         $scope.currAddress = null;
@@ -43,11 +45,6 @@ superApp.controller('SettingsProfileCtrl',
     };
 
     $scope.submitAddress = function() {
-      if($scope.buttonText == "Add") {  //in add mode
-         $scope.buttonText = "Adding";
-      }else {                           //in edit mode
-        $scope.buttonText = "Updating";
-      }
       var address = {
         "name": $scope.addressname,
         "address1": $scope.address1,
@@ -64,29 +61,20 @@ superApp.controller('SettingsProfileCtrl',
         address.yliftInd = $scope.yliftInd;
       }
       if ($scope.editAddressView) {  // update the address
-        $scope.addresses[$scope.addressInd] = address;
-        $scope.profile.addresses = $scope.addresses;
-        $scope.updateProfile("address");
-        $scope.buttonText = "Update";
-        $scope.editAddressView = false;
-        $scope.clearAddress();
+        $scope.updating = true;
+        locationService.updateAddress(address, onAddressUpdated);
       }
       if ($scope.addAddressView) { // address needs to be added
-        $scope.addresses.push(address);
-        $scope.profile.addresses = $scope.addresses;
-        $scope.updateProfile("address");
-        $scope.buttonText = "Add";
-        $scope.addAddressView = false;
-        $scope.clearAddress();
+        $scope.adding = true;
+        locationService.addAddressToProfile(address, onAddressAdded);
       }
       
     };
 
     $scope.removeAddress = function(ind) {
       if ($window.confirm('Are you sure?')) {
-        $scope.addresses.splice(ind, 1);
-        $scope.profile.addresses = $scope.addresses;
-        $scope.updateProfile();
+        var remove = $scope.addresses.splice(ind, 1);
+        locationService.removeAddress(remove[0]);
       }
     };
 
@@ -95,18 +83,17 @@ superApp.controller('SettingsProfileCtrl',
         for (var i = 0; i < $scope.addresses.length; i++) {
           if ($scope.addresses[i].default) {
             $scope.addresses[i].default = false;
+            locationService.updateAddress($scope.addresses[i]);
           }
           if (i == ind) {
             $scope.addresses[i].default = true;
+            locationService.updateAddress($scope.addresses[i]);
           }
         }
-        $scope.profile.addresses = $scope.addresses;
-        $scope.updateProfile();
       }
     };
 
     $scope.enableAddAddress = function() {
-      $scope.buttonText = "Add";
       $scope.clearAddress();
       $scope.editAddressView = false;
       $scope.addAddressView = true;
@@ -120,5 +107,38 @@ superApp.controller('SettingsProfileCtrl',
       $scope.editAddressView = false;
       $scope.addAddressView = false;
     }
+
+    function onAddressAdded (error, address) {
+      $scope.adding = false;
+      if (error) {
+        $scope.error = error;
+      } else {
+        $scope.addresses.push(address);
+        $scope.addAddressView = false;
+        $scope.clearAddress();
+      }
+    }
+
+    function onAddressUpdated (error, address) {
+      $scope.updating = false;
+      if (error) {
+        $scope.error = error;
+      } else {
+        $scope.editAddressView = false;
+        $scope.clearAddress();
+        for (var i = 0; i < $scope.addresses.length; i++) {
+          if (address.id == $scope.addresses[i].id) {
+            $scope.addresses[i] = address;
+          }
+        }
+      }
+    }
+
+    function onAddressesLoaded (error, addresses) {
+      $scope.loadingAddresses = false;
+      $scope.addresses = addresses || [];
+    }
+
+    locationService.getProfileAddresses(onAddressesLoaded);
 
 }]);

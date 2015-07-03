@@ -31,12 +31,13 @@
   </form>
   <div>
     <div class="row">
+      <error-dir msg="{{errror}}"></error-dir>
         <div class="large-3 small-6 columns">
           My Addresses
         </div>
         <div class="large-3 large-offset-6 small-6 columns text-right">
-          <div ng-hide="addAddressView" class="i-plus" ng-click="enableAddAddress()"></div>
-          <div ng-show="addAddressView" class="i-cancel-circled" ng-click="cancel()"></div>
+          <div ng-hide="addAddressView" class="i-plus pointer" ng-click="enableAddAddress()"></div>
+          <div ng-show="addAddressView" class="i-cancel-circled pointer" ng-click="cancel()"></div>
         </div>
     </div>
     <div class="row address-list" ng-repeat="address in addresses">
@@ -50,13 +51,14 @@
         <a class="address-edit-link" ng-click="removeAddress($index)">Delete</a>
       </div>
     </div> 
+    <div ng-show="loadingAddresses" class="loader locations-loading">Loading...</div>
     <form ng-show="addAddressView || editAddressView" novalidate>
       <fieldset>
         <div>
             <input type="text" ng-model="addressname" placeholder="Address Name"/>
         </div>
         <div>
-            <input type="text" ng-model="address1" placeholder="Address"/>
+            <input type="text" ng-model="address1" placeholder="Street Address"/>
         </div>
         <div>
             <input type="text" ng-model="address2" placeholder="Suite # (If relevant)"/>
@@ -72,13 +74,16 @@
         </div>
         <div ng-show="isYLIFT">
           <label>Check if this location is a Y LIFT Network practice
-            <input type="checkbox" ng-model="yliftInd" ng-true-value="YES" ng-false-value="NO">
+            <input type="checkbox" ng-model="yliftInd" ng-true-value="Y" ng-false-value="N">
           </label>
         </div>
           <button type="submit" class="button small" ng-click="submitAddress()">
-            {{buttonText}}
+            <span ng-show="adding">Adding...</span>
+            <span ng-hide="adding || editAddressView">Add</span>
+            <span ng-show="updating">Updating...</span>
+            <span ng-hide="updating || addAddressView">Update</span>
           </button>
-          <button ng-show="updating == 'none'" class="button secondary small" ng-click="cancel()"/>Cancel</button>
+          <button class="button secondary small" ng-click="cancel()"/>Cancel</button>
       </fieldset>
     </form>
   </div>

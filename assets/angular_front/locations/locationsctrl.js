@@ -46,34 +46,10 @@ superApp.controller('LocationsCtrl',
       });
     }
 
-  	$scope.onLocationsLoaded = function() {
-  		var img = {
-  			url: '/img/logo_md.png' // look into more props
-  		};
-      $scope.locationsLoaded = true;
-      $scope.locations.forEach(function (location, index) {
-        location.focused = false;
-  			$scope.markers[index] = new google.maps.Marker({
-  				position: new google.maps.LatLng(location.location.A, location.location.F),
-  				map: $scope.map,
-  				animation: google.maps.Animation.DROP,
-  				title: location.name,
-  				icon: img
-  			});
-        google.maps.event.addListener($scope.markers[index], 'click', function(e) {
-          $scope.toggleFocus(index);
-          $scope.map.panTo(e.latLng);
-        });
-      });
-  	}
-
   	$scope.onMapLoaded = function(map) {
       $scope.mapLoaded = true;
   		$scope.map = map;
-		  locationService.getAllLocations(function (locations) {
-				$scope.locations = locations;
-				$scope.onLocationsLoaded();
-			});
+		  locationService.getYLiftLocations(onLocationsLoaded);
   	}
 
     $scope.toggleLocationPanel = function() {
@@ -89,6 +65,28 @@ superApp.controller('LocationsCtrl',
     $scope.closeBooking = function($event) {
       $scope.selectedLocation = null;
       $scope.viewBooking = false;
+    }
+
+    function onLocationsLoaded (error, locations) {
+      var img = {
+        url: '/img/logo_md.png' // look into more props
+      };
+      $scope.locations = locations;
+      $scope.locationsLoaded = true;
+      $scope.locations.forEach(function (location, index) {
+        location.focused = false;
+        $scope.markers[index] = new google.maps.Marker({
+          position: new google.maps.LatLng(location.location.A, location.location.F),
+          map: $scope.map,
+          animation: google.maps.Animation.DROP,
+          title: location.name,
+          icon: img
+        });
+        google.maps.event.addListener($scope.markers[index], 'click', function(e) {
+          $scope.toggleFocus(index);
+          $scope.map.panTo(e.latLng);
+        });
+      });
     }
 
 	  navigator.geolocation.getCurrentPosition(function (position) {

@@ -31,9 +31,6 @@ module.exports = function(express, app, __dirname) {
 
 	// GET /profile/:profileid
 	ProfileRoutes.get_profile = function(req, res, next) {
-		if (!req.user.isYLIFT) {
-	  	errorHandler.logAndReturn('User not authorized to request profile', 401, next, null, [req.params, req.user]);
-		}
 	  orchHelper.getProfile(req.params.profileid)
 	  	.then(function (result) {
 	  		if (result) {
@@ -46,22 +43,7 @@ module.exports = function(express, app, __dirname) {
 	  		errorHandler.logAndReturn('Error retrieving profile for account', 500, next, err, [req.params, req.user]);
 	  	});
 	};
-
-	// GET /profile/:profileid
-	ProfileRoutes.get_profile = function(req, res, next) {
-	  orchHelper.getProfile(req.params.profileid)
-	  	.then(function (result) {
-	  		if (result) {
-		  		res.status(200).json({profile:result});
-	  		} else {
-	  			errorHandler.logAndReturn('No profile found', 404, next, null, req.params);
-	  		}
-	  	})
-	  	.fail(function (err) {
-	  		errorHandler.logAndReturn('Error retrieving profile', 500, next, err, req.params);
-	  	});
-	};
-
+	
 	// POST /profile/update_profile/:profileid
 	ProfileRoutes.update_profile = function(req, res, next) {
 	  orchHelper.updateProfile(req.params.profileid, req.body.profile)
