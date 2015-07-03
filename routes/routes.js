@@ -325,25 +325,6 @@ passport.use('bearer', new BearerStrategy(
       errorHandler.logAndReturn('Error updating user', 500, next, err, req.body);
     });
   };
- 
-
-  ///GET /all_products
-  var all_products = function(req, res, next) {
-    orchHelper.getAllProducts()
-      .then(function (products) {
-        if (products && req.user && req.user.isYLIFT) {
-          req.body.products = products;
-          next();
-        } else if (products) {
-          res.status(200).json({products: products});
-        } else {
-          errorHandler.logAndReturn('No products found', 404, next);
-        }
-      })
-      .fail(function (err) {
-        errorHandler.logAndReturn('Error retrieving products', 500, next, err);
-      });
-  };
 
   // GET get_product_by_id/:productnumber
   var get_product_by_id = function(req, res, next) {
@@ -594,7 +575,6 @@ passport.use('bearer', new BearerStrategy(
     app.get('/appcss', appcss);
 
     app.get('/all_orders/:profileid', ensureAuthenticated, get_all_orders);
-    app.get('/all_products', all_products);
     app.get('/all_ylift_profiles', all_ylift_profiles);
     app.get('/authorized', ensureAuthenticated, authorized);
     app.get('/cart/:profileid', ensureAuthenticated, get_cart);
@@ -663,6 +643,7 @@ passport.use('bearer', new BearerStrategy(
     // -- START Admin Routes
     ///////////////////////////////////////////////////////////////
     app.get('/admin/all_profiles', ensureAuthenticated, adminRoutes.all_profiles);
+    app.get('/admin/all_products', ensureAuthenticated, adminRoutes.all_products);
     app.get('/admin/promos', ensureAuthenticated, adminRoutes.get_promos);
     app.post('/admin/add_product', ensureAuthenticated, adminRoutes.add_product);
     app.post('/admin/add_promo', ensureAuthenticated, adminRoutes.add_promo);

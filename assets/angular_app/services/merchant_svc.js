@@ -5,14 +5,14 @@ trdServices.service("merchantService", ['$http',
 
     this.getMerchantByID = function(merchantid, callback) {
         if(this.merchants[merchantid]) {
-            callback(this.merchants[merchantid]);
+            callback(null, this.merchants[merchantid]);
         }
     	var internalThis = this;
         $http({method: 'POST', url: "/get_merchant_name",
             data:{id:merchantid}})
         .success(function(data, status, headers, config) {
         	internalThis.merchants[data.merchant.id] = data.merchant;
-            callback(data.merchant);
+            callback(null, data.merchant);
         })
         .error(function(data, status, headers, config) {
             callback("Merchant not found");

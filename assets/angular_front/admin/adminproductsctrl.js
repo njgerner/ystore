@@ -1,25 +1,29 @@
 superApp.controller('AdminProductsCtrl',
-  ['$rootScope', '$scope', '$state', 'authService', 'profileService', 'merchantService', '$location', 'productService', '$timeout', 'storeService',
-  function($rootScope, $scope, $state, authService, profileService, merchantService, $location, productService, $timeout, storeService) {
+  ['$rootScope', '$scope', '$state', 'adminService', 'merchantService', 'productService', 'storeService',
+  function($rootScope, $scope, $state, adminService, merchantService, productService, storeService) {
 
     $scope.vendornames = {};
 
-  	storeService.getStoreFront(function(error, products) {
-      if (error) {
+    adminService.getAllProducts(function (err, products) {
+      if(err) {
         $scope.error = error;
         return;
       }
-  		$scope.products = products;
-  		$scope.products.forEach(function (product) {
-  			  merchantService.getMerchantName(product.attributes.vendor, function(name) {
-  				$scope.vendornames[product.productnumber] = name;
-  			});
-  		});
-  	});
-
-    $scope.displayDate = function(date) {
-      return moment(date).format("MMMM Do, YYYY");
-    };
+      $scope.products = products;
+      $scope.vendorIDs = [];
+      for(var i = 0; i < products.length; i++) {
+        if($scope.vendorIDs.indexOf(products[i].attributes.vendor) < 0) {
+          $scope.vendorIDs.push(products[i].attributes.vendor);
+          adminService.getMerchantProfile(products[i].attributes.vendor, function (err, profile) {
+            if(err) {
+              $scope.error = err;
+            }else{
+              $scope.vendornames[profile.id] = profile.name;
+            }
+          });
+        }
+      }
+    });
 
     $scope.editProduct = function(productnumber, attribute) {
       $scope.products.forEach(function (product) {

@@ -1,4 +1,5 @@
 <div ng-if="vendor">
+    <error-dir msg="{{error}}"></error-dir>
 	<div class="row">
 		<div class="large-10 columns text-center">
 			<h3>{{vendor.name}}</h3>
@@ -13,7 +14,9 @@
 					<p style="margin-bottom:0">Phone: {{vendor.phone}}</p>
 					<p>Email: {{vendor.email}}</p>
 					<h5>Members</h5>
-					<li ng-if="members" ng-repeat="member in members"><a ui-sref="admin.user({profileid:member.id})">{{member.name}}</a>: {{member.email}}</li>
+					<li ng-if="members" ng-repeat="member in members">
+						<a ui-sref="admin.user({profileid:member.id})">{{member.name}}</a>: {{member.email}}
+					</li>
 				</div>
 				<div style="border-left: 1px solid" class="large-7 end columns">
 					<h4>Products ({{merchantProducts.length}} total)</h4>
