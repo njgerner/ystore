@@ -92,7 +92,6 @@ superApp.controller('CheckoutCtrl',
     }
 
     function onAddressesLoaded (error, addresses) {
-      console.log('on addresses loaded', addresses);
       $scope.addresses = addresses;
       $scope.addressesLoaded = true;
     }
