@@ -561,7 +561,6 @@ passport.use('bearer', new BearerStrategy(
     app.get('/appcss', appcss);
 
     app.get('/all_orders/:profileid', ensureAuthenticated, get_all_orders);
-    app.get('/all_ylift_profiles', all_ylift_profiles);
     app.get('/authorized', ensureAuthenticated, authorized);
     app.get('/cart/:profileid', ensureAuthenticated, get_cart);
     app.get('/get_all_testimonials', get_all_testimonials);

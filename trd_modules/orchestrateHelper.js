@@ -1244,16 +1244,15 @@ exports.findPatientAppts = function(profileid) {
   return deferred.promise;
 };
 
-exports.findProviderAppts = function(profileid, start, end) {
+exports.findProviderAppts = function(profileid, office, start, end) {
   var deferred = Q.defer();
   db.newSearchBuilder()
   .collection('appointments')
   .limit(100)
   .range('value.date', function (builder) {
-    return builder
-    .between(start, end);
+    return builder.between(start, end);
   })
-  .query('value.provider: ' + profileid)
+  .query('value.provider: ' + profileid + ' AND value.office: ' + office)
   .then(function (result) {
     deferred.resolve(rawDogger.push_values_to_top(result.body.results));
   })
@@ -1337,22 +1336,6 @@ exports.getDocFromCollection = function(collection, key) {
   db.get(collection, key)
   .then(function (result){
     deferred.resolve(result.body);
-  })
-  .fail(function (err) {
-    if (err.body.code == "items_not_found") {
-      deferred.resolve(false);
-    } else {
-      deferred.reject(new Error(err.body.message));
-    }
-  });
-  return deferred.promise;
-};
-
-exports.searchDocsFromCollection = function(collection, query, params) {
-  var deferred = Q.defer();
-  db.search(collection, query, params)
-  .then(function (result){
-    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
   })
   .fail(function (err) {
     if (err.body.code == "items_not_found") {

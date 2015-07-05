@@ -67,12 +67,16 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	BookingRoutes.get_provider_appts = function(req, res, next) {
-		orchHelper.findProviderAppts(req.params.providerid, req.body.start, req.body.end)
+		if (!req.body.office) {
+			errorHandler.logAndReturn('Missing appointment request data', 400, next, null, [req.user, req.body]);
+			return;
+		}
+		orchHelper.findProviderAppts(req.params.providerid, req.body.office, req.body.start, req.body.end)
 		.then(function (result) {
 			res.status(200).json({appts:result});
 		})
 		.fail(function (err) {
-			errorHandler.logAndReturn('Error fetching patient appointments', 500, next, err, req.params);
+			errorHandler.logAndReturn('Error fetching patient appointments', 500, next, err, [req.params, req.body]);
 		});
 	};
 

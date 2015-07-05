@@ -54,10 +54,10 @@ trdServices.service("bookingService", ['$rootScope', '$http', '$cookieStore', '$
 	        });
     	}
 
-    	this.getProviderAppts = function(startdate, enddate, providerid, callback) {
+    	this.getProviderAppts = function(startdate, enddate, officeid, providerid, callback) {
     		var inThis = this;
     		$http({method: 'POST', url: '/booking/provider_appts/' + providerid,
-    			   data: {start:startdate, end:enddate}})
+    			   data: {start:startdate, end:enddate, office:officeid}})
 	        .success(function (data, status, headers, config) {
 	            callback(null, data.appts);
 	        })
