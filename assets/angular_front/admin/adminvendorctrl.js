@@ -15,9 +15,7 @@ superApp.controller('AdminVendorCtrl',
         $scope.members = [];
         $scope.vendor.members.forEach(function (member) {
           adminService.getProfileByID(member, function (err, profile) {
-            if(!err == 'No profile found from admin') { //stray profile id in vendor.members
-              $scope.error = err;
-            }else {
+            if(profile) {
               $scope.members.push(profile);
             }
           });
