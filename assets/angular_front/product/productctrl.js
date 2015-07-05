@@ -1,6 +1,8 @@
 superApp.controller('ProductCtrl',
   ['$rootScope', '$scope', '$state', '$stateParams', 'storeService', 'authService', 'productService', 
-  function($rootScope, $scope, $state, $stateParams, storeService, authService, productService) {
+   'profileService',
+  function($rootScope, $scope, $state, $stateParams, storeService, authService, productService,
+    profileService) {
 
     $scope.loading = true;
     $scope.reviewsLoading = true;
@@ -50,11 +52,11 @@ superApp.controller('ProductCtrl',
     }
 
     function onProductLoaded (error, product) {
+        $scope.loading = false;
         if (error) {
             $scope.error = error;
         }
         $scope.product = product;
-        $scope.loading = false;
     }
 
     function onRelatedProductsLoaded (error, products) {
@@ -65,6 +67,12 @@ superApp.controller('ProductCtrl',
         }
         $scope.relatedProducts = products;
         $scope.relatedLoading = false;
+    }
+
+    function onMerchantLoaded (error, merchant) {
+        if (merchant && merchant.yliftCanAcceptPayment == 'N') {
+            $scope.note = "Note: This product will not be billed at checkout, purchase will result in a separate invoice from the vendor.";
+        }
     }
 
     function onReviewsLoaded (error, reviews) {
@@ -85,6 +93,7 @@ superApp.controller('ProductCtrl',
 
     storeService.getProductByID($scope.productnumber, onProductLoaded);
     storeService.getRelatedProducts($scope.productnumber, onRelatedProductsLoaded);
+    productService.getMerchant($scope.productnumber, onMerchantLoaded);
     productService.getReviews($scope.productnumber, onReviewsLoaded);
     productService.getRating($scope.productnumber, onRatingLoaded);
     productService.addPageView($scope.productnumber);

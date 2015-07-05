@@ -1,19 +1,68 @@
+<!-- <<<<<<< HEAD
+<div class="row">
+	<div class="large-10 columns text-center">
+		<h3>{{vendor.name}}</h3>
+	</div>
+</div>
+<div class="row">
+	<div class="panel large-10 columns">
+		<div class="row">
+			<div class="large-4 columns">
+				<h4>Contact Info</h4>
+				<p style="margin-bottom:0">Phone: <a ng-href="tel:{{vendor.phone}}">{{vendor.phone}}</a></p>
+				<p>Email: <a ng-href="mailto:{{vendor.email}}">{{vendor.email}}</a></p>
+				<hr>
+				<h4>Members</h4>
+				<li ng-if="members" ng-repeat="member in members"><a ui-sref="admin.user({profileid:member.id})">{{member.name}}</a>: <a ng-href="mailto:{{member.email}}">{{member.email}}</a></li>
+				<hr>
+				<h4>Settings</h4>
+				<label>Can Y Lift accept payments on behalf of {{vendor.name}}?
+					<select ng-model="vendor.yliftCanAcceptPayment">
+						<option value="Y">Yes</option>
+						<option value="N">No</option>
+					</select>
+				</label>
+				<button class="button small" ng-click="updateMerchant()">
+					<span ng-hide="updating">Update</span>
+					<span ng-show="updating">Updating...</span>
+				</button>
+			</div>
+			<div style="border-left: 1px solid" class="large-7 end columns">
+				<h4>Products ({{merchantProducts.length}} total)</h4>
+				<p style="margin:0" ng-repeat="product in merchantProducts"><a ui-sref="admin.product({productnumber:product.productnumber})">{{product.name}}</a></p> -->
+
 <div ng-if="vendor">
+    <error-dir msg="{{error}}"></error-dir>
 	<div class="row">
 		<div class="large-10 columns text-center">
 			<h3>{{vendor.name}}</h3>
+			<p><strong>Vendor since</strong>: {{displayDate(vendor.createdAt)}}</p>
 		</div>
 	</div>
 	<div class="row">
 		<div class="panel large-10 columns">
 			<div class="row">
 				<div class="large-4 columns">
-					<p><strong>Vendor since</strong>: {{displayDate(vendor.createdAt)}}</p>
 					<h4>Contact Info</h4>
-					<p style="margin-bottom:0">Phone: {{vendor.phone}}</p>
-					<p>Email: {{vendor.email}}</p>
+					<p style="margin-bottom:0">Phone: <a ng-href="tel:{{vendor.phone}}">{{vendor.phone}}</a></p>
+					<p>Email: <a ng-href="mailto:{{vendor.email}}">{{vendor.email}}</a></p>
+					<hr>
 					<h5>Members</h5>
-					<li ng-if="members" ng-repeat="member in members"><a ui-sref="admin.user({profileid:member.id})">{{member.name}}</a>: {{member.email}}</li>
+					<li ng-if="members" ng-repeat="member in members">
+						<a ui-sref="admin.user({profileid:member.id})">{{member.name}}</a>: {{member.email}}
+					</li>
+					<hr>
+					<h4>Settings</h4>
+					<label>Can Y Lift accept payments on behalf of {{vendor.name}}?
+						<select ng-model="vendor.yliftCanAcceptPayment">
+							<option value="Y">Yes</option>
+							<option value="N">No</option>
+						</select>
+					</label>
+					<button class="button small" ng-click="updateMerchant()">
+						<span ng-hide="updating">Update</span>
+						<span ng-show="updating">Updating...</span>
+					</button>
 				</div>
 				<div style="border-left: 1px solid" class="large-7 end columns">
 					<h4>Products ({{merchantProducts.length}} total)</h4>

@@ -63,6 +63,35 @@ module.exports = function(express, app, __dirname) {
 		});
 	};
 
+	// GET /product_merchant/:productnumber
+	ProductRoutes.get_merchant = function(req, res, next) {
+		var pn = req.params.productnumber;
+		orchHelper.getDocFromCollection('products', pn)
+		.then(function (data) {
+			if (data) {
+				return orchHelper.getDocFromCollection('merchant-profiles', data.attributes.vendor)
+				.then(function (result) {
+					return result;
+				})
+				.fail(function (err) {
+					throw new Error(err.body.message);
+				});
+			} else {
+				errorHandler.logAndReturn('No product found', 404, next, null, req.params);
+			}
+		})
+		.then(function (result) {
+			if (result) {
+				res.status(200).json({merchant:result});
+			} else {
+				errorHandler.logAndReturn('No product merchant found', 404, next, null, req.params);
+			}
+		})
+		.fail(function (err) {
+			errorHandler.logAndReturn('Error retrieving product merchant', 500, next, err, req.params);
+		});
+	};
+
 	// GET /most_viewed_product/:profileid
 	ProductRoutes.most_viewed_product = function(req, res, next) {
 		orchHelper.getMostFrequentEvent('products', 'page-view', req.params.profileid)

@@ -12,11 +12,26 @@ superApp.controller('AdminCtrl',
   		return moment(date).format("MMM Do YYYY");
     };
 
+    $scope.toTitleCase = function(str) {
+      return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    };
+
     adminService.getHash($scope.profile.id, function (err, hash) {
     	if(err) {
     		$scope.error = err;
     	}
     	$scope.hash = hash;
-    })
+    });
+
+    adminService.getAllMerchantProfiles(function (err, profiles) {
+      if(err) {
+        $scope.error = err;
+      }else {
+        $scope.merchantsLoaded = true;
+      }
+      $scope.merchantProfiles = profiles;
+    });
+
+
 
 }]);
