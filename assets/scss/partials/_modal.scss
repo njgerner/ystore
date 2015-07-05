@@ -162,6 +162,9 @@ j
 
 .cal-nav {
 	@extend .pointer;
-	font-size: 200%;
+	margin-top:0.5rem;
+}
+
+.cal-row {
 	margin-top:1rem;
 }

@@ -1,3 +1,4 @@
 <div ng-show="msg">
-	<p class='error'>{{msg}}</p>
+	<p class='error' ng-if="!redirectInMessage">{{msg}}</p>
+	<p class='error' ng-if="redirectInMessage" ng-bind-html="msg | unsafe"></p>
 </div>
