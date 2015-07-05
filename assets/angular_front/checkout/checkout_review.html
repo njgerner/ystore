@@ -4,6 +4,7 @@
 		<h3><strong>Review<strong></h3>
 	</div>	
 	<error-dir msg="{{error || $parent.orderError}}"></error-dir>
+	<span ng-if="note" style="margin-top:1rem;" data-alert class="alert-box info radius">{{note}}</span>
 </div>
 <div class="row" ng-click="toggleItems()">
 	<div class="large-7 columns">

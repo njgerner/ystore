@@ -143,6 +143,20 @@ trdServices.service("adminService", ['$rootScope', '$http', 'authService', 'merc
 	        });
     	};
 
+    	this.updateMerchantProfile = function(profile, callback) {
+	        var inThis = this;
+	        $http({method: 'POST', url: '/admin/profile/update_merchant', 
+	               data:{profile:profile}})
+	        .success(function (data, status, headers, config) {
+	            inThis.merchant = data.profile;
+	            callback(null, data.profile);
+	        })
+	        .error(function (data, status, headers, config) {
+	            $log.debug('error updating merchant profile', data);
+	            callback(data.message);
+	        });
+	    }
+
     	this.addPromoCode = function(promo, callback) {
     		$http({method: 'POST', url: '/admin/add_promo', data: {promo:promo} })
 	        .success(function (data, status, headers, config) {

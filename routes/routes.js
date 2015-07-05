@@ -589,6 +589,7 @@ passport.use('bearer', new BearerStrategy(
     app.get('/order/:orderid', get_order_by_id);
     app.get('/product_rating/:productnumber', productRoutes.get_rating);
     app.get('/product_reviews/:productnumber', productRoutes.get_reviews);
+    app.get('/product_merchant/:productnumber', productRoutes.get_merchant);
     app.get('/profile/:profileid', ensureAuthenticated, profileRoutes.get_profile);
     app.get('/request_pass_reset/:email', request_pass_reset);
     app.get('/reset_password/:userid', reset_password);
@@ -656,6 +657,7 @@ passport.use('bearer', new BearerStrategy(
     app.post('/admin/regkeys', ensureAuthenticated, adminRoutes.get_available_keys);
     app.post('/admin/hash', ensureAuthenticated, adminRoutes.get_hash);
     app.post('/admin/add_regkey', ensureAuthenticated, adminRoutes.add_regkey);
+    app.post('/admin/profile/update_merchant', ensureAuthenticated, profileRoutes.update_merchant);
 
     // -- START Booking Routes
     app.get('/booking/patient_appts/:patientid', ensureAuthenticated, bookingRoutes.get_patient_appts);
