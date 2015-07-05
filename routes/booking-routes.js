@@ -11,7 +11,7 @@ module.exports = function(express, app, __dirname) {
 		fs 				= require('fs');
 
 	BookingRoutes.request_appt = function(req, res, next) {
-		if (!req.params.providerid || !req.body.patientid || !req.body.date) {
+		if (!req.params.providerid || !req.body.patientid || !req.body.date || !req.body.office) {
 			errorHandler.logAndReturn('Missing appointment request data', 400, next, null, [req.params, req.body]);
 			return;
 		}

@@ -71,7 +71,8 @@ appDirectives.directive('bookingModalDir', ['$window', 'authService', 'bookingSe
 				} else {
 					scope.success = true;
 					scope.appts.push(appt);
-					scope.apptsByTimestamp[appt.date] = appt;
+					scope.apptsByOfficeAndTimestamp[appt.office] = scope.apptsByOfficeAndTimestamp[appt.office] || {};
+					scope.apptsByOfficeAndTimestamp[appt.office][appt.date] = appt;
 				}
 			}
 
@@ -85,7 +86,8 @@ appDirectives.directive('bookingModalDir', ['$window', 'authService', 'bookingSe
 			apptsWatch = scope.$watch('appts', function (newVal, oldVal) {
 				if (newVal && newVal.length) {
 					for (var i = 0; i < newVal.length; i++) {
-						scope.apptsByTimestamp[newVal[i].date] = newVal[i];
+						scope.apptsByOfficeAndTimestamp[newVal[i].office] = scope.apptsByOfficeAndTimestamp[newVal[i].office] || {};
+						scope.apptsByOfficeAndTimestamp[newVal[i].office][newVal[i].date] = newVal[i];
 					}
 				}
 			});
