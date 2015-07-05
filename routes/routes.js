@@ -311,25 +311,6 @@ passport.use('bearer', new BearerStrategy(
       errorHandler.logAndReturn('Error updating user', 500, next, err, req.body);
     });
   };
- 
-
-  ///GET /all_products
-  var all_products = function(req, res, next) {
-    orchHelper.getAllProducts()
-      .then(function (products) {
-        if (products && req.user && req.user.isYLIFT) {
-          req.body.products = products;
-          next();
-        } else if (products) {
-          res.status(200).json({products: products});
-        } else {
-          errorHandler.logAndReturn('No products found', 404, next);
-        }
-      })
-      .fail(function (err) {
-        errorHandler.logAndReturn('Error retrieving products', 500, next, err);
-      });
-  };
 
   // GET get_product_by_id/:productnumber
   var get_product_by_id = function(req, res, next) {
@@ -580,7 +561,7 @@ passport.use('bearer', new BearerStrategy(
     app.get('/appcss', appcss);
 
     app.get('/all_orders/:profileid', ensureAuthenticated, get_all_orders);
-    app.get('/all_products', all_products);
+    app.get('/all_ylift_profiles', all_ylift_profiles);
     app.get('/authorized', ensureAuthenticated, authorized);
     app.get('/cart/:profileid', ensureAuthenticated, get_cart);
     app.get('/get_all_testimonials', get_all_testimonials);
@@ -594,6 +575,7 @@ passport.use('bearer', new BearerStrategy(
     app.get('/order/:orderid', get_order_by_id);
     app.get('/product_rating/:productnumber', productRoutes.get_rating);
     app.get('/product_reviews/:productnumber', productRoutes.get_reviews);
+    app.get('/product_merchant/:productnumber', productRoutes.get_merchant);
     app.get('/request_pass_reset/:email', request_pass_reset);
     app.get('/reset_password/:userid', reset_password);
     app.get('/sign_s3', awsRoutes.sign_s3);
@@ -653,6 +635,7 @@ passport.use('bearer', new BearerStrategy(
     // -- START Admin Routes
     // GET ////////////////////////////////////////////////////////////
     app.get('/admin/all_profiles', ensureAuthenticated, adminRoutes.all_profiles);
+    app.get('/admin/all_products', ensureAuthenticated, adminRoutes.all_products);
     app.get('/admin/promos', ensureAuthenticated, adminRoutes.get_promos);
     app.get('/admin/profile/:profileid', ensureAuthenticated, adminRoutes.get_profile);
     app.get('/admin/all_merchants', ensureAuthenticated, adminRoutes.all_merchants);
@@ -666,6 +649,7 @@ passport.use('bearer', new BearerStrategy(
     app.post('/admin/regkeys', ensureAuthenticated, adminRoutes.get_available_keys);
     app.post('/admin/hash', ensureAuthenticated, adminRoutes.get_hash);
     app.post('/admin/add_regkey', ensureAuthenticated, adminRoutes.add_regkey);
+    app.post('/admin/profile/update_merchant', ensureAuthenticated, profileRoutes.update_merchant);
 
     // -- START Booking Routes
     // GET ////////////////////////////////////////////////////////////

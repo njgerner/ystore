@@ -73,11 +73,12 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	// POST /profile/update_merchant
+	// POST admin/profile/update_merchant
 	ProfileRoutes.update_merchant = function(req, res, next) {
 	  orchHelper.updateMerchantProfile(req.body.profile)
 	  	.then(function (result) {
 	  		if (result) {
-	  			res.status(200).json(result);
+	  			res.status(200).json({profile:result});
 	  		} else {
 	  			errorHandler.logAndReturn('No merchant profile found to update', 404, next, null, req.body);
 	  		}

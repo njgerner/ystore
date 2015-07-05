@@ -1,8 +1,8 @@
 superApp.controller('CheckoutCtrl',
   ['$rootScope', '$scope', '$state', '$stateParams', '$timeout', 'storeService', 'authService', 
-   'stripeService', 'locationService',
+   'stripeService', 'locationService, productService',
   function($rootScope, $scope, $state, $stateParams, $timeout, storeService, authService, 
-    stripeService, locationService) {
+    stripeService, locationService, productService) {
 
     // address vars
     $scope.shippingCost = 5; // flat fee for now
@@ -71,6 +71,7 @@ superApp.controller('CheckoutCtrl',
             $scope.merchants.push(storeService.getProductMerchant($scope.productsInCart[i].productnumber));
           }
           $scope.total += ( $scope.products[$scope.productsInCart[i].productnumber].price * $scope.productsInCart[i].quantity );
+          onProductsInCartLoaded();
         }
       });
     }
@@ -94,6 +95,17 @@ superApp.controller('CheckoutCtrl',
     function onAddressesLoaded (error, addresses) {
       $scope.addresses = addresses;
       $scope.addressesLoaded = true;
+    }
+
+    function onProductsInCartLoaded () {
+      $scope.productsInCart.forEach(function (product, index) {
+        productService.getMerchant(product.productnumber, function (error, merchant) {
+          if (merchant.yliftCanAcceptPayment == 'N') {
+            $scope.total -= ( $scope.products[product.productnumber].price * product.quantity );
+            $scope.note = "Note: You will receive a separate invoice in your inbox for some items in your cart due to the terms of the Y Lift Network.";
+          }
+        });
+      });
     }
 
     $rootScope.hideCart(function() {}); // want cart to hide when checkout page is brought up

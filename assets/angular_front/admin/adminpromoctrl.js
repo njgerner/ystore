@@ -83,6 +83,7 @@ superApp.controller('AdminPromoCtrl',
         }
         promo.active = $scope.makeactive;
         promo.message = $scope.message;
+        promo.domain = $scope.domain;
         $scope.activating = true;
         adminService.addPromoCode(promo, function (err, code) {
           if(err) {

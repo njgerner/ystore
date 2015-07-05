@@ -63,7 +63,9 @@
       <input type="text" ng-model="product.name" placeholder="Enter the product name"/>
     </label>
     <label>Vendor
-      <input type="text" ng-model="product.vendor"/>
+      <select ng-model="vendor"/>
+        <option ng-repeat="merchant in merchantProfiles" value="merchant.id" ng-model="vendor">{{merchant.name}}</option>
+      </select>
     </label>
     <label>Product category
       <select ng-model="product.category">
@@ -81,6 +83,10 @@
         <input type="text" ng-model="product.price" placeholder="Enter price, exclude currency symbol"/>
       </label>
     </div>
+      <input type="radio" value="yes" ng-model="makeactive" class="product-radio">
+      <span>
+        <p>Check to make product active. Note: active products are immediately visible in the store!</p>
+      </span>
     <div class="clearfix">
       <button class="primary expand right" ng-click="addProduct()">
         <span ng-hide="updating">Add</span>

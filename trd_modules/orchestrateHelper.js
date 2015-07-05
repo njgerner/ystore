@@ -319,8 +319,8 @@ exports.checkTemp = function (req) {
   return req.body.tempPwd;
 };
 
-//get all products
-exports.getAllProducts = function() {
+//get storefront products
+exports.getStorefrontProducts = function() {
   var deferred = Q.defer();
   db.newSearchBuilder()
     .collection('products')
@@ -335,6 +335,21 @@ exports.getAllProducts = function() {
     } else {
       deferred.reject(new Error(err.body));
     }
+  });
+  return deferred.promise;
+};
+
+exports.getAllProducts = function() {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+  .collection('products')
+  .limit(100)
+  .query('*')
+  .then(function (result) {
+    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body.message));
   });
   return deferred.promise;
 };
@@ -1369,6 +1384,22 @@ exports.getDocFromCollection = function(collection, key) {
   db.get(collection, key)
   .then(function (result){
     deferred.resolve(result.body);
+  })
+  .fail(function (err) {
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
+  });
+  return deferred.promise;
+};
+
+exports.searchDocsFromCollection = function(collection, query, params) {
+  var deferred = Q.defer();
+  db.search(collection, query, params)
+  .then(function (result){
+    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
   })
   .fail(function (err) {
     if (err.body.code == "items_not_found") {

@@ -6,7 +6,7 @@
 			</span>
 		</h3>
 		<error-dir msg="{{error}}"></error-dir>
-		<table style="width:100%">
+		<table ng-if="merchantsLoaded" style="width:100%">
 			<thead>
 			    <tr>
 			      <th>Vendor</th>
@@ -15,18 +15,16 @@
 			      <th>Date Added</th>
 			      <th>Active</th>
 			      <th>Y Lift</th>
-			      <th>Featured</th>
 			    </tr>
 			</thead>
 			<tbody>
 				<tr ng-repeat="product in products">
-					<th>{{vendornames[product.productnumber]}}</th>
+					<th><a ui-sref="admin.vendor({merchantid:product.attributes.vendor})"> {{vendornames[product.attributes.vendor]}}</a></th>
 					<th><a ui-sref="admin.product({productnumber:product.productnumber})">{{product.name}}</a></th>
-					<th>{{product.category}}</th>
+					<th>{{toTitleCase(product.category)}}</th>
 					<th>{{displayDate(product.createdAt)}}</th>
 					<th ng-click="editProduct(product.productnumber, 'active')" style="text-align:center">{{product.active}}</th>
 					<th ng-click="editProduct(product.productnumber, 'isYLIFT')" style="text-align:center">{{product.isYLIFT || 'N'}}</th>
-					<th ng-click="editProduct(product.productnumber, 'featured')"style="text-align:center">{{product.featured || 'N'}}</th>
 				</tr>
 			</tbody>
 		</table>

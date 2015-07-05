@@ -66,7 +66,7 @@ module.exports = function(express, app, __dirname) {
 	// POST /store
 	StoreRoutes.get_storefront = function(req, res, next) {
 		if (req.body.ylift) {
-			orchHelper.getAllProducts()
+			orchHelper.getStorefrontProducts()
 			.then(function (data) {
 				res.status(200).json({products:data});
 			})
