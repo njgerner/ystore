@@ -19,6 +19,7 @@ module.exports = function(express, app, __dirname) {
 			id: req.body.patientid + "_" + req.body.date + "_" + req.params.providerid,
 			patient: req.body.patientid,
 			date: req.body.date,
+			office: req.body.office,
 			provider: req.params.providerid,
 			procedure: req.body.procedure,
 			status: "requested",

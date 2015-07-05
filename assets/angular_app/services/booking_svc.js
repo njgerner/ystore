@@ -4,14 +4,14 @@ trdServices.service("bookingService", ['$rootScope', '$http', '$cookieStore', '$
     	this.patientAppts = [];
     	this.apptsByProvider = {};
 
-    	this.sendApptRequest = function(date, providerid, procedure, callback) {
+    	this.sendApptRequest = function(date, office, providerid, procedure, callback) {
     		if (!authService.profileid) {
     			callback('Please login to request an appointment');
     			return;
     		}
     		var inThis = this;
 	        $http({method: 'POST', url: '/booking/request_appt/' + providerid, 
-	    		   data: {patientid: authService.profileid, date:date, procedure:procedure}})
+	    		   data: {office:office, patientid: authService.profileid, date:date, procedure:procedure}})
 	        .success(function (data, status, headers, config) {
 	            callback(null, data.appt);
 	        })
