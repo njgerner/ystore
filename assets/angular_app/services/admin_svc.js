@@ -1,8 +1,10 @@
-trdServices.service("adminService", ['$rootScope', '$http', 'merchantService', 'profileService', '$cookieStore', '$log',
-    function ($rootScope, $http, merchantService, profileService, $cookieStore, $log) {
+trdServices.service("adminService", ['$rootScope', '$http', 'authService', 'merchantService', 'profileService', '$cookieStore', '$log',
+    function ($rootScope, $http, authService, merchantService, profileService, $cookieStore, $log) {
 
     	this.merchantProfilesByID = {};
     	this.profilesByID = {};
+    	this.productsByProductnumber = {};
+    	this.productsByVendor = {};
 
     	this.getProfileByID = function(id, callback) {
     		if(this.profilesByID[id] !== undefined) {
@@ -19,7 +21,23 @@ trdServices.service("adminService", ['$rootScope', '$http', 'merchantService', '
 	            	callback(data.message);
 		        });
     		}
-    	}
+    	};
+
+    	this.getAllProducts = function(callback) {
+    		var inThis = this;
+	        $http({method: 'GET', url: '/admin/all_products'})
+	        .success(function (data, status, headers, config) {
+	            callback(null, data.products);
+	            for(var i = 0; i < data.products.length; i++) {
+	            	inThis.productsByProductnumber[data.products[i].productnumber] = data.products[i];
+	            	inThis.productsByVendor[data.products[i].attributes.vendor] = data.products[i];
+	            } 
+	        })
+	        .error(function (data, status, headers, config) {
+	            $log.debug('error getting all products', data);
+            	callback(data.message);
+	        });
+    	};
 
     	this.getAllProfiles = function(callback) {
     		var inThis = this;
@@ -53,7 +71,7 @@ trdServices.service("adminService", ['$rootScope', '$http', 'merchantService', '
 
     	this.getMerchantProfile = function(id, callback) {
     		if(this.merchantProfilesByID[id] !== undefined) {
-    			callback(this.merchantProfilesByID[id]);
+    			callback(null, this.merchantProfilesByID[id]);
     		}else{
     			merchantService.getMerchantByID(id, callback);
     		}
@@ -145,7 +163,7 @@ trdServices.service("adminService", ['$rootScope', '$http', 'merchantService', '
 	            $log.debug('error deleting promo', data);
 	            callback(data.message);
 	        });
-    	}
+    	};
 
     	this.getAllPromoCodes = function(callback) {
     		$http({method: 'GET', url: '/admin/promos'})
@@ -156,6 +174,26 @@ trdServices.service("adminService", ['$rootScope', '$http', 'merchantService', '
 	            $log.debug('error getting promo codes', data);
 	            callback(data.message);
 	        });
-    	}
+    	};
+
+    	this.addProduct = function(product, merchant, callback) {
+            if (!authService.isAdmin) {
+                callback('User not authorized to add product');
+                return;
+            }
+            $http({method: 'POST', url: "/add_product",
+                   data: {product:product, merchant:merchant}})
+            .success(function(data, status, headers, config) {
+                if (callback) {
+                    callback(null, data);
+                }
+            })
+            .error(function(data, status, headers, config) {
+                $log.debug('error adding product', data);
+                if (callback) {
+                    callback(data.message);
+                }
+            });
+        }
 
 }]);

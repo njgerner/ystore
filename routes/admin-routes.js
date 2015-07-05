@@ -25,6 +25,21 @@ module.exports = function(express, app, __dirname) {
 		});
 	};
 
+	// GET /admin/all_profiles
+	AdminRoutes.all_products = function(req, res, next) {
+		orchHelper.getAllProducts()
+		.then(function (data) {
+			if (data) {
+				res.status(200).json({products:data});
+			} else {
+				errorHandler.logAndReturn('No products found from admin', 404, next);
+			}
+		})
+		.fail(function (err) {
+			errorHandler.logAndReturn('Error getting all products from admin', 500, next, err);
+		});
+	};
+
 	// GET /admin/profile
 	AdminRoutes.get_profile = function(req, res, next) {
 		orchHelper.getProfile(req.params.profileid)

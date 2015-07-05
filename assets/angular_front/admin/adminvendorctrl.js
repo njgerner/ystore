@@ -6,15 +6,16 @@ superApp.controller('AdminVendorCtrl',
       $state.go("admin.vendors");
     }
 
-    adminService.getMerchantProfile($stateParams.merchantid, function (merchant) {
+    adminService.getMerchantProfile($stateParams.merchantid, function (err, merchant) {
+      if(err) {
+        $scope.error = err;
+      }
       $scope.vendor = merchant;
       if($scope.vendor.members && $scope.vendor.members.length > 0) {
         $scope.members = [];
         $scope.vendor.members.forEach(function (member) {
           adminService.getProfileByID(member, function (err, profile) {
-            if(err) {
-              $scope.error = err;
-            }else {
+            if(profile) {
               $scope.members.push(profile);
             }
           });

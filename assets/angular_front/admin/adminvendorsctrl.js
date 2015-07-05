@@ -6,13 +6,4 @@ superApp.controller('AdminVendorsCtrl',
       $state.go("store");
     }
 
-    adminService.getAllMerchantProfiles(function (err, profiles) {
-    	if(err) {
-    		$scope.error = err;
-    	}else {
-        $scope.merchantsLoaded = true;
-      }
-    	$scope.merchantProfiles = profiles;
-    });
-
 }]);
