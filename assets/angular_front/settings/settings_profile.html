@@ -31,7 +31,6 @@
   </form>
   <div>
     <div class="row">
-      <error-dir msg="{{errror}}"></error-dir>
         <div class="large-3 small-6 columns">
           My Addresses
         </div>
@@ -39,6 +38,7 @@
           <div ng-hide="addAddressView" class="i-plus pointer" ng-click="enableAddAddress()"></div>
           <div ng-show="addAddressView" class="i-cancel-circled pointer" ng-click="cancel()"></div>
         </div>
+        <error-dir msg="{{errror}}"></error-dir>
     </div>
     <div class="row address-list" ng-repeat="address in addresses">
       <div class="large-1 small-1 columns" ng-click="makeDefault($index)">
@@ -71,6 +71,13 @@
         </div>
         <div>
             <input type="text" ng-model="zip" placeholder="Zip"/>
+        </div>
+        <hr>
+        <div>
+            <input type="text" ng-model="addressphone" placeholder="Contact phone number"/>
+        </div>
+        <div>
+            <input type="text" ng-model="addressemail" placeholder="Contact email address"/>
         </div>
         <div ng-show="isYLIFT">
           <label>Check if this location is a Y LIFT Network practice
