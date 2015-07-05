@@ -1,6 +1,6 @@
 superApp.controller('CheckoutCtrl',
   ['$rootScope', '$scope', '$state', '$stateParams', '$timeout', 'storeService', 'authService', 
-   'stripeService', 'locationService, productService',
+   'stripeService', 'locationService', 'productService',
   function($rootScope, $scope, $state, $stateParams, $timeout, storeService, authService, 
     stripeService, locationService, productService) {
 

@@ -19,6 +19,8 @@ superApp.controller('SettingsProfileCtrl',
       $scope.city = null;
       $scope.state = null;
       $scope.zip = null;
+      $scope.addressphone = null;
+      $scope.addressemail = null;
       $scope.currAddress = null;
       $scope.addressInd = null;
       $scope.yliftInd = null;
@@ -39,34 +41,45 @@ superApp.controller('SettingsProfileCtrl',
       $scope.city = $scope.currAddress.city;
       $scope.state = $scope.currAddress.state;
       $scope.zip = $scope.currAddress.zip;  
+      $scope.addressphone = $scope.currAddress.phone;  
+      $scope.addressemail = $scope.currAddress.email;  
       $scope.yliftInd = $scope.currAddress.yliftInd;
       $scope.addressInd = ind;
       $scope.editAddressView = true;
     };
 
-    $scope.submitAddress = function() {
-      var address = {
-        "name": $scope.addressname,
-        "address1": $scope.address1,
-        "address2": $scope.address2,
-        "city": $scope.city,
-        "state": $scope.state,
-        "zip": $scope.zip,
-        "default": $scope.default
-      };
-      if ($scope.addresses.length == 0) {
-        address.default = true;
-      }
-      if ($scope.isYLIFT) {
-        address.yliftInd = $scope.yliftInd;
-      }
-      if ($scope.editAddressView) {  // update the address
-        $scope.updating = true;
-        locationService.updateAddress(address, onAddressUpdated);
-      }
-      if ($scope.addAddressView) { // address needs to be added
-        $scope.adding = true;
-        locationService.addAddressToProfile(address, onAddressAdded);
+    $scope.submitAddress = function(id) {
+      if (validate()) {      
+        var address = {
+          "name": $scope.addressname,
+          "address1": $scope.address1,
+          "address2": $scope.address2,
+          "city": $scope.city,
+          "state": $scope.state,
+          "zip": $scope.zip,
+          "phone": $scope.addressphone,
+          "email": $scope.addressemail,
+          "default": $scope.default
+        };
+        if ($scope.addresses.length == 0) {
+          address.default = true;
+        }
+        if ($scope.isYLIFT) {
+          address.yliftInd = $scope.yliftInd;
+        }
+        if ($scope.currAddress) {
+          address.id = $scope.currAddress.id;
+          address.createdAt = $scope.currAddress.createdAt;
+          address.profile = authService.profileid;
+        }
+        if ($scope.editAddressView) {  // update the address
+          $scope.updating = true;
+          locationService.updateAddress(address, onAddressUpdated);
+        }
+        if ($scope.addAddressView) { // address needs to be added
+          $scope.adding = true;
+          locationService.addAddressToProfile(address, onAddressAdded);
+        }
       }
       
     };
@@ -106,6 +119,38 @@ superApp.controller('SettingsProfileCtrl',
     $scope.cancel = function() {
       $scope.editAddressView = false;
       $scope.addAddressView = false;
+    }
+
+    function validate () {
+      if (!$scope.addressname) {
+        $scope.error = 'Please name this address';
+        return false;
+      }
+      if (!$scope.address1) {
+        $scope.error = 'Please add the street address';
+        return false;
+      }
+      if (!$scope.city) {
+        $scope.error = 'Please add the address city';
+        return false;
+      }
+      if (!$scope.state) {
+        $scope.error = 'Please add the address state';
+        return false;
+      }
+      if (!$scope.zip) {
+        $scope.error = 'Please add the address zip';
+        return false;
+      }
+      if (!$scope.addressphone) {
+        $scope.error = 'Please add a contact phone number for this address';
+        return false;
+      }
+      if (!$scope.addressemail) {
+        $scope.error = 'Please add a contact email address';
+        return false;
+      }
+      return true;
     }
 
     function onAddressAdded (error, address) {

@@ -76,7 +76,7 @@ trdServices.service("locationService", ['$rootScope', '$http', '$cookieStore', '
 	            callback(null, data.addresses);
 	        })
 	        .error(function (data, status, headers, config) {
-	            $log.debug('error updating address', data);
+	            $log.debug('error getting addresses', data);
 	            callback(data.message);
 	        });
     	}
@@ -89,6 +89,7 @@ trdServices.service("locationService", ['$rootScope', '$http', '$cookieStore', '
     		var inThis = this;
     		$http({method: 'POST', url: '/profile/add_address/' + authService.profileid, data:{address:address}})
 	        .success(function (data, status, headers, config) {
+                inThis.locationsByProfile[authService.profileid] = inThis.locationsByProfile[authService.profileid] || [];
 	        	inThis.locationsByProfile[authService.profileid].push(data.address);
 	            if (callback) {
 	                callback(null, data.address);
