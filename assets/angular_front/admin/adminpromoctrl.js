@@ -52,6 +52,9 @@ superApp.controller('AdminPromoCtrl',
       }else if(!$scope.message) {
         $scope.error = "Please provide a message to display upon use of code";
         return;
+      }else if(!$scope.domain) {
+        $scope.error = "Please indicate how the code can be used";
+        return;
       }
       else{
         if($scope.promotype == 'percent_off') {
@@ -80,6 +83,7 @@ superApp.controller('AdminPromoCtrl',
         }
         promo.active = $scope.makeactive;
         promo.message = $scope.message;
+        promo.domain = $scope.domain;
         $scope.activating = true;
         adminService.addPromoCode(promo, function (err, code) {
           if(err) {
