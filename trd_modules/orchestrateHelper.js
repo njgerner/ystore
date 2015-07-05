@@ -349,7 +349,7 @@ exports.getAllProducts = function() {
     deferred.resolve(rawDogger.push_values_to_top(result.body.results));
   })
   .fail(function (err) {
-    deferred.reject(new Error(err.body));
+    deferred.reject(new Error(err.body.message));
   });
   return deferred.promise;
 };

@@ -19,7 +19,6 @@ superApp.controller('AdminNewProductCtrl',
         $scope.error = error;
         return;
       }
-      console.log('added prodduct success', product);
       $state.go("admin.products");
     }
 
@@ -43,6 +42,11 @@ superApp.controller('AdminNewProductCtrl',
       if($scope.updating) {
         return;
       }
+      if(!$scope.product.tmpImg.name) {
+        $scope.error = "Please upload an image for the product";
+        return;
+      }
+      return;
       if(!$scope.product.name) {
         $scope.error = "Missing product name";
         return;
@@ -68,7 +72,7 @@ superApp.controller('AdminNewProductCtrl',
       $scope.product.attributes.vendor = $scope.vendor;
       $scope.makeactive == 'yes' ? $scope.product.active = 'Y' : $scope.product.active = 'Y';
 
-      productService.addProduct($scope.product, $scope.vendor, onProductAdded());
+      productService.addProduct($scope.product, $scope.vendor, onProductAdded);
     };
 
 }]);

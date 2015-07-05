@@ -6,7 +6,7 @@ superApp.controller('AdminProductsCtrl',
 
     adminService.getAllProducts(function (err, products) {
       if(err) {
-        $scope.error = error;
+        $scope.error = err;
         return;
       }
       $scope.products = products;
