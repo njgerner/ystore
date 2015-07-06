@@ -18,7 +18,6 @@ superApp.controller('LocationsCtrl',
       if ($scope.locations[index].focused) {
         $scope.map.panTo(new google.maps.LatLng($scope.locations[index].location.A, $scope.locations[index].location.F));
       }
-      // $scope.$apply(); // need to add back for appts
     }
 
     $scope.toggleSearch = function() {
@@ -33,13 +32,13 @@ superApp.controller('LocationsCtrl',
       $scope.locations[index].focused = false;
     }
 
-    $scope.searchZip = function() {
+    $scope.searchZip = function(zip) {
       var geocoder = new google.maps.Geocoder();
-      geocoder.geocode({address:$scope.zip}, function (results, status) {
+      geocoder.geocode({address:zip}, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK && results.length > 0) {
           var latlng = new google.maps.LatLng(results[0].geometry.location.A, results[0].geometry.location.F);
           $scope.map.setCenter(latlng);
-          $scope.showSearch = false;
+          $scope.zip = null;
         } else {
           $scope.zipError = "Enter a valid zip code";
         }

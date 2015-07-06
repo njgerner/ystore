@@ -1,5 +1,5 @@
 module.exports = {
-	newOffice: function(addressDoc) {
+	newAddress: function(addressDoc) {
 
 		var crypto = require('crypto'),
     		id = crypto.randomBytes(20).toString('hex');
@@ -14,6 +14,8 @@ module.exports = {
 			"zip": addressDoc.zip,
 			"country": addressDoc.country,
 			"default": addressDoc.default,
+			"phone": addressDoc.phone,
+			"email": addressDoc.email,
 			"createdAt": new Date(),
 			"updatedAt": new Date()
 		};

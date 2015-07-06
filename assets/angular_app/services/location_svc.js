@@ -133,11 +133,12 @@ trdServices.service("locationService", ['$rootScope', '$http', '$cookieStore', '
     			callback('Not authorized');
     			return;
     		}
+            var inThis = this;
     		$http({method: 'POST', url: '/profile/remove_address/' + authService.profileid, data:{address:address}})
 	        .success(function (data, status, headers, config) {
 	        	for (var i = 0; i < inThis.locationsByProfile[authService.profileid].length; i++) {
-	        		if (inThis.locationsByProfile[authService.profileid].id == address.id) {
-	        			inThis.locationsByProfile[authService.profileid].splice(i, 1);
+	        		if (inThis.locationsByProfile[authService.profileid][i].id == address.id) {
+                        inThis.locationsByProfile[authService.profileid].splice(i, 1);
 	        		}
 	        	}
 	            if (callback) {

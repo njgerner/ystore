@@ -8,7 +8,7 @@ module.exports = function(express, app, __dirname) {
 		orchHelper      = require('../trd_modules/orchestrateHelper'),
 		Q               = require('q'),
 		aws             = require('aws-sdk'),
-		Office          = require('../models/office'),
+		Address         = require('../models/address'),
 		errorHandler    = require('../trd_modules/errorHandler.js'),
 		fs 				= require('fs');
 
@@ -61,7 +61,7 @@ module.exports = function(express, app, __dirname) {
 			errorHandler.logAndReturn('Missing address request data', 400, next, null, [req.params, req.body]);
 			return;
 		}
-		var addressDoc = Office.newOffice(address);
+		var addressDoc = Address.newAddress(address);
 		addressDoc.profile = req.params.profileid;
 		if (address.yliftInd) {
 			addressDoc.yliftInd = address.yliftInd;

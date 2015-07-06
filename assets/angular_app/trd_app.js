@@ -204,7 +204,8 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
     .state('register.home', {
       url: "/intro",
       templateUrl: "/partials/register_home.html",
-      controller: "RegisterHomeCtrl"
+      controller: "RegisterHomeCtrl",
+      title: "Register"
     })
     .state('register.form', {
       url: "/form",
@@ -432,17 +433,20 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
     .state('settings.profile', {
       url:"/profile",
       templateUrl: "/partials/settings_profile.html",
-      controller: "SettingsProfileCtrl"
+      controller: "SettingsProfileCtrl",
+      title: "Profile Settings"
     })
     .state('settings.store', {
       url:"/store",
       templateUrl: "/partials/settings_store.html",
-      controller: "SettingsStoreCtrl"
+      controller: "SettingsStoreCtrl",
+      title: "Store Settings"
     })
     .state('settings.notifications', {
       url:"/notifications",
       templateUrl: "/partials/settings_notifications.html",
-      controller: "SettingsNotificationsCtrl"
+      controller: "SettingsNotificationsCtrl",
+      title: "Notification Settings"
     })
     .state('settings.merchant', {
       url:"/merchant",
