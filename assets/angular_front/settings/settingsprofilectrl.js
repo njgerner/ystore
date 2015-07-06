@@ -48,7 +48,7 @@ superApp.controller('SettingsProfileCtrl',
       $scope.editAddressView = true;
     };
 
-    $scope.submitAddress = function(id) {
+    $scope.submitAddress = function() {
       if (validate()) {      
         var address = {
           "name": $scope.addressname,
@@ -86,8 +86,11 @@ superApp.controller('SettingsProfileCtrl',
 
     $scope.removeAddress = function(ind) {
       if ($window.confirm('Are you sure?')) {
-        var remove = $scope.addresses.splice(ind, 1);
-        locationService.removeAddress(remove[0]);
+        $scope.clearAddress();
+        $scope.addAddressView = false;
+        $scope.editAddressView = false;
+        var remove = $scope.addresses[ind];
+        locationService.removeAddress(remove, onAddressRemoved);
       }
     };
 
@@ -158,9 +161,9 @@ superApp.controller('SettingsProfileCtrl',
       if (error) {
         $scope.error = error;
       } else {
-        $scope.addresses.push(address);
         $scope.addAddressView = false;
         $scope.clearAddress();
+        $scope.addresses = locationService.locationsByProfile[authService.profileid];
       }
     }
 
@@ -171,17 +174,17 @@ superApp.controller('SettingsProfileCtrl',
       } else {
         $scope.editAddressView = false;
         $scope.clearAddress();
-        for (var i = 0; i < $scope.addresses.length; i++) {
-          if (address.id == $scope.addresses[i].id) {
-            $scope.addresses[i] = address;
-          }
-        }
+        $scope.addresses = locationService.locationsByProfile[authService.profileid];
       }
+    }
+
+    function onAddressRemoved (error, address) {
+      $scope.addresses = locationService.locationsByProfile[authService.profileid];
     }
 
     function onAddressesLoaded (error, addresses) {
       $scope.loadingAddresses = false;
-      $scope.addresses = addresses || [];
+      $scope.addresses = locationService.locationsByProfile[authService.profileid];
     }
 
     locationService.getProfileAddresses(onAddressesLoaded);

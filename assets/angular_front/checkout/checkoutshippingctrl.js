@@ -48,7 +48,7 @@ superApp.controller('CheckoutShippingCtrl',
         $scope.$parent.addressShipTo = address;
       }
       if (authService.authorized) {
-        locationService.addAddressToProfile(address, onAddressAdded);
+        locationService.addAddressToProfile(address);
       } else {
         onAddressAdded(null, address);
       }
@@ -61,7 +61,7 @@ superApp.controller('CheckoutShippingCtrl',
     }
 
     var addressWatch = null;
-    $scope.$watch('addressesLoaded', function (newVal, oldVal) {
+    addressWatch = $scope.$watch('addressesLoaded', function (newVal, oldVal) {
       if (newVal) {
         if ($scope.$parent.addresses.length > 0) {
           for (var i = 0; i < $scope.$parent.addresses.length; i++) {

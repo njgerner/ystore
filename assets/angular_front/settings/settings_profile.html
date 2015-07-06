@@ -38,9 +38,9 @@
           <div ng-hide="addAddressView" class="i-plus pointer" ng-click="enableAddAddress()"></div>
           <div ng-show="addAddressView" class="i-cancel-circled pointer" ng-click="cancel()"></div>
         </div>
-        <error-dir msg="{{errror}}"></error-dir>
+        <error-dir msg="{{error}}"></error-dir>
     </div>
-    <div class="row address-list" ng-repeat="address in addresses">
+    <div class="row address-list" ng-repeat="address in addresses track by address.id">
       <div class="large-1 small-1 columns" ng-click="makeDefault($index)">
         <i ng-show="address.default" class="i-star"></i>
         <i ng-show="!address.default" class="i-star-open"></i>
@@ -51,7 +51,7 @@
         <a class="address-edit-link" ng-click="removeAddress($index)">Delete</a>
       </div>
     </div> 
-    <div ng-show="loadingAddresses" class="loader locations-loading">Loading...</div>
+    <div ng-if="loadingAddresses" class="loader locations-loading">Loading...</div>
     <form ng-show="addAddressView || editAddressView" novalidate>
       <fieldset>
         <div>

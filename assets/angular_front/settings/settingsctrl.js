@@ -6,7 +6,6 @@ superApp.controller('SettingsCtrl',
   
     $scope.profile = angular.copy(authService.profile);
   	$scope.isYLIFT = authService.isYLIFT;
-    $scope.addresses = $scope.profile.addresses;
     $scope.viewState = $state.current.name.split('.')[1];
     $scope.currOffice = {};
   	$scope.updating = "none";

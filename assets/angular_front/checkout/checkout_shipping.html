@@ -10,7 +10,7 @@
     <div style="padding:0" ng-hide="addAddressView" class="large-4 columns text-right" ng-click="toggleAddAddress()"><i class="i-plus"></i></div>
 </div>
 <div class="row">
-    <div class="row address-list thin" ng-repeat="address in $parent.addresses" ng-click="selectAddress($index)">
+    <div class="row address-list thin" ng-repeat="address in $parent.addresses track by address.id" ng-click="selectAddress($index)">
       <div class="large-1 small-1 columns check-it">
         <i ng-show="isAddressSelected($index)" class="i-checked"></i>
         <i ng-hide="isAddressSelected($index)" class="i-unchecked"></i>

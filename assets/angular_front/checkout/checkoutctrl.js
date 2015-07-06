@@ -93,8 +93,10 @@ superApp.controller('CheckoutCtrl',
     }
 
     function onAddressesLoaded (error, addresses) {
-      $scope.addresses = addresses;
-      $scope.addressesLoaded = true;
+      if (addresses) {
+        $scope.addresses = addresses;
+        $scope.addressesLoaded = true;
+      }
     }
 
     function onProductsInCartLoaded () {
