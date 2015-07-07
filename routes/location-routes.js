@@ -37,7 +37,7 @@ module.exports = function(express, app, __dirname) {
 
 	 // GET /ylift_locations
 	LocationRoutes.get_ylift_locations = function(req, res, next) {
-		var query = 'value.yliftInd: true';
+		var query = 'value.yliftInd: "Y"';
 		var params = {
 			limit: 100
 		};

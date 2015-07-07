@@ -6,10 +6,11 @@
 			<i class="i-right-circled" ng-click="next()"></i>
 		</div>
 		<div class="small-12 large-6 columns">
-			<select ng-model="selectedOffice" placeholder="Select an office schedule to view">
-				<option value="null">Please select and office schedule to view</option>
+			<select ng-if="selectedOffice" ng-model="selectedOffice" placeholder="Select an office schedule to view">
+				<option value="null">Select an office schedule to view</option>
 				<option value="office.id" ng-repeat="office in addresses">{{office.name}}</option>
 			</select>
+			<error-dir ng-if="!selectedOffice && officesLoaded" html-msg="error"></error-dir>
 		</div>
 		<div class="small-12 large-2 columns">
 			<a class="button tiny split right dropdown" dropdown-toggle="#view-dropdown">

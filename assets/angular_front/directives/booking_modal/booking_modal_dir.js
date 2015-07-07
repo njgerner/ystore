@@ -9,7 +9,7 @@ appDirectives.directive('bookingModalDir', ['$window', 'authService', 'bookingSe
 		templateUrl: 'directives/booking_modal_template.html',
 		link: function(scope, element) {
 			scope.appts = [];
-			scope.apptsByTimestamp = {};
+			scope.apptsByOfficeAndTimestamp = {};
 			scope.dateOffset = 0;
 			scope.startDate = moment().startOf('week').add(1, 'days'); // always want this weeks monday
 			scope.error = null;
@@ -17,7 +17,7 @@ appDirectives.directive('bookingModalDir', ['$window', 'authService', 'bookingSe
 
 			scope.reset = function () {
 				scope.appts = [];
-				scope.apptsByTimestamp = {};
+				scope.apptsByOfficeAndTimestamp = {};
 				scope.dateOffset = 0;
 				scope.startDate = moment().startOf('week').add(1, 'days'); // always want this weeks monday
 				scope.error = null;
@@ -41,7 +41,7 @@ appDirectives.directive('bookingModalDir', ['$window', 'authService', 'bookingSe
 			}
 
 			scope.getSlotClass = function(offset, hour) {
-				var appt = scope.apptsByTimestamp[scope.getUnix(offset, hour)];
+				var appt = scope.apptsByOfficeAndTimestamp[scope.office.id][scope.getUnix(offset, hour)];
 				if (appt && appt.status) {
 					return appt.status;
 				} else {
@@ -66,6 +66,7 @@ appDirectives.directive('bookingModalDir', ['$window', 'authService', 'bookingSe
 			}
 
 			function onApptRequested (error, appt) {
+				console.log('appt requested', error, appt);
 				if (error) {
 					scope.error = error;
 				} else {
@@ -85,6 +86,7 @@ appDirectives.directive('bookingModalDir', ['$window', 'authService', 'bookingSe
 			var apptsWatch = null;
 			apptsWatch = scope.$watch('appts', function (newVal, oldVal) {
 				if (newVal && newVal.length) {
+					console.log("apptsByOfficeAndTimestamp", scope.apptsByOfficeAndTimestamp);
 					for (var i = 0; i < newVal.length; i++) {
 						scope.apptsByOfficeAndTimestamp[newVal[i].office] = scope.apptsByOfficeAndTimestamp[newVal[i].office] || {};
 						scope.apptsByOfficeAndTimestamp[newVal[i].office][newVal[i].date] = newVal[i];

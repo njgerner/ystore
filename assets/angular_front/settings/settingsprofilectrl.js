@@ -125,6 +125,7 @@ superApp.controller('SettingsProfileCtrl',
     }
 
     function validate () {
+      $scope.error = null;
       if (!$scope.addressname) {
         $scope.error = 'Please name this address';
         return false;

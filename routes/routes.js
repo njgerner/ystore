@@ -209,14 +209,14 @@ passport.use('bearer', new BearerStrategy(
                 loginHelper(req, res);
               })
               .fail(function (err) {
-                errorHandler.logAndReturn('No Y Lift profiles found', 404, next);
+                errorHandler.logAndReturn('No Y Lift profiles found', 404, next, err, req.body);
               });
           } else {
             errorHandler.logAndReturn('Invalid token', 422, next);
           }
         })
         .fail(function (err) {
-          errorHandler.logAndReturn('That email is not yet registered, please click register and signup.', 404, next);
+          errorHandler.logAndReturn('That email is not yet registered, please click register and signup.', 404, next, err, req.body);
         });
     } else {
       res.redirect("/home");
@@ -227,8 +227,8 @@ passport.use('bearer', new BearerStrategy(
   var loginHelper = function(req, res, next) {
 
     return passport.authenticate('local-signin', function(err, user, info) {
-      if (err) { return errorHandler.logAndReturn(err, 422, next, null, req.params); }
-      if (!user) { return errorHandler.logAndReturn(info.message, 422, next, null, req.params); }
+      if (err) { return errorHandler.logAndReturn(err, 422, next, null, [req.params, req.body]); }
+      if (!user) { return errorHandler.logAndReturn(info.message, 422, next, null, [req.params, req.body]); }
       // no sessions, don't bother logging in...
       var payload = { user: user.id, expires: moment().add(4, 'days') };
       var secret = app.get("jwtTokenSecret");

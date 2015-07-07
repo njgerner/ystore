@@ -4,8 +4,8 @@ appDirectives.directive('errorDir', ['$window', '$log',
 		restrict: 'E',
 		scope: {
 			msg: '@',
-			level: '=',
-			redirectInMsg: '='
+			htmlMsg: '=',
+			level: '='
 		},
 		templateUrl: 'directives/error_template.html',
 		link: function(scope, element) {

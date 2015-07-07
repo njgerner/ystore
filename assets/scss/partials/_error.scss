@@ -1,3 +1,9 @@
 .error {
 	color: red;
+
+	a {
+		color: red;
+		font-weight: bold;
+		border-bottom: dotted 1px;
+	}
 }
