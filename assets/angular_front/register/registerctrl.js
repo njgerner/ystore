@@ -137,6 +137,7 @@ superApp.controller('RegisterCtrl',
         "default": true
       };
       $scope.profile.name = $scope.name;
+      $scope.profile.phone = $scope.phone;
       profileService.updateProfile($scope.profile);
       locationService.addAddressToProfile(address);
     }
