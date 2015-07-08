@@ -21,7 +21,7 @@ var mitch = bunyan.createLogger({
 exports.logAndReturn = function(message, status, next, errObj, data) {
 	var err = new Error(message || 'Unknown server error');
 	err.status = status;
-	if (process.env.LOG_ERRORS == 'true') {
+	if (process.env.LOG_ERRORS == 'true' && status != 404) {
 		mitch.error(errObj || message || 'Unknown server error', '| data: ' + (JSON.stringify(data) || ""));
 	} else {
 		mitch.info(errObj || message || 'Unknown server error', '| data: ' + (JSON.stringify(data) || ""));

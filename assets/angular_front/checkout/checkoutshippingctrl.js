@@ -1,21 +1,25 @@
 superApp.controller('CheckoutShippingCtrl',
   ['$rootScope', '$scope', '$state', '$stateParams', 'storeService', 'authService', 'profileService',
-  function($rootScope, $scope, $state, $stateParams, storeService, authService, profileService) {
+   'locationService',
+  function($rootScope, $scope, $state, $stateParams, storeService, authService, profileService,
+    locationService) {
+
+    $scope.addAddressView = false;
 
   	$scope.toggleAddAddress = function() {
       $scope.addAddressView = !$scope.addAddressView;
     };
 
     $scope.selectAddress = function(index) {
-      if ($scope.$parent.addressShipTo == $scope.addresses[index]) {
+      if ($scope.$parent.addressShipTo == $scope.$parent.addresses[index]) {
         $scope.$parent.addressShipTo = null;
       } else {
-        $scope.$parent.addressShipTo = $scope.addresses[index];
+        $scope.$parent.addressShipTo = $scope.$parent.addresses[index];
       }
     };
 
     $scope.isAddressSelected = function(index) {
-      return $scope.$parent.addressShipTo == $scope.addresses[index];
+      return $scope.$parent.addressShipTo == $scope.$parent.addresses[index];
     };
 
     $scope.clearAddress = function() {
@@ -31,6 +35,7 @@ superApp.controller('CheckoutShippingCtrl',
     }
 
     $scope.addAddress = function() {
+      $scope.updatingAddress = true;
       var address = {
         "name": $scope.name,
         "address1": $scope.address1,
@@ -39,35 +44,42 @@ superApp.controller('CheckoutShippingCtrl',
         "state": $scope.state,
         "zip": $scope.zip
       };
-      if ($scope.addresses.length == 0) {
+      if ($scope.$parent.addresses.length == 0) {
         address.default = true;
         $scope.$parent.addressShipTo = address;
       }
-      $scope.addresses.push(address);
-      if (authService.authorized) {      
-        $scope.profile.addresses = $scope.addresses;
-        $scope.updateProfile();
+      if (authService.authorized) {
+        locationService.addAddressToProfile(address, onAddressAdded);
+      } else {
+        onAddressAdded(null, address);
       }
+    };
+
+    function onAddressAdded (error, address) {
+      $scope.$parent.addresses.push(address);
       $scope.addAddressView = false;
+      $scope.updatingAddress = false;
       $scope.clearAddress();
-    };
+    }
 
-    $scope.updateProfile = function(callback) {
-      $scope.addingAddress = true;
-      profileService.updateProfile($scope.profile, function (profile) {
-        $scope.profile = profile;
-        $scope.addingAddress = false;
-      });
-    };
-
-    if (authService.authorized && $scope.addresses.length > 0) {
-      for (var i = 0; i < $scope.addresses.length; i++) {
-        if ($scope.addresses[i].default) {
-          $scope.$parent.addressShipTo == $scope.addresses[i];
+    var addressWatch = null;
+    addressWatch = $scope.$watch('addressesLoaded', function (newVal, oldVal) {
+      if (newVal) {
+        if ($scope.$parent.addresses.length > 0) {
+          for (var i = 0; i < $scope.$parent.addresses.length; i++) {
+            if ($scope.$parent.addresses[i].default) {
+              $scope.$parent.addressShipTo = $scope.$parent.addresses[i];
+            }
+          }
+        } else {
+          $scope.addAddressView = true;
         }
       }
-    } else {
-      $scope.toggleAddAddress();
-    }
+    });
+
+    $scope.$on('$destroy', function () {
+      addressWatch();
+    });
+
 
 }]);

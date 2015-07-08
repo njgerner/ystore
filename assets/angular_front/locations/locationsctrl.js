@@ -18,7 +18,6 @@ superApp.controller('LocationsCtrl',
       if ($scope.locations[index].focused) {
         $scope.map.panTo(new google.maps.LatLng($scope.locations[index].location.A, $scope.locations[index].location.F));
       }
-      // $scope.$apply(); // need to add back for appts
     }
 
     $scope.toggleSearch = function() {
@@ -33,47 +32,23 @@ superApp.controller('LocationsCtrl',
       $scope.locations[index].focused = false;
     }
 
-    $scope.searchZip = function() {
+    $scope.searchZip = function(zip) {
       var geocoder = new google.maps.Geocoder();
-      geocoder.geocode({address:$scope.zip}, function (results, status) {
+      geocoder.geocode({address:zip}, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK && results.length > 0) {
           var latlng = new google.maps.LatLng(results[0].geometry.location.A, results[0].geometry.location.F);
           $scope.map.setCenter(latlng);
-          $scope.showSearch = false;
+          $scope.zip = null;
         } else {
           $scope.zipError = "Enter a valid zip code";
         }
       });
     }
 
-  	$scope.onLocationsLoaded = function() {
-  		var img = {
-  			url: '/img/logo_md.png' // look into more props
-  		};
-      $scope.locationsLoaded = true;
-      $scope.locations.forEach(function (location, index) {
-        location.focused = false;
-  			$scope.markers[index] = new google.maps.Marker({
-  				position: new google.maps.LatLng(location.location.A, location.location.F),
-  				map: $scope.map,
-  				animation: google.maps.Animation.DROP,
-  				title: location.name,
-  				icon: img
-  			});
-        google.maps.event.addListener($scope.markers[index], 'click', function(e) {
-          $scope.toggleFocus(index);
-          $scope.map.panTo(e.latLng);
-        });
-      });
-  	}
-
   	$scope.onMapLoaded = function(map) {
       $scope.mapLoaded = true;
   		$scope.map = map;
-		  locationService.getAllLocations(function (locations) {
-				$scope.locations = locations;
-				$scope.onLocationsLoaded();
-			});
+		  locationService.getYLiftLocations(onLocationsLoaded);
   	}
 
     $scope.toggleLocationPanel = function() {
@@ -89,6 +64,28 @@ superApp.controller('LocationsCtrl',
     $scope.closeBooking = function($event) {
       $scope.selectedLocation = null;
       $scope.viewBooking = false;
+    }
+
+    function onLocationsLoaded (error, locations) {
+      var img = {
+        url: '/img/logo_md.png' // look into more props
+      };
+      $scope.locations = locations;
+      $scope.locationsLoaded = true;
+      $scope.locations.forEach(function (location, index) {
+        location.focused = false;
+        $scope.markers[index] = new google.maps.Marker({
+          position: new google.maps.LatLng(location.location.A, location.location.F),
+          map: $scope.map,
+          animation: google.maps.Animation.DROP,
+          title: location.name,
+          icon: img
+        });
+        google.maps.event.addListener($scope.markers[index], 'click', function(e) {
+          $scope.toggleFocus(index);
+          $scope.map.panTo(e.latLng);
+        });
+      });
     }
 
 	  navigator.geolocation.getCurrentPosition(function (position) {

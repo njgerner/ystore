@@ -19,6 +19,7 @@ module.exports = function(express, app, __dirname) {
       bookingRoutes   = require('./booking-routes.js')(express, app, __dirname),
       awsRoutes       = require('./aws-routes.js')(express, app, __dirname),
       emailRoutes     = require('./email-routes.js')(express, app, __dirname),
+      locationRoutes  = require('./location-routes.js')(express, app, __dirname),
       profileRoutes   = require('./profile-routes.js')(express, app, __dirname),
       productRoutes   = require('./product-routes.js')(express, app, __dirname),
       promoRoutes     = require('./promo-routes.js')(express, app, __dirname),
@@ -274,21 +275,6 @@ passport.use('bearer', new BearerStrategy(
       })
       .fail(function (err) {
         res.send('No account was found with this email');
-      });
-  };
-
-  // GET /all_ylift_profiles
-  var all_ylift_profiles = function(req, res) {
-    orchHelper.getAllYLIFTProfiles()
-      .then(function (result) {
-        if (result) {
-          res.send({profiles:result});
-        } else {
-          errorHandler.logAndReturn('No Y Lift profiles found', 404, next);
-        }
-      })
-      .fail(function (err) {
-        errorHandler.logAndReturn('Error retrieving Y Lift profiles', 500, next, err);
       });
   };
 
@@ -575,7 +561,6 @@ passport.use('bearer', new BearerStrategy(
     app.get('/appcss', appcss);
 
     app.get('/all_orders/:profileid', ensureAuthenticated, get_all_orders);
-    app.get('/all_ylift_profiles', all_ylift_profiles);
     app.get('/authorized', ensureAuthenticated, authorized);
     app.get('/cart/:profileid', ensureAuthenticated, get_cart);
     app.get('/get_all_testimonials', get_all_testimonials);
@@ -590,12 +575,12 @@ passport.use('bearer', new BearerStrategy(
     app.get('/product_rating/:productnumber', productRoutes.get_rating);
     app.get('/product_reviews/:productnumber', productRoutes.get_reviews);
     app.get('/product_merchant/:productnumber', productRoutes.get_merchant);
-    app.get('/profile/:profileid', ensureAuthenticated, profileRoutes.get_profile);
     app.get('/request_pass_reset/:email', request_pass_reset);
     app.get('/reset_password/:userid', reset_password);
     app.get('/sign_s3', awsRoutes.sign_s3);
     app.get('/training_dates', trainingRoutes.get_dates);
     app.get('/upload_image', get_image);
+    app.get('/ylift_locations', locationRoutes.get_ylift_locations);
 
     // -- START POST Routes
     ///////////////////////////////////////////////////////////////
@@ -629,12 +614,17 @@ passport.use('bearer', new BearerStrategy(
     app.post('/validate_reset_token', userRoutes.validate_reset_token);
     
     // -- START Profile Routes
-    ///////////////////////////////////////////////////////////////
+    // GET ////////////////////////////////////////////////////////////
+    app.get('/profile/addresses/:profileid', ensureAuthenticated, locationRoutes.get_addresses);
     app.get('/profile/get_merchant/:profileid', ensureAuthenticated, profileRoutes.get_merchant);
-    app.get('/profile/:profileid', ensureAuthenticated, profileRoutes.get_profile);
+    app.get('/profile/:profileid', profileRoutes.get_profile);
+    // POST ////////////////////////////////////////////////////////////
     app.post('/profile/update/:profileid', ensureAuthenticated, profileRoutes.update_profile);
     app.post('/profile/get_merchant/:profileid', ensureAuthenticated, profileRoutes.get_merchant);
     app.post('/profile/add_merchant/:profileid', ensureAuthenticated, profileRoutes.add_merchant);
+    app.post('/profile/add_address/:profileid', ensureAuthenticated, locationRoutes.add_address);
+    app.post('/profile/remove_address/:profileid', ensureAuthenticated, locationRoutes.remove_address);
+    app.post('/profile/update_address/:profileid', ensureAuthenticated, locationRoutes.update_address);
     app.post('/profile/update_merchant', ensureAuthenticated, profileRoutes.update_merchant);
     app.post('/profile/delete_merchant/:profileid', ensureAuthenticated, profileRoutes.delete_merchant);
 
@@ -642,25 +632,28 @@ passport.use('bearer', new BearerStrategy(
     app.post('/user/give_ylift', ensureAuthenticated, userRoutes.give_ylift);
 
     // -- START Admin Routes
-    ///////////////////////////////////////////////////////////////
+    // GET ////////////////////////////////////////////////////////////
     app.get('/admin/all_profiles', ensureAuthenticated, adminRoutes.all_profiles);
     app.get('/admin/all_products', ensureAuthenticated, adminRoutes.all_products);
     app.get('/admin/promos', ensureAuthenticated, adminRoutes.get_promos);
-    app.post('/admin/add_product', ensureAuthenticated, adminRoutes.add_product);
-    app.post('/admin/add_promo', ensureAuthenticated, adminRoutes.add_promo);
-    app.post('/admin/delete_promo', ensureAuthenticated, adminRoutes.delete_promo);
     app.get('/admin/profile/:profileid', ensureAuthenticated, adminRoutes.get_profile);
-    app.post('/get_merchant_name', ensureAuthenticated, adminRoutes.get_merchant_name);
     app.get('/admin/all_merchants', ensureAuthenticated, adminRoutes.all_merchants);
     app.get('/admin/all_orders', ensureAuthenticated, adminRoutes.all_orders);
     app.get('/admin/all_ylift_profiles', ensureAuthenticated, adminRoutes.all_ylift_profiles);
+    // POST ////////////////////////////////////////////////////////////
+    app.post('/admin/add_product', ensureAuthenticated, adminRoutes.add_product);
+    app.post('/admin/add_promo', ensureAuthenticated, adminRoutes.add_promo);
+    app.post('/admin/delete_promo', ensureAuthenticated, adminRoutes.delete_promo);
+    app.post('/get_merchant_name', ensureAuthenticated, adminRoutes.get_merchant_name);
     app.post('/admin/regkeys', ensureAuthenticated, adminRoutes.get_available_keys);
     app.post('/admin/hash', ensureAuthenticated, adminRoutes.get_hash);
     app.post('/admin/add_regkey', ensureAuthenticated, adminRoutes.add_regkey);
     app.post('/admin/profile/update_merchant', ensureAuthenticated, profileRoutes.update_merchant);
 
     // -- START Booking Routes
+    // GET ////////////////////////////////////////////////////////////
     app.get('/booking/patient_appts/:patientid', ensureAuthenticated, bookingRoutes.get_patient_appts);
+    // POST ////////////////////////////////////////////////////////////
     app.post('/booking/provider_appts/:providerid', bookingRoutes.get_provider_appts);
     app.post('/booking/request_appt/:providerid', ensureAuthenticated, bookingRoutes.request_appt);
     app.post('/booking/update_appt', ensureAuthenticated, bookingRoutes.update_appt);

@@ -1,8 +1,8 @@
 superApp.controller('CheckoutCtrl',
   ['$rootScope', '$scope', '$state', '$stateParams', '$timeout', 'storeService', 'authService', 
-   'stripeService', 'productService',
+   'stripeService', 'locationService', 'productService',
   function($rootScope, $scope, $state, $stateParams, $timeout, storeService, authService, 
-    stripeService, productService) {
+    stripeService, locationService, productService) {
 
     // address vars
     $scope.shippingCost = 5; // flat fee for now
@@ -11,8 +11,10 @@ superApp.controller('CheckoutCtrl',
     $scope.addresseshipTo = null;
     $scope.productsInCart = [];
     $scope.products = [];
+    $scope.addresses = [];
     $scope.checkoutState = 'shipping';
     $scope.orderError = null;
+    $scope.addressesLoaded = false;
     $scope.orderSubmitted = false;
     $scope.states = {
       shipping: {
@@ -31,9 +33,10 @@ superApp.controller('CheckoutCtrl',
     if (authService.authorized) {
       $scope.profile = authService.profile;
       $scope.profileid = authService.profile.id;
-      $scope.addresses = authService.profile.addresses;
+      locationService.getProfileAddresses(onAddressesLoaded);
     } else {
       $scope.addresses = [];
+      $scope.addressesLoaded = true;
     }
 
     $scope.nextState = function() {
@@ -87,6 +90,13 @@ superApp.controller('CheckoutCtrl',
           storeService.emptyCart($scope.profileid, function(cart) {});
         }
       });
+    }
+
+    function onAddressesLoaded (error, addresses) {
+      if (addresses) {
+        $scope.addresses = addresses;
+        $scope.addressesLoaded = true;
+      }
     }
 
     function onProductsInCartLoaded () {

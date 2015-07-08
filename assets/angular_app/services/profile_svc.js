@@ -23,9 +23,6 @@ trdServices.service("profileService", ['$rootScope', '$http', '$cookieStore', 'a
         if (this.profilesByID[id] !== undefined) {
             callback(this.profilesByID[id]);
             return;
-        } else if (!authService.isYLIFT) { // until another use case comes up, only Y Lift members can request profiles
-            callback('Not authorized to make this request');
-            return;
         }
         var inThis = this;
         $http({method: 'GET', url: '/profile/' + id})

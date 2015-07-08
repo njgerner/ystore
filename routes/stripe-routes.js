@@ -218,7 +218,7 @@ module.exports = function(express, app, __dirname) {
 						emailHelper.sendOrdersToTeam(order).done();
 					}
 					// user account purchase
-					if (profileid !== undefined) {
+					if (profileid) {
 						orchHelper.addOrderToUser(profileid, order)
 						.then(function (result) {
 							res.status(201).json({order:order, success:result});

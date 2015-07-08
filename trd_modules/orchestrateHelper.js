@@ -1330,6 +1330,53 @@ exports.deletePromo = function(promo) {
     return deferred.promise;
 };
 
+exports.getAddressesByProfile = function(id) {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+  .collection('addresses')
+  .limit(50)
+  .query('value.profile:' + id)
+  .then(function (result) {
+    if (result.body.results.length) {
+      deferred.resolve(rawDogger.push_values_to_top(result.body.results));
+    } else {
+      deferred.resolve(false);
+    }
+  })
+  .fail(function (err) {
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
+  });   
+  return deferred.promise;
+};
+
+exports.getYLIFTLocations = function(id) {
+  var deferred = Q.defer();
+  db.newSearchBuilder()
+  .collection('addresses')
+  .limit(50)
+  .query('value.yliftInd: "Y"')
+  .then(function (result) {
+    if (result.body.results.length) {
+      deferred.resolve(rawDogger.push_values_to_top(result.body.results));
+    } else {
+      deferred.resolve(false);
+    }
+  })
+  .fail(function (err) {
+    if (err.body.code == "items_not_found") {
+      deferred.resolve(false);
+    } else {
+      deferred.reject(new Error(err.body.message));
+    }
+  });   
+  return deferred.promise;
+};
+
+
 // ABSTRACTED METHODS BELOW ONLY
 /////////////////////////////////////////////////////////////////////////////////////
 exports.getDocFromCollection = function(collection, key) {
@@ -1381,6 +1428,18 @@ exports.putDocToCollection = function(collection, id, doc) {
   db.put(collection, id, doc)
   .then(function (result) {
     deferred.resolve(result.path);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body.message));
+  });
+  return deferred.promise;
+};
+
+exports.removeDocFromCollection = function(collection, id) {
+  var deferred = Q.defer();
+  db.remove(collection, id)
+  .then(function (result) {
+    deferred.resolve(true);
   })
   .fail(function (err) {
     deferred.reject(new Error(err.body.message));
