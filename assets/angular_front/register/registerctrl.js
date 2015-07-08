@@ -1,8 +1,10 @@
 superApp.controller('RegisterCtrl',
   ['$rootScope', '$scope', '$state', 'authService', '$location', '$window', '$timeout', 
   		'stripeService', 'storeService', 'trainingService', 'REG_FEE', 'profileService',
+      'locationService',
   function($rootScope, $scope, $state, authService, $location, $window, $timeout, 
-  		stripeService, storeService, trainingService, REG_FEE, profileService) {
+  		stripeService, storeService, trainingService, REG_FEE, profileService,
+      locationService) {
 
   	$scope.staff = [];
   	$scope.viewState = 'start';
@@ -123,18 +125,21 @@ superApp.controller('RegisterCtrl',
 
     function addContactInfoToProfile() {
       var address = {
+        "name": 'Y Lift ' + $scope.city,
         "address1": $scope.address1,
         "address2": $scope.address2,
         "city": $scope.city,
         "state": $scope.state,
         "zip": $scope.zip,
         "country": $scope.country,
+        "phone": $scope.phone,
+        "email": $scope.profile.email,
         "default": true
       };
-      $scope.profile.addresses.push(address);
-      $scope.profile.phone = $scope.phone;
       $scope.profile.name = $scope.name;
+      $scope.profile.phone = $scope.phone;
       profileService.updateProfile($scope.profile);
+      locationService.addAddressToProfile(address);
     }
 
 // START VALIDATION
