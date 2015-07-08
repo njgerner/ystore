@@ -112,8 +112,8 @@ trdServices.service("locationService", ['$rootScope', '$http', '$cookieStore', '
     		$http({method: 'POST', url: '/profile/update_address/' + authService.profileid, data:{address:address}})
 	        .success(function (data, status, headers, config) {
 	        	for (var i = 0; i < inThis.locationsByProfile[authService.profileid].length; i++) {
-	        		if (inThis.locationsByProfile[authService.profileid].id == data.address.id) {
-	        			inThis.locationsByProfile[authService.profileid] = data.address;
+	        		if (inThis.locationsByProfile[authService.profileid][i].id == data.address.id) {
+	        			inThis.locationsByProfile[authService.profileid][i] = data.address;
 	        		}
 	        	}
 	            if (callback) {

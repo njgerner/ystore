@@ -4,6 +4,7 @@ appDirectives.directive('errorDir', ['$window', '$log',
 		restrict: 'E',
 		scope: {
 			msg: '@',
+			htmlMsg: '=',
 			level: '='
 		},
 		templateUrl: 'directives/error_template.html',

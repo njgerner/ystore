@@ -1244,16 +1244,15 @@ exports.findPatientAppts = function(profileid) {
   return deferred.promise;
 };
 
-exports.findProviderAppts = function(profileid, start, end) {
+exports.findProviderAppts = function(profileid, office, start, end) {
   var deferred = Q.defer();
   db.newSearchBuilder()
   .collection('appointments')
   .limit(100)
   .range('value.date', function (builder) {
-    return builder
-    .between(start, end);
+    return builder.between(start, end);
   })
-  .query('value.provider: ' + profileid)
+  .query('value.provider: ' + profileid + ' AND value.office: ' + office)
   .then(function (result) {
     deferred.resolve(rawDogger.push_values_to_top(result.body.results));
   })
@@ -1330,53 +1329,6 @@ exports.deletePromo = function(promo) {
     return deferred.promise;
 };
 
-exports.getAddressesByProfile = function(id) {
-  var deferred = Q.defer();
-  db.newSearchBuilder()
-  .collection('addresses')
-  .limit(50)
-  .query('value.profile:' + id)
-  .then(function (result) {
-    if (result.body.results.length) {
-      deferred.resolve(rawDogger.push_values_to_top(result.body.results));
-    } else {
-      deferred.resolve(false);
-    }
-  })
-  .fail(function (err) {
-    if (err.body.code == "items_not_found") {
-      deferred.resolve(false);
-    } else {
-      deferred.reject(new Error(err.body.message));
-    }
-  });   
-  return deferred.promise;
-};
-
-exports.getYLIFTLocations = function(id) {
-  var deferred = Q.defer();
-  db.newSearchBuilder()
-  .collection('addresses')
-  .limit(50)
-  .query('value.yliftInd: "Y"')
-  .then(function (result) {
-    if (result.body.results.length) {
-      deferred.resolve(rawDogger.push_values_to_top(result.body.results));
-    } else {
-      deferred.resolve(false);
-    }
-  })
-  .fail(function (err) {
-    if (err.body.code == "items_not_found") {
-      deferred.resolve(false);
-    } else {
-      deferred.reject(new Error(err.body.message));
-    }
-  });   
-  return deferred.promise;
-};
-
-
 // ABSTRACTED METHODS BELOW ONLY
 /////////////////////////////////////////////////////////////////////////////////////
 exports.getDocFromCollection = function(collection, key) {
@@ -1435,7 +1387,7 @@ exports.putDocToCollection = function(collection, id, doc) {
   return deferred.promise;
 };
 
-exports.removeDocFromCollection = function(collection, id) {
+exports.removeDocFromCollection = function(collection, id, doc) {
   var deferred = Q.defer();
   db.remove(collection, id)
   .then(function (result) {

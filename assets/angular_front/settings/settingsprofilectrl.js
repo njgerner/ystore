@@ -125,6 +125,7 @@ superApp.controller('SettingsProfileCtrl',
     }
 
     function validate () {
+      $scope.error = null;
       if (!$scope.addressname) {
         $scope.error = 'Please name this address';
         return false;
@@ -175,6 +176,7 @@ superApp.controller('SettingsProfileCtrl',
         $scope.editAddressView = false;
         $scope.clearAddress();
         $scope.addresses = locationService.locationsByProfile[authService.profileid];
+        console.log('address updated', error, address, $scope.addresses);
       }
     }
 

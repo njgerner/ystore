@@ -12,9 +12,17 @@ module.exports = function(express, app, __dirname) {
 		errorHandler    = require('../trd_modules/errorHandler.js'),
 		fs 				= require('fs');
 
-	// GET /profile/addresses/:profielid
+	// GET /profile/addresses/:profileid
 	LocationRoutes.get_addresses = function(req, res, next) {
-		orchHelper.getAddressesByProfile(req.params.profileid)
+		if (!req.params.profileid) {
+			errorHandler.logAndReturn('Missing address request data', 400, next, null, [req.params, req.body]);
+			return;
+		}
+		var query = 'value.profile: ' + req.params.profileid;
+		var params = {
+			limit: 20
+		};
+		orchHelper.searchDocsFromCollection('addresses', query, params)
 		.then(function (result) {
 			if (result) {
 	  			res.status(200).json({addresses:result});
@@ -29,7 +37,11 @@ module.exports = function(express, app, __dirname) {
 
 	 // GET /ylift_locations
 	LocationRoutes.get_ylift_locations = function(req, res, next) {
-		orchHelper.getYLIFTLocations()
+		var query = 'value.yliftInd: "Y"';
+		var params = {
+			limit: 100
+		};
+		orchHelper.searchDocsFromCollection('addresses', query, params)
 		.then(function (result) {
 			if (result) {
 	  			res.status(200).json({locations:result});
@@ -89,7 +101,7 @@ module.exports = function(express, app, __dirname) {
 		address.updatedAt = new Date();
 		orchHelper.putDocToCollection('addresses', address.id, address)
 		.then(function (result) {
-	  		res.status(200).json({address:result});
+	  		res.status(200).json({address:address});
 	  	})
 	  	.fail(function (err) {
 	  		errorHandler.logAndReturn('Error updating address', 500, next, err, req.body);

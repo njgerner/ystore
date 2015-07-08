@@ -1,28 +1,34 @@
 <div ng-click="closeConfirm()">
-	<div class="row clearfix">
-		<div class="left">
+	<div class="row clearfix cal-row">
+		<div class="small-12 large-4 columns cal-nav">
 			<i class="i-left-circled" ng-click="prev()"></i>
 			{{getNavDisplay()}}
 			<i class="i-right-circled" ng-click="next()"></i>
 		</div>
-		<div class="right">
-			<a class="button small split">
-				View {{viewState}}
-				<span dropdown-toggle="#view-dropdown"></span>
+		<div class="small-12 large-6 columns">
+			<select ng-if="officesLoaded" ng-model="$parent.selectedOffice" placeholder="Select an office schedule to view">
+				<option value="{{office.id}}" ng-repeat="office in addresses">{{office.name}}</option>
+			</select>
+			<error-dir ng-if="!selectedOffice && officesLoaded" html-msg="error"></error-dir>
+		</div>
+		<div class="small-12 large-2 columns">
+			<a class="button tiny split right dropdown" dropdown-toggle="#view-dropdown">
+				View: {{viewState}}
 			</a>
-			<ul id="view-dropdown">
+			<ul id="view-dropdown" class="f-dropdown">
 				<li ng-click="viewState = 'Week'">Week</li>
 				<li ng-click="viewState = 'Month'">Month</li>
 			</ul>
 		</div>
 	</div>
-	<div class="row">
+	<div class="row" ng-if="apptsLoaded">
+		<error-dir msg="{{error}}" redirect-in-msg="true"></error-dir>
 		<table class="small-12 columns" ng-if="viewState == 'Week'">
 			<thead>
 				<tr>
 					<th ng-repeat="dow in [] | range: 7">
 						<strong>{{getDisplayDay(dow)}}</strong><br>
-						{{getDisplayDate(dow)}}
+						<span>{{getDisplayDate(dow)}}</span>
 					</th>
 				</tr>
 			</thead>
@@ -39,14 +45,14 @@
 				<tr>
 					<th ng-repeat="dow in [] | range: 7">
 						<strong>{{getDisplayDay(dow+(week*7))}}</strong><br>
-						{{getDisplayDate(dow+(week*7))}}
+						<span>{{getDisplayDate(dow+(week*7))}}</span>
 					</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr ng-repeat="time in [] | range: 9">
 					<td class="date-column-provider" ng-repeat="dow in [] | range: 7" ng-class="getSlotClass(dow+(week*7), time+9)" ng-click="selectAppt(dow, time+9, $event)">
-						{{getDisplayTime(dow+(week*7), time+9)}}
+						<span>{{getDisplayTime(dow+(week*7), time+9)}}</span>
 					</td>
 				</tr>
 			</tbody>

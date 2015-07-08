@@ -1,13 +1,16 @@
 superApp.controller('OfficeSchedulingCtrl',
-  ['$scope', '$state', 'profileService', 'bookingService', 'authService',
-  function($scope, $state, profileService, bookingService, authService) {
+  ['$scope', '$state', 'profileService', 'bookingService', 'authService', 'locationService',
+  function($scope, $state, profileService, bookingService, authService, locationService) {
     $scope.appts = [];
-    $scope.apptsByTimestamp = {};
+    $scope.addresses = [];
+    $scope.apptsByOfficeAndTimestamp = {};
     $scope.startDate = moment().startOf('week'); // always want this weeks monday
     $scope.endDate = moment().endOf('week'); // always want this weeks monday
     $scope.viewState = 'Week';
     $scope.apptsLoaded = false;
+    $scope.officesLoaded = false;
     $scope.selectedAppt = null;
+    $scope.selectedOffice = null;
 
     $scope.closeConfirm = function($event) {
       $scope.selectedAppt = null;
@@ -32,6 +35,7 @@ superApp.controller('OfficeSchedulingCtrl',
         $scope.endDate.subtract(1, 'months').endOf('month');
         $scope.startDate = angular.copy($scope.startDate).subtract(1, 'months').startOf('month');
       }
+      $scope.loadApptsInRange($scope.startDate.format('X'), $scope.endDate.format('X'));
     }
 
     $scope.next = function() {
@@ -42,16 +46,18 @@ superApp.controller('OfficeSchedulingCtrl',
         $scope.startDate.add(1, 'months').startOf('month');
         $scope.endDate = angular.copy($scope.startDate).add(1, 'months');
       }
+      $scope.loadApptsInRange($scope.startDate.format('X'), $scope.endDate.format('X'));
     }
 
     $scope.getSlotClass = function(offset, hour) {
-        var appt = $scope.apptsByTimestamp[$scope.getUnix(offset, hour)];
-        if (appt && appt.status) {
-          return appt.status;
-        } else {
-          return '';
-        }
+      $scope.apptsByOfficeAndTimestamp[$scope.selectedOffice] = $scope.apptsByOfficeAndTimestamp[$scope.selectedOffice] || [];
+      var appt = $scope.apptsByOfficeAndTimestamp[$scope.selectedOffice][$scope.getUnix(offset, hour)];
+      if (appt && appt.status) {
+        return appt.status;
+      } else {
+        return '';
       }
+    }
 
     $scope.getUnix = function (offset, hour) {
       return angular.copy($scope.startDate).add(offset, 'days').hours(hour).format('X');
@@ -69,17 +75,13 @@ superApp.controller('OfficeSchedulingCtrl',
       return angular.copy($scope.startDate).add(offset, 'days').hours(hour).format('LT');
     }
 
-    $scope.closeConfirm = function() {
-      $scope.selectedAppt = null;
-    }
-
     $scope.selectAppt = function(offset, hour, $event) {
-      $scope.selectedAppt = $scope.apptsByTimestamp[$scope.getUnix(offset, hour)];
+      $scope.selectedAppt = $scope.apptsByOfficeAndTimestamp[$scope.selectedOffice][$scope.getUnix(offset, hour)];
       $event.stopPropagation();
     }
 
     $scope.loadApptsInRange = function(startDate, endDate) {
-      bookingService.getProviderAppts(startDate, endDate, authService.profileid, onApptsLoaded);
+      bookingService.getProviderAppts(startDate, endDate, $scope.selectedOffice, authService.profileid, onApptsLoaded);
     }
 
     function onApptsLoaded (error, appts) {
@@ -87,12 +89,35 @@ superApp.controller('OfficeSchedulingCtrl',
       $scope.appts = appts || [];
     }
 
+    function onAddressesLoaded (error, addresses) {
+      for (var i = 0; i < addresses.length; i++) {
+        if (addresses[i].yliftInd) {
+          $scope.addresses.push(addresses[i]);
+          $scope.selectedOffice = $scope.selectedOffice || addresses[i].id;
+        }
+      }
+
+      $scope.officesLoaded = true;
+      if (!$scope.selectedOffice) {
+        $scope.error = 'Please add a Y Lift Network office in your <a href="#!/settings/profile">settings</a> to access appointment scheduling.';
+      }
+    }
+
     var apptsWatch = null;
     apptsWatch = $scope.$watch('appts', function (newVal, oldVal) {
       if (newVal && newVal.length) {
         for (var i = 0; i < newVal.length; i++) {
-          $scope.apptsByTimestamp[newVal[i].date] = newVal[i];
+          $scope.apptsByOfficeAndTimestamp[newVal[i].office] = $scope.apptsByOfficeAndTimestamp[newVal[i].office] || [];
+          $scope.apptsByOfficeAndTimestamp[newVal[i].office][newVal[i].date] = newVal[i];
         }
+      }
+    });
+
+    var officeWatch = null;
+    officeWatch = $scope.$watch('selectedOffice', function (newVal, oldVal) {
+      if (newVal) {
+        bookingService.getProviderAppts($scope.getUnix(0, 0), $scope.getUnix(30, 0), $scope.selectedOffice, authService.profileid, onApptsLoaded);
+        
       }
     });
 
@@ -101,6 +126,6 @@ superApp.controller('OfficeSchedulingCtrl',
       apptsWatch();
     });
 
-    bookingService.getProviderAppts($scope.getUnix(0, 0), $scope.getUnix(30, 0), authService.profileid, onApptsLoaded);
+    locationService.getProfileAddresses(onAddressesLoaded);
 
 }]);
