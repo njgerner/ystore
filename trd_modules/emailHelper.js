@@ -1,6 +1,7 @@
 var Q 				= require('q'),
 	orchHelper 		= require('./orchestrateHelper'),
 	mandrill 		= require('mandrill-api/mandrill'),
+	moment 			= require('moment'),
 	mandrill_client = new mandrill.Mandrill(process.env.MANDRILL);
 
 exports.sendWelcome = function(name, email) {
@@ -10,18 +11,18 @@ exports.sendWelcome = function(name, email) {
         "content": "example content"
     }];
 	var message = {
-		"subject": "Welcome to the YLIFT Network",
-		"from_email": "message." + process.env.DEFAULT_EMAIL_FROM,
-		"from_name": "YLIFT Team",
+		"subject": "Welcome to the Y Lift Network",
+		"from_email": process.env.DEFAULT_EMAIL_FROM,
+		"from_name": "Y Lift Team",
 		"to": [{
 			"email": email,
 			"name": name,
 			"type": "to"
 		}],
 		"headers": {
-			"Reply-To": "message." + process.env.DEFAULT_EMAIL_REPLY_TO
+			"Reply-To": process.env.DEFAULT_EMAIL_REPLY_TO
 		},
-		"tags": ["welcome", "ylift"]
+		"tags": ["welcome", "Y Lift"]
 	};
 	mandrill_client.messages.sendTemplate({"template_name": "welcome", "template_content": template_content, "message": message},
 		function (result) {
@@ -46,7 +47,7 @@ exports.newUserTeamNotification = function(user) {
     }
 	var type = "Individual";
 	if(user.isYLIFT) {
-		type = "YLift";
+		type = "Y Lift";
 	}
 	var name = user.name;
 	if(name === null) {
@@ -59,11 +60,11 @@ exports.newUserTeamNotification = function(user) {
     }];
 	var message = {
 		"subject": "We have a new user!",
-		"from_email": "message." + process.env.DEFAULT_EMAIL_FROM,
-		"from_name": "YLIFT Team",
+		"from_email": process.env.DEFAULT_EMAIL_FROM,
+		"from_name": "Y Lift Team",
 		"to": to,
 		"headers": {
-			"Reply-To": "message." + process.env.DEFAULT_EMAIL_REPLY_TO
+			"Reply-To": process.env.DEFAULT_EMAIL_REPLY_TO
 		},
 		"merge": true,
 		"merge_language": "handlebars",
@@ -78,7 +79,7 @@ exports.newUserTeamNotification = function(user) {
 				"name": "email",
 				"content": user.email
 			}],
-		"tags": ["welcome", "ylift"]
+		"tags": ["welcome", "Y Lift"]
 	};
 	mandrill_client.messages.sendTemplate({"template_name": "new_user_notification", "template_content": template_content, "message": message},
 		function (result) {
@@ -125,16 +126,16 @@ exports.sendOrdersToMerchants = function(order) {
 			    }];
 
 				var message = {
-					"subject": "YLIFT Store Order",
-					"from_email": "message." + process.env.DEFAULT_EMAIL_FROM,
-					"from_name": "YLIFT Team",
+					"subject": "Y Lift Store Order",
+					"from_email": process.env.DEFAULT_EMAIL_FROM,
+					"from_name": "Y Lift Team",
 					"to": [{
 						"email": profile.email,
 						"name": profile.name,
 						"type": "to"
 					}],
 					"headers": {
-						"Reply-To": "message." + process.env.DEFAULT_EMAIL_REPLY_TO
+						"Reply-To": process.env.DEFAULT_EMAIL_REPLY_TO
 					},
 					"merge": true,
 					"merge_language": "handlebars",
@@ -156,7 +157,7 @@ exports.sendOrdersToMerchants = function(order) {
 							"content": productContent[merchant]
 						}
 					],
-					"tags": ["order", "orders", "merchant", profile.name, "ylift"]
+					"tags": ["order", "orders", "merchant", profile.name, "Y Lift"]
 				};
 
 				mandrill_client.messages.sendTemplate({"template_name": "merchant_order_notification", "template_content": template_content, "message": message},
@@ -210,12 +211,12 @@ exports.sendOrdersToTeam = function(order) {
 	    }];
 
 		var message = {
-			"subject": "YLIFT Store Order",
-			"from_email": "message." + process.env.DEFAULT_EMAIL_FROM,
-			"from_name": "YLIFT Team",
+			"subject": "Y Lift Store Order",
+			"from_email": process.env.DEFAULT_EMAIL_FROM,
+			"from_name": "Y Lift Team",
 			"to": to,
 			"headers": {
-				"Reply-To": "message." + process.env.DEFAULT_EMAIL_REPLY_TO
+				"Reply-To": process.env.DEFAULT_EMAIL_REPLY_TO
 			},
 			"merge": true,
 			"merge_language": "handlebars",
@@ -243,9 +244,152 @@ exports.sendOrdersToTeam = function(order) {
 					"content": order.profile || 'guest'
 				}
 			],
-			"tags": ["order", "orders", "team", "ylift"]
+			"tags": ["order", "orders", "team", "Y Lift"]
 		};
 
 		return mandrill_client.messages.sendTemplate({"template_name": "team_order_notification", "template_content": template_content, "message": message});
     });
+};
+
+exports.sendApptUpdateToPatient = function(appt, patient, provider, office) {
+	var deferred = Q.defer();
+
+	var template_content = [{
+        "name": "example name",
+        "content": "example content"
+    }]; //needed for backward compatibility 
+	var message = {
+		"subject": 'Update for Appointment on ' + moment(appt.date, 'X').format('LLLL'),
+		"from_email": process.env.DEFAULT_EMAIL_FROM,
+		"from_name": "Y Lift Team",
+		"to": [{
+			"email": patient.email,
+			"name": patient.name,
+			"type": "to"
+		}],
+		"headers": {
+			"Reply-To": process.env.DEFAULT_EMAIL_REPLY_TO
+		},
+		"merge": true,
+		"merge_language": "handlebars",
+		"global_merge_vars": [
+			{
+				"name": "patientname",
+				"content": patient.name
+			}, {
+				"name": "status",
+				"content": appt.status
+			}, {
+				"name": "apptdate",
+				"content": moment(appt.date, 'X').format('LLLL')
+			}, {
+				"name": "addressname",
+				"content": office.name
+			}, {
+				"name": "address1",
+				"content": office.address1
+			}, {
+				"name": "address2",
+				"content": office.address2 || ""
+			}, {
+				"name": "city",
+				"content": office.city
+			}, {
+				"name": "state",
+				"content": office.state
+			}, {
+				"name": "zip",
+				"content": office.zip
+			}, {
+				"name": "state",
+				"content": office.state
+			}, {
+				"name": "contactnumber",
+				"content": office.phone
+			}, {
+				"name": "contactemail",
+				"content": office.email
+			}],
+		"tags": ["appt", "Y Lift", "patient", "update"]
+	};
+	mandrill_client.messages.sendTemplate({"template_name": "patient_appt_update", "template_content": template_content, "message": message},
+		function (result) {
+			deferred.resolve(result);
+		}, function (err) {
+			console.log('appt update email error', err.name, err.message);
+			deferred.reject(new Error(err.message));
+		});
+
+	return deferred.promise;
+};
+
+exports.sendApptNoticeToProvider = function(appt, patient, office) {
+	console.log('sending appt notice to provider', appt, patient);
+
+	var deferred = Q.defer();
+
+	var template_content = [{
+        "name": "example name",
+        "content": "example content"
+    }]; //needed for backward compatibility 
+	var message = {
+		"subject": 'New Request for Appointment on ' + moment(appt.date, 'X').format('LLLL'),
+		"from_email": process.env.DEFAULT_EMAIL_FROM,
+		"from_name": "Y Lift Team",
+		"to": [{
+			"email": office.email,
+			"name": office.name,
+			"type": "to"
+		}],
+		"headers": {
+			"Reply-To": process.env.DEFAULT_EMAIL_REPLY_TO
+		},
+		"merge": true,
+		"merge_language": "handlebars",
+		"global_merge_vars": [
+			{
+				"name": "patientname",
+				"content": patient.name
+			}, {
+				"name": "apptdate",
+				"content": moment(appt.date, 'X').format('LLLL')
+			}, {
+				"name": "addressname",
+				"content": office.name
+			}, {
+				"name": "address1",
+				"content": office.address1
+			}, {
+				"name": "address2",
+				"content": office.address2 || ""
+			}, {
+				"name": "city",
+				"content": office.city
+			}, {
+				"name": "state",
+				"content": office.state
+			}, {
+				"name": "zip",
+				"content": office.zip
+			}, {
+				"name": "state",
+				"content": office.state
+			}, {
+				"name": "contactnumber",
+				"content": process.env.DEFAULT_CONTACT_PHONE
+			}, {
+				"name": "contactemail",
+				"content": process.env.DEFAULT_EMAIL_REPLY_TO
+			}],
+		"tags": ["appt", "Y Lift", "provider", "request", "notice"]
+	};
+	mandrill_client.messages.sendTemplate({"template_name": "provider_appt_notice", "template_content": template_content, "message": message},
+		function (result) {
+			deferred.resolve(result);
+		}, function (err) {
+			console.log('appt request email error', err.name, err.message);
+			deferred.reject(new Error(err.message));
+		});
+
+	return deferred.promise;
 };

@@ -51,8 +51,8 @@ appDirectives.directive('bookingModalDir', ['$window', 'authService', 'bookingSe
 
 			scope.selectSlot = function(offset, hour, $event) {
 				scope.error = null;
-				scope.success = null;
-				bookingService.sendApptRequest(scope.getUnix(offset, hour), scope.office.id, scope.office.profile, scope.procedure, onApptRequested);
+				scope.success = null;	
+				bookingService.sendApptRequest(scope.getUnix(offset, hour), scope.office, scope.office.profile, scope.procedure, onApptRequested);
 			}
 
 			scope.previous = function() {

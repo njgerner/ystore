@@ -25,7 +25,7 @@ appDirectives.directive('appointmentConfirmModalDir', ['profileService', 'authSe
 
 			scope.updateStatus = function(status) {
 				scope.appt.status = status;
-				bookingService.updateApptRequest(scope.appt, onApptUpdated);
+				bookingService.updateApptRequest(scope.appt, scope.patient, onApptUpdated);
 			}
 
 			function onApptUpdated (error, appt) {

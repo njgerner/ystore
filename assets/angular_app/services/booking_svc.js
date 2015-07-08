@@ -11,7 +11,7 @@ trdServices.service("bookingService", ['$rootScope', '$http', '$cookieStore', '$
     		}
     		var inThis = this;
 	        $http({method: 'POST', url: '/booking/request_appt/' + providerid, 
-	    		   data: {office:office, patientid: authService.profileid, date:date, procedure:procedure}})
+	    		   data: {office:office, patient: authService.profile, date:date, procedure:procedure}})
 	        .success(function (data, status, headers, config) {
 	            callback(null, data.appt);
 	        })
@@ -21,10 +21,10 @@ trdServices.service("bookingService", ['$rootScope', '$http', '$cookieStore', '$
 	        });
     	}
 
-    	this.updateApptRequest = function(appt, callback) {
+    	this.updateApptRequest = function(appt, patient, callback) {
     		var inThis = this;
 	        $http({method: 'POST', url: '/booking/update_appt', 
-	    		   data: {appt:appt}})
+	    		   data: {appt:appt, patient:patient}})
 	        .success(function (data, status, headers, config) {
 	        	if (callback) {
 	            	callback(null, data.appt);
