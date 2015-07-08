@@ -66,7 +66,6 @@ appDirectives.directive('bookingModalDir', ['$window', 'authService', 'bookingSe
 			}
 
 			function onApptRequested (error, appt) {
-				console.log('appt requested', error, appt);
 				if (error) {
 					scope.error = error;
 				} else {
@@ -86,7 +85,6 @@ appDirectives.directive('bookingModalDir', ['$window', 'authService', 'bookingSe
 			var apptsWatch = null;
 			apptsWatch = scope.$watch('appts', function (newVal, oldVal) {
 				if (newVal && newVal.length) {
-					console.log("apptsByOfficeAndTimestamp", scope.apptsByOfficeAndTimestamp);
 					for (var i = 0; i < newVal.length; i++) {
 						scope.apptsByOfficeAndTimestamp[newVal[i].office] = scope.apptsByOfficeAndTimestamp[newVal[i].office] || {};
 						scope.apptsByOfficeAndTimestamp[newVal[i].office][newVal[i].date] = newVal[i];

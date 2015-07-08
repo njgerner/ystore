@@ -50,8 +50,8 @@ superApp.controller('OfficeSchedulingCtrl',
     }
 
     $scope.getSlotClass = function(offset, hour) {
-      $scope.apptsByOfficeAndTimestamp[$scope.selectedOffice.id] = $scope.apptsByOfficeAndTimestamp[$scope.selectedOffice.id] || [];
-      var appt = $scope.apptsByOfficeAndTimestamp[$scope.selectedOffice.id][$scope.getUnix(offset, hour)];
+      $scope.apptsByOfficeAndTimestamp[$scope.selectedOffice] = $scope.apptsByOfficeAndTimestamp[$scope.selectedOffice] || [];
+      var appt = $scope.apptsByOfficeAndTimestamp[$scope.selectedOffice][$scope.getUnix(offset, hour)];
       if (appt && appt.status) {
         return appt.status;
       } else {
@@ -75,17 +75,13 @@ superApp.controller('OfficeSchedulingCtrl',
       return angular.copy($scope.startDate).add(offset, 'days').hours(hour).format('LT');
     }
 
-    $scope.closeConfirm = function() {
-      $scope.selectedAppt = null;
-    }
-
     $scope.selectAppt = function(offset, hour, $event) {
-      $scope.selectedAppt = $scope.apptsByOfficeAndTimestamp[$scope.selectedOffice.id][$scope.getUnix(offset, hour)];
+      $scope.selectedAppt = $scope.apptsByOfficeAndTimestamp[$scope.selectedOffice][$scope.getUnix(offset, hour)];
       $event.stopPropagation();
     }
 
     $scope.loadApptsInRange = function(startDate, endDate) {
-      bookingService.getProviderAppts(startDate, endDate, $scope.selectedOffice.id, authService.profileid, onApptsLoaded);
+      bookingService.getProviderAppts(startDate, endDate, $scope.selectedOffice, authService.profileid, onApptsLoaded);
     }
 
     function onApptsLoaded (error, appts) {
@@ -97,7 +93,7 @@ superApp.controller('OfficeSchedulingCtrl',
       for (var i = 0; i < addresses.length; i++) {
         if (addresses[i].yliftInd) {
           $scope.addresses.push(addresses[i]);
-          $scope.selectedOffice = $scope.selectedOffice || addresses[i];
+          $scope.selectedOffice = $scope.selectedOffice || addresses[i].id;
         }
       }
 
@@ -120,7 +116,7 @@ superApp.controller('OfficeSchedulingCtrl',
     var officeWatch = null;
     officeWatch = $scope.$watch('selectedOffice', function (newVal, oldVal) {
       if (newVal) {
-        bookingService.getProviderAppts($scope.getUnix(0, 0), $scope.getUnix(30, 0), $scope.selectedOffice.id, authService.profileid, onApptsLoaded);
+        bookingService.getProviderAppts($scope.getUnix(0, 0), $scope.getUnix(30, 0), $scope.selectedOffice, authService.profileid, onApptsLoaded);
         
       }
     });
