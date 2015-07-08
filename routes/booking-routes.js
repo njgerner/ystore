@@ -8,18 +8,19 @@ module.exports = function(express, app, __dirname) {
 		orchHelper      = require('../trd_modules/orchestrateHelper'),
 		Q               = require('q'),
 		errorHandler    = require('../trd_modules/errorHandler.js'),
+		emailHelper     = require('../trd_modules/emailHelper'),
 		fs 				= require('fs');
 
 	BookingRoutes.request_appt = function(req, res, next) {
-		if (!req.params.providerid || !req.body.patientid || !req.body.date || !req.body.office) {
+		if (!req.params.providerid || !req.body.patient.id || !req.body.date || !req.body.office) {
 			errorHandler.logAndReturn('Missing appointment request data', 400, next, null, [req.params, req.body]);
 			return;
 		}
 		var apptDoc = {
-			id: req.body.patientid + "_" + req.body.date + "_" + req.params.providerid,
-			patient: req.body.patientid,
+			id: req.body.patient.id + "_" + req.body.date + "_" + req.params.providerid,
+			patient: req.body.patient.id,
 			date: req.body.date,
-			office: req.body.office,
+			office: req.body.office.id,
 			provider: req.params.providerid,
 			procedure: req.body.procedure,
 			status: "requested",
@@ -30,6 +31,11 @@ module.exports = function(express, app, __dirname) {
 		.then(function (result) {
 			apptDoc.id = result.key;
 			res.status(201).json({appt:apptDoc});
+			orchHelper.getDocFromCollection('local-profiles', req.params.providerid)
+			.then(function (profile) {
+				emailHelper.sendApptUpdateToPatient(apptDoc, req.body.patient, profile, req.body.office).done();
+				emailHelper.sendApptNoticeToProvider(apptDoc, req.body.patient, req.body.office).done();
+			});
 		})
 		.fail(function (err) {
 			errorHandler.logAndReturn('Error requesting appointment', 500, next, err, [req.params, req.body]);
@@ -50,6 +56,8 @@ module.exports = function(express, app, __dirname) {
 		orchHelper.putDocToCollection('appointments', req.body.appt.id, req.body.appt)
 		.then(function (result) {
 			res.status(201).json({appt:req.body.appt});
+			orchHelper.getDocFromCollection('addresses', req.body.office)
+			.then(function (office) { emailHelper.sendApptUpdateToPatient(req.body.appt, req.body.patient, office).done(); });
 		})
 		.fail(function (err) {
 			errorHandler.logAndReturn('Error updating appointment', 500, next, err, [req.params, req.body]);
