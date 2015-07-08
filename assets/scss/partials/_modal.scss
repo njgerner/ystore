@@ -90,9 +90,11 @@
 	@extend .pointer;
 
 	&:hover {
+
 		span {
 			display: none;
 		}
+		
 		&:before {
 			content: "Open";
 		}
