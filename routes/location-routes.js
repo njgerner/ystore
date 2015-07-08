@@ -101,7 +101,7 @@ module.exports = function(express, app, __dirname) {
 		address.updatedAt = new Date();
 		orchHelper.putDocToCollection('addresses', address.id, address)
 		.then(function (result) {
-	  		res.status(200).json({address:result});
+	  		res.status(200).json({address:address});
 	  	})
 	  	.fail(function (err) {
 	  		errorHandler.logAndReturn('Error updating address', 500, next, err, req.body);

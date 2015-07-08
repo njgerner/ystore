@@ -1387,6 +1387,18 @@ exports.putDocToCollection = function(collection, id, doc) {
   return deferred.promise;
 };
 
+exports.removeDocFromCollection = function(collection, id, doc) {
+  var deferred = Q.defer();
+  db.remove(collection, id)
+  .then(function (result) {
+    deferred.resolve(true);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body.message));
+  });
+  return deferred.promise;
+};
+
 exports.getMostFrequentEvent = function(collection, type, profile) {
   var deferred = Q.defer();
   db.newSearchBuilder()

@@ -176,6 +176,7 @@ superApp.controller('SettingsProfileCtrl',
         $scope.editAddressView = false;
         $scope.clearAddress();
         $scope.addresses = locationService.locationsByProfile[authService.profileid];
+        console.log('address updated', error, address, $scope.addresses);
       }
     }
 
