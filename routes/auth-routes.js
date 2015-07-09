@@ -57,7 +57,6 @@ module.exports = function(express, app, __dirname) {
 	    	} 
 	    })
 	    .fail(function (err){
-	    	console.log('some weird error', err);
 	      done('There was an error on the server, please try again.', false);
 	    });
 	  }
@@ -68,6 +67,9 @@ module.exports = function(express, app, __dirname) {
 	    passwordField: 'password',
 	    passReqToCallback : true }, //allows us to pass back the request to the callback
 	  function(req, username, password, done) {
+	  	var query = 'value.email: ' + username;
+	  	var params = { limit: 1 };
+	  	orchHelper.searchDocsFromCollection('local-users', query, params)
 	    orchHelper.localReg(req.body.email, req.body.password, req.body.metadata)
 	      .then(function (user) {
 	        if (user) {
