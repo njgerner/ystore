@@ -317,7 +317,7 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       url:"/sell_info",
       templateUrl: "/partials/sell_with_us.html",
       controller: "SellInfoCtrl",
-      title: "Sell with Y Lift"
+      title: "Sell with Y LIFT"
     })
     .state('about', {
       url:"/about",
