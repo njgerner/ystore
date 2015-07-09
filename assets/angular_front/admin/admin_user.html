@@ -14,7 +14,13 @@
 			    </tr>
 			</thead>
 			<tbody>
-				<tr>
+				<tr ng-show="edit">
+					<th><input type="text">{{profile.name}}</input></th>
+					<th> x</th>
+					<th> y</th>
+					<th> z</th>
+				</tr>
+				<tr ng-hide="edit">
 					<th>{{profile.name}}</th>
 					<th>{{profile.email}}</th>
 					<th>{{displayDate(profile.createdAt)}}</th>

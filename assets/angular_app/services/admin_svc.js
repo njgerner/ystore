@@ -8,7 +8,7 @@ trdServices.service("adminService", ['$rootScope', '$http', 'authService', 'merc
 
     	this.getProfileByID = function(id, callback) {
     		if(this.profilesByID[id] !== undefined) {
-    			callback(this.profilesByID[id]);
+    			callback(null, this.profilesByID[id]);
     		}else {
     			var inThis = this;
     			$http({method: 'GET', url: '/admin/profile/' + id})
