@@ -12,7 +12,8 @@ module.exports = function(express, app, __dirname) {
 
 	// GET /admin/all_profiles
 	AdminRoutes.all_profiles = function(req, res, next) {
-		orchHelper.getAllProfiles()
+		var params = { limit: 100 };
+		orchHelper.listDocsFromCollection('local-profiles', params)
 		.then(function (data) {
 			if (data) {
 				res.status(200).json({profiles:data});
@@ -27,7 +28,8 @@ module.exports = function(express, app, __dirname) {
 
 	// GET /admin/all_profiles
 	AdminRoutes.all_products = function(req, res, next) {
-		orchHelper.getAllProducts()
+		var params = { limit: 100 };
+		orchHelper.listDocsFromCollection('products', params)
 		.then(function (data) {
 			if (data) {
 				res.status(200).json({products:data});
@@ -42,7 +44,7 @@ module.exports = function(express, app, __dirname) {
 
 	// GET /admin/profile
 	AdminRoutes.get_profile = function(req, res, next) {
-		orchHelper.getProfile(req.params.profileid)
+		orchHelper.getDocFromCollection('local-profiles', req.params.profileid)
 		.then(function (data) {
 			if (data) {
 				res.status(200).json({profile:data});
@@ -57,7 +59,8 @@ module.exports = function(express, app, __dirname) {
 
 	// GET /admin/all_orders
 	AdminRoutes.all_orders = function(req, res, next) {
-		orchHelper.getAllOrders()
+		var params = { limit: 100 };
+		orchHelper.listDocsFromCollection('orders', params)
 		.then(function (data) {
 			if (data) {
 				res.status(200).json({orders:data});
@@ -72,21 +75,32 @@ module.exports = function(express, app, __dirname) {
 
 	// GET /admin/all_ylift_profiles
 	AdminRoutes.all_ylift_profiles = function(req, res, next) {
-		orchHelper.getAllYLIFTProfiles()
+		var query = 'value.isYLIFT: true';
+		var params = { limit: 100 };
+		orchHelper.searchDocsFromCollection('local-users', query, params)
+		.then(function (users) {
+			var options = { docIDs: true };
+			profileids = rawDogger.extract_docs_with_prop_value(users, 'isYLIFT', true, options);
+			// TODO: Confirm this query works
+			var nextQuery = 'value.id: ' + profileids;
+			var nextParams = { limit: 100 };
+			return orchHelper.searchDocsFromCollection('local-profiles', nextQuery, nextParams);
+		})
 		.then(function (data) {
 			if (data) {
 				res.status(200).json({profiles:data});				
 			} else {
-				errorHandler.logAndReturn('No Y Lift profiles found from admin', 404, next);
+				errorHandler.logAndReturn('No Y LIFT profiles found from admin', 404, next);
 			}
 		})
 		.fail(function (err) {
-			errorHandler.logAndReturn('Error getting Y Lift profiles from admin', 500, next, err);
+			errorHandler.logAndReturn('Error getting Y LIFT profiles from admin', 500, next, err);
 		});
 	};
 
 	AdminRoutes.all_merchants = function(req, res, next) {
-		orchHelper.getAllMerchantProfiles()
+		var params = { limit: 100 };
+		orchHelper.listDocsFromCollection('merchant-profiles', params)
 		.then(function (data) {
 			if (data) {
 				res.status(200).json({profiles:data});				
@@ -99,18 +113,9 @@ module.exports = function(express, app, __dirname) {
 		});
 	};
 
-	AdminRoutes.get_merchant_name = function(req, res) {
-		orchHelper.getMerchantByID(req.body.id)
-		.then(function (merchant) {
-			res.send({merchant:merchant});
-		})
-		.fail(function (err) {
-			res.send({error:err});
-		});
-	};
-
 	AdminRoutes.get_promos = function(req, res, next) {
-		orchHelper.getAllPromoCodes()
+		var params = { limit: 100 };
+		orchHelper.listDocsFromCollection('promo-codes', params)
 		.then(function (data) {
 			if (data) {
 				res.status(200).json({promos:data});
@@ -124,10 +129,14 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	AdminRoutes.add_promo = function(req, res, next) {
-		orchHelper.addPromo(req.body.promo)
+		if (!req.body.promo) {
+			errorHandler.logAndReturn('Missing add promo request data', 400, next, null, [req.body, req.user]);
+			return;
+		}
+		orchHelper.putDocToCollection('promo-codes', req.body.promo.key, req.body.promo)
 		.then(function (data) {
 			if (data) {
-				res.status(200).json({promo:data});
+				res.status(200).json({promo:data.key});
 			} else {
 				errorHandler.logAndReturn('Error adding promo code from admin', 404, next);
 			}
@@ -138,7 +147,11 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	AdminRoutes.delete_promo = function(req, res, next) {
-		orchHelper.deletePromo(req.body.promo)
+		if (!req.body.promo) {
+			errorHandler.logAndReturn('Missing delete promo request data', 400, next, null, [req.body, req.user]);
+			return;
+		}
+		orchHelper.removeDocFromCollection('promo-codes', req.body.promo)
 		.then(function (data) {
 			if (data) {
 				res.status(200).json({success:true});
@@ -152,7 +165,9 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	AdminRoutes.get_available_keys = function(req, res, next) {
-		orchHelper.getAvailableRegKeys()
+		var query = 'value.isActive: false';
+		var params = { limit: 100 };
+		orchHelper.searchDocsFromCollection('registration-keys', query, params)
 		.then(function (keys) {
 			if (keys) {
 				res.status(200).json({keys:keys});				
@@ -166,7 +181,21 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	AdminRoutes.get_hash = function(req, res, next) {
-		orchHelper.getUserHashByProfileID(req.body.profileid)
+		if (!req.body.profileid) {
+			errorHandler.logAndReturn('Missing delete promo request data', 400, next, null, [req.body, req.user]);
+			return;
+		}
+		var query = 'value.profile: ' + req.body.profileid;
+		var params = { limit: 1 };
+		orchHelper.searchDocsFromCollection('local-users', query, params)
+		.then(function (users) {
+			if (users) {
+				return users[0].hash;
+				
+			} else {
+				errorHandler.logAndReturn('No user found for this profile admin', 404, next);
+			}
+		})
 		.then(function (hash) {
 			if (hash) {
 				res.status(200).json({hash:hash});				
@@ -180,31 +209,18 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	AdminRoutes.add_regkey = function(req, res, next) {
-		orchHelper.addRegKey(req.body.regkey)
-		.then(function (regkey) {
-			if (regkey) {
-				res.status(200).json({regkey:regkey});				
-			} else {
-				errorHandler.logAndReturn('Reg key not added from admin', 404, next);
-			}
+		if (!req.body.regkey) {
+			errorHandler.logAndReturn('Missing delete promo request data', 400, next, null, [req.body, req.user]);
+			return;
+		}
+		var key = {'key':regkey, 'status':'verified', 'isActive':false, 'activationDate':null, 'owner':null};
+		orchHelper.putDocToCollection('registration-keys', key.key, key)
+		.then(function (result) {
+			res.status(201).json({regkey:key});				
 		})
 		.fail(function (err) {
 			errorHandler.logAndReturn('Error adding regkey from admin', 500, next, err, [req.user, req.body]);
 		});
-	};
-
-	AdminRoutes.add_product = function(req, res, next) {
-		// orchHelper.getAllOrders()
-		// .then(function (data) {
-		// 	if (data) {
-		// 		res.status(200).json({orders:data});
-		// 	} else {
-		// 		errorHandler.logAndReturn('No orders found from admin', 404, next);
-		// 	}
-		// })
-		// .fail(function (err) {
-		// 	errorHandler.logAndReturn('Error getting all orders from admin', 500, next, err);
-		// });
 	};
 
 	return AdminRoutes;

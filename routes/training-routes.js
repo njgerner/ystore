@@ -12,7 +12,9 @@ module.exports = function(express, app, __dirname) {
 
 	// POST /training_dates
 	TrainingRoutes.get_dates = function(req, res, next) {
-		orchHelper.getTrainingDates()
+		var query = 'value.available:true';
+      	var params = { limit: 100 };
+		orchHelper.searchDocsFromCollection('training-dates', query, params)
 		.then(function (result) {
 			if (result) {
 				res.status(200).json(result);
