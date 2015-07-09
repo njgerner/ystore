@@ -6,6 +6,7 @@ module.exports = function(express, app, __dirname) {
 	var path            = require('path'),            						// http://nodejs.org/docs/v0.3.1/api/path.html
     	config 			= require('../trd_modules/config.json'), 			//config file contains all tokens and other private info
 		orchHelper      = require('../trd_modules/orchestrateHelper'),
+		rawDogger       = require('../trd_modules/rawDogger'),
       	nodemailer      = require('nodemailer'),
       	passport        = require('passport'),        // https://npmjs.org/package/passport
       	bcrypt 			= require('bcryptjs'),
@@ -67,22 +68,55 @@ module.exports = function(express, app, __dirname) {
 	    passwordField: 'password',
 	    passReqToCallback : true }, //allows us to pass back the request to the callback
 	  function(req, username, password, done) {
+	  	var user = User.newUser(req.body.email, req.body.password);
+		var profile = Profile.newProfile(email);
+		if (metadata) {
+			rawDogger.addMetaToProfile(profile, JSON.parse(req.body.metadata));
+		}
+		var cart = Cart.newCart();
 	  	var query = 'value.email: ' + username;
 	  	var params = { limit: 1 };
+
 	  	orchHelper.searchDocsFromCollection('local-users', query, params)
-	    orchHelper.localReg(req.body.email, req.body.password, req.body.metadata)
-	      .then(function (user) {
-	        if (user) {
-	          emailHelper.sendWelcome(user.name, user.email).done();
-	          emailHelper.newUserTeamNotification(user).done();
-	          done(null,user);
-	        } else {
-	          done(null, false, 'No user returned from local reg');
-	        }
-	      })
-	      .fail(function (err){
-	        done(err);
-	      });
+	  	.then(function (result) {
+	  		if (result.length > 0) {
+	  			throw new Error('That email is already registered to an account, please login.');
+	  		} else {
+				user.profile = profile.id;
+				return orchHelper.putDocToCollection('local-users', user.id, user)
+				.then(function (result) {
+					return user;
+				})
+				.fail(function (err) {
+					throw new Error(err.body.message);
+				});
+	  		}
+	  	})
+	  	.then(function (user) {
+	  		profile.cart = cart.id;
+	  		return orchHelper.putDocToCollection('local-profiles', profile.id, profile)
+	  		.then(function (result) {
+	  			return profile;
+	  		})
+	  		.fail(function (err) {
+	  			throw new Error(err.body.message);
+	  		});
+	  	})
+	  	.then(function (profile) {
+	  		orchHelper.putDocToCollection('carts', cart.id, cart)
+	  		.then(function (result) {
+	  			emailHelper.sendWelcome(user.name, user.email).done();
+	         	emailHelper.newUserTeamNotification(user).done();
+	  			done(null, user);
+	  		})
+	  		.fail(function (err) {
+	  			throw new Error(err.body.message);
+	  		});
+	  	})
+	  	.fail(function (err) {
+	  		console.log('error from reg', err);
+	  		done(err.message, false);
+	  	});
 	  }
 	));
 
