@@ -6,7 +6,11 @@ module.exports = function(express, app, __dirname) {
 	var path            = require('path'),            						// http://nodejs.org/docs/v0.3.1/api/path.html
     	config 			= require('../trd_modules/config.json'), 			//config file contains all tokens and other private info
 		orchHelper      = require('../trd_modules/orchestrateHelper'),
+		emailHelper     = require('../trd_modules/emailHelper'),
 		rawDogger       = require('../trd_modules/rawDogger'),
+		User 			= require('../models/user'),
+		Profile 		= require('../models/profile'),
+		Cart 			= require('../models/cart'),
       	nodemailer      = require('nodemailer'),
       	passport        = require('passport'),        // https://npmjs.org/package/passport
       	bcrypt 			= require('bcryptjs'),
@@ -69,18 +73,17 @@ module.exports = function(express, app, __dirname) {
 	    passReqToCallback : true }, //allows us to pass back the request to the callback
 	  function(req, username, password, done) {
 	  	var user = User.newUser(req.body.email, req.body.password);
-		var profile = Profile.newProfile(email);
-		if (metadata) {
+		var profile = Profile.newProfile(req.body.email);
+		if (req.body.metadata) {
 			rawDogger.addMetaToProfile(profile, JSON.parse(req.body.metadata));
 		}
 		var cart = Cart.newCart();
 	  	var query = 'value.email: ' + username;
 	  	var params = { limit: 1 };
-
 	  	orchHelper.searchDocsFromCollection('local-users', query, params)
 	  	.then(function (result) {
 	  		if (result.length > 0) {
-	  			throw new Error('That email is already registered to an account, please login.');
+	  			done(null, false, { message: 'That email is already registered to an account, please login.' });
 	  		} else {
 				user.profile = profile.id;
 				return orchHelper.putDocToCollection('local-users', user.id, user)
@@ -88,7 +91,7 @@ module.exports = function(express, app, __dirname) {
 					return user;
 				})
 				.fail(function (err) {
-					throw new Error(err.body.message);
+					throw new Error(err);
 				});
 	  		}
 	  	})
@@ -99,23 +102,23 @@ module.exports = function(express, app, __dirname) {
 	  			return profile;
 	  		})
 	  		.fail(function (err) {
-	  			throw new Error(err.body.message);
+	  			throw new Error(err);
 	  		});
 	  	})
 	  	.then(function (profile) {
-	  		orchHelper.putDocToCollection('carts', cart.id, cart)
+	  		console.log('profile', profile);
+	  		orchHelper.putDocToCollection('carts', profile.id, cart)
 	  		.then(function (result) {
 	  			emailHelper.sendWelcome(user.name, user.email).done();
 	         	emailHelper.newUserTeamNotification(user).done();
 	  			done(null, user);
 	  		})
 	  		.fail(function (err) {
-	  			throw new Error(err.body.message);
+	  			throw new Error(err);
 	  		});
 	  	})
 	  	.fail(function (err) {
-	  		console.log('error from reg', err);
-	  		done(err.message, false);
+	  		done(err, false);
 	  	});
 	  }
 	));
@@ -195,6 +198,7 @@ module.exports = function(express, app, __dirname) {
 	///////////////////////////////////////////////////////////////
 	AuthRoutes.register = function(req, res, next) {
 		return passport.authenticate('local-signup', function(err, user, info) { 
+			console.log('result from register', err, user, info);
 			if (err) { return errorHandler.logAndReturn(err.message || 'Error registering, please try again. If this issue continues, please contact support@ylift.io.', 422, next, err, null, req.params); }
 			if (!user) { return errorHandler.logAndReturn(info.message || 'Registration successful but there was an error on the server, please contact support@ylift.io if you have any issues with your account.', 500, next, req.params); }
 			var payload = { user: user.id, expires: moment().add(4, 'days') };

@@ -64,8 +64,9 @@ module.exports = function(express, app, __dirname) {
 
 	// GET /product_reviews/:productnumber
 	ProductRoutes.get_reviews = function(req, res, next) {
-		var pn = req.params.productnumber;
-		orchHelper.getProductReviews(pn)
+		var query = 'value.productnumber: ' + req.params.productnumber;
+		var params = { limit: 50 };
+		orchHelper.searchDocsFromCollection('product-reviews', query, params)
 		.then(function (data) {
 			if (data) {
 				res.status(200).json({data:data});
@@ -189,7 +190,8 @@ module.exports = function(express, app, __dirname) {
 				"increment": "1",
 				"vendor": merchant.id
 			};
-			return orchHelper.addProduct(product, req.user.profile);
+			product.createdBy = req.user.profile;
+			return orchHelper.putDocToCollection('products', product.id, product).then(function (result) { return product; });
 		})
 		.then(function (result) {
 			res.status(201).json(result);
@@ -224,7 +226,8 @@ module.exports = function(express, app, __dirname) {
 				product.img = img;
 				product.remote_img = 'https://s3.amazonaws.com/'+S3_BUCKET+ '/' + name;
 			}
-			return orchHelper.updateProduct(product, req.user.profile);
+			product.updatedBy = req.user.profile;
+			return orchHelper.putDocToCollection('products', product.id, product).then(function (result) { return product; });
 		})
 		.then(function (result) {
 			res.status(201).json(result);

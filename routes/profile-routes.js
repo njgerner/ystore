@@ -54,7 +54,7 @@ module.exports = function(express, app, __dirname) {
 			errorHandler.logAndReturn('Missing update profile request data', 400, next, null, req.body);
 			return;
 		} 
-		if (req.user.profile != req.params.profileid || !req.user.isAdmin) {
+		if (req.user.profile != req.params.profileid) {
 			errorHandler.logAndReturn('Not authorized to update this profile', 401, next, null, req.body);
 			return;
 		}

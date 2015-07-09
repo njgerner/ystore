@@ -162,7 +162,7 @@ module.exports = function(express, app, __dirname) {
     // MIDDLEWARE //////////////////////////////////////////////////////
     app.use('/admin', ensureAuthenticated); // ensure that we're authenticated and have a user
     app.use('/admin', function(req, res, next) {
-        orchHelper.getUser(req.user.id)
+        orchHelper.getDocFromCollection('local-users', req.user.id)
           .then(function (user) {
             if (user.isAdmin) {
               next();

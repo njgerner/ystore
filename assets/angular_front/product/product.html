@@ -46,7 +46,10 @@
           <input ng-hide="product.attributes.increment > 1" type="text" ng-model="quantity" placeholder="Qty" style="padding-right: 15px" required/>
         </div>
       </div>
-      <a class="small button" ng-click="addToCart()">Add to Cart</a>
+      <a class="small button" ng-click="addToCart()">
+        <span ng-hide="adding">Add to Cart</span>
+        <span ng-show="adding">Adding...</span>
+      </a>
     </div>
 
   </div>

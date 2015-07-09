@@ -65,7 +65,9 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	BookingRoutes.get_patient_appts = function(req, res, next) {
-		orchHelper.findPatientAppts(req.params.patientid)
+		var query = 'value.patient: ' + req.params.profileid + ' AND NOT value.status: \'rejected\'';
+		var params = { limit: 100 };
+		orchHelper.searchDocsFromCollection('appointments', query, params)
 		.then(function (result) {
 			res.status(200).json({appts:result});
 		})

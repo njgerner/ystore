@@ -199,25 +199,25 @@ module.exports = function(express, app, __dirname) {
 			errorHandler.logAndReturn('Missing add to cart request data', 400, next, null, [req.body, req.user]);
 			return;
 		}
-		orchHelper.getDocFromCollection('carts', req.body.profile)
+		orchHelper.getDocFromCollection('carts', req.body.profileid)
 		.then(function (cart) {
 			if (cart) {
 				var duplicate = false;
 				for (var i = 0; i < cart.products.length; i++) {
-			        if (cart.products[i].productnumber == productnumber) {
+			        if (cart.products[i].productnumber == req.body.productnumber) {
 						duplicate = true;
-						cart.products[i].quantity = Number(cart.products[i].quantity) + Number(quantity); //if so just update quantity
+						cart.products[i].quantity = Number(cart.products[i].quantity) + Number(req.body.quantity); //if so just update quantity
 			        }
 			    }
 			    if (!duplicate) {
-			    	productObj = {
-			    		productnumber: productnumber,
-          				quantity: quantity
+			    	var productObj = {
+			    		productnumber: req.body.productnumber,
+          				quantity: req.body.quantity
 			    	};
 			    	cart.products.push(productObj);
 			    }
 				cart.status = "active";	
-				return orchHelper.putDocToCollection('carts', req.body.profile, cart).then(function (result) { return cart; });
+				return orchHelper.putDocToCollection('carts', req.body.profileid, cart).then(function (result) { return cart; });
 			} else {
 				errorHandler.logAndReturn('Could not find cart to update', 404, next, null, [req.body, req.user]);
 			}
