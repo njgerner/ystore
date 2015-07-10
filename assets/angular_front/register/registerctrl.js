@@ -1,13 +1,15 @@
 superApp.controller('RegisterCtrl',
   ['$rootScope', '$scope', '$state', 'authService', '$location', '$window', '$timeout', 
   		'stripeService', 'storeService', 'trainingService', 'REG_FEE', 'profileService',
-      'locationService',
+      'locationService', '$stateParams',
   function($rootScope, $scope, $state, authService, $location, $window, $timeout, 
   		stripeService, storeService, trainingService, REG_FEE, profileService,
-      locationService) {
+      locationService, $stateParams) {
+
+    console.log('state params', $stateParams.view);
 
   	$scope.staff = [];
-  	$scope.viewState = 'start';
+  	$scope.viewState = $stateParams.view || 'start';
     $scope.total = REG_FEE;
 
   	$scope.$watch('billingsame', function(newValue, oldValue) {
