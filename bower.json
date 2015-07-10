@@ -26,7 +26,8 @@
     "ngInfiniteScroll": "~1.2.0",
     "ng-error": "~1.0.2",
     "ng-flow": "~2",
-    "angulartics": "~0.18.0"
+    "angulartics": "~0.18.0",
+    "fastclick": "~1.0.6"
   },
   "resolutions": {
     "angular": "~1.2.x",
