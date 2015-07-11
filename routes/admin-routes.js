@@ -25,6 +25,20 @@ module.exports = function(express, app, __dirname) {
 		});
 	};
 
+	AdminRoutes.update_user_profile = function(req, res, next) {
+		orchHelper.updateProfile(req.body.profile.id, req.body.profile)
+		.then(function (data) {
+			if(data) {
+				res.status(200).json({profile:data});
+			} else {
+				errorHandler.logAndReturn('Error updating user profile', 404, next); //don't know status codes but this shouldnt be a 404
+			}
+		})
+		.fail(function (err) {
+			errorHandler.logAndReturn('Error updating user profile from admin', 500, next, err, req.body);
+		});
+	};
+
 	// GET /admin/all_profiles
 	AdminRoutes.all_products = function(req, res, next) {
 		orchHelper.getAllProducts()

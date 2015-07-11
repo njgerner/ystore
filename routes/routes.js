@@ -649,6 +649,7 @@ passport.use('bearer', new BearerStrategy(
     app.post('/admin/hash', ensureAuthenticated, adminRoutes.get_hash);
     app.post('/admin/add_regkey', ensureAuthenticated, adminRoutes.add_regkey);
     app.post('/admin/profile/update_merchant', ensureAuthenticated, profileRoutes.update_merchant);
+    app.post('/admin/update_user_profile', ensureAuthenticated, adminRoutes.update_user_profile);
 
     // -- START Booking Routes
     // GET ////////////////////////////////////////////////////////////

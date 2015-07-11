@@ -157,6 +157,18 @@ trdServices.service("adminService", ['$rootScope', '$http', 'authService', 'merc
 	        });
 	    }
 
+	    this.updateUserProfile = function(profile, callback) {
+	    	$http({method: 'POST', url: '/admin/update_user_profile', 
+	               data:{profile:profile}})
+	        .success(function (data, status, headers, config) {
+	            callback(null, data.profile);
+	        })
+	        .error(function (data, status, headers, config) {
+	            $log.debug('error updating user profile', data);
+	            callback(data.message);
+	        });
+	    }
+
     	this.addPromoCode = function(promo, callback) {
     		$http({method: 'POST', url: '/admin/add_promo', data: {promo:promo} })
 	        .success(function (data, status, headers, config) {

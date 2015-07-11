@@ -1,9 +1,14 @@
 <div ng-if="userloaded" style="margin-top:30px;" class="large-8 large-offset-1 end columns">
+	<error-dir msg="{{error}}"></error-dir>
+	<div ng-if="notify" style="margin-top:1rem;" data-alert class="alert-box info radius notification animated"> {{notify}}</div>
 	<div class="row">
-		<h4 style="text-decoration:underline">Basic Info</h4>
+		<h4 style="text-decoration:underline">Basic Info
+			<i ng-hide="edit=='basicinfo'" style="position:relative;bottom:-3px" class="right i-settings" ng-click="edit='basicinfo'"></i>
+			<i ng-show="edit=='basicinfo'" style="position:relative;bottom:-3px" class="right i-save" ng-click="save()"></i>
+			<i ng-show="edit=='basicinfo'" style="position:relative;bottom:-3px" class="right i-cancel" ng-click="edit=false"></i>
+		</h4>
 	</div>
 	<div class="row">
-		<error-dir msg="{{error}}"></error-dir>
 		<table style="width:100%">
 			<thead>
 			    <tr>
@@ -14,13 +19,13 @@
 			    </tr>
 			</thead>
 			<tbody>
-				<tr ng-show="edit">
-					<th><input type="text">{{profile.name}}</input></th>
-					<th> x</th>
-					<th> y</th>
-					<th> z</th>
+				<tr ng-show="edit=='basicinfo'">
+					<th style="padding:0"><input style="margin:0" type="text" placeholder="{{profile.name}}" ng-model="$parent.name"></input></th>
+					<th style="padding:0"><input style="margin:0" type="text" placeholder="{{profile.email}}" ng-model="$parent.email"></input></th>
+					<th>{{displayDate(profile.createdAt)}}</th>
+					<th>{{displayDate(profile.last_login)}}</th>
 				</tr>
-				<tr ng-hide="edit">
+				<tr ng-hide="edit=='basicinfo'">
 					<th>{{profile.name}}</th>
 					<th>{{profile.email}}</th>
 					<th>{{displayDate(profile.createdAt)}}</th>
@@ -33,22 +38,29 @@
 		<h4 style="text-decoration:underline">Addresses</h4>
 	</div>
 	<div class="row">
-		<div style="padding-left:0" class="large-6 columns" ng-repeat="address in addresses track by $index">
-			<fieldset>
-				{{address.name || "Address # " + $index}}<hr class="small-break">
-				{{address.address1}}<br>
-				<div ng-if="address.address2">
-					{{address.address2}}<br>
+		<div style="padding:0" class="large-6 columns" ng-repeat="address in addresses track by $index">
+			<fieldset style="margin-top:0">
+				<h5 ng-hide="edit=='address'+$index">{{address.name || 'Address # ' + $index}}</h5>
+				<span ng-show="edit=='address'+$index"><input type="text" placeholder= "{{address.name || 'Address # ' 
+				 + $index}}" ng-model="addressModels[$index]"></input></span>
+				<i ng-hide="edit=='address'+$index" class="right i-settings" ng-click="edit='address'+$index"></i>
+				<i ng-show="edit=='address'+$index" class="right i-save" ng-click="save()"></i>
+				<i ng-show="edit=='address'+$index" class="right i-cancel" ng-click="edit=false"></i>
+				</h5>
+				<hr class="small-break">
+				<div>
+					<p>{{address.address1}}</p>
+					<p ng-if="address.address2">{{address.address2}}</p>
+					<p>{{address.city}}, {{address.state}} {{address.zip}}</p>
 				</div>
-				{{address.city}}, {{address.state}} {{address.zip}}<br>
 			</fieldset>
 		</div>
 	</div>
 	<div class="row">
-		<h4 style="text-decoration:underline">Cart</h4>
+		<h4 style="text-decoration:underline">Cart<i style="position:relative;bottom:-3px" class="right i-settings" ng-click="edit='cart'"></i></h4>
 	</div>
 	<div class="row">
-		<table style="padding:0" class="large-8 columns">
+		<table style="padding:0; width:100%" class="large-8 columns">
 			<thead>
 				<tr>
 					<th>Product</th>
