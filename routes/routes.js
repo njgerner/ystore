@@ -643,6 +643,7 @@ passport.use('bearer', new BearerStrategy(
     // POST ////////////////////////////////////////////////////////////
     app.post('/admin/add_product', ensureAuthenticated, adminRoutes.add_product);
     app.post('/admin/add_promo', ensureAuthenticated, adminRoutes.add_promo);
+    app.post('/admin/addresses', ensureAuthenticated, adminRoutes.get_addresses);
     app.post('/admin/delete_promo', ensureAuthenticated, adminRoutes.delete_promo);
     app.post('/get_merchant_name', ensureAuthenticated, adminRoutes.get_merchant_name);
     app.post('/admin/regkeys', ensureAuthenticated, adminRoutes.get_available_keys);

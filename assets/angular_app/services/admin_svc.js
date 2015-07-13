@@ -202,11 +202,18 @@ trdServices.service("adminService", ['$rootScope', '$http', 'authService', 'merc
 	        });
     	};
 
+    	this.getAddresses = function(addressids, callback) {
+    		$http({method: 'POST', url: '/admin/addresses', data: {addressesids:addressids} })
+	        .success(function (data, status, headers, config) {
+	            callback(null, data.addresses);
+	        })
+	        .error(function (data, status, headers, config) {
+	            $log.debug('error getting addresses', data);
+	            callback(data.message);
+	        });
+    	};
+
     	this.addProduct = function(product, merchant, callback) {
-            if (!authService.isAdmin) {
-                callback('User not authorized to add product');
-                return;
-            }
             $http({method: 'POST', url: "/add_product",
                    data: {product:product, merchant:merchant}})
             .success(function(data, status, headers, config) {

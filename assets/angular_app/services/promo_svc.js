@@ -7,6 +7,9 @@ trdServices.service("promoService", ['$http', '$log', '$rootScope',
     	}
 
     	this.getPromoCode = function(code, domain, callback) {
+    		console.log('svc');
+    		console.log(code);
+    		console.log(domain);
     		inThis = this;
 	        $http({method: 'POST', url: '/promo/' + code, data: {domain:domain}})
 	        .success(function (data, status, headers, config) {

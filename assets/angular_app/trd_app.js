@@ -139,7 +139,7 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       url: "/promo",
       templateUrl: "/partials/admin_promo.html",
       controller: "AdminPromoCtrl",
-      title: "Admin Promo Codes"
+      title: "Promo Codes"
     })
     .state('admin.orders', {
       url: "/orders",

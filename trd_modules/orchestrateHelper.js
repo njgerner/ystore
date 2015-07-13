@@ -339,6 +339,10 @@ exports.getStorefrontProducts = function() {
   return deferred.promise;
 };
 
+exports.getAddresses = function(ids) {
+  var deferred = Q.defer();
+}
+
 exports.getAllProducts = function() {
   var deferred = Q.defer();
   db.newSearchBuilder()
@@ -1335,6 +1339,7 @@ exports.getDocFromCollection = function(collection, key) {
   var deferred = Q.defer();
   db.get(collection, key)
   .then(function (result){
+    console.log('orch got result', result.body);
     deferred.resolve(result.body);
   })
   .fail(function (err) {

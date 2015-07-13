@@ -18,6 +18,7 @@ module.exports = function(express, app, __dirname) {
 		orchHelper.getDocFromCollection('promo-codes', req.params.code)
 		.then(function (result) {
 			if (result) {
+				console.log('result in route', result);
 				if (result.active && (result.domain == req.body.domain)) {
 					res.status(200).json({code:result});
 				} else if (result.domain != req.body.domain) {

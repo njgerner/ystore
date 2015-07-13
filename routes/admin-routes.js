@@ -39,6 +39,16 @@ module.exports = function(express, app, __dirname) {
 		});
 	};
 
+	AdminRoutes.get_addresses = function(req, res, next) {
+		orchHelper.getAddresses(req.body.addressids)
+		.then(function (data) {
+			res.status(200).json({addresses:data});
+		})
+		.fail(function (err) {
+			errorHandler.logAndReturn('Error getting addresses from admin', 500, next, err, req.body);
+		});
+	};
+
 	// GET /admin/all_profiles
 	AdminRoutes.all_products = function(req, res, next) {
 		orchHelper.getAllProducts()
