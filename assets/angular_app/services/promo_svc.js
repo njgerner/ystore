@@ -13,8 +13,8 @@ trdServices.service("promoService", ['$http', '$log', '$rootScope',
     		inThis = this;
 	        $http({method: 'POST', url: '/promo/' + code, data: {domain:domain}})
 	        .success(function (data, status, headers, config) {
-	        	inThis.currentPromo = data.code;
-	            callback(null, data.code);
+	        	inThis.currentPromo = data.key;
+	            callback(null, data.key);
 	        })
 	        .error(function (data, status, headers, config) {
 	            $log.debug('error getting promo code', data);

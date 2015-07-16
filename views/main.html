@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Home of the Y LIFT Network and store.">
+  <meta name="description" content="Home of the Y LIFT Network and Store.">
   <meta name="author" content="">
 
   <title ng-bind="'Y LIFT | ' + $root.title"></title>
@@ -13,7 +13,6 @@
   <link rel="icon" href="/favicon.ico">
   <link href="https://fontastic.s3.amazonaws.com/v5Jn9a5V3hU7fcgVrwphGa/icons.css" rel="stylesheet">
   <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed&subset=cyrillic,latin' rel='stylesheet' type='text/css'>
-  <!--[if IE]><link rel="shortcut icon" href="/favicon.ico"><![endif]-->
 
   </head>
 
@@ -56,6 +55,11 @@
     <script src="js/match-panel-heights.js"></script>
     <script src="js/config.js"></script>
     <script src="/appjs"></script>
+    <script>
+      window.addEventListener('load', function() {
+        new FastClick(document.body);
+      }, false);
+    </script>
     <script>
       $(document).foundation();
       

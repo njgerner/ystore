@@ -1,4 +1,4 @@
-<top-bar>
+<top-bar class="nav-bar-dir">
   <ul class="title-area">
     <li class="name">
       <h1>
@@ -10,29 +10,23 @@
   <top-bar-section>
     <ul class="search">
       <li class="show-for-medium-up category" has-dropdown>
-        <a class="nav-text">Shop by <strong>Category</strong></a>
-        <ul top-bar-dropdown>
+        <a class="nav-text visible-for-large-up">Shop by <strong>Category</strong></a>
+        <ul top-bar-dropdown class="box-drop">
           <li ng-repeat="(cat, count) in productCategories | orderBy: 'count'"><a ng-click="search(cat)">{{toTitleCase(cat)}}</a></li>
         </ul>
       <li id="search-wrapper" class="has-form">
         <form style="height:100%" ng-submit="search(searchQuery)">
-          <div style="height:100%" class="row collapse">
-            <div style="height:100%" class="small-10 columns">
-              <input id="searchbar" type="text" ng-model="searchQuery" typeahead="name for name in productNames.length ? [$viewValue].concat(productNames) : [] | filter:$viewValue | limitTo:6" typeahead-on-select="search(searchQuery)" class="nav-text" placeholder="Search for anything" autoselect>
-            </div>
-            <div class="small-2 columns">
-              <i ng-click="search(searchQuery)" class="i-search pointer"> </i>
-            </div>
-          </div>
+          <input id="searchbar" type="text" ng-model="searchQuery" typeahead="name for name in productNames.length ? [$viewValue].concat(productNames) : [] | filter:$viewValue | limitTo:6" typeahead-on-select="search(searchQuery)" class="nav-text" placeholder="Search for anything" autoselect>
+          <i ng-click="search(searchQuery)" class="i-search pointer"> </i>
         </form>
       </li>
     </ul>
 
     <ul class="right">
       <li class="cart">
-        <a class="nav-text" ng-click="openCart()">
+        <a ng-show="itemCount" class="nav-text" ng-click="openCart()">
         <div style="padding-top:1px" class="i-cart"></div>
-        My Cart ({{itemCount}})
+        <span class="visible-for-large-up">My Cart</span> ({{itemCount}})
         </a>
       </li>
       <li class="divider"></li>
@@ -43,7 +37,7 @@
         <a class="nav-text">
           {{name || 'My Account'}}
         </a>
-        <ul top-bar-dropdown>
+        <ul top-bar-dropdown class="box-drop">
           <li ng-if="isAdmin" class="divider"></li>
           <li ng-if="isAdmin"><a ui-sref="admin.users">Admin</a></li>
           <li ng-if="isAdmin" class="divider"></li>

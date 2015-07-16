@@ -41,6 +41,7 @@ appDirectives.directive('mobileNavBarDir', [ 'authService', '$state', '$location
 	  				scope.name = authService.profile.name;
 	  				scope.profileid = authService.profile.id;
 	  				scope.isAdmin = authService.isAdmin;
+	  				scope.isYLIFT = authService.isYLIFT;
 	  				scope.isMerchant = authService.isMerchant;
 	  			} else {
 	  				scope.loggedIn = false;
@@ -65,6 +66,7 @@ appDirectives.directive('mobileNavBarDir', [ 'authService', '$state', '$location
 				scope.name = authService.profile.name;
 				scope.profileid = authService.profile.id;
 				scope.isAdmin = authService.isAdmin;
+	  			scope.isYLIFT = authService.isYLIFT;
 	  			scope.isMerchant = authService.isMerchant;
 			} else {
 				scope.loadedFun = null;

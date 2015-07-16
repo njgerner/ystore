@@ -202,7 +202,7 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       title: "Login"
     })
     .state('register', {
-      url: "/register",
+      url: "/register?view",
       templateUrl: "/partials/register.html",
       controller: "RegisterCtrl",
       title: "Register"
