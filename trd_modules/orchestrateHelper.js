@@ -339,9 +339,60 @@ exports.getStorefrontProducts = function() {
   return deferred.promise;
 };
 
-exports.getAddresses = function(ids) {
+exports.getAddresses = function(profileid) {
   var deferred = Q.defer();
-}
+  db.newSearchBuilder()
+  .collection('addresses')
+  .limit(100)
+  .query(profileid)
+  .then(function (result) {
+    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body.message));
+  });
+  return deferred.promise;
+};
+
+exports.addAddress = function(address) {
+  address.id = crypto.randomBytes(20).toString('hex');
+  var deferred = Q.defer();
+  address.updatedAt = new Date();
+  db.put('addresses', address.id, address)
+  .then(function (result) {
+    deferred.resolve(address);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body.message));
+  });
+  return deferred.promise;
+};
+
+exports.updateAddress = function(address) {
+  var deferred = Q.defer();
+  address.updatedAt = new Date();
+  db.put('addresses', address.id, address)
+  .then(function (result) {
+    deferred.resolve(address);
+  })
+  .fail(function (err) {
+    deferred.reject(new Error(err.body.message));
+  });
+  return deferred.promise;
+};
+
+exports.deleteAddress = function(addressid) {
+  var deferred = Q.defer();
+  db.remove('addresses', addressid)
+    .then(function (result) {
+      deferred.resolve(true);
+    })
+    .fail(function (err) {
+      deferred.reject(new Error(err.body.message));
+    });
+   
+    return deferred.promise;
+};
 
 exports.getAllProducts = function() {
   var deferred = Q.defer();

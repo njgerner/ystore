@@ -52,7 +52,51 @@ trdServices.service("adminService", ['$rootScope', '$http', 'authService', 'merc
 	            $log.debug('error getting all profiles', data);
             	callback(data.message);
 	        });
-    	}
+    	};
+
+    	this.getAddresses = function(profileid, callback) {
+    		$http({method: 'GET', url: '/admin/addresses/' + profileid})
+	        .success(function (data, status, headers, config) {
+	            callback(null, data.addresses);
+	        })
+	        .error(function (data, status, headers, config) {
+	            $log.debug('error getting addresses', data);
+            	callback(data.message);
+	        });
+    	};
+
+    	this.addAddress = function(address, callback) {
+    		$http({method: 'POST', url: '/admin/add_address/', data: {address:address} })
+	        .success(function (data, status, headers, config) {
+	            callback(null, data.address);
+	        })
+	        .error(function (data, status, headers, config) {
+	            $log.debug('error updating address', data);
+            	callback(data.message);
+	        });
+    	};
+
+    	this.updateAddress = function(address, callback) {
+    		$http({method: 'POST', url: '/admin/update_address/', data: {address:address} })
+	        .success(function (data, status, headers, config) {
+	            callback(null, data.address);
+	        })
+	        .error(function (data, status, headers, config) {
+	            $log.debug('error updating address', data);
+            	callback(data.message);
+	        });
+    	};
+
+    	this.deleteAddress = function(addressid, callback) {
+    		$http({method: 'POST', url: '/admin/delete_address/', data: {addressid:addressid} })
+	        .success(function (data, status, headers, config) {
+	            callback(null, data.success);
+	        })
+	        .error(function (data, status, headers, config) {
+	            $log.debug('error deleting address', data);
+            	callback(data.message);
+	        });
+    	};
 
     	this.getAllMerchantProfiles = function(callback) {
     		var inThis = this;
@@ -198,17 +242,6 @@ trdServices.service("adminService", ['$rootScope', '$http', 'authService', 'merc
 	        })
 	        .error(function (data, status, headers, config) {
 	            $log.debug('error getting promo codes', data);
-	            callback(data.message);
-	        });
-    	};
-
-    	this.getAddresses = function(addressids, callback) {
-    		$http({method: 'POST', url: '/admin/addresses', data: {addressesids:addressids} })
-	        .success(function (data, status, headers, config) {
-	            callback(null, data.addresses);
-	        })
-	        .error(function (data, status, headers, config) {
-	            $log.debug('error getting addresses', data);
 	            callback(data.message);
 	        });
     	};

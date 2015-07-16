@@ -635,6 +635,7 @@ passport.use('bearer', new BearerStrategy(
     // GET ////////////////////////////////////////////////////////////
     app.get('/admin/all_profiles', ensureAuthenticated, adminRoutes.all_profiles);
     app.get('/admin/all_products', ensureAuthenticated, adminRoutes.all_products);
+    app.get('/admin/addresses/:profileid', ensureAuthenticated, adminRoutes.addresses);
     app.get('/admin/promos', ensureAuthenticated, adminRoutes.get_promos);
     app.get('/admin/profile/:profileid', ensureAuthenticated, adminRoutes.get_profile);
     app.get('/admin/all_merchants', ensureAuthenticated, adminRoutes.all_merchants);
@@ -643,13 +644,15 @@ passport.use('bearer', new BearerStrategy(
     // POST ////////////////////////////////////////////////////////////
     app.post('/admin/add_product', ensureAuthenticated, adminRoutes.add_product);
     app.post('/admin/add_promo', ensureAuthenticated, adminRoutes.add_promo);
-    app.post('/admin/addresses', ensureAuthenticated, adminRoutes.get_addresses);
     app.post('/admin/delete_promo', ensureAuthenticated, adminRoutes.delete_promo);
+    app.post('/admin/delete_address', ensureAuthenticated, adminRoutes.delete_address);
     app.post('/get_merchant_name', ensureAuthenticated, adminRoutes.get_merchant_name);
     app.post('/admin/regkeys', ensureAuthenticated, adminRoutes.get_available_keys);
     app.post('/admin/hash', ensureAuthenticated, adminRoutes.get_hash);
     app.post('/admin/add_regkey', ensureAuthenticated, adminRoutes.add_regkey);
     app.post('/admin/profile/update_merchant', ensureAuthenticated, profileRoutes.update_merchant);
+    app.post('/admin/add_address', ensureAuthenticated, adminRoutes.add_address);
+    app.post('/admin/update_address', ensureAuthenticated, adminRoutes.update_address);
     app.post('/admin/update_user_profile', ensureAuthenticated, adminRoutes.update_user_profile);
 
     // -- START Booking Routes

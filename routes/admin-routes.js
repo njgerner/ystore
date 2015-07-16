@@ -39,13 +39,43 @@ module.exports = function(express, app, __dirname) {
 		});
 	};
 
-	AdminRoutes.get_addresses = function(req, res, next) {
-		orchHelper.getAddresses(req.body.addressids)
+	AdminRoutes.addresses = function(req, res, next) {
+		orchHelper.getAddresses(req.params.profileid)
 		.then(function (data) {
 			res.status(200).json({addresses:data});
 		})
 		.fail(function (err) {
-			errorHandler.logAndReturn('Error getting addresses from admin', 500, next, err, req.body);
+			errorHandler.logAndReturn('Error getting addresses from admin', 500, next, err, req.params);
+		});
+	};
+
+	AdminRoutes.add_address = function(req, res, next) {
+		orchHelper.addAddress(req.body.address)
+		.then(function (data) {
+			res.status(200).json({address:data});
+		})
+		.fail(function (err) {
+			errorHandler.logAndReturn('Error adding address from admin', 500, next, err, req.body);
+		});
+	};
+
+	AdminRoutes.update_address = function(req, res, next) {
+		orchHelper.updateAddress(req.body.address)
+		.then(function (data) {
+			res.status(200).json({address:data});
+		})
+		.fail(function (err) {
+			errorHandler.logAndReturn('Error updating address from admin', 500, next, err, req.body);
+		});
+	};
+
+	AdminRoutes.delete_address = function(req, res, next) {
+		orchHelper.deleteAddress(req.body.addressid)
+		.then(function (data) {
+			res.status(200).json({success:true});
+		})
+		.fail(function (err) {
+			errorHandler.logAndReturn('Error deleting address from admin', 500, next, err, req.body);
 		});
 	};
 
