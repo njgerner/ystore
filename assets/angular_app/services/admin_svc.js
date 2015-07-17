@@ -39,6 +39,23 @@ trdServices.service("adminService", ['$rootScope', '$http', 'authService', 'merc
 	        });
     	};
 
+    	this.getProduct = function(productnumber, callback) {
+    		if(this.productsByProductnumber[productnumber]) {
+    			callback(this.productsByProductnumber[productnumber]);
+    		} else {
+    			var inThis = this;
+    			$http({method: 'GET', url: '/admin/product/' + productnumber})
+		        .success(function (data, status, headers, config) {
+		            callback(null, data.product);
+		            inThis.productsByProductnumber[data.product.productnumber] = data.product;
+		        })
+		        .error(function (data, status, headers, config) {
+		            $log.debug('error getting product', data);
+	            	callback(data.message);
+		        });
+    		}
+    	};
+
     	this.getAllProfiles = function(callback) {
     		var inThis = this;
 	        $http({method: 'GET', url: '/admin/all_profiles'})
@@ -79,22 +96,30 @@ trdServices.service("adminService", ['$rootScope', '$http', 'authService', 'merc
     	this.updateAddress = function(address, callback) {
     		$http({method: 'POST', url: '/admin/update_address/', data: {address:address} })
 	        .success(function (data, status, headers, config) {
-	            callback(null, data.address);
+	            if(callback) {
+	            	callback(null, data.address);
+	            }
 	        })
 	        .error(function (data, status, headers, config) {
 	            $log.debug('error updating address', data);
-            	callback(data.message);
+            	if(callback) {
+            		callback(data.message);
+            	}
 	        });
     	};
 
     	this.deleteAddress = function(addressid, callback) {
     		$http({method: 'POST', url: '/admin/delete_address/', data: {addressid:addressid} })
 	        .success(function (data, status, headers, config) {
-	            callback(null, data.success);
+	            if(callback) {
+	            	callback(null, data.success);
+	            }
 	        })
 	        .error(function (data, status, headers, config) {
 	            $log.debug('error deleting address', data);
-            	callback(data.message);
+            	if(callback) {
+            		callback(data.message);
+            	}
 	        });
     	};
 
@@ -205,11 +230,15 @@ trdServices.service("adminService", ['$rootScope', '$http', 'authService', 'merc
 	    	$http({method: 'POST', url: '/admin/update_user_profile', 
 	               data:{profile:profile}})
 	        .success(function (data, status, headers, config) {
-	            callback(null, data.profile);
+	            if(callback) {
+	            	callback(null, data.profile);
+	            }
 	        })
 	        .error(function (data, status, headers, config) {
 	            $log.debug('error updating user profile', data);
-	            callback(data.message);
+	            if(callback) {
+	            	callback(data.message);
+	            }
 	        });
 	    }
 

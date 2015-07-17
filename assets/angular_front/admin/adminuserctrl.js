@@ -1,6 +1,6 @@
 superApp.controller('AdminUserCtrl',
-  ['$rootScope', '$window', '$scope', '$state', 'adminService', 'storeService', '$stateParams', '$http',
-  function($rootScope, $window, $scope, $state, adminService, storeService, $stateParams, $http) {
+  ['$rootScope', '$window', '$scope', '$state', 'toolbelt', 'adminService', 'storeService', '$stateParams', '$http',
+  function($rootScope, $window, $scope, $state, toolbelt, adminService, storeService, $stateParams, $http) {
 
     $scope.edit = false;
 
@@ -33,61 +33,59 @@ superApp.controller('AdminUserCtrl',
     };
 
     $scope.submitAddress = function() {
-        if (validate()) {    
-
-            var address = {
-            "name": $scope.addressname,
-            "address1": $scope.address1,
-            "address2": $scope.address2,
-            "city": $scope.city,
-            "state": $scope.state,
-            "zip": $scope.zip,
-            "phone": $scope.addressphone,
-            "email": $scope.addressemail,
-            "profile": $scope.profile.id,
-            "default": $scope.default
-            };
-            if ($scope.addresses.length == 0) {
-               address.default = true;
-            }
-            if ($scope.isYLIFT) {
-                address.yliftInd = $scope.yliftInd;
-            }
-            if ($scope.currAddress) {
-                address.id = $scope.currAddress.id;
-                address.createdAt = $scope.currAddress.createdAt;
-            }
-            if ($scope.editAddressView) {
-                $scope.updating = true;
-                adminService.updateAddress(address, function (err, data) {
-                  if(err) {
-                    $scope.error = err;
-                  } else {
-                    $scope.updating = false;
-                    $scope.clearAddress();
-                    $scope.addAddressView = false;
-                    $scope.editAddressView = false;
-                    $scope.notify = 'Successfully updated user address';
-                  }
-                });
-            }
-            if ($scope.addAddressView) {
-                $scope.adding = true;
-                adminService.addAddress(address, function (err, data) {
-                  if(err) {
-                    $scope.error = err;
-                  } else {
-                    $scope.updating = false;
-                    $scope.clearAddress();
-                    $scope.addAddressView = false;
-                    $scope.editAddressView = false;
-                    $scope.notify = "Successfully added user address";
-                    $scope.addresses.push(data);
-                  }
-                });
-            }
-       }
-
+      if (validate()) {    
+          var address = {
+          "name": $scope.addressname,
+          "address1": $scope.address1,
+          "address2": $scope.address2,
+          "city": $scope.city,
+          "state": $scope.state,
+          "zip": $scope.zip,
+          "phone": $scope.addressphone,
+          "email": $scope.addressemail,
+          "profile": $scope.profile.id,
+          "default": $scope.default
+          };
+          if ($scope.addresses.length == 0) {
+             address.default = true;
+          }
+          if ($scope.isYLIFT) {
+              address.yliftInd = $scope.yliftInd;
+          }
+          if ($scope.currAddress) {
+              address.id = $scope.currAddress.id;
+              address.createdAt = $scope.currAddress.createdAt;
+          }
+          if ($scope.editAddressView) {
+              $scope.updating = true;
+              adminService.updateAddress(address, function (err, data) {
+                if(err) {
+                  $scope.error = err;
+                } else {
+                  $scope.updating = false;
+                  $scope.clearAddress();
+                  $scope.addAddressView = false;
+                  $scope.editAddressView = false;
+                  $scope.notify = 'Successfully updated user address';
+                }
+              });
+          }
+          if ($scope.addAddressView) {
+              $scope.adding = true;
+              adminService.addAddress(address, function (err, data) {
+                if(err) {
+                  $scope.error = err;
+                } else {
+                  $scope.updating = false;
+                  $scope.clearAddress();
+                  $scope.addAddressView = false;
+                  $scope.editAddressView = false;
+                  $scope.notify = "Successfully added user address";
+                  $scope.addresses.push(data);
+                }
+              });
+          }
+      }
     };
 
     $scope.selectAddress = function(ind) {
@@ -195,6 +193,10 @@ superApp.controller('AdminUserCtrl',
       return true;
     }
 
+    $scope.formatPrice = function(price) {
+      return "$" + toolbelt.insertCommasIntoNumber(price);
+    };
+
     function onAddressesLoaded(err, data) {
           $scope.loadingAddresses = false;
           if(err) {
@@ -218,9 +220,24 @@ superApp.controller('AdminUserCtrl',
         adminService.getAddresses($scope.profile.id, onAddressesLoaded);
         $scope.loadingAddresses = true;
 
-        storeService.getProductsInCart($stateParams.profileid, function (err, cart) {
+        storeService.getProductsInCart($stateParams.profileid, function (err, data) {
           if(!err) {
-            $scope.cart = cart;
+            $scope.cartProducts = {};
+            $scope.total = 0;
+            var quantities = {};
+            for(var i = 0; i < data.length; i++) {
+              quantities[data[i].productnumber] = data[i].quantity;
+              adminService.getProduct(data[i].productnumber, function (err, product) {
+                if(err) {
+                  $scope.error = err;
+                } else { 
+                  product.quantity = quantities[product.productnumber];
+                  product.price = $scope.formatPrice(product.price);
+                  $scope.cartProducts[product.productnumber] = product;
+                  $scope.total += (product.price * product.quantity);
+                }
+              })
+            }
           }
         });
       });

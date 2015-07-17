@@ -1,11 +1,12 @@
 <div style="margin-top:30px;" class="large-8 large-offset-1 end columns">
 	<error-dir msg="{{error}}"></error-dir>
 	<div ng-if="notify" style="margin-top:1rem;" data-alert class="alert-box info radius notification animated"> {{notify}}</div>
-	<div class="row">
-		<h4 style="text-decoration:underline">Basic Info
-			<i ng-hide="edit=='basicinfo'" style="position:relative;bottom:-3px" class="right i-settings" ng-click="edit='basicinfo'"></i>
-			<i ng-show="edit=='basicinfo'" style="position:relative;bottom:-3px" class="right i-save" ng-click="updateInfo()"></i>
-			<i ng-show="edit=='basicinfo'" style="position:relative;bottom:-3px" class="right i-cancel" ng-click="edit=false"></i>
+
+	<div class="row admin-user-header">
+		<h4>Basic Info
+			<i ng-hide="edit=='basicinfo'" class="right i-settings" ng-click="edit='basicinfo'"></i>
+			<i ng-show="edit=='basicinfo'" class="right i-save" ng-click="updateInfo()"></i>
+			<i ng-show="edit=='basicinfo'" class="right i-cancel" ng-click="edit=false"></i>
 		</h4>
 	</div>
 	<div class="row">
@@ -34,69 +35,75 @@
 			</tbody>
 		</table>
 	</div>
-	<div style="margin-bottom:15px" class="row">
-		<h4 style="text-decoration:underline">Addresses
-			<i style="position:relative;bottom:-3px" ng-hide="addAddressView" class="i-plus pointer right" ng-click="enableAddAddress()"></i>
-          	<i style="position:relative;bottom:-3px" ng-show="addAddressView" class="i-cancel-circled pointer right" ng-click="cancel()"></i>
+
+	<div ng-if="addresses.length > 0" class="row admin-user-header">
+		<h4>Addresses
+			<i ng-hide="addAddressView" class="i-plus pointer right" ng-click="enableAddAddress()"></i>
+          	<i ng-show="addAddressView" class="i-cancel-circled pointer right" ng-click="cancel()"></i>
 		</h4>
 	</div>
+    <div class="row address-row" ng-repeat="address in addresses track by $index">
+      <div style="padding:0" class="large-1 small-1 columns" ng-click="makeDefault($index)">
+        <i ng-show="address.default" class="i-star"></i>
+        <i ng-show="!address.default" class="i-star-open"></i>
+      </div>
+      <div style="padding:0" class="large-5 small-6 columns">{{address.name}}</div>
+      <div style="padding:0" class="large-3 large-offset-3 small-5 columns text-right">
+        <a class="address-edit-link" ng-click="selectAddress($index)">Edit</a>|
+        <a class="address-edit-link" ng-click="removeAddress($index)">Delete</a>
+      </div>
+    </div> 
+    <div ng-if="loadingAddresses" class="loader locations-loading">Loading...</div>
+    <form ng-if="address.length > 0" ng-show="addAddressView || editAddressView" novalidate>
+      <fieldset>
+        <div>
+            <input type="text" ng-model="addressname" placeholder="Address Name"/>
+        </div>
+        <div>
+            <input type="text" ng-model="address1" placeholder="Street Address"/>
+        </div>
+        <div>
+            <input type="text" ng-model="address2" placeholder="Suite # (If relevant)"/>
+        </div>
+        <div>
+            <input type="text" ng-model="city" placeholder="City"/>
+        </div>
+        <div>
+            <input type="text" ng-model="state" placeholder="State"/>
+        </div>
+        <div>
+            <input type="text" ng-model="zip" placeholder="Zip"/>
+        </div>
+        <hr>
+        <div>
+            <input type="text" ng-model="addressphone" placeholder="Contact phone number"/>
+        </div>
+        <div>
+            <input type="text" ng-model="addressemail" placeholder="Contact email address"/>
+        </div>
+        <label>Check if this location is a Y LIFT Network practice
+        	<input type="checkbox" ng-model="yliftInd" ng-true-value="Y" ng-false-value="N">
+        </label>
+          <button type="submit" class="button small" ng-click="submitAddress()">
+            <span ng-show="adding">Adding...</span>
+            <span ng-hide="adding || editAddressView">Add</span>
+            <span ng-show="updating">Updating...</span>
+            <span ng-hide="updating || addAddressView">Update</span>
+          </button>
+          <button class="button secondary small" ng-click="cancel()"/>Cancel</button>
+      </fieldset>
+    </form>
+    <div ng-if="addresses.length <= 0">
+    	<p> User has no addresses </p>
+    </div>
 
-	    <div class="row address-row" ng-repeat="address in addresses track by $index">
-	      <div style="padding:0" class="large-1 small-1 columns" ng-click="makeDefault($index)">
-	        <i ng-show="address.default" class="i-star"></i>
-	        <i ng-show="!address.default" class="i-star-open"></i>
-	      </div>
-	      <div style="padding:0" class="large-5 small-6 columns">{{address.name}}</div>
-	      <div style="padding:0" class="large-3 large-offset-3 small-5 columns text-right">
-	        <a class="address-edit-link" ng-click="selectAddress($index)">Edit</a>|
-	        <a class="address-edit-link" ng-click="removeAddress($index)">Delete</a>
-	      </div>
-	    </div> 
-	    <div ng-if="loadingAddresses" class="loader locations-loading">Loading...</div>
-	    <form ng-show="addAddressView || editAddressView" novalidate>
-	      <fieldset>
-	        <div>
-	            <input type="text" ng-model="addressname" placeholder="Address Name"/>
-	        </div>
-	        <div>
-	            <input type="text" ng-model="address1" placeholder="Street Address"/>
-	        </div>
-	        <div>
-	            <input type="text" ng-model="address2" placeholder="Suite # (If relevant)"/>
-	        </div>
-	        <div>
-	            <input type="text" ng-model="city" placeholder="City"/>
-	        </div>
-	        <div>
-	            <input type="text" ng-model="state" placeholder="State"/>
-	        </div>
-	        <div>
-	            <input type="text" ng-model="zip" placeholder="Zip"/>
-	        </div>
-	        <hr>
-	        <div>
-	            <input type="text" ng-model="addressphone" placeholder="Contact phone number"/>
-	        </div>
-	        <div>
-	            <input type="text" ng-model="addressemail" placeholder="Contact email address"/>
-	        </div>
-            <label>Check if this location is a Y LIFT Network practice
-            	<input type="checkbox" ng-model="yliftInd" ng-true-value="Y" ng-false-value="N">
-            </label>
-	          <button type="submit" class="button small" ng-click="submitAddress()">
-	            <span ng-show="adding">Adding...</span>
-	            <span ng-hide="adding || editAddressView">Add</span>
-	            <span ng-show="updating">Updating...</span>
-	            <span ng-hide="updating || addAddressView">Update</span>
-	          </button>
-	          <button class="button secondary small" ng-click="cancel()"/>Cancel</button>
-	      </fieldset>
-	    </form>
-
-	<div style="margin-top:20px" class="row">
-		<h4 style="text-decoration:underline">Cart<i style="position:relative;bottom:-3px" class="right i-settings" ng-click="edit='cart'"></i></h4>
+	<div ng-if="cartProducts" style="margin-top:20px" class="row admin-user-header">
+		<h4>Cart
+			<i class="right i-settings" ng-click="edit='cart'"></i>
+		</h4>
+		<h5>{{formatPrice(total)}} total</h5>
 	</div>
-	<div class="row">
+	<div ng-if="cartProducts" class="row">
 		<table style="padding:0; width:100%" class="large-8 columns">
 			<thead>
 				<tr>
@@ -106,12 +113,15 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="product in cart">
-					<th><a ui-sref="admin.product({productnumber:product.productnumber})">{{product.productnumber}}</a></th>
-					<th>${{product.price}}</th>
+				<tr ng-repeat="product in cartProducts">
+					<th><a ui-sref="admin.product({productnumber:product.productnumber})">{{product.name}}</a></th>
+					<th>{{product.price}}</th>
 					<th>{{product.quantity}}</th>
 				</tr>
 			</tbody>
 		</table>
 	</div>
+	<div ng-if="cart.length <= 0">
+    	<p> User has no cart </p>
+    </div>
 </div>

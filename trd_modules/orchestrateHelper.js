@@ -70,20 +70,6 @@ exports.updateUserProfile = function(profile, userid, property) {
     return deferred.promise;
 };
 
-exports.updateProfile = function(id, profile) {
-  var deferred = Q.defer();
-  profile.updatedAt = new Date();
-  db.put('local-profiles', id, profile)
-  .then(function (result) {
-    deferred.resolve(profile);
-  })
-  .fail(function (err) {
-    deferred.reject(new Error(err.body.message));
-  });
-   
-  return deferred.promise;
-};
- 
 // update password
 // user provides password, this updates password to their choice
 exports.updatePassword = function(resettoken, password) {
@@ -337,61 +323,6 @@ exports.getStorefrontProducts = function() {
     }
   });
   return deferred.promise;
-};
-
-exports.getAddresses = function(profileid) {
-  var deferred = Q.defer();
-  db.newSearchBuilder()
-  .collection('addresses')
-  .limit(100)
-  .query(profileid)
-  .then(function (result) {
-    deferred.resolve(rawDogger.push_values_to_top(result.body.results));
-  })
-  .fail(function (err) {
-    deferred.reject(new Error(err.body.message));
-  });
-  return deferred.promise;
-};
-
-exports.addAddress = function(address) {
-  address.id = crypto.randomBytes(20).toString('hex');
-  var deferred = Q.defer();
-  address.updatedAt = new Date();
-  db.put('addresses', address.id, address)
-  .then(function (result) {
-    deferred.resolve(address);
-  })
-  .fail(function (err) {
-    deferred.reject(new Error(err.body.message));
-  });
-  return deferred.promise;
-};
-
-exports.updateAddress = function(address) {
-  var deferred = Q.defer();
-  address.updatedAt = new Date();
-  db.put('addresses', address.id, address)
-  .then(function (result) {
-    deferred.resolve(address);
-  })
-  .fail(function (err) {
-    deferred.reject(new Error(err.body.message));
-  });
-  return deferred.promise;
-};
-
-exports.deleteAddress = function(addressid) {
-  var deferred = Q.defer();
-  db.remove('addresses', addressid)
-    .then(function (result) {
-      deferred.resolve(true);
-    })
-    .fail(function (err) {
-      deferred.reject(new Error(err.body.message));
-    });
-   
-    return deferred.promise;
 };
 
 exports.getAllProducts = function() {
@@ -1390,7 +1321,6 @@ exports.getDocFromCollection = function(collection, key) {
   var deferred = Q.defer();
   db.get(collection, key)
   .then(function (result){
-    console.log('orch got result', result.body);
     deferred.resolve(result.body);
   })
   .fail(function (err) {

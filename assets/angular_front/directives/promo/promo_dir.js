@@ -25,15 +25,10 @@ appDirectives.directive('promoDir', ['$window', 'promoService',
 					return;
 				}
 				scope.validating = true;
-				console.log('applycode');
-				console.log(scope.code);
-				console.log(scope.domain);
 				promoService.getPromoCode(scope.code, scope.domain, onCodeLoaded);
 			}
 
 			function onCodeLoaded(error, code) {
-				console.log(error);
-				console.log(code);
 				if (error) {
 					scope.error = error;
 				} else {
@@ -51,10 +46,7 @@ appDirectives.directive('promoDir', ['$window', 'promoService',
 					scope.success = true;
 					scope.error = null;
 				}
-
 				scope.validating = false;
-
-
 			}
 			
 		}

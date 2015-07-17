@@ -25,6 +25,7 @@ superApp.controller('AdminUsersCtrl',
         $scope.error = error;
       }
   		$scope.profiles = profiles;
+      console.log(profiles);
   	}
 
   	function onYLIFTsLoaded(error, yliftProfiles) {

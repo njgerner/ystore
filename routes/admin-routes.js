@@ -8,7 +8,8 @@ module.exports = function(express, app, __dirname) {
 		orchHelper      = require('../trd_modules/orchestrateHelper'),
 		Q               = require('q'),
 		errorHandler    = require('../trd_modules/errorHandler.js'),
-		fs 				= require('fs');
+		fs 				= require('fs'),
+		crypto        	= require('crypto');
 
 	// GET /admin/all_profiles
 	AdminRoutes.all_profiles = function(req, res, next) {
@@ -26,7 +27,12 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	AdminRoutes.update_user_profile = function(req, res, next) {
-		orchHelper.updateProfile(req.body.profile.id, req.body.profile)
+		if(!req.body.profile.id) {
+			errorHandler.logAndReturn('Missing data admin update user profile', 400, next, {}, req.body);
+		}
+		var profile = req.body.profile;
+		profile.updatedAt = new Date();
+		orchHelper.putDocToCollection('local-profiles', profile.id, profile)
 		.then(function (data) {
 			if(data) {
 				res.status(200).json({profile:data});
@@ -40,7 +46,10 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	AdminRoutes.addresses = function(req, res, next) {
-		orchHelper.getAddresses(req.params.profileid)
+		if(!req.params.profileid) {
+			errorHandler.logAndReturn('Missing data admin addresses', 400, next, req.params);
+		}
+		orchHelper.searchDocsFromCollection('addresses', req.params.profileid)
 		.then(function (data) {
 			res.status(200).json({addresses:data});
 		})
@@ -50,7 +59,12 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	AdminRoutes.add_address = function(req, res, next) {
-		orchHelper.addAddress(req.body.address)
+		if(!req.body.address.id) {
+			errorHandler.logAndReturn('Missing data admin add address', 400, next, {}, req.body);
+		}
+		var address = req.body.address;
+		address.id = crypto.randomBytes(20).toString('hex');
+		orchHelper.putDocToCollection('addresses', address.id, address)
 		.then(function (data) {
 			res.status(200).json({address:data});
 		})
@@ -60,7 +74,11 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	AdminRoutes.update_address = function(req, res, next) {
-		orchHelper.updateAddress(req.body.address)
+		if(!req.body.address.id) {
+			errorHandler.logAndReturn('Missing data update address', 400, next, {}, req.body);
+		}
+		var address = req.body.address;
+		orchHelper.putDocToCollection('addresses', address.id, address)
 		.then(function (data) {
 			res.status(200).json({address:data});
 		})
@@ -70,7 +88,11 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	AdminRoutes.delete_address = function(req, res, next) {
-		orchHelper.deleteAddress(req.body.addressid)
+		if(!req.body.address.id) {
+			errorHandler.logAndReturn('Missing data admin delete address', 400, next, {}, req.body);
+		}
+		var address = req.body.address;
+		orchHelper.removeDocFromCollection('addresses',address.id, address)
 		.then(function (data) {
 			res.status(200).json({success:true});
 		})
@@ -91,6 +113,17 @@ module.exports = function(express, app, __dirname) {
 		})
 		.fail(function (err) {
 			errorHandler.logAndReturn('Error getting all products from admin', 500, next, err);
+		});
+	};
+
+	AdminRoutes.get_product = function(req, res, next) {
+		orchHelper.getDocFromCollection('products', req.params.productnumber)
+		.then(function (data) {
+			if (data) {
+				res.status(200).json({product:data});
+			} else {
+				errorHandler.logAndReturn('Error getting product from admin', 500, next, err, req.params);
+			}
 		});
 	};
 

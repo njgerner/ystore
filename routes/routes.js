@@ -182,11 +182,11 @@ passport.use('bearer', new BearerStrategy(
             return orchHelper.updateProfile(profile.id, profile);
           })
           .fail(function (err) {
-            errorHandler.logAndReturn('Error authorizing', 500, next, err, req.user);
+            // errorHandler.logAndReturn('Error authorizing', 500, next, err, req.user);
           }).done();
       })
       .fail(function (err) {
-        errorHandler.logAndReturn('Error authorizing', 500, next, err, req.user);
+        // errorHandler.logAndReturn('Error authorizing', 500, next, err, req.user);
       });
   };
 
@@ -636,6 +636,7 @@ passport.use('bearer', new BearerStrategy(
     app.get('/admin/all_profiles', ensureAuthenticated, adminRoutes.all_profiles);
     app.get('/admin/all_products', ensureAuthenticated, adminRoutes.all_products);
     app.get('/admin/addresses/:profileid', ensureAuthenticated, adminRoutes.addresses);
+    app.get('/admin/product/:productnumber', ensureAuthenticated, adminRoutes.get_product);
     app.get('/admin/promos', ensureAuthenticated, adminRoutes.get_promos);
     app.get('/admin/profile/:profileid', ensureAuthenticated, adminRoutes.get_profile);
     app.get('/admin/all_merchants', ensureAuthenticated, adminRoutes.all_merchants);
