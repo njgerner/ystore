@@ -9,4 +9,4 @@ logs/ylift-dev-error.log
 public/
 npm-debug.log
 .bash_profile
-.DS_Store
+**/.DS_Store
