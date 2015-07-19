@@ -28,7 +28,7 @@ appDirectives.directive('learnMoreModalDir', ['$window', 'authService', 'emailSe
 		  		};
 		  		emailService.sendSupportRequest(scope.email, scope.data, function(error, result) {
 		  			if (error) {
-		  				scope.error = 'error';
+		  				scope.error = 'Error submitting request, please try again.';
 		  			} else {
 		  				scope.submitted = true;
 		  			}
