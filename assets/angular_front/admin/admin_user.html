@@ -115,8 +115,8 @@
 			<tbody>
 				<tr ng-repeat="product in cartProducts">
 					<th><a ui-sref="admin.product({productnumber:product.productnumber})">{{product.name}}</a></th>
-					<th>{{product.price}}</th>
-					<th>{{product.quantity}}</th>
+					<th>{{formatPrice(product.price)}}</th>
+					<th>{{quantities[product.productnumber]}}</th>
 				</tr>
 			</tbody>
 		</table>

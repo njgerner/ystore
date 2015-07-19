@@ -224,17 +224,15 @@ superApp.controller('AdminUserCtrl',
           if(!err) {
             $scope.cartProducts = {};
             $scope.total = 0;
-            var quantities = {};
+            $scope.quantities = {};
             for(var i = 0; i < data.length; i++) {
-              quantities[data[i].productnumber] = data[i].quantity;
+              $scope.quantities[data[i].productnumber] = data[i].quantity;
               adminService.getProduct(data[i].productnumber, function (err, product) {
                 if(err) {
                   $scope.error = err;
                 } else { 
-                  product.quantity = quantities[product.productnumber];
-                  product.price = $scope.formatPrice(product.price);
                   $scope.cartProducts[product.productnumber] = product;
-                  $scope.total += (product.price * product.quantity);
+                  $scope.total += (product.price * $scope.quantities[product.productnumber]);
                 }
               })
             }

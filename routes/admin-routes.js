@@ -42,9 +42,6 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	AdminRoutes.addresses = function(req, res, next) {
-		if(!req.params.profileid) {
-			errorHandler.logAndReturn('Missing data admin addresses', 400, next, req.params);
-		}
 		var query = "value.profile: " + req.params.profileid;
 		var params = {limit:20};
 		orchHelper.searchDocsFromCollection('addresses', query, params)
@@ -74,6 +71,7 @@ module.exports = function(express, app, __dirname) {
 	AdminRoutes.update_address = function(req, res, next) {
 		if(!req.body.address.id) {
 			errorHandler.logAndReturn('Missing data update address', 400, next, {}, req.body);
+			return;
 		}
 		var address = req.body.address;
 		orchHelper.putDocToCollection('addresses', address.id, address)
