@@ -30,9 +30,9 @@ module.exports = function(express, app, __dirname) {
 	EmailRoutes.support = function(req, res, next) {
 		var props = req.body.props;
 	    var options = {
-	      from: 'support@ylift.io',
-	      subject: "YLIFT Store Customer Inquiry",
-	      to: "mitch@ylift.io",
+	      from: process.env.DEFAULT_EMAIL_REPLY_TO,
+	      subject: "Y LIFT Customer Inquiry",
+	      to: 'mitch@ylift.io',
 	      html: '<h3>Email: ' + req.body.email + '</h3>' + 
 	            '<h4>Topic: ' + props.topic + '</p>' +
 	            '<p>Subject: ' + props.subject + '</p>' +
@@ -55,19 +55,19 @@ module.exports = function(express, app, __dirname) {
 			return;
 		}
 		var options = {
-			from: 'support@ylift.io',
+			from: process.env.DEFAULT_EMAIL_REPLY_TO,
 			subject: 'Y Lift Account Email Change',
 			to: req.body.oldemail,
 			text: 'This is a confirmation that the ylift.io account associated with ' + req.body.oldemail + ' now belongs to ' + req.body.newemail + '\n\n' + 
-				  'Please check ' + req.body.newemail + ' for a confirmation. If this change was made in error, please contact support@ylift.io'
+				  'Please check ' + req.body.newemail + ' for a confirmation. If this change was made in error, please contact support@ylift.io.'
 		};
 		transport.sendMail(options, function(err, response) {
 			if (err) {
-	        errorHandler.logAndReturn('Error sending notifcation of email address change to old email', 500, next, err, req.body);
+	        	errorHandler.logAndReturn('Error sending notifcation of email address change to old email', 500, next, err, req.body);
 		    } else {
 		      options.to = req.body.newemail;
 		      options.text = 'This is a confirmation that the ylift.io account previosuly associated with ' + req.body.oldemail + ' now belongs to this address.' + '\n\n' + 
-				  'If this change was made in error, please contact support@ylift.io';
+				  'If this change was made in error, please contact support@ylift.io.';
 		    }
 		    transport.sendMail(options, function(err, response) {
 		    	if (err) {

@@ -13,20 +13,31 @@ superApp.constant('USER_ROLES', {
 
 superApp.controller('MainCtrl',
   ['$rootScope', '$scope', '$window', '$location', '$cookies', '$state', 'authService', 'trdInterceptor', 
-  'stripeService',
+  'stripeService', 'ENV',
   function($rootScope, $scope, $window, $location, $cookies, $state, authService, trdInterceptor, 
-    stripeService) {
+    stripeService, ENV) {
 
     $scope.handleLoaded = function() {
       $scope.loaded = true;
       $scope.authorized = authService.authorized;
       $scope.isAdmin = authService.isAdmin;
       $scope.loggedin = authService.loggedin;
+      if (!$scope.loggedin) {
+        $scope.displayIntro = true;
+      }
     };
+
+    $scope.handleViewClick = function() {
+      $scope.closeModal();
+    }
       
     $scope.hideCart = function() {
       $rootScope.hideCart(function() {  }); 
     };
+
+    $scope.closeModal = function() {
+      $scope.displayIntro = false;
+    }
 
     $scope.cartViewFun = $rootScope.$on('cartviewchange', function(evt, args) { // this is really important don't delete
       $scope.showCart = $rootScope.isVisible;

@@ -46,7 +46,7 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
           }
 
           var isUnauthorizedState = function () {
-            var unauthedStates = ["login", "login_by_token", "email_sent", "email_taken", "resend_email", "new_password", "reset_password", "register"];
+            var unauthedStates = ["login", "login_by_token", "email_sent", "email_taken", "resend_email", "new_password", "reset_password", "register", "learn_more"];
             return unauthedStates.indexOf(toState.name) >= 0;
           };
 
@@ -61,7 +61,7 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
               $state.go("login");
             } else if (authService.authorized && isUnauthorizedState()) { // don't want signed in people going to login, pass reset, etc....
               event.preventDefault();
-              $state.go("store");
+              $state.go("profile");
             } else { // non authorized can go to non authorized states
               return;
             }
@@ -76,7 +76,7 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
               } else if (!authService.authorized && isAuthorizedState()) { // don't want non signed in people going to profile, settings, etc...
                 $state.go("login");
               } else if (authService.authorized && isUnauthorizedState()) { // don't want signed in people going to login, pass reset, etc....
-                $state.go("store");
+                $state.go("profile");
               } else { // non authorized can go to non authorized states
                 $state.go(toState.name, toParams);
               }
@@ -179,7 +179,7 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       title: "Admin Product"
     })
     .state('admin.addproduct', {
-      url: "/add_product",
+      url: "/add-product",
       templateUrl: "/partials/admin_new_product.html",
       controller: "AdminNewProductCtrl"
     })
@@ -243,7 +243,7 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       controller: "NetworkCtrl",
       title: "Network Information"
     })
-    .state('office_scheduling', {
+    .state('office-scheduling', {
       url: "/scheduling",
       templateUrl: "/partials/office_scheduling.html",
       controller: "OfficeSchedulingCtrl",
@@ -251,7 +251,7 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
     })
     .state('merchant_inventory', {
       abstract: true,
-      url: "/merchant_inventory",
+      url: "/merchant-inventory",
       templateUrl: "/partials/merchant_inventory.html",
       controller: "MerchantInventoryCtrl"
     })
@@ -266,12 +266,12 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       controller: "MerchantInventoryProductCtrl"
     })
     .state('merchant_inventory.new_product', {
-      url: "/new_product",
+      url: "/new-product",
       templateUrl: "/partials/merchant_inventory_new_product.html",
       controller: "MerchantInventoryNewProductCtrl"
     })
     .state('merchant_orders', {
-      url: "/merchant_orders",
+      url: "/merchant-orders",
       templateUrl: "/partials/merchant_orders.html",
       controller: "MerchantOrdersCtrl"
     })
@@ -292,12 +292,12 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       controller: "ProductCtrl"
     })
     .state('leave_review', {
-      url:"/leave_review/:productnumber",
+      url:"/leave-review/:productnumber",
       templateUrl:"/partials/leave_review.html",
       controller: "LeaveReviewCtrl"
     })
     .state('search_results', {
-      url:"/search_results?query",
+      url:"/search-results?query",
       templateUrl:"/partials/search_results.html",
       controller:"SearchResultsCtrl"
     })
@@ -308,13 +308,13 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       title: "Profile"
     })
     .state('reset_password', {
-      url:"/reset_password/:resettoken",
+      url:"/reset-password/:resettoken",
       templateUrl: "/partials/reset_password.html",
       controller: "ResetPasswordCtrl",
       title: "Password Assistance"
     })
     .state('sell_info', {
-      url:"/sell_info",
+      url:"/sell-info",
       templateUrl: "/partials/sell_with_us.html",
       controller: "SellInfoCtrl",
       title: "Sell with Y Lift"
@@ -418,7 +418,7 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       title: "Zones: Skin"
     })
     .state('before_after', {
-      url:"/before_after/:procedure",
+      url:"/before-after/:procedure",
       templateUrl: "/partials/before_after.html",
       controller: "BeforeAfterCtrl",
       title: "Before & After"

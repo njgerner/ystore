@@ -5,7 +5,6 @@ superApp.controller('SupportCtrl',
   	$scope.submitted = false;
 
   	if (authService.authorized) {
-  		console.log('setting the email', $scope.email);
   		$scope.email = authService.profile.email;
   	} 
   	
@@ -21,7 +20,7 @@ superApp.controller('SupportCtrl',
   			orderid: $scope.orderid,
   			message: $scope.message
   		};
-  		emailService.sendSupportRequest($scope.email, $scope.data, function(result) {
+  		emailService.sendSupportRequest($scope.email, $scope.data, function(error, result) {
   			$scope.submitted = true;
   			$scope.submitting = false;
   		});
