@@ -9,12 +9,12 @@
 
   <top-bar-section>
     <ul class="search">
-      <li class="show-for-medium-up category" has-dropdown>
+      <li class="show-for-medium-up category" has-dropdown ng-click="checkProductsLoaded($event)">
         <a class="nav-text visible-for-large-up">Shop by <strong>Category</strong></a>
         <ul top-bar-dropdown class="box-drop">
           <li ng-repeat="(cat, count) in productCategories | orderBy: 'count'"><a ng-click="search(cat)">{{toTitleCase(cat)}}</a></li>
         </ul>
-      <li id="search-wrapper" class="has-form">
+      <li id="search-wrapper" class="has-form" ng-click="checkProductsLoaded($event)">
         <form style="height:100%" ng-submit="search(searchQuery)">
           <input id="searchbar" type="text" ng-model="searchQuery" typeahead="name for name in productNames.length ? [$viewValue].concat(productNames) : [] | filter:$viewValue | limitTo:6" typeahead-on-select="search(searchQuery)" class="nav-text" placeholder="Search for anything" autoselect>
           <i ng-click="search(searchQuery)" class="i-search pointer"> </i>
