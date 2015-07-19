@@ -169,7 +169,7 @@ passport.use('bearer', new BearerStrategy(
 
     //GET /authorized
   ///////////////////////////////////////////////////////////////
-  var authorized = function(req, res){
+  var authorized = function(req, res, next){
     res.type('application/json');
     delete req.user.hash;
     delete req.user.salt;
@@ -182,11 +182,11 @@ passport.use('bearer', new BearerStrategy(
             return orchHelper.updateProfile(profile.id, profile);
           })
           .fail(function (err) {
-            // errorHandler.logAndReturn('Error authorizing', 500, next, err, req.user);
+            errorHandler.logAndReturn('Error authorizing', 500, next, err, req.user);
           }).done();
       })
       .fail(function (err) {
-        // errorHandler.logAndReturn('Error authorizing', 500, next, err, req.user);
+        errorHandler.logAndReturn('Error authorizing', 500, next, err, req.user);
       });
   };
 

@@ -34,11 +34,7 @@ module.exports = function(express, app, __dirname) {
 		profile.updatedAt = new Date();
 		orchHelper.putDocToCollection('local-profiles', profile.id, profile)
 		.then(function (data) {
-			if(data) {
-				res.status(200).json({profile:data});
-			} else {
-				errorHandler.logAndReturn('Error updating user profile', 404, next); //don't know status codes but this shouldnt be a 404
-			}
+			res.status(200).json({profile:data});
 		})
 		.fail(function (err) {
 			errorHandler.logAndReturn('Error updating user profile from admin', 500, next, err, req.body);
@@ -49,7 +45,9 @@ module.exports = function(express, app, __dirname) {
 		if(!req.params.profileid) {
 			errorHandler.logAndReturn('Missing data admin addresses', 400, next, req.params);
 		}
-		orchHelper.searchDocsFromCollection('addresses', req.params.profileid)
+		var query = "value.profile: " + req.params.profileid;
+		var params = {limit:20};
+		orchHelper.searchDocsFromCollection('addresses', query, params)
 		.then(function (data) {
 			res.status(200).json({addresses:data});
 		})
@@ -60,7 +58,7 @@ module.exports = function(express, app, __dirname) {
 
 	AdminRoutes.add_address = function(req, res, next) {
 		if(!req.body.address.id) {
-			errorHandler.logAndReturn('Missing data admin add address', 400, next, {}, req.body);
+			errorHandler.logAndReturn('Missing data admin add address', 400, next, null, req.body);
 		}
 		var address = req.body.address;
 		address.id = crypto.randomBytes(20).toString('hex');
@@ -122,8 +120,11 @@ module.exports = function(express, app, __dirname) {
 			if (data) {
 				res.status(200).json({product:data});
 			} else {
-				errorHandler.logAndReturn('Error getting product from admin', 500, next, err, req.params);
+				errorHandler.logAndReturn('No product found from admin', 404, next);
 			}
+		})
+		.fail(function (err) {
+			errorHandler.logAndReturn('Error getting product from admin', 500, next, err, req.params);
 		});
 	};
 
