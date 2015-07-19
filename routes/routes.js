@@ -170,21 +170,20 @@ passport.use('bearer', new BearerStrategy(
     //GET /authorized
   ///////////////////////////////////////////////////////////////
   var authorized = function(req, res, next){
-    res.type('application/json');
-    delete req.user.hash;
-    delete req.user.salt;
-    orchHelper.findProfileByID(req.user.profile)
+      delete req.user.hash;
+      delete req.user.salt;
+      orchHelper.getDocFromCollection('local-profiles', req.user.profile)
       .then(function (profile) {
-        orchHelper.findUserByID(req.user.id)
-          .then(function (user) {
-            res.send({user:user, profile:profile, isAdmin:user.isAdmin, isYLIFT:user.isYLIFT}); //eliminate the user doc ASAP
-            profile.last_login = new Date();
-            return orchHelper.updateProfile(profile.id, profile);
+          orchHelper.getDocFromCollection('local-users', req.user.id)
+            .then(function (user) {
+                res.status(200).json({user:user, profile:profile, isAdmin:user.isAdmin, isYLIFT:user.isYLIFT});
+                profile.last_login = new Date();
+                return orchHelper.putDocToCollection('local-profiles', profile.id, profile);
+            })
+            .fail(function (err) {
+                errorHandler.logAndReturn('Error authorizing', 500, next, err, req.user);
+            }).done();
           })
-          .fail(function (err) {
-            errorHandler.logAndReturn('Error authorizing', 500, next, err, req.user);
-          }).done();
-      })
       .fail(function (err) {
         errorHandler.logAndReturn('Error authorizing', 500, next, err, req.user);
       });
