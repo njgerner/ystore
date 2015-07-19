@@ -66,7 +66,7 @@ module.exports = function(express, app, __dirname) {
 	    	});
 	    })
 	    .send();
-	}
+	};
 
 	return AWSRoutes;
 };

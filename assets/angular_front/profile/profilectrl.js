@@ -35,7 +35,7 @@ superApp.controller('ProfileCtrl',
     }
 
     $scope.download = function(file) {
-
+      
     }
 
     function onOrdersLoaded (error, orders) {
