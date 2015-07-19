@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Home of the Y LIFT Network and store.">
+  <meta name="description" content="Home of the Y LIFT Network and Store.">
   <meta name="author" content="">
 
-  <title ng-bind="'Y Lift | ' + $root.title"></title>
+  <title ng-bind="'Y LIFT | ' + $root.title"></title>
 
   <link rel="stylesheet" href="/appcss">
   <link rel="icon" href="/favicon.ico">
@@ -55,6 +55,11 @@
     <script src="js/match-panel-heights.js"></script>
     <script src="js/config.js"></script>
     <script src="/appjs"></script>
+    <script>
+      window.addEventListener('load', function() {
+        new FastClick(document.body);
+      }, false);
+    </script>
     <script>
       $(document).foundation();
       

@@ -30,6 +30,7 @@ var paths = {
 		'assets/angular_app/services/*.js',
 		bowerRoot + 'angulartics/dist/angulartics.min.js',
 		bowerRoot + 'angulartics/dist/angulartics-ga.min.js',
+		bowerRoot + 'fastclick/lib/fastclick.js',
 		bowerRoot + 'foundation/js/foundation.js'
 	],
 	scss: [

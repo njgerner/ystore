@@ -99,10 +99,10 @@ superApp.controller('LocationsCtrl',
 		  $scope.onMapLoaded(map);
 		}, function (error) {
       if (error.code == error.PERMISSION_DENIED) {
-        var latlng = new google.maps.LatLng(40.7127, 74.0059);
+        var latlng = new google.maps.LatLng(39, -95);
         var map = new google.maps.Map(document.getElementById("map-canvas"), { 
           center: latlng, 
-          zoom: 12,
+          zoom: 4,
           mapTypeControl: false,
           streetViewControl: false
         });
