@@ -28,7 +28,6 @@ module.exports = function(express, app, __dirname) {
 	  		}
 	  	})
 	  	.fail(function (err) {
-	  		console.log('err in getting merchant', err);
 	  		errorHandler.logAndReturn('Error retrieving profile for account', 500, next, err, [req.params, req.user]);
 	  	});
 	};

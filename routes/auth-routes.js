@@ -106,7 +106,6 @@ module.exports = function(express, app, __dirname) {
 	  		});
 	  	})
 	  	.then(function (profile) {
-	  		console.log('profile', profile);
 	  		orchHelper.putDocToCollection('carts', profile.id, cart)
 	  		.then(function (result) {
 	  			emailHelper.sendWelcome(user.name, user.email).done();
@@ -198,7 +197,6 @@ module.exports = function(express, app, __dirname) {
 	///////////////////////////////////////////////////////////////
 	AuthRoutes.register = function(req, res, next) {
 		return passport.authenticate('local-signup', function(err, user, info) { 
-			console.log('result from register', err, user, info);
 			if (err) { return errorHandler.logAndReturn(err.message || 'Error registering, please try again. If this issue continues, please contact support@ylift.io.', 422, next, err, null, req.params); }
 			if (!user) { return errorHandler.logAndReturn(info.message || 'Registration successful but there was an error on the server, please contact support@ylift.io if you have any issues with your account.', 500, next, req.params); }
 			var payload = { user: user.id, expires: moment().add(4, 'days') };

@@ -6,6 +6,7 @@ module.exports = function(express, app, __dirname) {
 	var path            = require('path'),            						// http://nodejs.org/docs/v0.3.1/api/path.html
     	config 			= require('../trd_modules/config.json'), 			//config file contains all tokens and other private info
 		orchHelper      = require('../trd_modules/orchestrateHelper'),
+		rawDogger 		= require('../trd_modules/rawDogger'),
 		Q               = require('q'),
 		errorHandler    = require('../trd_modules/errorHandler.js'),
 		fs 				= require('fs');
@@ -79,9 +80,8 @@ module.exports = function(express, app, __dirname) {
 		var params = { limit: 100 };
 		orchHelper.searchDocsFromCollection('local-users', query, params)
 		.then(function (users) {
-			var options = { docIDs: true };
-			profileids = rawDogger.extract_docs_with_prop_value(users, 'isYLIFT', true, options);
-			// TODO: Confirm this query works
+			var options = { singleProperty: true, property: 'profile' };
+			profileids = rawDogger.extract_docs_with_prop_value(users, 'isYLIFT', true, options).join(" ");
 			var nextQuery = 'value.id: ' + profileids;
 			var nextParams = { limit: 100 };
 			return orchHelper.searchDocsFromCollection('local-profiles', nextQuery, nextParams);
@@ -213,10 +213,10 @@ module.exports = function(express, app, __dirname) {
 			errorHandler.logAndReturn('Missing delete promo request data', 400, next, null, [req.body, req.user]);
 			return;
 		}
-		var key = {'key':regkey, 'status':'verified', 'isActive':false, 'activationDate':null, 'owner':null};
-		orchHelper.putDocToCollection('registration-keys', key.key, key)
+		var doc = {'key':regkey, 'status':'verified', 'isActive':false, 'activationDate':null, 'owner':null};
+		orchHelper.putDocToCollection('registration-keys', doc.key, doc)
 		.then(function (result) {
-			res.status(201).json({regkey:key});				
+		res.status(201).json({regkey:doc});				
 		})
 		.fail(function (err) {
 			errorHandler.logAndReturn('Error adding regkey from admin', 500, next, err, [req.user, req.body]);

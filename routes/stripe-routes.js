@@ -226,7 +226,6 @@ module.exports = function(express, app, __dirname) {
 					if (profileid) {
 						orchHelper.getDocFromCollection('user-orders', profileid)
 						.then(function (ordersDoc) {
-							console.log('ordersDoc', ordersDoc);
 							if (ordersDoc && ordersDoc.orders) {
 								ordersDoc.orders.push(order);
 							} else {
