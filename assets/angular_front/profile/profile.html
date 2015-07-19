@@ -18,7 +18,7 @@
             <p>{{profile.name}}</p>
             <strong>Email</strong> 
             <p>{{profile.email}}</p>
-            <strong>Member since  </strong> 
+            <strong>Member Since  </strong> 
             <p> {{createdAt}} </p>
           </div> 
           <div class="large-6 end columns">
@@ -43,6 +43,7 @@
           <h5>{{training.title}} <small>{{getDisplayDate(training.start)}} - {{getDisplayDate(training.end)}}</small></h5>
         </div>
         <hr>
+        <error-dir msg="error"></error-dir>
         <div class="small-3 columns">
           <strong>Location</strong>
         </div>
@@ -64,8 +65,8 @@
         <div class="small-3 columns">
           <p>{{training.status}}</p>
         </div>
-        <div class="small-3 columns">
-          <p class="text-center"><a class="has-tip" popover-animation="true" tooltip-popup-delay="250" tooltip="Download" ng-click="download(training.download)"><i class="i-download"></i></a></p>
+        <div class="small-3 columns text-center">
+          <p class="animated infinite" ng-class="{'flash': downloading}"><a class="has-tip" popover-animation="true" tooltip-popup-delay="250" tooltip="Download" ng-click="download(training.download)"><i class="i-download"></i></a></p>
         </div>
         <div class="small-12 columns">
           <strong>Description</strong>

@@ -15,11 +15,11 @@ trdServices.service('awsService', ['$http', '$log',
 	this.getObject = function(file, callback) {
 		$http({method:'POST', url:'/get_object', data: {file_name: file}}).
 			success(function(data, status, headers, config) {
-				callback();
+				callback(null, data.success);
 			}).
 			error(function(data, status, headers, config) {
 				$log.debug("getting object failed:", data);
-				callback();
+				callback(true);
 			});
 	};
 

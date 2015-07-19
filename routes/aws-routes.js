@@ -61,7 +61,7 @@ module.exports = function(express, app, __dirname) {
 	    		if (err) {
 	    			errorHandler.logAndReturn('Error downloading the object', 500, next, err, [req.body, req.user]);
 	    		} else {
-	    			res.status(200).end();
+	    			res.status(200).json({success:true});
 	    		}
 	    	});
 	    })

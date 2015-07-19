@@ -1,11 +1,12 @@
 superApp.controller('ProfileCtrl',
-  ['$rootScope', '$scope', '$state', 'authService', 'profileService', '$location', '$stateParams', '$timeout', 
+  ['$rootScope', '$scope', '$state', 'authService', 'awsService', '$location', '$stateParams', '$timeout', 
    'storeService', 'trainingService', 'toolbelt',
-  function($rootScope, $scope, $state, authService, profileService, $location, $stateParams, $timeout, 
+  function($rootScope, $scope, $state, authService, awsService, $location, $stateParams, $timeout, 
     storeService, trainingService, toolbelt) {
   	
   	$scope.profile = authService.profile; // this call should be alright as we will never make it to /profile w/o being authorized
     $scope.ordersLoaded = false;
+    $scope.downloading = false;
     $scope.orders = [];
     $scope.trainings = [];
     $scope.createdAt = moment($scope.profile.createdAt).format("MMMM Do, YYYY");
@@ -35,7 +36,14 @@ superApp.controller('ProfileCtrl',
     }
 
     $scope.download = function(file) {
-      
+      $scope.error = null;
+      $scope.downloading = true;
+      awsService.getObject(file, function (err, success) {
+        if (err) {
+          $scope.error = 'There was an issue downloading the materials, please reach out to support@ylift.io if this problem persists.';
+        }
+        $scope.downloading = false;
+      });
     }
 
     function onOrdersLoaded (error, orders) {
