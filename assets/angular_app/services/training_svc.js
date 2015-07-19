@@ -1,5 +1,7 @@
-trdServices.service("trainingService", ['$rootScope', '$http', '$cookieStore',
-    function ($rootScope, $http, $cookieStore) {
+trdServices.service("trainingService", ['$rootScope', '$http', '$cookieStore', 'authService',
+    function ($rootScope, $http, $cookieStore, authService) {
+
+    	this.trainingsByProfile = {};
 
     	this.getAvailableDates = function(callback) {
 			$http({method:'GET', url:'/training_dates'}).
@@ -7,9 +9,21 @@ trdServices.service("trainingService", ['$rootScope', '$http', '$cookieStore',
 					callback(data);
 				}).
 				error(function(data, status, headers, config) {
-					console.log("getting training dates failed:");
-					console.log(data);
+					$log.debug("getting training dates failed:", data);
 					callback();
+				});
+	    }
+
+	    this.getTrainingsByProfileID = function(callback) {
+	    	var inThis = this;
+	    	$http({method:'GET', url:'/training_dates/' + authService.profileid}).
+				success(function(data, status, headers, config) {
+    				inThis.trainingsByProfile[authService.profileid] = data.dates;
+					callback(null, data.dates);
+				}).
+				error(function(data, status, headers, config) {
+					$log.debug("getting profile training dates failed:", data);
+					callback(data.message);
 				});
 	    }
 }]);

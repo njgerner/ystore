@@ -1,5 +1,5 @@
-trdServices.service('awsService', ['$http',
-	function($http) {
+trdServices.service('awsService', ['$http', '$log',
+	function($http, $log) {
 
 	this.getSignedRequest = function(file, callback) {
 		$http({method:'GET', url:'/sign_s3?file_name=' + file.name + '&file_type=' + file.type}).
@@ -7,8 +7,18 @@ trdServices.service('awsService', ['$http',
 				callback(file, data.signed_request, data.url);
 			}).
 			error(function(data, status, headers, config) {
-				console.log("getting profile failed:");
-				console.log(data);
+				$log.debug("getting signed request failed:", data);
+				callback();
+			});
+	};
+
+	this.getObject = function(file, callback) {
+		$http({method:'POST', url:'/get_object', data: {file_name: file}}).
+			success(function(data, status, headers, config) {
+				callback();
+			}).
+			error(function(data, status, headers, config) {
+				$log.debug("getting object failed:", data);
 				callback();
 			});
 	};
