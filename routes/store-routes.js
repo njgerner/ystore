@@ -270,12 +270,13 @@ module.exports = function(express, app, __dirname) {
 		}
 		orchHelper.getDocFromCollection('carts', req.body.profileid)
 		.then(function (cart) {
+			console.log('updating cart', cart);
 			if (cart) {
     			cart.products = [];
-				productnumbers.forEach(function (product, index) {
+				req.body.productnumbers.forEach(function (product, index) {
 					cart.products.push({
 						productnumber: product.productnumber,
-        				quantity: quantities[index]
+        				quantity: req.body.quantities[index]
 					});
 				});
 				cart.status = "active";

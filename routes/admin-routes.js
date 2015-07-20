@@ -213,10 +213,10 @@ module.exports = function(express, app, __dirname) {
 			errorHandler.logAndReturn('Missing delete promo request data', 400, next, null, [req.body, req.user]);
 			return;
 		}
-		var doc = {'key':regkey, 'status':'verified', 'isActive':false, 'activationDate':null, 'owner':null};
+		var doc = {'key':req.body.regkey, 'status':'verified', 'isActive':false, 'activationDate':null, 'owner':null};
 		orchHelper.putDocToCollection('registration-keys', doc.key, doc)
 		.then(function (result) {
-		res.status(201).json({regkey:doc});				
+			res.status(201).json({regkey:doc});				
 		})
 		.fail(function (err) {
 			errorHandler.logAndReturn('Error adding regkey from admin', 500, next, err, [req.user, req.body]);

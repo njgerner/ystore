@@ -8,12 +8,16 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 		},
 		templateUrl: 'directives/cart_template.html',
 		link: function(scope, element) {
+
 			scope.productsInCart = [];
-			scope.cartProductsLoading = true;
+			scope.profileid = null;
 			scope.cartTotal = 0;
+			scope.cartProductsLoading = true;
+
 			if (authService.authorized) {
-				scope.profileid = authService.profile.id;
+				scope.profileid = authService.profileid;
 			}
+
 
 			scope.persistCartItems = function() {
 				var productnumbers = [];
@@ -36,10 +40,12 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 			}
 
 			scope.updateTotal = function() {
+				console.log('updating total', scope.productsInCart);
 				scope.cartTotal = 0;
 				for (var i = 0; i < scope.productsInCart.length; i++) {
-  				scope.cartTotal += ( scope.products[scope.productsInCart[i].productnumber].price * scope.productsInCart[i].quantity );
-  			}
+  					scope.cartTotal += ( scope.products[scope.productsInCart[i].productnumber].price * scope.productsInCart[i].quantity );
+  				}
+  				console.log('total updated', scope.cartTotal);
   				scope.persistCartItems();
 			}
 
@@ -49,7 +55,7 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 
 	  		var productsInCartWatch = null;
 			productsInCartWatch = scope.$watch('productsInCart', function(newValue, oldValue) {
-				if (!newValue) {
+				if (newValue && newValue !== oldValue) {
 					scope.updateTotal();
 					scope.updatePInCartCookie();
 					productsInCartWatch();
@@ -85,6 +91,10 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 	  		};
 
 			storeService.getProductsInCart(authService.profileid, onProductsInCartReceived);
+
+			scope.$on('loggedout', function() {
+  				$cookieStore.put('pInCart', []);
+			});
 
 			scope.$on('$destroy', function () {
 				productsInCartWatch();

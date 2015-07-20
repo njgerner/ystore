@@ -3,29 +3,38 @@ appDirectives.directive('productCartDir', [ '$state', '$rootScope', '$window', '
 	return {
 		restrict: 'E',
 		scope: {
-			ind: '=',
-			pn: '=',
+			product: '=',
+			quantity: '=',
 			edit: '='
 		},
 		templateUrl: 'directives/product_cart_template.html',
 		link: function(scope, element) {
 
-			scope.product = storeService.productsByID[scope.pn];
-			scope.qty = scope.$parent.productsInCart[scope.ind].quantity;
+			scope.recentChange = false;
 
 			scope.updateQuantity = function(quantity) {
-				scope.$parent.productsInCart[scope.ind].quantity = quantity;
+				scope.quantity = quantity;
 				scope.$parent.updateTotal();
 			}
 
 			scope.addOne = function() {
-				scope.$parent.productsInCart[scope.ind].quantity++;
+				console.log('adding one pre', scope.ind, scope.$parent.productsInCart, scope.$parent.productsInCart[scope.ind]);
+				scope.quantity++;
 				scope.$parent.updateTotal();
+				scope.recentChange = true;
+                $timeout(function() {
+                    scope.recentChange = false;
+                }, 1000);
+				console.log('adding one post', scope.ind, scope.$parent.productsInCart, scope.$parent.productsInCart[scope.ind]);
 			} 
 
 			scope.minusOne = function() {
-				if (scope.$parent.productsInCart[scope.ind].quantity > 0) {
-					scope.$parent.productsInCart[scope.ind].quantity--;
+				if (scope.quantity > 0) {
+					scope.quantity--;
+					scope.recentChange = true;
+	                $timeout(function() {
+	                    scope.recentChange = false;
+	                }, 1000);
 				} else {
 					scope.removeItemFromCart();
 				}
@@ -33,7 +42,7 @@ appDirectives.directive('productCartDir', [ '$state', '$rootScope', '$window', '
 			} 
 
 			scope.removeItemFromCart = function() {
-				scope.$parent.removeItemFromCart();
+				scope.$parent.removeItemFromCart(scope.ind);
 			}
 
 			scope.goToProduct = function() {

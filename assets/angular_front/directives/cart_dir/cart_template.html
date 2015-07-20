@@ -3,7 +3,7 @@
     <div class="small-2 small-offset-7 columns">Price</div>
     <div class="small-3 columns end">Quantity</div>
   </div>
-  <product-cart-dir ng-repeat="product in productsInCart" ind="$index" pn="product.productnumber" edit="'true'"></product-cart-dir>
+  <product-cart-dir ng-repeat="product in productsInCart" product="products[product.productnumber]" quantity="product.quantity" edit="true"></product-cart-dir>
   <div class="row">
   	<div class="small-5 small-offset-7 columns">
   		<button class="button tiny" ng-click="goToCheckout()">Checkout</button>

@@ -12,15 +12,19 @@ superApp.controller('AdminNewVendorCtrl',
     };
 
     $scope.activate = function() {
+      $scope.notify = null;
       if($scope.authorized = false) {
         return;
       }
       adminService.addRegKey($scope.regkey, function (err, data) {
+        console.log('added regkey', $scope.regkey, err, data.key);
         if(err) {
           $scope.error = err;
           return;
         }
-        $state.go('admin.new_vendor');
+        $scope.regkey = null;
+        $scope.notify = "Reg key '" + data.key + "' was successfully added.";        
+        $scope.availableKeys.push(data.key);
       });
     };
 
