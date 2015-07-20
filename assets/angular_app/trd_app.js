@@ -334,11 +334,13 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       parent: 'techniques',
       url:"/y-lift",
       templateUrl: "/partials/techniques_ylift.html",
+      title: "Techniques: Y LIFT"
     })
     .state('techniques.yeye', {
       parent: 'techniques',
       url:"/y-eye",
       templateUrl: "/partials/techniques_yeye.html",
+      title: "Techniques: Y EYE"
     })
     .state('techniques.botox', {
       parent: 'techniques',
