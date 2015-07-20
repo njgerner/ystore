@@ -73,6 +73,14 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 	  			}
 	  		};
 
+	  		scope.checkProductsLoaded = function($event) {
+	  			if (scope.productNames.length > 0) {
+	  				$event.stopPropagation();
+	  				return;
+	  			}
+	  			storeService.getStoreFront(onProductsLoaded);
+	  		}
+
 			var pInCartWatch = scope.$watch(function() { return $cookies.pInCart; }, function(newCart, oldCart) { // this makes me hard ... me too
 				if (newCart) {
 					scope.productsInCart = JSON.parse(newCart);
@@ -89,7 +97,7 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 	  			});
 	  		}
 
-			function onProductsLoaded (products) {
+			function onProductsLoaded (error, products) {
 				products.forEach(function(product, index) {
 					if (scope.productCategories[product.category] === undefined) {
 						scope.productCategories[product.category] = 0;
@@ -121,7 +129,7 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 
 
 			scope.$on('productsloaded', function (evt, products) {
-				onProductsLoaded(products);
+				onProductsLoaded(null, products);
 			});
 
 			scope.$on('merchantcreated', function (evt, args) {
