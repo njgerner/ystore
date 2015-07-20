@@ -19,16 +19,27 @@ superApp.controller('AdminUserCtrl',
     }
 
     $scope.updateInfo = function () {
+      $scope.error = null;
       $scope.updating = true;
       var profile = angular.copy($scope.profile);
       profile.name = $scope.name;
       profile.email = $scope.email;
-      adminService.updateUserProfile(profile, function (err, profile) {
-        $scope.profile = profile;
-        $scope.edit = false;
-        $scope.updating = false;
-        $scope.notify = 'Successfully updated user profile';
-        $scope.edit = false;
+      adminService.checkEmailAvailability($scope.email, function (err, data) {
+        if(err) {
+          $scope.error = err;
+          return;
+        } else if (!data.available) {
+          $scope.error = "Email is already in use.";
+          return;
+        } else {
+          adminService.updateUserProfile(profile, function (err, profile) {
+            $scope.profile = profile;
+            $scope.edit = false;
+            $scope.updating = false;
+            $scope.notify = 'Successfully updated user profile';
+            $scope.edit = false;
+          });
+        }
       });
     };
 

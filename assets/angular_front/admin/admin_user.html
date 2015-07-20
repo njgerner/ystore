@@ -23,7 +23,7 @@
 			<tbody>
 				<tr ng-show="edit=='basicinfo'">
 					<th style="padding:0"><input style="margin:0" type="text" placeholder="{{profile.name}}" ng-model="$parent.name"></input></th>
-					<th>{{profile.email}}</th>
+					<th style="padding:0"><input style="margin:0" type="text" placeholder="{{profile.email}}" ng-model="$parent.email"></input></th>
 					<th style="padding:0"><input style="margin:0" type="text" placeholder="{{profile.phone}}" ng-model="$parent.phone"></input></th>
 					<th>{{displayDate(profile.createdAt)}}</th>
 					<th>{{displayDate(profile.last_login)}}</th>
@@ -39,7 +39,7 @@
 		</table>
 	</div>
 
-	<div class="row admin-user-header">
+	<div ng-if="addresses.length > 0" class="row admin-user-header">
 		<h4>Addresses
 			<i ng-hide="addAddressView" class="i-plus pointer right" ng-click="enableAddAddress()"></i>
           	<i ng-show="addAddressView" class="i-cancel-circled pointer right" ng-click="cancel()"></i>

@@ -289,6 +289,18 @@ trdServices.service("adminService", ['$rootScope', '$http', 'authService', 'merc
                     callback(data.message);
                 }
             });
-        }
+        };
+
+        this.checkEmailAvailability = function(email, callback) {
+        	$http({method: 'POST', url: "/admin/email_availability",
+                   data: {email:email} })
+            .success(function(data, status, headers, config) {
+            	callback(null, data);
+            })
+            .error(function(data, status, headers, config) {
+                $log.debug('error checking email availability', data);
+                callback(data.message);
+            });
+        };
 
 }]);

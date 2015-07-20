@@ -279,6 +279,27 @@ module.exports = function(express, app, __dirname) {
 		});
 	};
 
+	AdminRoutes.email_availability = function(req, res, next) {
+		if(!req.body.email) {
+			errorHandler.logAndReturn('Missing data from admin email availability', 404, next);
+		}
+		var query = 'value.email: ' + req.body.email;
+		var params = {
+			limit: 1
+		};
+		orchHelper.searchDocsFromCollection('local-users', query, params)
+		.then(function (result) {
+			if(result.length > 0) {
+				res.status(200).json({available:false});
+			} else {
+				res.status(200).json({available:true});
+			}
+		})
+		.fail(function (err) {
+			errorHandler.logAndReturn('Error finding email from admin', 500, next, err, req.body);
+		});
+	};
+
 	AdminRoutes.add_product = function(req, res, next) {
 		// orchHelper.getAllOrders()
 		// .then(function (data) {

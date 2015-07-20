@@ -646,6 +646,7 @@ passport.use('bearer', new BearerStrategy(
     app.post('/admin/add_promo', ensureAuthenticated, adminRoutes.add_promo);
     app.post('/admin/delete_promo', ensureAuthenticated, adminRoutes.delete_promo);
     app.post('/admin/delete_address', ensureAuthenticated, adminRoutes.delete_address);
+    app.post('/admin/email_availability', ensureAuthenticated, adminRoutes.email_availability);
     app.post('/get_merchant_name', ensureAuthenticated, adminRoutes.get_merchant_name);
     app.post('/admin/regkeys', ensureAuthenticated, adminRoutes.get_available_keys);
     app.post('/admin/hash', ensureAuthenticated, adminRoutes.get_hash);
