@@ -27,7 +27,7 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	AdminRoutes.update_user_profile = function(req, res, next) {
-		if(!req.body.profile.id) {
+		if(!req.body.profile) {
 			errorHandler.logAndReturn('Missing data admin update user profile', 400, next, {}, req.body);
 		}
 		var profile = req.body.profile;
@@ -84,7 +84,7 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	AdminRoutes.delete_address = function(req, res, next) {
-		if(!req.body.address.id) {
+		if(!req.body.address) {
 			errorHandler.logAndReturn('Missing data admin delete address', 400, next, {}, req.body);
 		}
 		var address = req.body.address;
