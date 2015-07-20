@@ -1,0 +1,58 @@
+<h3 class="text-center">Your Y LIFT Account</h3>
+<a ng-click="makeNew = true">I need to make an account</a>
+<br>
+<br>
+<a ng-click="upgrade = true">I want to upgrade my current account to a Y LIFT account</a>
+
+<form ng-show="makeNew" class="regform" novalidate>
+<error-dir msg="{{error}}"></error-dir>
+	<fieldset>
+		<legend>Account Info</legend>
+		<div class="row">
+			<div class="small-12 columns">
+				<label>Email </span class="required">*</span>
+					<input type="email" name="email" ng-model="loginemail" required>
+				</label>
+				<label>Password </span class="required">*</span>
+					<input type="password" name="password" ng-model="password" required>
+				</label>
+				<label>Confirm Password </span class="required">*</span>
+					<input type="password" name="confirmpassword" ng-model="confirmpassword" required>
+				</label>
+			</div>
+		</div>
+		 <div class="row clearfix">
+		 	<p>By clicking next you agree to our <a ui-sref="terms" target="_blank">Terms & Conditions</a>. Note: these are only the terms of use of www.ylift.io. You will sign your Y LIFT Network contract during training.</p>
+		  	<button class="button small right" ng-click="createAccount()">
+		  		<span ng-hide="validating">Create My Account</span>
+		  		<span ng-show="validating">Validating...</span>
+		  	</button>
+		  	<a ui-sref="registerylift.personalinfo" class="button secondary small right">Back</a>
+		  </div>
+	</fieldset>
+</form>
+
+<form ng-show="upgrade" class="regform" novalidate>
+<error-dir msg="{{error}}"></error-dir>
+	<fieldset>
+		<legend>Verify Your Account Credentials</legend>
+		<div class="row">
+			<div class="small-12 columns">
+				<label>Email </span class="required">*</span>
+					<input type="email" name="email" ng-model="currentemail" required>
+				</label>
+				<label>Password </span class="required">*</span>
+					<input type="password" name="password" ng-model="currentpassword" required>
+				</label>
+			</div>
+		</div>
+		 <div class="row clearfix">
+		 	<p>By clicking next you agree to our <a ui-sref="terms" target="_blank">Terms & Conditions</a>. Note: these are only the terms of use of www.ylift.io. This is NOT your Y LIFT Network contract. You will sign your Y LIFT Network contract during training.</p>
+		  	<button class="button small right" ng-click="verifyAccount()">
+		  		<span ng-hide="validating">Verify</span>
+		  		<span ng-show="validating">Validating...</span>
+		  	</button>
+		  	<a ui-sref="registerylift.personalinfo" class="button secondary small right">Back</a>
+		  </div>
+	</fieldset>
+</form>

@@ -108,8 +108,8 @@ trdServices.service("adminService", ['$rootScope', '$http', 'authService', 'merc
 	        });
     	};
 
-    	this.deleteAddress = function(addressid, callback) {
-    		$http({method: 'POST', url: '/admin/delete_address/', data: {addressid:addressid} })
+    	this.deleteAddress = function(address, callback) {
+    		$http({method: 'POST', url: '/admin/delete_address/', data: {address:address} })
 	        .success(function (data, status, headers, config) {
 	            if(callback) {
 	            	callback(null, data.success);

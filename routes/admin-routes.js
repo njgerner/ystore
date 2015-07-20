@@ -54,7 +54,7 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	AdminRoutes.add_address = function(req, res, next) {
-		if(!req.body.address.id) {
+		if(!req.body.address) {
 			errorHandler.logAndReturn('Missing data admin add address', 400, next, null, req.body);
 		}
 		var address = req.body.address;

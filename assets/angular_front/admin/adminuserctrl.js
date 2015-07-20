@@ -150,7 +150,7 @@ superApp.controller('AdminUserCtrl',
         $scope.addAddressView = false;
         $scope.editAddressView = false;
         var address = $scope.addresses[index];
-        adminService.deleteAddress(address.id, onAddressRemoved);
+        adminService.deleteAddress(address, onAddressRemoved);
       }
     };
 

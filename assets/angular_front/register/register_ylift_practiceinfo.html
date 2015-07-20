@@ -1,0 +1,73 @@
+<error-dir msg="{{error}}"></error-dir>
+<h3 class="text-center">Practice Info</h3>
+<div class="regform">
+	<legend>Y LIFT Network Registration - Practice Information</legend>
+	<fieldset>
+		<div class="row">
+		    <div class="small-12 columns">
+		      <label>Medical License #
+		        <input type="text" ng-model="medlicensenum" name="medlicensenum"/>
+		      </label>
+		   </div>
+		</div>
+		<div class="row">
+	    <div class="small-12 columns">
+	      <label>Specialty
+	      	<select ng-model="specialty">
+	        	<option value="Plastic Surgery">Plastic Surgery</option>
+				<option value="Dermatology">Dermatology</option>
+				<option value="Cosmetic Surgery">Cosmetic Surgery</option>
+				<option value="Ophthalmology">Ophthalmology</option>
+				<option value="Oral and Maxillofacial Surgery">Oral and Maxillofacial Surgery</option>
+				<option value="Oculoplastics">Oculoplastics</option>
+				<option value="Other">Other</option>
+			</select>
+	      </label>
+	    </div>
+	  </div>
+	  <div class="row">
+	    <div class="small-12 columns">
+	      <label>Affiliation/Practice Type
+	      	<select ng-model="practicetype">
+	        	<option value="SoloPractice">Solo Practice</option>
+				<option value="SmallGroup">Small Group</option>
+				<option value="LargeGroup">Large Group</option>
+			</select>
+	      </label>
+	    </div>
+	  </div>
+	  <div class="row">
+	    <div class="small-12 columns">
+	      <label>Check if you purchase dermal filler
+	      	<input type="checkbox" ng-model="uses_filler" ng-true-value="'YES'" ng-false-value="'NO'">
+	      </label>
+	    </div>
+	    
+	  </div>
+	  <div class="row">
+	    <div class="small-6 columns">
+	      <label>% Practice revenue generated from fillers
+	      	<select ng-model="filler_revenue_pct">
+	        	<option value="0_20"> 0% to 20% </option>
+				<option value="20_40"> 20% to 40%</option>
+				<option value="40_60">40% to 60%</option>
+				<option value="60_80">60% to 80%</option>
+				<option value="80_100">80% to 100%</option>
+			</select>	
+	      </label>
+	    </div>
+	    <div class="small-6 columns">
+	      <label>Filler procedure estimate
+	        <input type="text" ng-model="filler_procedures" name="filler_procedures" placeholder="How many procedures are performed per week" />
+	      </label>
+	    </div>
+	  </div>
+	  <div class="row clearfix">
+	  	<button class="button small right" ng-click="goTo('form3')">
+	  		<span ng-hide="validating">Next</span>
+	  		<span ng-show="validating">Validating...</span>
+	  	</button>
+	  	<a ui-sref="registerylift.personalinfo" class="button secondary small right">Back</a>
+	  </div>
+	</fieldset>
+</div>

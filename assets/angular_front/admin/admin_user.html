@@ -57,7 +57,7 @@
       </div>
     </div> 
     <div ng-if="loadingAddresses" class="loader locations-loading">Loading...</div>
-    <form ng-if="address.length > 0" ng-show="addAddressView || editAddressView" novalidate>
+    <form ng-show="addAddressView || editAddressView" novalidate>
       <fieldset>
         <div>
             <input type="text" ng-model="addressname" placeholder="Address Name"/>
