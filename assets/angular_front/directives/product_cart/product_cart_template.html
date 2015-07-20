@@ -8,7 +8,7 @@
   <div class="small-1 large-1 columns">${{product.price}}</div>
   <div class="small-3 large-3 columns text-right">
   	<i style="padding-left:30%" ng-show="edit" class="i-minus quantity-change show-for-medium-up left" ng-click="minusOne()"></i>
-  	<span class="animated" ng-class="'rubberBand': recentChange">{{quantity}}</span>
+  	<span class="animated" ng-class="{'rubberBand': recentChange}">{{item.quantity}}</span>
   	<i style="margin-left:15%" ng-show="edit" class="i-plus quantity-change show-for-medium-up right" ng-click="addOne()"></i> 
   </div>
   <div class="small-1 large-1 columns">

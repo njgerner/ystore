@@ -1,14 +1,16 @@
-appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$cookieStore', '$cookies', '$window', 'storeService',
-	function(authService, $state, $rootScope, $cookieStore, $cookies, $window, storeService) {
+appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$cookieStore', '$cookies', '$window', 
+	    'storeService', '$timeout',
+	function(authService, $state, $rootScope, $cookieStore, $cookies, $window, 
+		storeService, $timeout) {
 	return {
 		restrict: 'E',
 		scope: {
-			userid: '=',
-			showCart: '='
+			close: '='
 		},
 		templateUrl: 'directives/cart_template.html',
 		link: function(scope, element) {
 
+			scope.products = {};
 			scope.productsInCart = [];
 			scope.profileid = null;
 			scope.cartTotal = 0;
@@ -17,7 +19,6 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 			if (authService.authorized) {
 				scope.profileid = authService.profileid;
 			}
-
 
 			scope.persistCartItems = function() {
 				var productnumbers = [];
@@ -35,41 +36,29 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 
 			scope.removeItemFromCart = function(index) {
 				scope.productsInCart.splice(index, 1);
-  				scope.persistCartItems();
 				scope.updateTotal();
+  				scope.persistCartItems();
 			}
 
 			scope.updateTotal = function() {
-				console.log('updating total', scope.productsInCart);
 				scope.cartTotal = 0;
 				for (var i = 0; i < scope.productsInCart.length; i++) {
   					scope.cartTotal += ( scope.products[scope.productsInCart[i].productnumber].price * scope.productsInCart[i].quantity );
   				}
-  				console.log('total updated', scope.cartTotal);
+			}
+
+			scope.updateTotalAndPersist = function() {
+				scope.cartTotal = 0;
+				for (var i = 0; i < scope.productsInCart.length; i++) {
+  					scope.cartTotal += ( scope.products[scope.productsInCart[i].productnumber].price * scope.productsInCart[i].quantity );
+  				}
   				scope.persistCartItems();
 			}
 
 			scope.goToCheckout = function() {
 				$state.go("checkout");
+				$rootScope.$broadcast('cartviewchange', {displayCart: false});
 			}
-
-	  		var productsInCartWatch = null;
-			productsInCartWatch = scope.$watch('productsInCart', function(newValue, oldValue) {
-				if (newValue && newValue !== oldValue) {
-					scope.updateTotal();
-					scope.updatePInCartCookie();
-					productsInCartWatch();
-				}
-			});
-
-			var cartWatch = null;
-			cartWatch = scope.$watch(function() { return $cookies.pInCart; }, function(newCart, oldCart) { // this makes me hard
-				if (newCart !== undefined) {
-					onProductsInCartReceived(null, JSON.parse(newCart));
-				} else {
-					onProductsInCartReceived(null, []);
-				}
-			});
 
 			function updatePInCartCookie () {
   				$cookieStore.put('pInCart', scope.productsInCart);
@@ -79,26 +68,26 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 	  			scope.products = storeService.productsByID;
 	  			if (scope.productsInCart.length > 0) {
 	  				scope.updateTotal();
+  					scope.persistCartItems();
+					updatePInCartCookie();
 	  			}
 	  			scope.cartProductsLoading = false;
 	  		}
 
 	  		function onProductsInCartReceived (error, products) {
 	  			scope.productsInCart = products;
-	  			scope.$on('productsloaded', function (evt, products) {
-	  				onProductsLoaded(products);
-	  			});
+
+				if (storeService.productsReceived) {
+					onProductsLoaded(null, storeService.products);
+				} else {
+					storeService.getStoreFront(onProductsLoaded);
+				}
 	  		};
 
 			storeService.getProductsInCart(authService.profileid, onProductsInCartReceived);
 
 			scope.$on('loggedout', function() {
   				$cookieStore.put('pInCart', []);
-			});
-
-			scope.$on('$destroy', function () {
-				productsInCartWatch();
-				cartWatch();
 			});
 
 		}

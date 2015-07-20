@@ -110,8 +110,6 @@ superApp.controller('CheckoutCtrl',
       });
     }
 
-    $rootScope.hideCart(function() {}); // want cart to hide when checkout page is brought up
-
     if (storeService.productsRetrieved) {
       $scope.onProductsLoaded();
     } else {

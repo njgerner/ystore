@@ -275,7 +275,8 @@ module.exports = function(express, app, __dirname) {
     app.post('/add_item_to_cart', ensureAuthenticated, storeRoutes.add_item_to_cart);
     app.post('/add_check_order', storeRoutes.create_check_order);
     app.post('/empty_cart', storeRoutes.empty_cart);
-    app.post('/get_products_by_category/:category', storeRoutes.get_products_by_category);
+    app.post('/get_products_by_category', storeRoutes.get_products_by_category);
+    app.post('/get_products_by_ids', storeRoutes.get_products_by_ids);
     app.post('/store', storeRoutes.get_storefront);
     app.post('/update_cart', ensureAuthenticated, storeRoutes.update_cart);
     app.post('/update_order', ensureAuthenticated, storeRoutes.update_order);

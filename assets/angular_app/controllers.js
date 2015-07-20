@@ -24,12 +24,16 @@ superApp.controller('MainCtrl',
       $scope.loggedin = authService.loggedin;
     };
       
-    $scope.hideCart = function() {
-      $rootScope.hideCart(function() {  }); 
+    $scope.closeCart = function() {
+      $scope.displayCart = false;
     };
 
-    $scope.cartViewFun = $rootScope.$on('cartviewchange', function(evt, args) { // this is really important don't delete
-      $scope.showCart = $rootScope.isVisible;
+    $scope.handleViewClick = function() {
+      $scope.displayCart = false;
+    }
+
+    $rootScope.$on('cartviewchange', function(evt, args) { // this is really important don't delete
+      $scope.displayCart = args.displayCart;
     });
 
     $scope.$on('loggedin', function(evt, args) {

@@ -48,10 +48,8 @@ appDirectives.directive('navBarDir', [ 'authService', '$state', '$location', '$r
 	  		};
 
 	  		scope.openCart = function() {
-	  			if (scope.itemCount == 0) {
-	  				return;
-	  			}
-	  			$rootScope.showCart(function(isVisible) {scope.showCart = isVisible});
+	  			$rootScope.$broadcast('cartviewchange', {displayCart: true});
+	  			// $rootScope.showCart(function(isVisible) {scope.showCart = isVisible});
 	  		};
 
 	  		scope.search = function(query) {
