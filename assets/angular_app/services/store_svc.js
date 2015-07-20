@@ -44,7 +44,6 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
                     }
                 }
                 internalThis.productsReceived = true;
-                $rootScope.$broadcast('productsloaded', internalThis.products);
                 callback(null, internalThis.products);
             })
             .error(function(data, status, headers, config) {
