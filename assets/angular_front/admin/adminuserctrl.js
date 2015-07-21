@@ -20,6 +20,7 @@ superApp.controller('AdminUserCtrl',
 
     $scope.updateInfo = function () {
       $scope.error = null;
+      $scope.notify = null;
       $scope.updating = true;
       var profile = angular.copy($scope.profile);
       profile.name = $scope.name;
@@ -44,6 +45,8 @@ superApp.controller('AdminUserCtrl',
     };
 
     $scope.submitAddress = function() {
+      $scope.error = null;
+      $scope.notify = null;
       if (validate()) {    
           var address = {
           "name": $scope.addressname,
@@ -156,6 +159,8 @@ superApp.controller('AdminUserCtrl',
     };
 
     $scope.removeAddress = function(index) {
+      $scope.error = null;
+      $scope.notify = null;
       if ($window.confirm('Are you sure?')) {
         $scope.clearAddress();
         $scope.addAddressView = false;
