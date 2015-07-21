@@ -39,7 +39,7 @@
 		</table>
 	</div>
 
-	<div ng-if="addresses.length > 0" class="row admin-user-header">
+	<div class="row admin-user-header">
 		<h4>Addresses
 			<i ng-hide="addAddressView" class="i-plus pointer right" ng-click="enableAddAddress()"></i>
           	<i ng-show="addAddressView" class="i-cancel-circled pointer right" ng-click="cancel()"></i>
@@ -101,9 +101,7 @@
     </div>
 
 	<div ng-if="cartProducts" style="margin-top:20px" class="row admin-user-header">
-		<h4>Cart
-			<i class="right i-settings" ng-click="edit='cart'"></i>
-		</h4>
+		<h4>Cart</h4>
 		<h5>{{formatPrice(total)}} total</h5>
 	</div>
 	<div ng-if="cartProducts" class="row">

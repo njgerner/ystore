@@ -92,7 +92,8 @@ superApp.controller('AdminUserCtrl',
                   $scope.addAddressView = false;
                   $scope.editAddressView = false;
                   $scope.notify = "Successfully added user address";
-                  $scope.addresses.push(data);
+                  $scope.addresses.push(address);
+                  console.log('address added. now addresses=', $scope.addresses);
                 }
               });
           }
@@ -161,14 +162,17 @@ superApp.controller('AdminUserCtrl',
         $scope.addAddressView = false;
         $scope.editAddressView = false;
         var address = $scope.addresses[index];
-        adminService.deleteAddress(address, onAddressRemoved);
+        adminService.deleteAddress(address, function (err, data) {
+          if(err) {
+            $scope.error = err;
+          } else {
+            $scope.addresses.splice(index, 1);
+            $scope.notify = "Address successfully removed";
+            console.log('address removed, addresses now', $scope.addresses);
+            adminService.getAddresses($scope.profile.id, onAddressesLoaded);
+          }
+        });
       }
-    };
-
-    function onAddressRemoved(err, data) {
-        $scope.notify = "Address successfully removed";
-        adminService.getAddresses($scope.profile.id, onAddressesLoaded);
-        $scope.loadingAddresses = true;
     };
 
     function validate () {
@@ -214,11 +218,6 @@ superApp.controller('AdminUserCtrl',
             $scope.error = err;
           }
           $scope.addresses = data;
-           // so i can assign ng-models in an ng-repeat
-          $scope.addressModels = [];
-          for(var i = 0; i < $scope.addresses.length; i++) {
-            $scope.addressModels.push('address' + i);
-          }
           $scope.userloaded = true;
       };
 
