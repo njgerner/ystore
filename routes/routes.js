@@ -261,7 +261,7 @@ passport.use('bearer', new BearerStrategy(
         mailOptions.subject = 'Password Reset';
         mailOptions.text = 'A request for a password reset has been made for the account linked to this email address\n\n' +
             'Please click on the following link, or paste into your browser to complete the process' + '\n\n' + 
-            'http://' + req.get('host') + '/home#/reset_password/' + user.resetToken.token + '\n\n' +
+            'http://' + req.get('host') + '/home#!/reset_password/' + user.resetToken.token + '\n\n' +
             'If you did not request this, please ignore this email and your password will remain unchanged.';
 
         transport.sendMail(mailOptions, function(error, info){
