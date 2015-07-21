@@ -17,7 +17,6 @@ superApp.controller('AdminNewVendorCtrl',
         return;
       }
       adminService.addRegKey($scope.regkey, function (err, data) {
-        console.log('added regkey', $scope.regkey, err, data.key);
         if(err) {
           $scope.error = err;
           return;

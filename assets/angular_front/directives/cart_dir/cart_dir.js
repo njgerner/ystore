@@ -15,6 +15,7 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 			scope.profileid = null;
 			scope.cartTotal = 0;
 			scope.cartProductsLoading = true;
+			scope.cartWatch = null;
 
 			if (authService.authorized) {
 				scope.profileid = authService.profileid;
@@ -43,14 +44,14 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 			scope.updateTotal = function() {
 				scope.cartTotal = 0;
 				for (var i = 0; i < scope.productsInCart.length; i++) {
-  					scope.cartTotal += ( scope.products[scope.productsInCart[i].productnumber].price * scope.productsInCart[i].quantity );
+  					scope.cartTotal += parseInt( scope.products[scope.productsInCart[i].productnumber].price * scope.productsInCart[i].quantity ).toFixed(2);
   				}
 			}
 
 			scope.updateTotalAndPersist = function() {
 				scope.cartTotal = 0;
 				for (var i = 0; i < scope.productsInCart.length; i++) {
-  					scope.cartTotal += ( scope.products[scope.productsInCart[i].productnumber].price * scope.productsInCart[i].quantity );
+  					scope.cartTotal += parseInt( scope.products[scope.productsInCart[i].productnumber].price * scope.productsInCart[i].quantity ).toFixed(2);
   				}
   				scope.persistCartItems();
 			}
@@ -84,9 +85,20 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 				}
 	  		};
 
+	  		cartWatch = scope.$watch(function() { return $cookieStore.get('pInCart'); },
+	  			function (newValue, oldValue) {
+	  				console.log('cart watch new/old', newValue, oldValue);
+	  				if (newValue && newValue !== oldValue && newValue !== scope.productsInCart) {
+	  					scope.productsInCart = newValue;
+	  					scope.updateTotal();
+	  				}
+	  			}
+	  		);
+
 			storeService.getProductsInCart(authService.profileid, onProductsInCartReceived);
 
 			scope.$on('loggedout', function() {
+  				cartWatch();
   				$cookieStore.put('pInCart', []);
 			});
 
