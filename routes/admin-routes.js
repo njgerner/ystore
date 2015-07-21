@@ -8,6 +8,7 @@ module.exports = function(express, app, __dirname) {
 		orchHelper      = require('../trd_modules/orchestrateHelper'),
 		Q               = require('q'),
 		errorHandler    = require('../trd_modules/errorHandler.js'),
+		Address         = require('../models/address'),
 		fs 				= require('fs'),
 		crypto        	= require('crypto');
 
@@ -57,11 +58,10 @@ module.exports = function(express, app, __dirname) {
 		if(!req.body.address) {
 			errorHandler.logAndReturn('Missing data admin add address', 400, next, null, req.body);
 		}
-		var address = req.body.address;
-		address.id = crypto.randomBytes(20).toString('hex');
-		orchHelper.putDocToCollection('addresses', address.id, address)
+		var addressDoc = Address.newAddress(req.body.address);
+		orchHelper.putDocToCollection('addresses', addressDoc.id, addressDoc)
 		.then(function (data) {
-			res.status(200).json({address:data});
+			res.status(200).json({address:addressDoc});
 		})
 		.fail(function (err) {
 			errorHandler.logAndReturn('Error adding address from admin', 500, next, err, req.body);
@@ -88,7 +88,7 @@ module.exports = function(express, app, __dirname) {
 			errorHandler.logAndReturn('Missing data admin delete address', 400, next, {}, req.body);
 		}
 		var address = req.body.address;
-		orchHelper.removeDocFromCollection('addresses',address.id, address)
+		orchHelper.removeDocFromCollection('addresses', address.id, address)
 		.then(function (data) {
 			res.status(200).json({success:true});
 		})

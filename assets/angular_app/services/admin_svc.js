@@ -88,7 +88,7 @@ trdServices.service("adminService", ['$rootScope', '$http', 'authService', 'merc
 	            callback(null, data.address);
 	        })
 	        .error(function (data, status, headers, config) {
-	            $log.debug('error updating address', data);
+	            $log.debug('error adding address', data);
             	callback(data.message);
 	        });
     	};

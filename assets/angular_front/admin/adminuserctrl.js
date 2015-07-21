@@ -92,8 +92,7 @@ superApp.controller('AdminUserCtrl',
                   $scope.addAddressView = false;
                   $scope.editAddressView = false;
                   $scope.notify = "Successfully added user address";
-                  $scope.addresses.push(address);
-                  console.log('address added. now addresses=', $scope.addresses);
+                  $scope.addresses.push(data);
                 }
               });
           }
@@ -168,8 +167,6 @@ superApp.controller('AdminUserCtrl',
           } else {
             $scope.addresses.splice(index, 1);
             $scope.notify = "Address successfully removed";
-            console.log('address removed, addresses now', $scope.addresses);
-            adminService.getAddresses($scope.profile.id, onAddressesLoaded);
           }
         });
       }
