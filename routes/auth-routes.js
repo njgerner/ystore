@@ -178,8 +178,6 @@ module.exports = function(express, app, __dirname) {
 
   	// POST /login
 	AuthRoutes.loginHelper = function(req, res, next) {
-
-
 		return passport.authenticate('local-signin', function(err, user, info) {
 		if (err) { return errorHandler.logAndReturn(err, 422, next, null, [req.params, req.body]); }
 		if (!user) { return errorHandler.logAndReturn(info.message, 422, next, null, [req.params, req.body]); }
@@ -191,6 +189,32 @@ module.exports = function(express, app, __dirname) {
 		var token = jwt.encode(payload, secret);
 		return res.json({tkn:token});
 		})(req, res, next);
+	};
+
+	//POST /request_pass_reset
+  	//an email has been sent to user asking if they want to reset password
+	AuthRoutes.request_pass_reset = function(req, res) {
+		orchHelper.generateResetToken(req.params.email)
+		.then(function (user) {
+			mailOptions.to = user.email;
+			mailOptions.subject = 'Password Reset';
+			mailOptions.text = 'A request for a password reset has been made for the account linked to this email address\n\n' +
+			    'Please click on the following link, or paste into your browser to complete the process' + '\n\n' + 
+			    'http://' + req.get('host') + '/home#!/reset_password/' + user.resetToken.token + '\n\n' +
+			    'If you did not request this, please ignore this email and your password will remain unchanged.';
+
+			transport.sendMail(mailOptions, function(error, info){
+			    if(error){
+			        console.log('pw reset email error', error);
+			        res.send('An error occurred. If this persists, please contact support@ylift.io');
+			    }else{
+			        res.send('success');
+			    }
+			});
+		})
+		.fail(function (err) {
+			res.send('No account was found with this email');
+		});
 	};
 
 	//POST /register
