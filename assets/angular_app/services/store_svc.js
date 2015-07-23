@@ -175,7 +175,17 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
                 "productnumber": productnumber,
                 "quantity": quantity
             };
-            pInCart.push(pInCartObj);
+            var duplicate = false;
+            for (var i = 0; i < pInCart.length; i++) {
+                if (pInCart[i].productnumber == pInCartObj.productnumber) {
+                    var duplicate = true;
+                    pInCart[i].quantity = parseInt(pInCart[i].quantity) + parseInt(pInCartObj.quantity);
+                }
+            }
+            if (!duplicate) {
+                pInCart.push(pInCartObj);
+            }
+            console.log('guest cart', pInCart, pInCartObj);
             this.updateProductsInCartCookie(pInCart);
             callback(null, null);
         }
@@ -343,7 +353,8 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
         callback(filteredProducts);
     }
 
-    this.updateProductsInCartCookie = function(productsInCart) {        
+    this.updateProductsInCartCookie = function(productsInCart) {  
+        console.log('store svc update pInCartCookie', productsInCart, $cookieStore.get('pInCart'));      
         $cookieStore.put('pInCart', productsInCart || []);
     }
 

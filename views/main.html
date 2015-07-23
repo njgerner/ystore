@@ -25,7 +25,7 @@
         <nav-bar-dir class="show-for-medium-up"></nav-bar-dir>
         <a class="exit-off-canvas"></a>
         <main ui-view ng-click="handleViewClick($event)"></main>
-        <cart-dir ng-if="loaded" ng-show="displayCart" class="cart-modal animated" ng-class="{fadeInDown:displayCart, fadeOutUp:!displayCart}" close="closeCart"></cart-dir>
+        <cart-dir ng-if="loaded" ng-show="displayCart" class="cart-modal animated" ng-class="getCartAnimateClass()" close="closeCart"></cart-dir>
         <footer-dir></footer-dir>
       </div>
     </div>
