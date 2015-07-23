@@ -70,20 +70,6 @@ exports.updateUserProfile = function(profile, userid, property) {
     return deferred.promise;
 };
 
-exports.updateProfile = function(id, profile) {
-  var deferred = Q.defer();
-  profile.updatedAt = new Date();
-  db.put('local-profiles', id, profile)
-  .then(function (result) {
-    deferred.resolve(profile);
-  })
-  .fail(function (err) {
-    deferred.reject(new Error(err.body.message));
-  });
-   
-  return deferred.promise;
-};
- 
 // update password
 // user provides password, this updates password to their choice
 exports.updatePassword = function(resettoken, password) {
