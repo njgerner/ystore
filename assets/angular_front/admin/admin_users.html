@@ -1,5 +1,5 @@
 <error-dir msg="{{error}}"></error-dir>
-<div ng-if="profiles.length" class="row admin-users-summary">
+<div ng-if="profiles" class="row admin-users-summary">
 	<h4>User Summary</h4>
 	<div class="small-6 large-3 columns text-center">
 		<span>{{profiles.length}}</span><br>
@@ -18,58 +18,57 @@
 		<small>Monthly Active Users</small>
 	</div>
 </div>
-<div ng-if="profiles.length">
+<div ng-if="profiles">
 	<div class="row">
 		<h4>Users</h4>
-		<div class="small-4 large-4 columns">
+		<div class="small-4 columns">
 			<strong>Name</strong>
 		</div>
-		<div class="small-4 large-4 columns">
+		<div class="small-4 columns">
 			<strong>Last Login</strong>
 		</div>
-		<div class="small-4 large-4 end columns">
+		<div class="small-4 columns">
 			<strong>Member Since</strong>
 		</div>
 	</div>
 	<div class="row">
 		<div class="info-row" ng-repeat="profile in profiles">
-			<div class="small-4 large-4 columns">
-				<span><a ui-sref="admin.user({profileid:profile.id})">{{profile.name || profile.email}}</a></span>
+			<div class="small-4 columns">
+				<span><a ui-sref="admin.user({profileid:profile.id})">{{profile.name || profile.email || 'NO_NAME OR EMAIL'}}</a></span>
 			</div>
-			<div class="small-4 large-4 columns">
+			<div class="small-4 columns">
 				<span>{{displayDate(profile.last_login)}}</span>
 			</div>
-			<div class="small-4 large-4 end columns">
+			<div class="small-4 columns">
 				<span>{{displayDate(profile.createdAt)}}</span>
 			</div>
 		</div>
 	</div>
 </div>
-<div ng-if="yliftProfiles.length">
+<div ng-if="yliftProfiles">
 	<div class="row">
 		<h4>Y LIFT Network Users</h4>
-		<div class="small-4 large-4 columns">
+		<div class="small-4 columns">
 			<strong>Name</strong>
 		</div>
-		<div class="small-4 large-4 columns">
+		<div class="small-4 columns">
 			<strong>Last Login</strong>
 		</div>
-		<div class="small-4 large-4 end columns">
+		<div class="small-4 columns">
 			<strong>Member Since</strong>
 		</div>
 	</div>
 	<div class="row">
 		<div class="info-row" ng-repeat="profile in yliftProfiles">
-			<div class="small-4 large-4 columns">
-				<span><a ui-sref="admin.user({profileid:profile.id})">{{profile.name || profile.email}}</a></span>
+			<div class="small-4 columns">
+				<span><a ui-sref="admin.user({profileid:profile.id})">{{profile.name || profile.email || 'NO_NAME OR EMAIL'}}</a></span>
 			</div>
-			<div class="small-4 large-4 columns">
+			<div class="small-4 columns">
 				<span>{{displayDate(profile.last_login)}}</span>
 			</div>
-			<div class="small-4 large-4 end columns">
+			<div class="small-4 columns">
 				<span>{{displayDate(profile.createdAt)}}</span>
 			</div>
 		</div>
 	</div>
 </div>
-<div ng-hide="profiles.length || error" class="loader locations-loading">Loading...</div>

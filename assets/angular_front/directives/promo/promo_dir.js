@@ -46,10 +46,7 @@ appDirectives.directive('promoDir', ['$window', 'promoService',
 					scope.success = true;
 					scope.error = null;
 				}
-
 				scope.validating = false;
-
-
 			}
 			
 		}

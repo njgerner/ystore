@@ -169,22 +169,21 @@ passport.use('bearer', new BearerStrategy(
 
     //GET /authorized
   ///////////////////////////////////////////////////////////////
-  var authorized = function(req, res){
-    res.type('application/json');
-    delete req.user.hash;
-    delete req.user.salt;
-    orchHelper.findProfileByID(req.user.profile)
+  var authorized = function(req, res, next){
+      delete req.user.hash;
+      delete req.user.salt;
+      orchHelper.getDocFromCollection('local-profiles', req.user.profile)
       .then(function (profile) {
-        orchHelper.findUserByID(req.user.id)
-          .then(function (user) {
-            res.send({user:user, profile:profile, isAdmin:user.isAdmin, isYLIFT:user.isYLIFT}); //eliminate the user doc ASAP
-            profile.last_login = new Date();
-            return orchHelper.updateProfile(profile.id, profile);
+          orchHelper.getDocFromCollection('local-users', req.user.id)
+            .then(function (user) {
+                res.status(200).json({user:user, profile:profile, isAdmin:user.isAdmin, isYLIFT:user.isYLIFT});
+                profile.last_login = new Date();
+                return orchHelper.putDocToCollection('local-profiles', profile.id, profile);
+            })
+            .fail(function (err) {
+                errorHandler.logAndReturn('Error authorizing', 500, next, err, req.user);
+            }).done();
           })
-          .fail(function (err) {
-            errorHandler.logAndReturn('Error authorizing', 500, next, err, req.user);
-          }).done();
-      })
       .fail(function (err) {
         errorHandler.logAndReturn('Error authorizing', 500, next, err, req.user);
       });
@@ -635,6 +634,8 @@ passport.use('bearer', new BearerStrategy(
     // GET ////////////////////////////////////////////////////////////
     app.get('/admin/all_profiles', ensureAuthenticated, adminRoutes.all_profiles);
     app.get('/admin/all_products', ensureAuthenticated, adminRoutes.all_products);
+    app.get('/admin/addresses/:profileid', ensureAuthenticated, adminRoutes.addresses);
+    app.get('/admin/product/:productnumber', ensureAuthenticated, adminRoutes.get_product);
     app.get('/admin/promos', ensureAuthenticated, adminRoutes.get_promos);
     app.get('/admin/profile/:profileid', ensureAuthenticated, adminRoutes.get_profile);
     app.get('/admin/all_merchants', ensureAuthenticated, adminRoutes.all_merchants);
@@ -644,11 +645,16 @@ passport.use('bearer', new BearerStrategy(
     app.post('/admin/add_product', ensureAuthenticated, adminRoutes.add_product);
     app.post('/admin/add_promo', ensureAuthenticated, adminRoutes.add_promo);
     app.post('/admin/delete_promo', ensureAuthenticated, adminRoutes.delete_promo);
+    app.post('/admin/delete_address', ensureAuthenticated, adminRoutes.delete_address);
+    app.post('/admin/email_availability', ensureAuthenticated, adminRoutes.email_availability);
     app.post('/get_merchant_name', ensureAuthenticated, adminRoutes.get_merchant_name);
     app.post('/admin/regkeys', ensureAuthenticated, adminRoutes.get_available_keys);
     app.post('/admin/hash', ensureAuthenticated, adminRoutes.get_hash);
     app.post('/admin/add_regkey', ensureAuthenticated, adminRoutes.add_regkey);
     app.post('/admin/profile/update_merchant', ensureAuthenticated, profileRoutes.update_merchant);
+    app.post('/admin/add_address', ensureAuthenticated, adminRoutes.add_address);
+    app.post('/admin/update_address', ensureAuthenticated, adminRoutes.update_address);
+    app.post('/admin/update_user_profile', ensureAuthenticated, adminRoutes.update_user_profile);
 
     // -- START Booking Routes
     // GET ////////////////////////////////////////////////////////////

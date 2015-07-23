@@ -1,5 +1,5 @@
-appDirectives.directive('productCartDir', [ '$state', '$rootScope', '$window', 'storeService',
-	function($state, $rootScope, $window, storeService) {
+appDirectives.directive('productCartDir', [ '$state', '$rootScope', '$window', 'storeService', 'merchantService',
+	function($state, $rootScope, $window, storeService, merchantService) {
 	return {
 		restrict: 'E',
 		scope: {
@@ -12,6 +12,7 @@ appDirectives.directive('productCartDir', [ '$state', '$rootScope', '$window', '
 
 			scope.product = storeService.productsByID[scope.pn];
 			scope.qty = scope.$parent.productsInCart[scope.ind].quantity;
+			scope.vendornames = {};
 
 			scope.updateQuantity = function(quantity) {
 				scope.$parent.productsInCart[scope.ind].quantity = quantity;
@@ -40,6 +41,12 @@ appDirectives.directive('productCartDir', [ '$state', '$rootScope', '$window', '
 				$state.go('product', {productnumber: scope.product.productnumber});
 				$rootScope.hideCart(function() {});
 			}
+
+			merchantService.getMerchantByID(scope.product.attributes.vendor, function (err, data) {
+				if(!err) {
+					scope.vendorname = data.name;
+				}
+			})
 		}
 	}
 }]);

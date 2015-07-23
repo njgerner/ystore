@@ -7,6 +7,10 @@ trdFactories.factory("toolbelt", ['$rootScope',
     		return moment(date).format('LT');
     	}
 
+    	toolbelt.insertCommasIntoNumber = function (number) {
+    		return number.toString().split( /(?=(?:\d{3})+(?:\.|$))/g ).join( "," );
+    	}
+
     	return toolbelt;
 
 }]);

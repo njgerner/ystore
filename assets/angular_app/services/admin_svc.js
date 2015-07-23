@@ -8,7 +8,7 @@ trdServices.service("adminService", ['$rootScope', '$http', 'authService', 'merc
 
     	this.getProfileByID = function(id, callback) {
     		if(this.profilesByID[id] !== undefined) {
-    			callback(this.profilesByID[id]);
+    			callback(null, this.profilesByID[id]);
     		}else {
     			var inThis = this;
     			$http({method: 'GET', url: '/admin/profile/' + id})
@@ -39,6 +39,23 @@ trdServices.service("adminService", ['$rootScope', '$http', 'authService', 'merc
 	        });
     	};
 
+    	this.getProduct = function(productnumber, callback) {
+    		if(this.productsByProductnumber[productnumber]) {
+    			callback(this.productsByProductnumber[productnumber]);
+    		} else {
+    			var inThis = this;
+    			$http({method: 'GET', url: '/admin/product/' + productnumber})
+		        .success(function (data, status, headers, config) {
+		            callback(null, data.product);
+		            inThis.productsByProductnumber[data.product.productnumber] = data.product;
+		        })
+		        .error(function (data, status, headers, config) {
+		            $log.debug('error getting product', data);
+	            	callback(data.message);
+		        });
+    		}
+    	};
+
     	this.getAllProfiles = function(callback) {
     		var inThis = this;
 	        $http({method: 'GET', url: '/admin/all_profiles'})
@@ -52,7 +69,59 @@ trdServices.service("adminService", ['$rootScope', '$http', 'authService', 'merc
 	            $log.debug('error getting all profiles', data);
             	callback(data.message);
 	        });
-    	}
+    	};
+
+    	this.getAddresses = function(profileid, callback) {
+    		$http({method: 'GET', url: '/admin/addresses/' + profileid})
+	        .success(function (data, status, headers, config) {
+	            callback(null, data.addresses);
+	        })
+	        .error(function (data, status, headers, config) {
+	            $log.debug('error getting addresses', data);
+            	callback(data.message);
+	        });
+    	};
+
+    	this.addAddress = function(address, callback) {
+    		$http({method: 'POST', url: '/admin/add_address/', data: {address:address} })
+	        .success(function (data, status, headers, config) {
+	            callback(null, data.address);
+	        })
+	        .error(function (data, status, headers, config) {
+	            $log.debug('error adding address', data);
+            	callback(data.message);
+	        });
+    	};
+
+    	this.updateAddress = function(address, callback) {
+    		$http({method: 'POST', url: '/admin/update_address/', data: {address:address} })
+	        .success(function (data, status, headers, config) {
+	            if(callback) {
+	            	callback(null, data.address);
+	            }
+	        })
+	        .error(function (data, status, headers, config) {
+	            $log.debug('error updating address', data);
+            	if(callback) {
+            		callback(data.message);
+            	}
+	        });
+    	};
+
+    	this.deleteAddress = function(address, callback) {
+    		$http({method: 'POST', url: '/admin/delete_address/', data: {address:address} })
+	        .success(function (data, status, headers, config) {
+	            if(callback) {
+	            	callback(null, data.success);
+	            }
+	        })
+	        .error(function (data, status, headers, config) {
+	            $log.debug('error deleting address', data);
+            	if(callback) {
+            		callback(data.message);
+            	}
+	        });
+    	};
 
     	this.getAllMerchantProfiles = function(callback) {
     		var inThis = this;
@@ -157,6 +226,22 @@ trdServices.service("adminService", ['$rootScope', '$http', 'authService', 'merc
 	        });
 	    }
 
+	    this.updateUserProfile = function(profile, callback) {
+	    	$http({method: 'POST', url: '/admin/update_user_profile', 
+	               data:{profile:profile}})
+	        .success(function (data, status, headers, config) {
+	            if(callback) {
+	            	callback(null, data.profile);
+	            }
+	        })
+	        .error(function (data, status, headers, config) {
+	            $log.debug('error updating user profile', data);
+	            if(callback) {
+	            	callback(data.message);
+	            }
+	        });
+	    }
+
     	this.addPromoCode = function(promo, callback) {
     		$http({method: 'POST', url: '/admin/add_promo', data: {promo:promo} })
 	        .success(function (data, status, headers, config) {
@@ -191,10 +276,6 @@ trdServices.service("adminService", ['$rootScope', '$http', 'authService', 'merc
     	};
 
     	this.addProduct = function(product, merchant, callback) {
-            if (!authService.isAdmin) {
-                callback('User not authorized to add product');
-                return;
-            }
             $http({method: 'POST', url: "/add_product",
                    data: {product:product, merchant:merchant}})
             .success(function(data, status, headers, config) {
@@ -208,6 +289,18 @@ trdServices.service("adminService", ['$rootScope', '$http', 'authService', 'merc
                     callback(data.message);
                 }
             });
-        }
+        };
+
+        this.checkEmailAvailability = function(email, callback) {
+        	$http({method: 'POST', url: "/admin/email_availability",
+                   data: {email:email} })
+            .success(function(data, status, headers, config) {
+            	callback(null, data);
+            })
+            .error(function(data, status, headers, config) {
+                $log.debug('error checking email availability', data);
+                callback(data.message);
+            });
+        };
 
 }]);
