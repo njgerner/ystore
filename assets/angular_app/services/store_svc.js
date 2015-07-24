@@ -70,6 +70,38 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
             });
     }
 
+    this.getProductsByIDs = function(productnumbers, callback) {
+        if (!Array.isArray(productnumbers)) {
+            productnumbers = [productnumbers];
+        }
+        var products = {};
+        var productsToGet = [];
+        productnumbers.forEach(function (pn, index) {
+            if (this.productsByID[pn] !== undefined) {
+                products[pn] = this.productsByID[pn];
+            } else {
+                productsToGet.push(pn);
+            }
+        });
+        if (productsToGet.length == 0) {
+            callback(null, products);
+        } else {
+            var inThis = this;
+            $http({method: 'POST', url: "/get_products_by_ids", data: {productIDs: productsToGet}})
+                .success(function(data, status, headers, config) {
+                    data.products.forEach(function (product, index) {
+                        inThis.productsByID[product.productnumber] = product;
+                        products[product.productnumber] = product;
+                    });
+                    callback(null, products);
+                })
+                .error(function(data, status, headers, config) {
+                    $log.debug('there was an error getting products by ids', data);
+                    callback(data.message);
+                });
+        }
+    }
+
     this.getRelatedProducts = function(productnumber, callback) {
         if (this.relatedProductsByID[productnumber] !== undefined) {
             callback(null, this.relatedProductsByID[productnumber]);
@@ -143,7 +175,17 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
                 "productnumber": productnumber,
                 "quantity": quantity
             };
-            pInCart.push(pInCartObj);
+            var duplicate = false;
+            for (var i = 0; i < pInCart.length; i++) {
+                if (pInCart[i].productnumber == pInCartObj.productnumber) {
+                    var duplicate = true;
+                    pInCart[i].quantity = parseInt(pInCart[i].quantity) + parseInt(pInCartObj.quantity);
+                }
+            }
+            if (!duplicate) {
+                pInCart.push(pInCartObj);
+            }
+            console.log('guest cart', pInCart, pInCartObj);
             this.updateProductsInCartCookie(pInCart);
             callback(null, null);
         }
@@ -311,7 +353,8 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
         callback(filteredProducts);
     }
 
-    this.updateProductsInCartCookie = function(productsInCart) {        
+    this.updateProductsInCartCookie = function(productsInCart) {  
+        console.log('store svc update pInCartCookie', productsInCart, $cookieStore.get('pInCart'));      
         $cookieStore.put('pInCart', productsInCart || []);
     }
 

@@ -11,15 +11,20 @@ module.exports = function(express, app, __dirname) {
 		errorHandler    = require('../trd_modules/errorHandler.js'),
 		fs 				= require('fs');
 
+	var mailOptions = {
+    	from: process.env.DEFAULT_EMAIL_REPLY_TO
+  	};
+
+	// create reusable transport method (opens pool of SMTP connections)
 	var transport = nodemailer.createTransport({
-	      host:'smtp.office365.com',
-	      secureConnection: true,
-	      port: '587',
-	      auth: {
-	          user: "support@ylift.io",
-	          pass: "Wula9252"
-	      }
-	  });  
+		host:'smtp.office365.com',
+		secureConnection: true,
+		port: '587',
+		auth: {
+			user: process.env.DEFAULT_SUPPORT_EMAIL,
+		  	pass: process.env.SUPPORT_EMAIL_PASSWORD
+		}
+	});  
 
 	//POST /email_support
 	EmailRoutes.support = function(req, res, next) {

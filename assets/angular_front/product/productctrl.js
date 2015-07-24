@@ -8,16 +8,14 @@ superApp.controller('ProductCtrl',
     $scope.reviewsLoading = true;
     $scope.ratingLoading = true;
     $scope.relatedLoading = true;
+    $scope.adding = false;
     $scope.added = false;
     $scope.productnumber = $stateParams.productnumber;
     $scope.error = false;
 
 
-    $scope.itemAdded = function() {
-        $scope.added = true;
-    }
-
     $scope.addToCart = function() {
+        console.log('adding to cart', $scope.product, $scope.quantity);
         if ($scope.quantity <= 0) {
             $scope.error = 'Please select a quantity first';
             return;
@@ -26,11 +24,12 @@ superApp.controller('ProductCtrl',
             $scope.error = 'The quantity entered must be a multiple of ' + $scope.product.attributes.increment;
             return;
         }
+        if ($scope.adding) {
+            return;
+        }
         $scope.error = false;
-        storeService.addItemToCart($scope.profileid, $scope.product.productnumber, $scope.quantity, function() {
-            $scope.itemAdded();
-            $rootScope.showCart(function() {}); // want cart to pop out when item is added
-        });
+        $scope.adding = true;
+        storeService.addItemToCart($scope.profileid, $scope.product.productnumber, $scope.quantity, onItemAdded);
     }
 
     $scope.reset = function() {
@@ -49,6 +48,16 @@ superApp.controller('ProductCtrl',
       } else {
         product.img = "http://placehold.it/475x475&text=[img]";
       }
+    }
+
+    function onItemAdded (error, cart) {
+        if (error) {
+            $scope.error = error;
+        } else {
+            $rootScope.$broadcast('cartviewchange', {displayCart: true}); // want cart to pop out when item is added
+            $scope.adding = false;
+            $scope.added = true;
+        }
     }
 
     function onProductLoaded (error, product) {

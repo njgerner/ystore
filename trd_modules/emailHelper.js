@@ -97,7 +97,7 @@ exports.sendOrdersToMerchants = function(order) {
 	var products = [];
 
 	order.products.forEach(function (product, index) {
-		productPromises.push(orchHelper.getProductByID(product.productnumber));
+		productPromises.push(orchHelper.getDocFromCollection('products', product.productnumber));
 	});
 
 	Q.all(productPromises)
@@ -118,7 +118,7 @@ exports.sendOrdersToMerchants = function(order) {
 		}
 		order.merchants.forEach(function (merchant, index) {
 			var def = Q.defer();
-			orchHelper.getMerchantProfile(merchant)
+			orchHelper.getDocFromCollection('merchant-profiles', merchant)
 			.then(function (profile) {
 				var template_content = [{
 			        "name": "order",
@@ -191,7 +191,7 @@ exports.sendOrdersToTeam = function(order) {
 	var productPromises = [];
 
 	order.products.forEach(function (product, index) {
-		productPromises.push(orchHelper.getProductByID(product.productnumber));
+		productPromises.push(orchHelper.getDocFromCollection('products', product.productnumber));
 	});
 
 	return Q.all(productPromises)

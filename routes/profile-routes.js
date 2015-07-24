@@ -12,14 +12,17 @@ module.exports = function(express, app, __dirname) {
 
 	// GET /profile/get_merchant/:profileid
 	ProfileRoutes.get_merchant = function(req, res, next) {
-	  orchHelper.findMerchantProfile(req.params.profileid)
+		var query = 'value.owner: ' + req.params.profile + ' OR value.members: ' + req.params.profile;
+		var params = { limit: 1 };
+		orchHelper.searchDocsFromCollection('merchant-profiles', query, params)
 	  	.then(function (result) {
-	  		if (result) {
+	  		var profile = result[0];
+	  		if (profile) {
 		  		var isAdmin = false;
-		  		if (result.owner == req.params.profileid) {
+		  		if (profile.owner == req.params.profileid) {
 		  			isAdmin = true;
 		  		}
-		  		res.status(200).json({profile:result, admin:isAdmin});
+		  		res.status(200).json({profile:profile, admin:isAdmin});
 	  		} else {
 	  			errorHandler.logAndReturn('No profile found for account', 404, next, null, [req.params, req.user]);
 	  		}
@@ -31,7 +34,7 @@ module.exports = function(express, app, __dirname) {
 
 	// GET /profile/:profileid
 	ProfileRoutes.get_profile = function(req, res, next) {
-	  orchHelper.getProfile(req.params.profileid)
+		orchHelper.getDocFromCollection('local-profile', req.params.profileid)
 	  	.then(function (result) {
 	  		if (result) {
 		  		res.status(200).json({profile:result});
@@ -46,9 +49,17 @@ module.exports = function(express, app, __dirname) {
 	
 	// POST /profile/update_profile/:profileid
 	ProfileRoutes.update_profile = function(req, res, next) {
-	  orchHelper.updateProfile(req.params.profileid, req.body.profile)
+		if (!req.body.profile) {
+			errorHandler.logAndReturn('Missing update profile request data', 400, next, null, req.body);
+			return;
+		} 
+		if (req.user.profile != req.params.profileid) {
+			errorHandler.logAndReturn('Not authorized to update this profile', 401, next, null, req.body);
+			return;
+		}
+		orchHelper.putDocToCollection('local-profiles', req.params.profileid, req.body.profile)
 	  	.then(function (result) {
-	  		res.status(200).json(result);
+	  		res.status(200).json(req.body.profile);
 	  	})
 	  	.fail(function (err) {
 	  		errorHandler.logAndReturn('Error updating account profile', 500, next, err, [req.params, req.body]);
@@ -75,43 +86,45 @@ module.exports = function(express, app, __dirname) {
 	// POST /profile/update_merchant
 	// POST admin/profile/update_merchant
 	ProfileRoutes.update_merchant = function(req, res, next) {
-	  orchHelper.updateMerchantProfile(req.body.profile)
+		if (!req.body.profile) {
+			errorHandler.logAndReturn('Missing update merchant request data', 400, next, null, req.body);
+			return;
+		} 
+		orchHelper.putDocToCollection('merchant-profiles', req.body.profile.id, req.body.profile)
 	  	.then(function (result) {
-	  		if (result) {
-	  			res.status(200).json({profile:result});
-	  		} else {
-	  			errorHandler.logAndReturn('No merchant profile found to update', 404, next, null, req.body);
-	  		}
+	  		res.status(200).json({profile:req.body.profile});
 	  	})
 	  	.fail(function (err) {
 	  		errorHandler.logAndReturn('Error updating merchant profile', 500, next, err, req.body);
 	  	});
 	};
 
-	// POST /profile/delete_merchant/:profileid
-	ProfileRoutes.delete_merchant = function(req, res, next) {
-		orchHelper.getMerchantProfile(req.params.profileid)
-		.then(function (result) {
-			if (result) {
-				if (result.id == req.body.merchantid && result.owner == req.params.profileid) {
-					orchHelper.deleteMerchantProfile(req.body.merchantid)
-				  	.then(function (result) {
-				  		res.status(200).json({result:"deleted"});
-				  	})
-				  	.fail(function (err) {
-				  		errorHandler.logAndReturn('Error deleting merchant profile', 500, next, err, [req.params, req.body]);
-				  	});
-				} else {
-			  		errorHandler.logAndReturn('Unauthorized to delete merchant account', 401, next, null, [req.params, req.body]);
-				}
-			} else {
-				errorHandler.logAndReturn('No merchant account found to delete', 401, next, null, [req.params, req.body]);
-			}
-		})
-		.fail(function (err) {
-			errorHandler.logAndReturn('Error deleting merchant profile', 500, next, err, [req.params, req.body]);
-		});
-	};
+	// TODO: Add this route functionality
+	// // POST /profile/delete_merchant/:profileid
+	// ProfileRoutes.delete_merchant = function(req, res, next) {
+	// 	orchHelper.getDocFromCollection('merchant-profiles', req.params.profileid)
+	// 	.then(function (result) {
+	// 		if (result) {
+	// 			if (result.id == req.body.merchantid && result.owner == req.params.profileid) {
+	// 				orchHelper.removeDocFromCollection('merchant-profiles', req.body.merchantid)
+	// 				orchHelper.deleteMerchantProfile(req.body.merchantid)
+	// 			  	.then(function (result) {
+	// 			  		res.status(200).json({result:"deleted"});
+	// 			  	})
+	// 			  	.fail(function (err) {
+	// 			  		errorHandler.logAndReturn('Error deleting merchant profile', 500, next, err, [req.params, req.body]);
+	// 			  	});
+	// 			} else {
+	// 		  		errorHandler.logAndReturn('Unauthorized to delete merchant account', 401, next, null, [req.params, req.body]);
+	// 			}
+	// 		} else {
+	// 			errorHandler.logAndReturn('No merchant account found to delete', 401, next, null, [req.params, req.body]);
+	// 		}
+	// 	})
+	// 	.fail(function (err) {
+	// 		errorHandler.logAndReturn('Error deleting merchant profile', 500, next, err, [req.params, req.body]);
+	// 	});
+	// };
 
 	return ProfileRoutes;
 };

@@ -31,6 +31,21 @@ module.exports = function(express, app, __dirname) {
 		});
 	}
 
+	  // GET get_product_by_id/:productnumber
+	ProductRoutes.get_product = function(req, res, next) {
+		orchHelper.getDocFromCollection('products', req.params.productnumber)
+	  	.then(function (result) {
+	    	if (result) {
+	      		res.status(200).json({product: result});
+	    	} else {
+	      		errorHandler.logAndReturn('Not a valid product id', 404, next, null, req.params);
+	    	}
+	  	})
+	  	.fail(function (err) {
+	    	errorHandler.logAndReturn('Error retrieving product by id', 500, next, err, req.params);
+	  	});
+	};
+
 	// GET /product_rating/:productnumber
 	ProductRoutes.get_rating = function(req, res, next) {
 		var pn = req.params.productnumber;
@@ -49,8 +64,9 @@ module.exports = function(express, app, __dirname) {
 
 	// GET /product_reviews/:productnumber
 	ProductRoutes.get_reviews = function(req, res, next) {
-		var pn = req.params.productnumber;
-		orchHelper.getProductReviews(pn)
+		var query = 'value.productnumber: ' + req.params.productnumber;
+		var params = { limit: 50 };
+		orchHelper.searchDocsFromCollection('product-reviews', query, params)
 		.then(function (data) {
 			if (data) {
 				res.status(200).json({data:data});
@@ -109,10 +125,13 @@ module.exports = function(express, app, __dirname) {
 
 	// POST /submit_review
 	ProductRoutes.submit_review = function(req, res, next) {
-		var review = req.body.review;
-		orchHelper.submitReview(review)
+		if (!req.body.review) {
+			errorHandler.logAndReturn('Missing submit review request data', 400, next, null, req.body);
+			return;
+		}
+		orchHelper.postDocToCollection('product-reviews', req.body.review)
 		.then(function (result) {
-	  		res.status(201).json(result);
+	  		res.status(201).json({success:true});
 	  	})
 	  	.fail(function (err) {
 	  		errorHandler.logAndReturn('Error submitting review for product', 500, next, err, req.body);
@@ -121,6 +140,7 @@ module.exports = function(express, app, __dirname) {
 
 	// POST /add_product
 	ProductRoutes.add_product = function(req, res, next) {
+		// TODO: This bitch needs a make over, can't believe all those lines execute and a product is actually added
 		var merchant = req.body.merchant;
 		var key = merchant.name.substr(0, 1).toLowerCase();
 		var product = req.body.product;
@@ -170,7 +190,8 @@ module.exports = function(express, app, __dirname) {
 				"increment": "1",
 				"vendor": merchant.id
 			};
-			return orchHelper.addProduct(product, req.user.profile);
+			product.createdBy = req.user.profile;
+			return orchHelper.putDocToCollection('products', product.id, product).then(function (result) { return product; });
 		})
 		.then(function (result) {
 			res.status(201).json(result);
@@ -182,8 +203,14 @@ module.exports = function(express, app, __dirname) {
 
 	// POST /update_product
 	ProductRoutes.update_product = function(req, res, next) {
+		if (!req.body.product) {
+			errorHandler.logAndReturn('Missing update product request data', 400, next, null, req.body);
+			return;
+		}
 		var product = req.body.product;
-		orchHelper.findMerchantProfile(req.user.profile)
+		var query = 'value.owner: ' + req.user.profile + ' OR value.members: ' + req.user.profile;
+		var params = { limit: 1 };
+		orchHelper.searchDocsFromCollection('merchant-profiles', query, params)
 		.then(function (res) {
 			if (product.tmpImg) {
 				var name = product.productnumber + "." + product.tmpImg.extension;
@@ -199,7 +226,8 @@ module.exports = function(express, app, __dirname) {
 				product.img = img;
 				product.remote_img = 'https://s3.amazonaws.com/'+S3_BUCKET+ '/' + name;
 			}
-			return orchHelper.updateProduct(product, req.user.profile);
+			product.updatedBy = req.user.profile;
+			return orchHelper.putDocToCollection('products', product.id, product).then(function (result) { return product; });
 		})
 		.then(function (result) {
 			res.status(201).json(result);
@@ -211,8 +239,11 @@ module.exports = function(express, app, __dirname) {
 
 	// POST //product_page_view/:productnumber?profile=
 	ProductRoutes.page_view = function(req, res, next) {
+		var profile = 'guest';
+		if (req.params.productnumber !== 'undefined') {
+			profile = req.params.productnumber;
+		}
 		var pn = req.params.productnumber;
-		var profile = req.query.profile || 'guest';
 		orchHelper.addPageView('products', pn, profile)
 		.then(function (result) {
 			res.status(201).json(true);

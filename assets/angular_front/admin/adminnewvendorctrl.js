@@ -12,6 +12,7 @@ superApp.controller('AdminNewVendorCtrl',
     };
 
     $scope.activate = function() {
+      $scope.notify = null;
       if($scope.authorized = false) {
         return;
       }
@@ -20,7 +21,9 @@ superApp.controller('AdminNewVendorCtrl',
           $scope.error = err;
           return;
         }
-        $state.go('admin.new_vendor');
+        $scope.regkey = null;
+        $scope.notify = "Reg key '" + data.key + "' was successfully added.";        
+        $scope.availableKeys.push(data.key);
       });
     };
 

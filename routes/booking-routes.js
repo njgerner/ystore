@@ -56,7 +56,7 @@ module.exports = function(express, app, __dirname) {
 		orchHelper.putDocToCollection('appointments', req.body.appt.id, req.body.appt)
 		.then(function (result) {
 			res.status(201).json({appt:req.body.appt});
-			orchHelper.getDocFromCollection('addresses', req.body.office)
+			orchHelper.getDocFromCollection('addresses', req.body.appt.office)
 			.then(function (office) { emailHelper.sendApptUpdateToPatient(req.body.appt, req.body.patient, office).done(); });
 		})
 		.fail(function (err) {
@@ -65,7 +65,9 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	BookingRoutes.get_patient_appts = function(req, res, next) {
-		orchHelper.findPatientAppts(req.params.patientid)
+		var query = 'value.patient: ' + req.params.profileid + ' AND NOT value.status: \'rejected\'';
+		var params = { limit: 100 };
+		orchHelper.searchDocsFromCollection('appointments', query, params)
 		.then(function (result) {
 			res.status(200).json({appts:result});
 		})

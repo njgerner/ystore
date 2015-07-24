@@ -5,7 +5,6 @@
   <div class="small-6 columns">
     <a class="cart-productname" ng-click="goToProduct()">{{product.name}}</a>
     <br>
-    <!-- <p>By {{vendorname}}</p> -->
   </div>
   <div style="font-size:1.2rem" class="small-2 columns">
     ${{product.price}}
@@ -13,35 +12,12 @@
   <div style="padding:0" class="small-2 columns text-center">
     <div style="font-size:1.2rem">
       <i style="display:inline" ng-show="edit" class="i-minus quantity-change show-for-medium-up left" ng-click="minusOne()"></i>
-      {{qty}} 
+      <span class="animated" ng-class="{'rubberBand': recentChange}">{{item.quantity}}</span> 
       <i ng-show="edit" class="i-plus quantity-change show-for-medium-up right" ng-click="addOne()"></i> 
     </div>
     <br>
-    <a>Remove</a>
+    <a ng-click="remove(ind)">Remove</a>
   </div>
-  <!-- <div style="padding:0" class="small-1 columns">
-    <i ng-show="edit" class="i-delete-garbage-streamline right" ng-click="removeItemFromCart()"></i>
-  </div> -->
 </div>
 
 <hr style="margin-top:5px">
-
-
-
-<!-- <div class="row product">
-  <div class="small-4 large-4 columns product-image pointer">
-    <img ng-if="product.img" class="product-cart-img" ng-src="{{product.img}}" ng-click="goToProduct()" style="width:100%"/>
-  </div>
-  <div class="small-3 large-3 columns" ng-click="goToProduct()"> 
-    <a ng-click="goToProduct()"> {{product.name}} </a>
-  </div>
-  <div class="small-1 large-1 columns">${{product.price}}</div>
-  <div class="small-3 large-3 columns text-right">
-    <i style="padding-left:30%" ng-show="edit" class="i-minus quantity-change show-for-medium-up left" ng-click="minusOne()"></i>
-    {{qty}} 
-    <i style="margin-left:15%" ng-show="edit" class="i-plus quantity-change show-for-medium-up right" ng-click="addOne()"></i> 
-  </div>
-  <div class="small-1 large-1 columns">
-    <i ng-show="edit" class="i-cancel-circled" ng-click="removeItemFromCart()"></i>
-  </div>
-</div>   -->

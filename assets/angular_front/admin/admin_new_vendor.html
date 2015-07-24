@@ -1,4 +1,5 @@
 <div style="padding-left:0;margin-top:20px" class="large-6 large-offset-2 columns text-center">
+	<div ng-if="notify" style="margin-top:1rem;" data-alert class="alert-box info radius"> {{notify}}</div>
 	<h5 style="margin-bottom:10px" ng-if="availableKeys">Currently available registration keys:</h5>
 	<p ng-repeat="key in availableKeys">{{key}}</p>
 	<p ng-if="availableKeys.length == 0">There are no available registration keys at this time.</p>

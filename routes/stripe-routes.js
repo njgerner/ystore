@@ -31,21 +31,25 @@ module.exports = function(express, app, __dirname) {
 				  return new Error(err);
 				});
 			} else {
-				return orchHelper.addCustomer(customer);
+				return orchHelper.putDocToCollection('customers', customer.id, customer).then(function (result) { return customer; });
 			}
 		})
 		.then(function (customer) {
-			return orchHelper.getProfile(profileid)
+			// TODO: Really need an abstracted pathDocFromCollection method
+			return orchHelper.getDocFromCollection('local-profiles', profileid)
 			.then(function (profile) {
-				profile.customerid = customer.id;
-				profile.updatedAt = new Date();
-				return orchHelper.updateProfile(profile.id, profile)
-				.then(function (result) {
-					return customer;
-				})
-				.fail(function (err) {
-					throw new Error(err.body.message);
-				});
+				if (profile) {
+					profile.customerid = customer.id;
+					return orchHelper.putDocToCollection('local-profiles', profile.id, profile)
+					.then(function (result) {
+						return customer;
+					})
+					.fail(function (err) {
+						throw new Error(err.body.message);
+					});
+				} else {
+					errorHandler.logAndReturn('No profile found to add customer to', 404, next, null, [req.body, req.user]);
+				}
 			})
 			.fail(function (err) {
 				throw new Error(err.body.message);
@@ -69,7 +73,8 @@ module.exports = function(express, app, __dirname) {
 				  throw new Error(err);
 				});
 			} else {
-				return orchHelper.addCustomer(customer);
+				return orchHelper.putDocToCollection('customers', customer.id, customer)
+				.then(function (result) { return customer; });
 			}
 		})
 		.then(function (customer) {
@@ -114,7 +119,7 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	StripeRoutes.update_customer = function(req, res, next) {
-		orchHelper.getProfile(req.params.profileid)
+		orchHelper.getDocFromCollection('local-profiles', req.params.profileid)
 			.then(function (profile) {
 				if (profile.customerid == req.body.customer.id) {
 					return true;
@@ -123,7 +128,7 @@ module.exports = function(express, app, __dirname) {
 				}
 			})
 			.then(function (result) {
-				return orchHelper.updateCustomer(req.body.customer);
+				return orchHelper.putDocToCollection('customers', req.body.customer.id, req.body.customer);
 			})
 			.then(function (customer) {
 				res.status(200).json({customer:customer});
@@ -143,9 +148,9 @@ module.exports = function(express, app, __dirname) {
 				errorHandler.logAndReturn('Error updating guest customer, please contact support@ylift.io', 500, next, err);
 				return;
 			}
-			orchHelper.updateCustomer(result)
-			.then(function (customer) {
-				res.status(200).json({customer:customer});
+			orchHelper.putDocToCollection('customers', result.id, result)
+			.then(function (data) {
+				res.status(200).json({customer:result});
 			})
 			.fail(function (err) {
 				errorHandler.logAndReturn('Error updating guest customer', 500, next, err, req.body);
@@ -154,7 +159,7 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	StripeRoutes.get_customer = function(req, res, next) {
-		orchHelper.getCustomer(req.params.customerid)
+		orchHelper.getDocFromCollection('customers', req.params.customerid)
 			.then(function (customer) {
 				if (customer) {
 					res.status(200).json({customer:customer});
@@ -180,7 +185,7 @@ module.exports = function(express, app, __dirname) {
 		var merchants = transaction.merchants;
 		var customer = transaction.customer;
 		var charge = {
-			amount: total * 100, // stripe processes in the smallest denomination so for USD it is cents!!! <-- why was i so excited about this?
+			amount: parseInt(total * 100).toFixed(0), // stripe processes in the smallest denomination so for USD it is cents!!! <-- why was i so excited about this?
 			source: card.id || card,
 			currency: "USD",
 			customer: transaction.customer.id,
@@ -208,7 +213,7 @@ module.exports = function(express, app, __dirname) {
 					status: 'PROCESSING',
 					trackingNum: null
 				};
-				orchHelper.addOrder(order)
+				orchHelper.putDocToCollection('orders', order.id, order)
 				.then(function (result) {
 					// trying to keep this route universal and not all purchases will have a merchant (e.g. ylift registration)
 					if (merchants && merchants.length > 0) {
@@ -219,7 +224,18 @@ module.exports = function(express, app, __dirname) {
 					}
 					// user account purchase
 					if (profileid) {
-						orchHelper.addOrderToUser(profileid, order)
+						orchHelper.getDocFromCollection('user-orders', profileid)
+						.then(function (ordersDoc) {
+							if (ordersDoc && ordersDoc.orders) {
+								ordersDoc.orders.push(order);
+							} else {
+								ordersDoc = {
+									user: profileid,
+									orders: [order]
+								};
+							}
+							return orchHelper.putDocToCollection('user-orders', profileid, ordersDoc);
+						})
 						.then(function (result) {
 							res.status(201).json({order:order, success:result});
 						})

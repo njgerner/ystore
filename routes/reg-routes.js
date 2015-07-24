@@ -11,13 +11,16 @@ module.exports = function(express, app, __dirname) {
 		fs 				= require('fs');
 
 	RegRoutes.verify_key = function(req, res) {
-		var key = req.body.key;
-	  orchHelper.getRegKey(key)
+		if (!req.body.key) {
+			errorHandler.logAndReturn('Missing verify key request data', 400, next, null, req.body);
+			return;
+		}
+		orchHelper.getDocFromCollection('registration-keys', req.body.key)
 	  	.then(function (key) {
 	  		if (key && key.status == "verified" && !key.isActive) {
 	  			res.status(200).json({status:"verified"});
 	  		} else if (key && key.status == "verified" && key.isActive) {
-	  			orchHelper.getMerchantProfile(key.owner)
+	  			orchHelper.getDocFromCollection('merchant-profiles', key.owner)
 	  			.then(function(result) {
 	  				res.status(200).json({status:"can_add", merchant:result});
 	  			}, function (err) {

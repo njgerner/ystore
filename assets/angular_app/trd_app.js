@@ -89,17 +89,18 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
           $rootScope.title = $state.current.title;
       });
 
-      $rootScope.hideCart = function(callback) {
-        $('#cart').foundation('reveal', 'close');
-        this.isVisible = false;
-        callback(this.isVisible);
-      }
+      // $rootScope.hideCart = function(callback) {
+      //   // $('#cart').foundation('reveal', 'close');
+      //   this.isVisible = false;
+      //   callback(this.isVisible);
+      // }
 
-      $rootScope.showCart = function(callback) {
-        $('#cart').foundation('reveal', 'open');
-        this.isVisible = true;
-        callback(this.isVisible);
-      }
+      // $rootScope.showCart = function(callback) {
+      //   console.log('showing cart');
+      //   // $('#cart').foundation('reveal', 'open');
+      //   this.isVisible = true;
+      //   callback(this.isVisible);
+      // }
 
 }]);
 

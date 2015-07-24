@@ -12,13 +12,17 @@ module.exports = function(express, app, __dirname) {
 
 	// POST /user/give_ylift
 	UserRoutes.give_ylift = function(req, res, next) {
-		orchHelper.getOrderByID(req.body.orderid)
+		if (!req.body.orderid) {
+			errorHandler.logAndReturn('Missing switch to y lift request data', 400, next, null, req.body);
+			return;
+		}
+		orchHelper.getDocFromCollection('orders', req.body.orderid)
 		.then(function (order) {
 			if (order.profile != req.user.profile) {
 				throw new Error('Registration order not made by user');
 			} else {
 				req.user.isYLIFT = true;
-				return orchHelper.updateUserDoc(req.user);
+				return orchHelper.putDocToCollection('local-users', req.user.id, req.user);
 			}
 		})
 		.then(function (result) {
@@ -30,18 +34,24 @@ module.exports = function(express, app, __dirname) {
 	  
 	};
 
+	// POST /validate_reset_token
 	UserRoutes.validate_reset_token = function(req, res, next) {
-    orchHelper.validateResetToken(req.body.token)
-	    .then(function (valid) {
-	    	if(valid) {
-	    		res.send({valid:true});
-	    	}else {
+		if (!req.body.token) {
+			errorHandler.logAndReturn('Missing validate reset token request data', 400, next, null, req.body);
+			return;
+		}
+		orchHelper.getDocFromCollection('reset-tokens', req.body.token)
+	    .then(function (token) {
+    		var now = new Date();
+    		if (Date.parse(token.createdAt) + 86400000 < Date.parse(now)) {
 	    		res.send({valid:false});
-	    	}
+    		} else {
+	    		res.send({valid:true});
+    		}
 	    })
 	    .fail(function (err) {
 	    	errorHandler.logAndReturn('Error validating reset token', 500, next, err, req.body);
-	    });
+	    }).done();
   	};
 
 	return UserRoutes;

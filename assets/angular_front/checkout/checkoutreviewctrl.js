@@ -16,7 +16,8 @@ superApp.controller('CheckoutReviewCtrl',
 
 	$scope.formatValue = function (value) {
 		if (value) {
-      		return "$" + toolbelt.insertCommasIntoNumber(value);
+			var fixed = parseInt(value).toFixed(2);
+      		return "$" + toolbelt.insertCommasIntoNumber(fixed);
 		} else {
 			return "";
 		}
