@@ -6,7 +6,8 @@ appDirectives.directive('productCartDir', [ '$state', '$rootScope', '$window', '
 			product: '=',
 			item: '=',
 			ind: '=',
-			edit: '='
+			edit: '=',
+			remove: '='
 		},
 		templateUrl: 'directives/product_cart_template.html',
 		link: function(scope, element) {
@@ -36,13 +37,9 @@ appDirectives.directive('productCartDir', [ '$state', '$rootScope', '$window', '
 	                    scope.recentChange = false;
 	                }, 1000);
 				} else {
-					scope.removeItemFromCart();
+					scope.remove(scope.ind);
 				}
 				scope.$parent.updateTotalAndPersist();
-			} 
-
-			scope.removeItemFromCart = function() {
-				scope.$parent.removeItemFromCart(scope.ind);
 			} 
 
 			scope.goToProduct = function() {

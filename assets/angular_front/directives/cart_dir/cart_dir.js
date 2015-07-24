@@ -40,15 +40,17 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 			scope.updateTotal = function() {
 				scope.cartTotal = 0;
 				for (var i = 0; i < scope.productsInCart.length; i++) {
-  					parseInt( scope.cartTotal += scope.products[scope.productsInCart[i].productnumber].price * scope.productsInCart[i].quantity ).toFixed(2);
+  					scope.cartTotal += parseInt(scope.products[scope.productsInCart[i].productnumber].price) * parseInt(scope.productsInCart[i].quantity);
   				}
+  				scope.cartTotal = parseInt(scope.cartTotal).toFixed(2);
 			}
 
 			scope.updateTotalAndPersist = function() {
 				scope.cartTotal = 0;
 				for (var i = 0; i < scope.productsInCart.length; i++) {
-  					parseInt( scope.cartTotal += scope.products[scope.productsInCart[i].productnumber].price * scope.productsInCart[i].quantity ).toFixed(2);
+  					scope.cartTotal += parseInt(scope.products[scope.productsInCart[i].productnumber].price) * parseInt(scope.productsInCart[i].quantity);
   				}
+  				scope.cartTotal = parseInt(scope.cartTotal).toFixed(2);
   				scope.persistCartItems();
 			}
 
@@ -58,7 +60,6 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 			}
 
 	  		function onProductsLoaded (error, products) {
-	  			console.log('onProductsLoaded', error, products, storeService.productsByID, scope.productsInCart);
 	  			scope.products = storeService.productsByID;
 	  			if (scope.productsInCart.length > 0) {
 	  				scope.updateTotal();
@@ -67,9 +68,7 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 	  		}
 
 	  		function onProductsInCartReceived (error, products) {
-	  			console.log('onProductsInCartReceived', error, products);
 	  			scope.productsInCart = products;
-				console.log('storeService.productsReceived', storeService.productsReceived);
 				if (storeService.productsReceived) {
 					onProductsLoaded(null, storeService.products);
 				} else {
@@ -79,9 +78,7 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 
 	  		cartWatch = scope.$watch(function() { return $cookies.pInCart; },
 	  			function (newValue, oldValue) {
-	  				console.log('cart watch new/old', newValue, oldValue, newValue.length, scope.productsInCart.length);
 	  				if (newValue && newValue != oldValue) {
-	  					console.log('CART WATCH DIFFERENT', newValue, oldValue, scope.productsInCart);
 	  					scope.productsInCart = $cookieStore.get('pInCart');
 	  					scope.updateTotal();
 	  				}
