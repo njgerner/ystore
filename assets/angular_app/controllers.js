@@ -11,6 +11,8 @@ superApp.controller('MainCtrl',
   function($rootScope, $scope, $window, $location, $cookies, $state, authService, trdInterceptor, 
     stripeService) {
 
+    $scope.cartAnimation = '';
+
     $scope.handleLoaded = function() {
       $scope.loaded = true;
       console.log('HANDLE LOADED', $scope.loaded, $scope.displayCart);
@@ -22,24 +24,30 @@ superApp.controller('MainCtrl',
     $scope.closeCart = function() {
       console.log('CLOSE CART', $scope.displayCart);
       $scope.displayCart = false;
+      $scope.cartAnimation = 'fadeOutUp';
       console.log('past closeCart', $scope.displayCart);
     };
 
     $scope.handleViewClick = function() {
-      $scope.displayCart = false;
+      console.log('handle view click');
+      if ($scope.displayCart) {
+        $scope.displayCart = false;
+        $scope.cartAnimation = 'fadeOutUp';
+      }
     }
 
     $scope.getCartAnimateClass = function() {
-      if ($scope.displayCart) {
-        return 'fadeInDown';
-      } else if ($scope.displayCart === false) { // this prevents the cart from fading out up on app start up when displayCart === undefined
-        return 'fadeOutUp';
-      }
+      return $scope.cartAnimation;
     }
 
     $rootScope.$on('cartviewchange', function(evt, args) { // this is really important don't delete
       console.log('on cartviewchange', args);
       $scope.displayCart = args.displayCart;
+      if ($scope.displayCart) {
+        $scope.cartAnimation = 'fadeInDown';
+      } else {
+        $scope.cartAnimation = 'fadeOutUp';
+      }
     });
 
     $scope.$on('loggedin', function(evt, args) {

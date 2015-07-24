@@ -16,7 +16,8 @@ superApp.controller('CheckoutReviewCtrl',
 
 	$scope.formatValue = function (value) {
 		if (value) {
-      		return "$" + value.toString().split( /(?=(?:\d{3})+(?:\.|$))/g ).join( "," );
+			var fixed = parseInt(value).toFixed(2);
+      		return "$" + fixed.toString().split( /(?=(?:\d{3})+(?:\.|$))/g ).join( "," );
 		} else {
 			return "";
 		}
