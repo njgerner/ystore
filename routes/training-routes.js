@@ -48,19 +48,19 @@ module.exports = function(express, app, __dirname) {
 
 	// POST /training_materials
 	TrainingRoutes.get_materials = function(req, res, next) {
-		var query = 'value.profile:' + req.params.profileid;
-      	var params = { limit: 20 };
-		orchHelper.searchDocsFromCollection('training-dates', query, params)
-		.then(function (result) {
-			if (result) {
-				res.status(200).json({dates:result});
-			} else {
-				errorHandler.logAndReturn('No training dates found', 404, next);
-			}
-		})
-	  	.fail(function (err) {
-	  		errorHandler.logAndReturn('Error getting training dates', 500, next, err);
-	  	}).done();
+		// var query = 'value.profile:' + req.params.profileid;
+  //     	var params = { limit: 20 };
+		// orchHelper.searchDocsFromCollection('training-dates', query, params)
+		// .then(function (result) {
+		// 	if (result) {
+		// 		res.status(200).json({dates:result});
+		// 	} else {
+		// 		errorHandler.logAndReturn('No training dates found', 404, next);
+		// 	}
+		// })
+	 //  	.fail(function (err) {
+	 //  		errorHandler.logAndReturn('Error getting training dates', 500, next, err);
+	 //  	}).done();
 	  
 	};
 

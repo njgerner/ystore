@@ -56,7 +56,6 @@ superApp.controller('ProfileCtrl',
 
     function onTrainingsLoaded (error, trainings) {
       if (trainings) {
-        console.log('trainings loaded', trainings);
         $scope.trainings = trainings;
       }
     }
