@@ -133,12 +133,14 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
     .state('admin.user', {
       url: "/user/:profileid",
       templateUrl: "/partials/admin_user.html",
-      controller: "AdminUserCtrl"
+      controller: "AdminUserCtrl",
+      title: "Inspect User"
     })
     .state('admin.promo', {
       url: "/promo",
       templateUrl: "/partials/admin_promo.html",
-      controller: "AdminPromoCtrl"
+      controller: "AdminPromoCtrl",
+      title: "Promo Codes"
     })
     .state('admin.orders', {
       url: "/orders",
@@ -155,17 +157,20 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
     .state('admin.vendors', {
       url: "/vendors",
       templateUrl: "/partials/admin_vendors.html",
-      controller: "AdminVendorsCtrl"
+      controller: "AdminVendorsCtrl",
+      title: "Admin Vendors"
     })
     .state('admin.vendor', {
       url: "/vendor/:merchantid",
       templateUrl: "/partials/admin_vendor.html",
-      controller: "AdminVendorCtrl"
+      controller: "AdminVendorCtrl",
+      title: "Admin Vendor"
     })
     .state('admin.new_vendor', {
       url: "/vendors/add",
       templateUrl: "/partials/admin_new_vendor.html",
-      controller: "AdminNewVendorCtrl"
+      controller: "AdminNewVendorCtrl",
+      title: "New Vendor"
     })
     .state('admin.products', {
       url: "/products/",
@@ -182,7 +187,8 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
     .state('admin.addproduct', {
       url: "/add_product",
       templateUrl: "/partials/admin_new_product.html",
-      controller: "AdminNewProductCtrl"
+      controller: "AdminNewProductCtrl",
+      title: "Add Product"
     })
     .state('admin.metrics', {
       url: "/metrics",
@@ -318,7 +324,7 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       url:"/sell_info",
       templateUrl: "/partials/sell_with_us.html",
       controller: "SellInfoCtrl",
-      title: "Sell with Y Lift"
+      title: "Sell with Y LIFT"
     })
     .state('about', {
       url:"/about",

@@ -1,6 +1,7 @@
 .side-nav {
 	&.admin {
 		background-color: $white;
+		padding:0;
 	}
 }
 
@@ -33,4 +34,22 @@
 	float:left;
 	margin-right:5px!important;
 	margin-top:5px!important;
+}
+
+.address-row {
+	padding-left:0;
+	padding-right:0;
+	margin-top:5px;
+	margin-bottom:5px;
+}
+
+.admin-user-header { 
+	h4 {
+		text-decoration:underline;
+		i {
+			position:relative;
+			bottom:-3px;
+			cursor:pointer;
+		}
+	}
 }

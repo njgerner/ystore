@@ -23,6 +23,7 @@ superApp.controller('AdminProductsCtrl',
           });
         }
       }
+      $scope.$parent.vendornames = $scope.vendornames;
     });
 
     $scope.editProduct = function(productnumber, attribute) {

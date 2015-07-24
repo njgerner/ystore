@@ -1,5 +1,5 @@
-appDirectives.directive('productCartDir', [ '$state', '$rootScope', '$window', 'storeService', '$timeout',
-	function($state, $rootScope, $window, storeService, $timeout) {
+appDirectives.directive('productCartDir', [ '$state', '$rootScope', '$window', 'storeService', '$timeout', 'merchantService',
+	function($state, $rootScope, $window, storeService, $timeout, merchantService) {
 	return {
 		restrict: 'E',
 		scope: {
@@ -12,6 +12,7 @@ appDirectives.directive('productCartDir', [ '$state', '$rootScope', '$window', '
 		link: function(scope, element) {
 
 			scope.recentChange = false;
+			scope.vendornames = {};
 
 			scope.updateQuantity = function(quantity) {
 				scope.item.quantity = quantity;
@@ -48,6 +49,12 @@ appDirectives.directive('productCartDir', [ '$state', '$rootScope', '$window', '
 				$state.go('product', {productnumber: scope.product.productnumber});
 				$rootScope.$broadcast('cartviewchange', {displayCart: false});
 			}
+
+			merchantService.getMerchantByID(scope.product.attributes.vendor, function (err, data) {
+				if(!err) {
+					scope.vendorname = data.name;
+				}
+			})
 		}
 	}
 }]);

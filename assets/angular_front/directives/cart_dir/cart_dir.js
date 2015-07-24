@@ -30,10 +30,6 @@ appDirectives.directive('cartDir', [ 'authService', '$state', '$rootScope', '$co
 				}
 				storeService.updateCart(authService.profileid, productnumbers, quantities);
 			}
-			
-			scope.hide = function() {
-				$rootScope.hideCart(function() {});
-			}
 
 			scope.removeItemFromCart = function(index) {
 				scope.productsInCart.splice(index, 1);

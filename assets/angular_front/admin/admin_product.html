@@ -23,6 +23,12 @@
 	    <!-- Edit name -->
 	    <h4>{{product.name}}<small ng-click="mode = 'edit'; message = '';" class="right"><i class="i-pencil"></i>Edit</small></h4>
 	    <input ng-show="mode == 'edit'" type="text" ng-model="product.name"/>
+	    <label>Vendor
+	    	<p ng-show="mode == 'view'">{{vendornames[product.attributes.vendor]}}</p>
+	        <select ng-show="mode == 'edit'" ng-model="vendor"/>
+	        	<option ng-repeat="merchant in merchantProfiles" value="merchant.id" ng-model="vendor">{{merchant.name}}</option>
+	        </select>
+	    </label>
 	    <!-- Edit category -->
 	    <label>Category</label>
 	    <p ng-hide="mode == 'edit'">{{product.category}}</p>
