@@ -16,6 +16,12 @@
 	
 }
 
+.training-title {
+	color: $ylift;
+	font-size: 80%;
+	float: left;
+}
+
 #profile-orders {
 	margin-right:auto;
 	margin-left:auto;
@@ -23,7 +29,7 @@
 	width:85%;
 }
 
-#profile-address {
+.profile-address {
 	margin-bottom:5px;
 	text-decoration:underline;
 	margin-top:10px;

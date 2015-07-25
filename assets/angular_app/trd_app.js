@@ -463,7 +463,7 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       controller: "SettingsMerchantCtrl"
     })
     .state('support', {
-      url:"/support",
+      url:"/support?topic&orderid",
       templateUrl: "/partials/support.html",
       controller: "SupportCtrl",
       title: "Support"
