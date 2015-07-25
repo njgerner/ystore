@@ -1,45 +1,57 @@
-appDirectives.directive('productCartDir', [ '$state', '$rootScope', '$window', 'storeService',
-	function($state, $rootScope, $window, storeService) {
+appDirectives.directive('productCartDir', [ '$state', '$rootScope', '$window', 'storeService', '$timeout', 'merchantService',
+	function($state, $rootScope, $window, storeService, $timeout, merchantService) {
 	return {
 		restrict: 'E',
 		scope: {
+			product: '=',
+			item: '=',
 			ind: '=',
-			pn: '=',
-			edit: '='
+			edit: '=',
+			remove: '='
 		},
 		templateUrl: 'directives/product_cart_template.html',
 		link: function(scope, element) {
 
-			scope.product = storeService.productsByID[scope.pn];
-			scope.qty = scope.$parent.productsInCart[scope.ind].quantity;
+			scope.recentChange = false;
+			scope.vendornames = {};
 
 			scope.updateQuantity = function(quantity) {
-				scope.$parent.productsInCart[scope.ind].quantity = quantity;
-				scope.$parent.updateTotal();
+				scope.item.quantity = quantity;
+				scope.$parent.updateTotalAndPersist();
 			}
 
 			scope.addOne = function() {
-				scope.$parent.productsInCart[scope.ind].quantity++;
-				scope.$parent.updateTotal();
+				scope.item.quantity++;
+				scope.$parent.updateTotalAndPersist();
+				scope.recentChange = true;
+                $timeout(function() {
+                    scope.recentChange = false;
+                }, 1000);
 			} 
 
 			scope.minusOne = function() {
-				if (scope.$parent.productsInCart[scope.ind].quantity > 0) {
-					scope.$parent.productsInCart[scope.ind].quantity--;
+				if (scope.item.quantity > 0) {
+					scope.item.quantity--;
+					scope.recentChange = true;
+	                $timeout(function() {
+	                    scope.recentChange = false;
+	                }, 1000);
 				} else {
-					scope.removeItemFromCart();
+					scope.remove(scope.ind);
 				}
-				scope.$parent.updateTotal();
+				scope.$parent.updateTotalAndPersist();
 			} 
-
-			scope.removeItemFromCart = function() {
-				scope.$parent.removeItemFromCart();
-			}
 
 			scope.goToProduct = function() {
 				$state.go('product', {productnumber: scope.product.productnumber});
-				$rootScope.hideCart(function() {});
+				$rootScope.$broadcast('cartviewchange', {displayCart: false});
 			}
+
+			merchantService.getMerchantByID(scope.product.attributes.vendor, function (err, data) {
+				if(!err) {
+					scope.vendorname = data.name;
+				}
+			})
 		}
 	}
 }]);

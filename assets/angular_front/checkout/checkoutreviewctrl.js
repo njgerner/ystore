@@ -1,6 +1,6 @@
 superApp.controller('CheckoutReviewCtrl',
-  ['$rootScope', '$scope', '$state', '$stateParams', 'storeService', 'authService', 'stripeService',
-  function($rootScope, $scope, $state, $stateParams, storeService, authService, stripeService) {
+  ['$rootScope', '$scope', '$state', '$stateParams', 'toolbelt', 'storeService', 'authService', 'stripeService',
+  function($rootScope, $scope, $state, $stateParams, toolbelt, storeService, authService, stripeService) {
 
   	$scope.emailEntered = false;
 	$scope.showItems = false;
@@ -16,7 +16,8 @@ superApp.controller('CheckoutReviewCtrl',
 
 	$scope.formatValue = function (value) {
 		if (value) {
-      		return "$" + value.toString().split( /(?=(?:\d{3})+(?:\.|$))/g ).join( "," );
+			var fixed = parseInt(value).toFixed(2);
+      		return "$" + toolbelt.insertCommasIntoNumber(fixed);
 		} else {
 			return "";
 		}

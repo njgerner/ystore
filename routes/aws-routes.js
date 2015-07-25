@@ -39,5 +39,34 @@ module.exports = function(express, app, __dirname) {
 	    });
 	};
 
+	AWSRoutes.get_object = function(req, res, next) {
+		if (!req.body.file_name) {
+			errorHandler.logAndReturn('Missing request data', 400, next, null, req.body);
+			return;
+		}
+		aws.config.update({accessKeyId: AWS_ACCESS_KEY, secretAccessKey: AWS_SECRET_KEY});
+	    var s3 = new aws.S3();
+	    var s3_params = {
+	        Bucket: S3_BUCKET,
+	        Key: req.body.file_name
+	    };
+	    var file = fs.createWriteStream(process.env.TMPDIR + '/' + req.body.file_name);
+	    s3.getObject(s3_params)
+	    .on('httpData', function(chunk) { 
+	    	file.write(chunk); 
+	    })
+	    .on('httpDone', function () { 
+	    	file.end();
+	    	res.download(process.env.TMPDIR + '/' + req.body.file_name, function (err) {
+	    		if (err) {
+	    			errorHandler.logAndReturn('Error downloading the object', 500, next, err, [req.body, req.user]);
+	    		} else {
+	    			res.status(200).json({success:true});
+	    		}
+	    	});
+	    })
+	    .send();
+	};
+
 	return AWSRoutes;
 };

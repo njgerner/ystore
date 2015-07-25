@@ -1,12 +1,16 @@
 superApp.controller('SupportCtrl',
-  ['$rootScope', '$scope', 'emailService', 'authService',
-  function($rootScope, $scope, emailService, authService) {
+  ['$rootScope', '$scope', 'emailService', 'authService', '$stateParams',
+  function($rootScope, $scope, emailService, authService, $stateParams) {
 
   	$scope.submitted = false;
 
   	if (authService.authorized) {
   		$scope.email = authService.profile.email;
   	} 
+
+    if ($stateParams.topic) {
+      $scope.topic = $stateParams.topic;
+    }
   	
   	$scope.sendRequest = function() {
   		if ($scope.email == null) {

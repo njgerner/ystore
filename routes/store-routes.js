@@ -172,13 +172,34 @@ module.exports = function(express, app, __dirname) {
 		}
 	};
 
-	  // GET get_products_by_category
+	  // POST get_products_by_category
 	StoreRoutes.get_products_by_category = function(req, res, next) {
 		if (!req.body.category) {
 			errorHandler.logAndReturn('Missing product category to filter by', 400, next, null, req.body);
 			return;
 		}
 		var query = 'value.category: ' + req.body.category + ' AND value.active: "Y"';
+		var params = { limit: 100 };
+		orchHelper.searchDocsFromCollection('products', query, params)
+		.then(function (result) {
+			if (result) {
+		    	res.status(200).json({products: result});
+		    } else {
+		      	errorHandler.logAndReturn('No products found for this category', 404, next, null, req.body);
+		    }
+		  })
+		.fail(function (err) {
+		  	errorHandler.logAndReturn('Error retrieving products by category', 500, next, err, req.body);
+		});
+	};
+
+	// POST get_products_by_ids
+	StoreRoutes.get_products_by_ids = function(req, res, next) {
+		if (!req.body.productIDs) {
+			errorHandler.logAndReturn('Missing product ids to search for', 400, next, null, req.body);
+			return;
+		}
+		var query = 'value.id: ' + req.body.productIDs.join(" ");
 		var params = { limit: 100 };
 		orchHelper.searchDocsFromCollection('products', query, params)
 		.then(function (result) {
@@ -272,10 +293,10 @@ module.exports = function(express, app, __dirname) {
 		.then(function (cart) {
 			if (cart) {
     			cart.products = [];
-				productnumbers.forEach(function (product, index) {
+				req.body.productnumbers.forEach(function (pn, index) {
 					cart.products.push({
-						productnumber: product.productnumber,
-        				quantity: quantities[index]
+						productnumber: pn,
+        				quantity: req.body.quantities[index]
 					});
 				});
 				cart.status = "active";

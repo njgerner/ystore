@@ -115,10 +115,6 @@ superApp.controller('SettingsProfileCtrl',
       $scope.addAddressView = true;
     };
 
-    $scope.toggleShowAddress = function() {
-      $scope.editAddressView = !$scope.editAddressView;
-    };
-
     $scope.cancel = function() {
       $scope.editAddressView = false;
       $scope.addAddressView = false;

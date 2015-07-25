@@ -89,17 +89,18 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
           $rootScope.title = $state.current.title;
       });
 
-      $rootScope.hideCart = function(callback) {
-        $('#cart').foundation('reveal', 'close');
-        this.isVisible = false;
-        callback(this.isVisible);
-      }
+      // $rootScope.hideCart = function(callback) {
+      //   // $('#cart').foundation('reveal', 'close');
+      //   this.isVisible = false;
+      //   callback(this.isVisible);
+      // }
 
-      $rootScope.showCart = function(callback) {
-        $('#cart').foundation('reveal', 'open');
-        this.isVisible = true;
-        callback(this.isVisible);
-      }
+      // $rootScope.showCart = function(callback) {
+      //   console.log('showing cart');
+      //   // $('#cart').foundation('reveal', 'open');
+      //   this.isVisible = true;
+      //   callback(this.isVisible);
+      // }
 
 }]);
 
@@ -132,12 +133,14 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
     .state('admin.user', {
       url: "/user/:profileid",
       templateUrl: "/partials/admin_user.html",
-      controller: "AdminUserCtrl"
+      controller: "AdminUserCtrl",
+      title: "Inspect User"
     })
     .state('admin.promo', {
       url: "/promo",
       templateUrl: "/partials/admin_promo.html",
-      controller: "AdminPromoCtrl"
+      controller: "AdminPromoCtrl",
+      title: "Promo Codes"
     })
     .state('admin.orders', {
       url: "/orders",
@@ -154,17 +157,20 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
     .state('admin.vendors', {
       url: "/vendors",
       templateUrl: "/partials/admin_vendors.html",
-      controller: "AdminVendorsCtrl"
+      controller: "AdminVendorsCtrl",
+      title: "Admin Vendors"
     })
     .state('admin.vendor', {
       url: "/vendor/:merchantid",
       templateUrl: "/partials/admin_vendor.html",
-      controller: "AdminVendorCtrl"
+      controller: "AdminVendorCtrl",
+      title: "Admin Vendor"
     })
     .state('admin.new_vendor', {
       url: "/vendors/add",
       templateUrl: "/partials/admin_new_vendor.html",
-      controller: "AdminNewVendorCtrl"
+      controller: "AdminNewVendorCtrl",
+      title: "New Vendor"
     })
     .state('admin.products', {
       url: "/products/",
@@ -181,7 +187,8 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
     .state('admin.addproduct', {
       url: "/add-product",
       templateUrl: "/partials/admin_new_product.html",
-      controller: "AdminNewProductCtrl"
+      controller: "AdminNewProductCtrl",
+      title: "Add Product"
     })
     .state('admin.metrics', {
       url: "/metrics",
@@ -317,7 +324,7 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       url:"/sell-info",
       templateUrl: "/partials/sell_with_us.html",
       controller: "SellInfoCtrl",
-      title: "Sell with Y Lift"
+      title: "Sell with Y LIFT"
     })
     .state('about', {
       url:"/about",
@@ -334,11 +341,13 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       parent: 'techniques',
       url:"/y-lift",
       templateUrl: "/partials/techniques_ylift.html",
+      title: "Techniques: Y LIFT"
     })
     .state('techniques.yeye', {
       parent: 'techniques',
       url:"/y-eye",
       templateUrl: "/partials/techniques_yeye.html",
+      title: "Techniques: Y EYE"
     })
     .state('techniques.botox', {
       parent: 'techniques',
@@ -454,7 +463,7 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       controller: "SettingsMerchantCtrl"
     })
     .state('support', {
-      url:"/support",
+      url:"/support?topic&orderid",
       templateUrl: "/partials/support.html",
       controller: "SupportCtrl",
       title: "Support"

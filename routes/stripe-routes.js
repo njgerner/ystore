@@ -185,7 +185,7 @@ module.exports = function(express, app, __dirname) {
 		var merchants = transaction.merchants;
 		var customer = transaction.customer;
 		var charge = {
-			amount: total * 100, // stripe processes in the smallest denomination so for USD it is cents!!! <-- why was i so excited about this?
+			amount: parseInt(total * 100).toFixed(0), // stripe processes in the smallest denomination so for USD it is cents!!! <-- why was i so excited about this?
 			source: card.id || card,
 			currency: "USD",
 			customer: transaction.customer.id,
@@ -226,7 +226,6 @@ module.exports = function(express, app, __dirname) {
 					if (profileid) {
 						orchHelper.getDocFromCollection('user-orders', profileid)
 						.then(function (ordersDoc) {
-							console.log('ordersDoc', ordersDoc);
 							if (ordersDoc && ordersDoc.orders) {
 								ordersDoc.orders.push(order);
 							} else {

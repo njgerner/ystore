@@ -15,6 +15,7 @@ superApp.controller('ProductCtrl',
 
 
     $scope.addToCart = function() {
+        console.log('adding to cart', $scope.product, $scope.quantity);
         if ($scope.quantity <= 0) {
             $scope.error = 'Please select a quantity first';
             return;
@@ -53,7 +54,7 @@ superApp.controller('ProductCtrl',
         if (error) {
             $scope.error = error;
         } else {
-            $rootScope.showCart(function() {}); // want cart to pop out when item is added
+            $rootScope.$broadcast('cartviewchange', {displayCart: true}); // want cart to pop out when item is added
             $scope.adding = false;
             $scope.added = true;
         }

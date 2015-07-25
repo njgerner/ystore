@@ -212,7 +212,6 @@ exports.listDocsFromCollection = function(collection, params) {
   var deferred = Q.defer();
   db.list(collection, params)
   .then(function (result){
-    console.log('listing docs from collection', rawDogger.push_values_to_top(result.body.results));
     deferred.resolve(rawDogger.push_values_to_top(result.body.results));
   })
   .fail(function (err) {

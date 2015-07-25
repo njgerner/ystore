@@ -153,11 +153,14 @@ module.exports = function(express, app, __dirname) {
     app.get('/admin/all_orders', ensureAuthenticated, adminRoutes.all_orders);
     app.get('/admin/all_ylift_profiles', ensureAuthenticated, adminRoutes.all_ylift_profiles);
     // POST ////////////////////////////////////////////////////////////
+    app.post('/admin/add_address', ensureAuthenticated, adminRoutes.add_address);
     app.post('/admin/add_promo', ensureAuthenticated, adminRoutes.add_promo);
     app.post('/admin/delete_promo', ensureAuthenticated, adminRoutes.delete_promo);
     app.post('/admin/regkeys', ensureAuthenticated, adminRoutes.get_available_keys);
     app.post('/admin/hash', ensureAuthenticated, adminRoutes.get_hash);
     app.post('/admin/add_regkey', ensureAuthenticated, adminRoutes.add_regkey);
+    app.post('/admin/update_address', ensureAuthenticated, adminRoutes.update_address);
+    app.post('/admin/update_user_profile', ensureAuthenticated, adminRoutes.update_user_profile);
     app.post('/admin/profile/update_merchant', ensureAuthenticated, profileRoutes.update_merchant);
     // MIDDLEWARE //////////////////////////////////////////////////////
     app.use('/admin', ensureAuthenticated); // ensure that we're authenticated and have a user
@@ -191,6 +194,7 @@ module.exports = function(express, app, __dirname) {
     // GET /////////////////////////////////////////////////////////////
     app.get('/sign_s3', awsRoutes.sign_s3);
     // POST ////////////////////////////////////////////////////////////
+    app.post('/get_object', ensureAuthenticated, awsRoutes.get_object);
     ////////////////////////////////////////////////////////////////////
 
     // BOOKING ROUTES
@@ -275,7 +279,8 @@ module.exports = function(express, app, __dirname) {
     app.post('/add_item_to_cart', ensureAuthenticated, storeRoutes.add_item_to_cart);
     app.post('/add_check_order', storeRoutes.create_check_order);
     app.post('/empty_cart', storeRoutes.empty_cart);
-    app.post('/get_products_by_category/:category', storeRoutes.get_products_by_category);
+    app.post('/get_products_by_category', storeRoutes.get_products_by_category);
+    app.post('/get_products_by_ids', storeRoutes.get_products_by_ids);
     app.post('/store', storeRoutes.get_storefront);
     app.post('/update_cart', ensureAuthenticated, storeRoutes.update_cart);
     app.post('/update_order', ensureAuthenticated, storeRoutes.update_order);
@@ -297,6 +302,7 @@ module.exports = function(express, app, __dirname) {
     // TRAINING ROUTES
     // GET /////////////////////////////////////////////////////////////
     app.get('/training_dates', trainingRoutes.get_dates);
+    app.get('/training_dates/:profileid', ensureAuthenticated, trainingRoutes.get_dates_by_profile);
     // POST ////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////
 

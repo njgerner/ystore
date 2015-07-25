@@ -1,17 +1,9 @@
-<!-- <div class="text-center profile-header">
-  <h2>{{profile.name}}</h2>
-  <h4>{{profile.email}}</h4>
-</div> -->
-
-
-  <!-- Personal Info -->
+ <!-- Personal Info -->
   <div style="margin-top:30px" class="small-12 large-6 large-offset-3 columns">
-    <div class="panel">
+    <div class="card">
         <div class="row">
-          <div>
-              <h3>My Info<a ui-sref="settings.profile"><small style="margin-left:10px;">Edit</small></a></h3>
-              <error-dir msg="{{error}}"></error-dir>
-          </div>
+          <h4>My Info<a ui-sref="settings.profile"><small style="margin-left:10px;">Edit</small></a></h4>
+          <!-- <error-dir msg="{{error}}"></error-dir> -->
           <hr>
         </div>  
         <div class="row">
@@ -20,13 +12,13 @@
             <p>{{profile.name}}</p>
             <strong>Email</strong> 
             <p>{{profile.email}}</p>
-            <strong>Member since  </strong> 
+            <strong>Member Since  </strong> 
             <p> {{createdAt}} </p>
           </div> 
           <div class="large-6 end columns">
             <strong style="margin-left:0;">Addresses</strong>
               <div style="padding-right:0"class="col-md-6" ng-repeat="address in profile.addresses track by $index">
-                <p id="profile-address">{{address.name}}</p>
+                <p class="profile-address">{{address.name}}</p>
                 <p style="margin-bottom:0"> {{address.address1}} </p>
                 <p style="margin-bottom:0"> {{address.address2}} </p>
                 <p> {{address.city}}, {{address.state}} {{address.zip}} </p>
@@ -35,37 +27,75 @@
         </div>
     </div>
 
-    <div ng-show="updateSuccessful" class="alert alert-success">
-       <p> Update successful </p>
-    </div>
-
-
-  <!-- Order history -->
-    <div class="panel">
-      <div>
-        <div class="row">
-          <h3> Past Orders </h3>
+  <!-- Training history -->
+   <div ng-show="trainings.length > 0" class="card">
+      <div class="row">
+        <h4> Trainings </h4>
+      </div>
+      <div class="row clearfix" ng-repeat="training in trainings | orderBy: 'date'">
+        <div class="small-12 columns">
+          <h5>{{training.title}} <small>{{getDisplayDate(training.start)}} - {{getDisplayDate(training.end)}}</small></h5>
         </div>
-       </div>
-      <div>
-        <div>
-          <table id="profile-orders" class="table">
-            <tr>
-              <th>Order #</th>
-              <th class="show-for-medium-up">Status</th>
-              <th>Date</th>
-              <th>Total</th>
-              <th></th>
-            </tr>
-            <tr ng-repeat="order in orders | orderBy: '-createdAt' | limitTo: 5" ng-click="goToOrder(order.id)">
-              <td>{{order.id}}</td>
-              <td class="show-for-medium-up">{{order.status}}</td>
-              <td>{{getDisplayDate(order.createdAt)}}</td>
-              <td>{{getDisplayTotal(order.total)}}</td>
-              <td><a ng-show="order.total" ui-sref="support">Return</a></td>
-            </tr>
-          </table>
+        <hr>
+        <error-dir msg="{{error}}"></error-dir>
+        <div class="small-3 columns">
+          <strong>Location</strong>
+        </div>
+        <div class="small-3 columns">
+          <strong>Instructor</strong>
+        </div>
+        <div class="small-3 columns">
+          <strong>Status</strong>
+        </div>
+        <div class="small-3 columns">
+          <strong>Materials</strong>
+        </div>
+        <div class="small-3 columns">
+          <p><a class="has-tip" popover-animation="true" tooltip-popup-delay="250" tooltip-html-unsafe="{{formatAddress(training.location)}}">{{training.location.name}}</a><p>
+        </div>
+        <div class="small-3 columns">
+          <p>{{training.instructor}}</p>
+        </div>
+        <div class="small-3 columns">
+          <p>{{training.status}}</p>
+        </div>
+        <div class="small-3 columns text-center">
+<!--           <p class="animated infinite" ng-class="{'flash': downloading}"><a class="has-tip" popover-animation="true" tooltip-popup-delay="250" tooltip="Download" ng-click="download(training.download)"><i class="i-download"></i></a></p> -->
+        </div>
+        <div class="small-12 columns">
+          <strong>Description</strong>
+          <p>{{training.description}}</p>
         </div>
       </div>
+      <div class="row">
+        <div class="small-12 columns">
+          <p>Have questions? Feel free to reach out to our <a ui-sref="support({'topic': 'training'})"> support team.</a></p>
+          <!-- <p>Have questions? View our <a ui-sref="training_faq">training FAQ</a> page or feel free to reach out to our <a ui-sref="support({'topic': 'training'})"> support team.</a></p> -->
+        </div>
+      </div>
+
+  </div>
+
+  <!-- Order history -->
+  <div ng-show="orders.length > 0" class="card">
+    <div class="row">
+      <h4> Past Orders </h4>
+    </div>
+    <table id="profile-orders" class="table">
+      <tr>
+        <th>Order #</th>
+        <th class="show-for-medium-up">Status</th>
+        <th>Date</th>
+        <th>Total</th>
+        <th></th>
+      </tr>
+      <tr ng-repeat="order in orders | orderBy: '-createdAt' | limitTo: 5" ng-click="goToOrder(order.id)">
+        <td>{{order.id}}</td>
+        <td class="show-for-medium-up">{{order.status}}</td>
+        <td>{{getDisplayDate(order.createdAt)}}</td>
+        <td>{{getDisplayTotal(order.total)}}</td>
+        <td><a ng-show="order.total" ui-sref="support({'orderid': order.id})">Return</a></td>
+      </tr>
+    </table>
   </div>
 </div>

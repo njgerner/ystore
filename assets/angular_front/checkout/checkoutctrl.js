@@ -70,9 +70,9 @@ superApp.controller('CheckoutCtrl',
           if ($scope.merchants.indexOf(storeService.getProductMerchant($scope.productsInCart[i].productnumber)) == -1) {
             $scope.merchants.push(storeService.getProductMerchant($scope.productsInCart[i].productnumber));
           }
-          $scope.total += ( $scope.products[$scope.productsInCart[i].productnumber].price * $scope.productsInCart[i].quantity );
-          onProductsInCartLoaded();
+          $scope.total += parseInt($scope.products[$scope.productsInCart[i].productnumber].price) * parseInt($scope.productsInCart[i].quantity);
         }
+        onProductsInCartLoaded();
       });
     }
 
@@ -103,14 +103,13 @@ superApp.controller('CheckoutCtrl',
       $scope.productsInCart.forEach(function (product, index) {
         productService.getMerchant(product.productnumber, function (error, merchant) {
           if (merchant.yliftCanAcceptPayment == 'N') {
-            $scope.total -= ( $scope.products[product.productnumber].price * product.quantity );
+            $scope.total -= parseInt($scope.products[product.productnumber].price) * parseInt(product.quantity);
             $scope.note = "Note: You will receive a separate invoice in your inbox for some items in your cart due to the terms of the Y Lift Network.";
           }
         });
       });
-    }
 
-    $rootScope.hideCart(function() {}); // want cart to hide when checkout page is brought up
+    }
 
     if (storeService.productsRetrieved) {
       $scope.onProductsLoaded();
