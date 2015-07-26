@@ -1,7 +1,7 @@
 <i class="i-cancel-circled right pointer" style="font-size: 150%;" ng-click="close($event)"></i>
 <img class="logo" src="/img/logo.png"/>
 <h2 class="text-center">Welcome to Y LIFT</h4>
-<h4 class="text-center">Whether you're a provider or patient you can use the Y LIFT Network to book appointments, order products, and much more! <a ui-sref="network">More details.</a></h6>
+<h4 class="text-center">Whether you're a provider or patient you can use the Y LIFT Network to book appointments, order products, and much more! <a ui-sref="network" ng-click="close($event)">More details.</a></h6>
 <div ng-hide="submitted" class="row collapse postfix-radius show-for-medium-up">
 	<error-dir msg="{{error}}"></error-dir>
 	<div class="small-10 columns">

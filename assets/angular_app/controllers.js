@@ -1,5 +1,4 @@
 'use strict';
-// var pouchdb = require('pouchdb');
 
 /* Controllers */
 
@@ -12,10 +11,11 @@ superApp.controller('MainCtrl',
     stripeService, ENV) {
 
     $scope.cartAnimation = '';
+    $scope.displayIntro = false;
+    $scope.displayCart = false;
 
     $scope.handleLoaded = function() {
       $scope.loaded = true;
-      console.log('HANDLE LOADED', $scope.loaded, $scope.displayCart);
       $scope.authorized = authService.authorized;
       $scope.isAdmin = authService.isAdmin;
       $scope.loggedin = authService.loggedin;
@@ -29,10 +29,8 @@ superApp.controller('MainCtrl',
     }
       
     $scope.closeCart = function() {
-      console.log('CLOSE CART', $scope.displayCart);
       $scope.displayCart = false;
       $scope.cartAnimation = 'fadeOutUp';
-      console.log('past closeCart', $scope.displayCart);
     };
 
     $scope.closeModal = function() {
@@ -40,7 +38,6 @@ superApp.controller('MainCtrl',
     }
 
     $scope.handleViewClick = function() {
-      console.log('handle view click');
       if ($scope.displayCart) {
         $scope.displayCart = false;
         $scope.cartAnimation = 'fadeOutUp';
@@ -52,7 +49,6 @@ superApp.controller('MainCtrl',
     }
 
     $rootScope.$on('cartviewchange', function(evt, args) { // this is really important don't delete
-      console.log('on cartviewchange', args);
       $scope.displayCart = args.displayCart;
       if ($scope.displayCart) {
         $scope.cartAnimation = 'fadeInDown';
