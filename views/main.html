@@ -24,8 +24,9 @@
         <nav-links-dir class="show-for-medium-up"></nav-links-dir>
         <nav-bar-dir class="show-for-medium-up"></nav-bar-dir>
         <a class="exit-off-canvas"></a>
+        <learn-more-modal-dir ng-show="displayIntro" class="learn-more-modal animated" ng-class="{fadeInDown:displayIntro, fadeOutUp:!displayIntro}" close="closeModal"></learn-more-modal-dir>
         <main ui-view ng-click="handleViewClick($event)"></main>
-        <cart-dir ng-if="loaded" ng-show="displayCart" class="cart-modal animated" ng-class="getCartAnimateClass()" close="closeCart"></cart-dir>
+        <cart-dir ng-if="loaded" ng-show="displayCart" class="cart-modal " ng-class="getCartAnimateClass()" close="closeCart"></cart-dir>
         <footer-dir></footer-dir>
       </div>
     </div>
@@ -62,6 +63,8 @@
     </script>
     <script>
       $(document).foundation();
+    </script>
+    <script ng-if="ENV === 'PROD'">
       
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

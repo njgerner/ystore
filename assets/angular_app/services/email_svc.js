@@ -5,7 +5,7 @@ trdServices.service('emailService', ['$http', '$log',
 		$http({method:'POST', url:'/email_support',
 			   data: {email:email, props:props}}).
 			success(function(data, status, headers, config) {
-				callback(data.result);
+				callback(null, data.result);
 			}).
 			error(function(data, status, headers, config) {
 				$log.debug('error sending support request', data);

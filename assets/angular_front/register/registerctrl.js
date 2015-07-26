@@ -6,8 +6,6 @@ superApp.controller('RegisterCtrl',
   		stripeService, storeService, trainingService, REG_FEE, profileService,
       locationService, $stateParams) {
 
-    console.log('state params', $stateParams.view);
-
   	$scope.staff = [];
   	$scope.viewState = $stateParams.view || 'start';
     $scope.total = REG_FEE;
