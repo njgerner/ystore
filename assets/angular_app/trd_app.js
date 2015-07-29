@@ -17,10 +17,7 @@ var trdApp = angular.module('trdApp', [
   'env.config',
   'mm.foundation',
   'angulartics',
-  'angulartics.google.analytics',
-  // 'n3-line-chart',
-  'angularFileUpload' //https://github.com/nervgh/angular-file-upload
-  // 'uiGmapgoogle-maps'
+  'angulartics.google.analytics'
 ]);
 
 trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'authService', '$log',// watch these params in bin/www
@@ -51,7 +48,7 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
           };
 
           if (toState.name == "authorizing") {
-          
+            
           } else if (authService.authorizationReceived) {
 
             if (isExceptionalState()) {
@@ -315,7 +312,7 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       title: "Profile"
     })
     .state('reset_password', {
-      url:"/reset_password/:resettoken",
+      url:"/reset-password/:resettoken",
       templateUrl: "/partials/reset_password.html",
       controller: "ResetPasswordCtrl",
       title: "Password Assistance"
