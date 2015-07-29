@@ -17,7 +17,8 @@ exports.generateResetToken = function(email) {
   db.search('local-users', email)
   .then(function(result) {
     var user = result.body.results[0].value;
-    user.resetToken = {token: randomString(20), createdAt: new Date()};
+    delete user.resetToken;
+    user.resetToken = {token: rawDogger.randomString(20), createdAt: new Date()};
     db.put('local-users', user.id, user)
       .then(function (result) {
         db.put('reset-tokens', user.resetToken.token, user.resetToken)

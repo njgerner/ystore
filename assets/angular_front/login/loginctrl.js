@@ -63,6 +63,7 @@ superApp.controller('LoginCtrl',
         if (successMessage) {
           $scope.failedMessage = null;
           $scope.loginState = "signin";
+          $scope.email = "";
           $scope.pass_reset = true;
           $scope.requestingReset = false;
         } else {

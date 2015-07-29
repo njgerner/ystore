@@ -22,11 +22,11 @@ superApp.controller('ResetPasswordCtrl',
         $scope.failedMessage = "Passwords do not match";
         return;
       } else {
-      authService.updatePassword($stateParams.resettoken, $scope.password, function(failedMessage, successMessage) {
-          if (successMessage) {
-            $state.go('login');
+      authService.updatePassword($stateParams.resettoken, $scope.password, function (err, data) {
+          if (err) {
+            $scope.error = err;
           } else {
-            $scope.failedMessage = failedMessage;
+            $state.go('login');
           }
         });
       }

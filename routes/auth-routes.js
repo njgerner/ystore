@@ -173,6 +173,7 @@ module.exports = function(express, app, __dirname) {
   	//user has received email and confirmed they want to reset password
 	AuthRoutes.reset_password = function(req, res) {
 		// TODO: Remove ths route
+		console.log('reset pw route');
 		res.render('reset_password', {resettoken: req.params.resettoken});
 	};
 
@@ -235,7 +236,7 @@ module.exports = function(express, app, __dirname) {
 			errorHandler.logAndReturn('Missing update password request data', 400, next, null, [req.body, req.user]);
 			return;
 		}
-		var query = 'value.resetToken: ' + req.body.resettoken;
+		var query = 'value.resetToken.token: ' + req.body.resettoken;
 		var params = { limit: 1 };
 		orchHelper.searchDocsFromCollection('local-users', query, params)
 		.then(function (result) {
@@ -249,8 +250,8 @@ module.exports = function(express, app, __dirname) {
 			}
 		})
 		.then(function (result) {
-				res.status(201).json({success:true});
-				orchHelper.removeDocFromCollection('reset-tokens', req.body.resettoken).done();
+			res.status(201).json({success:true});
+			orchHelper.removeDocFromCollection('reset-tokens', req.body.resettoken).done();
 		})
 		.fail(function (err) {
 			errorHandler.logAndReturn('Error updating account password', 500, next, err, req.body);
