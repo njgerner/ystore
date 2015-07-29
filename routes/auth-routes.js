@@ -173,7 +173,6 @@ module.exports = function(express, app, __dirname) {
   	//user has received email and confirmed they want to reset password
 	AuthRoutes.reset_password = function(req, res) {
 		// TODO: Remove ths route
-		console.log('reset pw route');
 		res.render('reset_password', {resettoken: req.params.resettoken});
 	};
 
