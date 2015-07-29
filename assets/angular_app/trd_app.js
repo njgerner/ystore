@@ -315,7 +315,7 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
       title: "Profile"
     })
     .state('reset_password', {
-      url:"/reset-password/:resettoken",
+      url:"/reset_password/:resettoken",
       templateUrl: "/partials/reset_password.html",
       controller: "ResetPasswordCtrl",
       title: "Password Assistance"

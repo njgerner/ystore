@@ -184,6 +184,7 @@ module.exports = function(express, app, __dirname) {
     app.get('/request_pass_reset/:email', authRoutes.request_pass_reset);
     app.get('/reset_password/:userid', authRoutes.reset_password);
     app.get('/authorized', ensureAuthenticated, authRoutes.authorized);
+
     // POST ////////////////////////////////////////////////////////////
     app.post('/register', authRoutes.register);
     app.post('/login', authRoutes.loginHelper);
