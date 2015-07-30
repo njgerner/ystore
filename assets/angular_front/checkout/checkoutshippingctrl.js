@@ -44,10 +44,6 @@ superApp.controller('CheckoutShippingCtrl',
         "state": $scope.state,
         "zip": $scope.zip
       };
-      if ($scope.$parent.addresses.length == 0) {
-        address.default = true;
-        $scope.$parent.addressShipTo = address;
-      }
       if (authService.authorized) {
         locationService.addAddressToProfile(address, onAddressAdded);
       } else {
@@ -56,7 +52,10 @@ superApp.controller('CheckoutShippingCtrl',
     };
 
     function onAddressAdded (error, address) {
-      $scope.$parent.addresses.push(address);
+      if ($scope.$parent.addresses.length == 0) {
+        address.default = true;
+        $scope.$parent.addressShipTo = address;
+      }
       $scope.addAddressView = false;
       $scope.updatingAddress = false;
       $scope.clearAddress();
