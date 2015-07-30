@@ -190,7 +190,7 @@ module.exports = function(express, app, __dirname) {
 			currency: "USD",
 			customer: transaction.customer.id,
 			receipt_email: transaction.customer.email,
-			description: 'Y LIFT Network registration fee, thank you for your order!'
+			description: 'Y LIFT Network order, thank you for your business!'
 		};
 
 		stripe.charges.create(charge, function(err, charge) {
