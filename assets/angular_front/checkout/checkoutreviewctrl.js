@@ -14,10 +14,6 @@ superApp.controller('CheckoutReviewCtrl',
 		$scope.emailEntered = true;
 	}
 
-	$scope.removeItemFromCart = function() {
-		
-	}
-
 	$scope.formatValue = function (value) {
 		if (value) {
 			var fixed = parseInt(value).toFixed(2);
