@@ -109,7 +109,11 @@ superApp.controller('CheckoutBillingCtrl',
 
     function onCustomerLoaded (customer) {
       $scope.customer = customer;
-      $scope.cards = $scope.customer.sources.data;
+      if (customer.sources) {
+        $scope.cards = customer.sources.data;
+      } else {
+        $scope.cards = [];
+      }
       $scope.loadingCustomer = false;
     }
 

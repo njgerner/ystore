@@ -66,6 +66,7 @@ module.exports = function(express, app, __dirname) {
 		}
 		orchHelper.putDocToCollection('addresses', addressDoc.id, addressDoc)
 		.then(function (result) {
+			console.log('address added', addressDoc, result);
 	  		res.status(200).json({address:addressDoc});
 	  	})
 	  	.fail(function (err) {

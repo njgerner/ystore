@@ -354,7 +354,6 @@ trdServices.service("storeService", ['$rootScope', '$http', '$cookieStore', 'str
     }
 
     this.updateProductsInCartCookie = function(productsInCart) {  
-        console.log('store svc update pInCartCookie', productsInCart, $cookieStore.get('pInCart'));      
         $cookieStore.put('pInCart', productsInCart || []);
     }
 

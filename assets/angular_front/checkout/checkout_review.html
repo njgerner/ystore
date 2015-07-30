@@ -16,12 +16,12 @@
 	<div ng-show="showItems" class="large-2 columns">Quantity</div>
 	<div ng-show="showItems" class="large-1 columns"></div>
 </div>
-<div class="row">
+<div class="row">Checkout
 	<i ng-hide="showItems" class="fa fa-arrow-circle-right"></i>
 	<i ng-show="showItems" class="fa fa-arrow-circle-down"></i>
 	<ul ng-show="showItems" style="list-style-type: none;">
 		<li class="" ng-repeat="product in productsInCart">
-			<product-cart-dir ind="$index" pn="product.productnumber" edit="false"></product-cart-dir>
+			<product-cart-dir ind="$index" item="product" product="$parent.products[product.productnumber]" edit="false"></product-cart-dir>
 		</li>
 	</ul>
 </div>

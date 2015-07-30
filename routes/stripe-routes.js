@@ -119,6 +119,10 @@ module.exports = function(express, app, __dirname) {
 	};
 
 	StripeRoutes.update_customer = function(req, res, next) {
+		if (!req.body.customer) {
+			errorHandler.logAndReturn('Missing update customer data', 400, next, null, req.body);
+			return;
+		}
 		orchHelper.getDocFromCollection('local-profiles', req.params.profileid)
 			.then(function (profile) {
 				if (profile.customerid == req.body.customer.id) {
@@ -130,8 +134,8 @@ module.exports = function(express, app, __dirname) {
 			.then(function (result) {
 				return orchHelper.putDocToCollection('customers', req.body.customer.id, req.body.customer);
 			})
-			.then(function (customer) {
-				res.status(200).json({customer:customer});
+			.then(function (result) {
+				res.status(200).json({customer:req.body.customer});
 			})
 			.fail(function (err) {
 				errorHandler.logAndReturn('Error updating customer', 500, next, err, [req.params, req.body]);

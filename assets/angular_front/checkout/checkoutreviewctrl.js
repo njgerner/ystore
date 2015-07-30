@@ -21,7 +21,7 @@ superApp.controller('CheckoutReviewCtrl',
 		} else {
 			return "";
 		}
-    }
+  }
 
 	$scope.addEmail = function() {
 		if (!customer) {
