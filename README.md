@@ -7,6 +7,7 @@
 ### How do I get set up? ###
 
 * Take off your condom
+* Why do you guys even own condoms?
 
 ### Contribution guidelines ###
 
