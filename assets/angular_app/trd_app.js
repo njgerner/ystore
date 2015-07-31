@@ -17,7 +17,8 @@ var trdApp = angular.module('trdApp', [
   'env.config',
   'mm.foundation',
   'angulartics',
-  'angulartics.google.analytics'
+  'angulartics.google.analytics',
+  'angularFileUpload'
 ]);
 
 trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'authService', '$log',// watch these params in bin/www
