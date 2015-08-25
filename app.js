@@ -44,11 +44,11 @@ if ('development' == app.get('env')) {
   app.use(errorHandler());
 }
 
-if (process.env.ENV == 'PROD') {
-  var enforce = require('express-sslify');
-  // use HTTPS(true) in case you are behind a load balancer (e.g. Heroku)
-  app.use(enforce.HTTPS(true));
-}
+// if (process.env.ENV == 'PROD') {
+//   var enforce = require('express-sslify');
+//   // use HTTPS(true) in case you are behind a load balancer (e.g. Heroku)
+//   app.use(enforce.HTTPS(true));
+// }
 
 // roll tide go hokies
 require('./routes/routes.js')(express, app, __dirname);
