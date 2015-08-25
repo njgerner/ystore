@@ -33,7 +33,7 @@ trdApp.run(['$rootScope', '$state', '$stateParams', '$cookies', '$location', 'au
           $log.debug('authorized / received', authService.authorized, authService.authorizationReceived);
 
           var isExceptionalState = function() {
-            var exceptionalState = ["terms", "store", "checkout", "order", "support", "locations"];
+            var exceptionalState = ["terms", "store", "checkout", "order", "support", "locations", "network"];
             return exceptionalState.indexOf(toState.name) >= 0;
           }
 
@@ -107,7 +107,7 @@ trdApp.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$analyt
   function($httpProvider, $stateProvider, $urlRouterProvider, $analyticsProvider, $locationProvider,
     $logProvider, ENV) {
     $httpProvider.interceptors.push('trdInterceptor');
-    $urlRouterProvider.otherwise("/store");
+    $urlRouterProvider.otherwise("/network");
     $locationProvider.hashPrefix('!'); // makes site crawlable 
     $logProvider.debugEnabled(ENV == 'DEV');
     
