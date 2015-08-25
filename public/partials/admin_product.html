@@ -1,0 +1,62 @@
+<div style="margin-top:30px; padding-right:40px;" class="large-8 large-offset-1 end columns">
+	<p id="admin-products-showall" class="pointer" ng-click="$state.go('admin.products')">Show All Products</p>
+	<div class="row">
+	  <hr>
+	  <div class="large-2 columns show-for-medium-up">
+	    <img src="http://placehold.it/400x300&text=[img]">
+	    <br>
+	    <img src="http://placehold.it/400x300&text=[img]">
+	    <br>
+	    <img src="http://placehold.it/400x300&text=[img]">
+	    <br>
+	    <img src="http://placehold.it/400x300&text=[img]">
+	  </div>
+	  <div class="large-5 columns">
+	    <div flow-init="{target: '/upload_image'}" flow-files-submitted="$flow.upload()"
+	         flow-files-success="$file.msg = $message" flow-files-added="onFileAdded($files, $event, $flow)">
+	      <img ng-hide="$flow.files.length" ng-src="{{product.img}}" />
+	      <img ng-show="$flow.files.length > 0" flow-img="$flow.files[0]" />
+	      <input ng-show="mode == 'edit'" type="file" flow-btn flow-attrs="{accept:'image/*'}"/>
+	    </div>
+	  </div>
+	  <div class="large-5 columns">
+	    <!-- Edit name -->
+	    <h4>{{product.name}}<small ng-click="mode = 'edit'; message = '';" class="right"><i class="i-pencil"></i>Edit</small></h4>
+	    <input ng-show="mode == 'edit'" type="text" ng-model="product.name"/>
+	    <label>Vendor
+	    	<p ng-show="mode == 'view'">{{vendornames[product.attributes.vendor]}}</p>
+	        <select ng-show="mode == 'edit'" ng-model="vendor"/>
+	        	<option ng-repeat="merchant in merchantProfiles" value="merchant.id" ng-model="vendor">{{merchant.name}}</option>
+	        </select>
+	    </label>
+	    <!-- Edit category -->
+	    <label>Category</label>
+	    <p ng-hide="mode == 'edit'">{{product.category}}</p>
+	    <select ng-hide="mode == 'view'" ng-model="product.category">
+	       <option value="skin care">Skin Care</option>
+	       <option value="cosmetics">Cosmetics</option>
+	       <option value="y lift">Y Lift</option>
+	       <option value="other">Other</option>
+	    </select>
+	    <!-- Edit description -->
+	    <p ng-show="mode == 'view'">{{product.description}}</p>
+	    <textarea ng-show="mode == 'edit'" ng-model="product.description" rows="12"></textarea>
+	    <!-- Edit price -->
+	    <div class="panel">
+	      <h5 ng-show="mode == 'view'">${{product.price}}</h5>
+	      <input ng-show="mode == 'edit'" type="text" ng-model="product.price"/>
+	    </div>
+	    <!-- Save -->
+	    <div ng-show="mode == 'edit'" class="clearfix">
+	      <button class="small secondary right" ng-click="mode = 'view'">Cancel</button>
+	      <button class="small primary right" ng-click="updateProduct()">
+	        <span ng-hide="updating">Save</span>
+	        <span ng-show="updating">Saving...</span>
+	      </button>
+	    </div>
+	    <div style="background:#ecfaff" ng-show="message.length > 0" class="panel callout radius">
+	    	<p>{{message}}</p>
+	    </div>
+	  </div>
+	</div>
+</div>

@@ -1,0 +1,97 @@
+<div class="row">
+  <hr>
+  <div class="large-3 large-offset-1 columns" flow-init="{target: '/upload_image'}"
+                               flow-files-submitted="$flow.upload()"
+                               flow-files-success="$file.msg = $message"
+                               flow-files-added="onFileAdded($files, $event, $flow)">
+      <div class="row">
+        <label>Image</label>
+        <div ng-hide="$flow.files.length > 0" class="alert image-drop" flow-drop flow-drag-enter="style={border:'4px solid green'}" flow-drag-leave="style={}"
+       ng-style="style">
+          Drag and Drop your image file here or <input type="file" flow-btn flow-attrs="{accept:'image/*'}"/>
+        </div>
+        <img ng-show="$flow.files.length >= 1" flow-img="$flow.files[0]" />
+      </div>
+
+      <div style="margin-top:5%" class="row">
+        <label ng-show="$flow.files.length > 0" style="margin-bottom:5%">Enter Up To 4 Alternate Images</label>
+        <div class="row">
+          <div ng-show="$flow.files.length > 0" class="large-6 end columns">
+            <label>Alternate Image 1</label>
+            <div ng-hide="$flow.files.length >= 2" class="alert image-drop" flow-drop flow-drag-enter="style={border:'4px solid green'}" flow-drag-leave="style={}"
+            ng-style="style">
+            Drag and Drop your image file here or <input type="file" flow-btn flow-attrs="{accept:'image/*'}"/>
+            </div>
+            <img ng-show="$flow.files.length >= 2" flow-img="$flow.files[1]" />
+          </div>
+          <div ng-show="$flow.files.length > 1" class="large-6 columns">
+             <label>Alternate Image 2</label>
+             <div ng-hide="$flow.files.length >= 3" class="alert image-drop" flow-drop flow-drag-enter="style={border:'4px solid green'}" flow-drag-leave="style={}"
+            ng-style="style">
+            Drag and Drop your image file here or <input type="file" flow-btn flow-attrs="{accept:'image/*'}"/>
+            </div>
+            <img ng-show="$flow.files.length >= 3" flow-img="$flow.files[2]" />
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:5%" class="row">
+        <div class="row">
+          <div ng-show="$flow.files.length > 2" class="large-6 end columns">
+            <label>Alternate Image 3</label>
+            <div ng-hide="$flow.files.length >= 4" class="alert image-drop" flow-drop flow-drag-enter="style={border:'4px solid green'}" flow-drag-leave="style={}"
+            ng-style="style">
+            Drag and Drop your image file here or <input type="file" flow-btn flow-attrs="{accept:'image/*'}"/>
+            </div>
+            <img ng-show="$flow.files.length >= 4" flow-img="$flow.files[3]" />
+          </div>
+          <div ng-show="$flow.files.length > 3" class="large-6 columns">
+             <label>Alternate Image 4</label>
+             <div ng-hide="$flow.files.length >= 5" class="alert image-drop" flow-drop flow-drag-enter="style={border:'4px solid green'}" flow-drag-leave="style={}"
+            ng-style="style">
+            Drag and Drop your image file here or <input type="file" flow-btn flow-attrs="{accept:'image/*'}"/>
+            </div>
+            <img ng-show="$flow.files.length >= 5" flow-img="$flow.files[4]" />
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <div class="large-4 large-offset-1 end columns">
+    <error-dir msg="{{error}}"></error-dir>
+    <label>Product name
+      <input type="text" ng-model="product.name" placeholder="Enter the product name"/>
+    </label>
+    <label>Vendor
+      <select ng-model="vendor"/>
+        <option ng-repeat="merchant in merchantProfiles" value="merchant.id" ng-model="vendor">{{merchant.name}}</option>
+      </select>
+    </label>
+    <label>Product category
+      <select ng-model="product.category">
+        <option value="skin care">Skin Care</option>
+        <option value="cosmetics">Cosmetics</option>
+        <option value="y lift">Y LIFT</option>
+        <option value="other">Other</option>
+      </select>
+    </label>
+    <label>Product description
+      <textarea ng-model="product.description" rows="12" placeholder="Enter the product description"></textarea>
+    </label>
+    <div class="panel">
+      <label>Product Price
+        <input type="text" ng-model="product.price" placeholder="Enter price, exclude currency symbol"/>
+      </label>
+    </div>
+      <input type="radio" value="yes" ng-model="makeactive" class="product-radio">
+      <span>
+        <p>Check to make product active. Note: active products are immediately visible in the store!</p>
+      </span>
+    <div class="clearfix">
+      <button class="primary expand right" ng-click="addProduct()">
+        <span ng-hide="updating">Add</span>
+        <span ng-show="updating">Adding...</span>
+      </button>
+    </div>
+  </div>
+</div>

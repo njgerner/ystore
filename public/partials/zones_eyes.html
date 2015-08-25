@@ -1,0 +1,44 @@
+<div style="border-bottom:2px solid black; margin-bottom:20px" class="row text-center">
+	<div style="text-align:right; border-right:2px solid black" class="large-4 large-offset-2 columns">
+		<h3><a ng-click="changeView('eyebrowlift')">Eyebrow / Forehead Lift</a><h3>
+	</div>
+	<div style="text-align:left" class="large-4 end columns">
+		<h3><a ng-click="changeView('eyelidrejuvination')">Eyelid Rejuvination</a></h3>
+	</div>
+</div>
+<div class="row">
+	<div class="small-12 large-6 columns">
+		<img src="img/zones_eyes.jpg"/>
+	</div>
+	<div ng-show="viewState == 'eyebrowlift'" class="small-12 large-6 columns">
+		<h3 style="text-decoration:underline"><strong>Eyebrow / Forehead Lift</strong></h3>
+		<p>Brow lift surgery, also referred to as a forehead or eyebrow lift, uses tiny incisions along the hairline to allow the patient to achieve a younger, more refreshed look by smoothing the forehead, reducing frown lines, and elevating the position of the eyebrow line. The brow lift will make you appear years younger.</p>
+		<strong>What to expect following surgery:</strong>
+		<ul>
+			<li>Swelling with possible bruising</li>
+			<li>Discomfort controlled with medication</li>
+			<li>Minimal incisions</li>
+		</ul>
+		<strong>Results</strong>
+		<ul>
+			<li>A more youthful and refreshed appearance</li>
+		</ul>
+		<small>* Not offered at all Y LIFT Provider locations.</small><br><br>
+		<a class="button small" ui-sref="locations">FIND A PROVIDER NEAR YOU</a>
+	</div>
+	<div ng-show="viewState == 'eyelidrejuvination'" class="small-12 large-6 columns">
+		<h3 style="text-decoration:underline"><strong>Eyelid Rejuvination</strong></h3>
+		<p>Laser eyelid surgery brings about a fresh, rejuvenated appearance by reducing or even eliminating saggy, puffy skin around the eyes. The results of laser blepharoplasty are usually long-lasting and may even be permanent for some patients who lead a healthy lifestyle.</p>
+		<strong>What to expect following surgery:</strong>
+		<ul>
+			<li>Bruising and puffiness for 3 to 5 days</li>
+			<li>Discomfort minimal, but controlled with medication if needed</li>
+		</ul>
+		<strong>Results</strong>
+		<ul>
+			<li>Youthful, more refreshed appearance</li>
+		</ul>
+		<small>* Not offered at all Y LIFT Provider locations.</small><br><br>
+		<a class="button small" ui-sref="locations">FIND A PROVIDER NEAR YOU</a>
+	</div>
+</div>

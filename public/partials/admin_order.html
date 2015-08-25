@@ -1,0 +1,40 @@
+<error-dir msg="{{error}}"></error-dir>
+<div ng-show="order" class="row admin-users-summary">
+	<h4>Order Summary</h4>
+	<div class="small-6 large-3 columns text-center">
+		<span>{{getDisplayDate(order.createdAt)}}</span><br>
+		<small>Order Placed</small>
+	</div>
+	<div class="small-6 large-3 end columns text-center">
+		<span>{{formatValue(order.total)}}</span><br>
+		<small>Total</small>
+	</div>
+	<div class="small-6 large-3 end columns text-center">
+		<span>{{order.customer}}</span><br>
+		<small>Customer</small>
+	</div>
+	<div class="small-6 large-3 end columns text-center">
+		<span>{{order.id}}</span><br>
+		<small>Order ID</small>
+	</div>
+</div>
+<div ng-show="order" class="row" style="margin-top:1rem;">
+	<h5>Status: <strong>{{order.status}}</strong></h5>
+	<h6>As of <strong>{{getDisplayDate(order.updatedAt)}}</strong></h6>
+	<div ng-show="products.length" ng-repeat="p in products" class="row">
+		<div class="small-4 large-3 columns">
+			<img ng-src="{{p.remote_img || p.img}}?dim=475x475" class="image" ng-error="defaultImage(p)">
+		</div>
+		<div class="small-8 large-6 columns">
+			<a ui-sref="product({productnumber:p.productnumber})">{{p.name}}</a><br>
+			<small>Vendor ID: {{p.attributes.vendor}}</small>
+		</div>
+		<div ng-show="order.shipTo" class="large-3 show-for-large-up columns">
+			<p>Ship To</p>
+			<strong>{{order.shipTo.name}}</strong><br>
+			{{order.shipTo.address1}} {{order.shipTo.address2 || ""}}<br>
+			{{order.shipTo.city}}, {{order.shipTo.state}} {{order.shipTo.zip}}
+		</div>
+	</div>
+</div>
+<div ng-hide="order || error" class="loader locations-loading">Loading...</div>

@@ -1,0 +1,48 @@
+<div class="off-canvas-wrap">
+	<div class="inner-wrap" ng-click="closeBooking($event)">
+		<a class="right-off-canvas-toggle menu-icon"><span></span></a>
+		<div ng-show="mapLoaded" id="map-canvas" class="ylift-locations"></div>
+		<i ng-hide="showLocationsRight" class="i-map pointer" ng-click="toggleLocationPanel()"></i>
+		<div ng-if="!mapLoaded" class="loader locations-loading">Loading...</div>
+	</div>
+</div>
+<booking-modal-dir ng-if="locationsLoaded" ng-show="viewBooking" class="booking-modal animated" ng-class="{fadeInDown:viewBooking, fadeOutUp:!viewBooking}" office="selectedLocation" close="closeBooking"></booking-modal-dir>
+<div ng-show="locationsLoaded" ng-show="showLocationsRight" class="locations-panel animated" ng-class="{bounceOutRight:!showLocationsRight,bounceInRight:showLocationsRight}">
+	<div class="locations-header">
+      <i ng-hide="showSearch" class="i-right-open-big clickable" ng-click="toggleLocationPanel()"></i>
+      <h3 ng-hide="showSearch">Y LIFT Locations</h3>
+      <i ng-hide="showSearch" class="i-search location-search" ng-click="toggleSearch()"></i>
+		<div class="row" ng-if="showSearch">
+      		<i ng-show="showSearch" class="i-cancel clickable small-2 columns" ng-click="toggleSearch()"></i>
+      		<zip-search-dir on-submit="searchZip"></zip-search-dir>
+		</div>
+	</div>
+	<div class="locations-panel-content">
+		<ul class="list-group locations-list">
+			<li ng-repeat="location in locations" class="location-list-item" ng-class="{'location-focused':location.focused}">
+				<div class="row location-row" style="margin:0" ng-click="toggleFocus($index)">
+					<div>
+						<h5>{{location.name}} <small><name-dir id="location.profile"></name-dir></small></h5>
+						<p>{{location.formattedaddress}}</p>
+					</div>
+				</div>
+				<div ng-show="location.focused" class=" location-icons row animated" style="margin:0" ng-class="{fadeOut:!location.focused,fadeIn:location.focused}">
+					<div class="icon-bar two-up">
+<!-- 						<a class="item" ng-click="openBooking(location, $event)">
+							<i class="i-calendar"></i>
+						</a> -->
+						<a class="item" ng-href="tel:{{location.phone}}">
+							<i class="i-phone"></i>
+						</a>
+						<a class="item" ng-href="mailto:{{location.email}}">
+							<i class="i-message"></i>
+						</a>
+<!-- 						<a class="item">
+							<i class="i-info"></i>
+						</a> -->
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>

@@ -1,0 +1,67 @@
+<div style="padding-left:0;margin:10px" class="large-6 large-offset-2 columns text-center">
+	<h3>Active Promo Codes</h3>
+	<div ng-if="notify" style="margin-top:1rem;" data-alert class="alert-box info radius"> {{notify}}</div>
+	<table style="width:100%">
+		<tbody>
+			<tr ng-repeat="promo in promos">
+				<th>{{promo.key}}</th>
+				<th>{{displayPromo(promo.value, promo.type)}}</th>
+				<th>on {{promo.domain}}s</th>
+				<th>{{promo.active ? 'Active' : 'Inactive'}} <span><div ng-click="promptDelete(promo.key)"class="i-delete-garbage-streamline right pointer"></div></span></th>
+			</tr>
+		</tbody>
+	</table>
+	<h3>Add a Code</h3>
+	<error-dir msg="{{error}}"></error-dir>
+	<div class="row">
+		<form novalidate>
+		<fieldset>
+			<div class="row">
+				<div class="small-8 small-offset-2 columns">
+					<label>Code
+			        	<input class="text-center" type="text" ng-model="newcode" name="code" required/>
+			     	 </label>
+				</div>
+			</div>
+			<div class="row">
+			    <div style="padding-right:0"class="small-4 small-offset-2 columns">
+			      <label>Value
+			        <input class="text-center" type="text" ng-model="value" name="value" placeholder="Do not include symbols!"required/>
+			      </label>
+			    </div>
+			    <div style="padding-left:0" class="small-4 end columns">
+			      <label>Type
+			        <select ng-model="promotype">
+			        	<option value="percent_off">% off</option>
+			        	<option value="new_price">New Price</option>
+			        	<option value="money_off">$ off</option>
+			        </select>
+			      </label>
+			    </div>
+		    </div>
+		    <div class="row">
+		    	<div class="small-8 small-offset-2 columns">
+		    		<label>Add a message to display after successful use
+		    			<input type="text" ng-model="message" name="message"/>
+			      </label>
+		    	</div>
+		    </div>
+		    <div class="row">
+		    	<div class="small-8 small-offset-2 columns">
+		    		<p>Should the promo code be activated immediately?</p>
+		    		<span>
+			    		<input type="radio" value="yes" name="turnon" ng-model="makeactive"> Yes <input style="margin-left:15px" type="radio" value="no" name="turnon" ng-model="makeactive"> No
+			    	</span>
+			    	<p>This code can be applied to (choose one): </p>
+		    		<span>
+			    		<input type="radio" value="registration" name="domain" ng-model="domain"> Registration <input style="margin-left:15px" type="radio" value="order" name="domain" ng-model="domain"> Orders
+			    	</span>
+		    	</div>
+		    </div>
+		</fieldset>
+	</form>
+	</div>
+	<div class="row">
+		<button ng-click="activate()">Activate</button>
+	</div>
+</div>

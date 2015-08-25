@@ -1,0 +1,97 @@
+<div class="row">
+  <form>
+  <legend>My Info</legend>
+    <fieldset>
+      <div>
+        <span ng-show="emailchange" data-alert class="alert-box info radius"> Your email has been changed. Reminder: your email is used to login.</span>
+        <label for="inputName">Name</label>
+        <div>
+          <input type="text" ng-model="profile.name" placeholder="Add your name">
+        </div>
+      </div>
+      <div>
+        <label for="inputEmail">Email</label>
+        <div>
+          <input type="email" ng-model="profile.email" placeholder="Enter your email" required>
+        </div>
+      </div>
+      <div>
+        <label for="inputName">Phone</label>
+        <div>
+          <input type="tel" ng-model="profile.phone" placeholder="Add a contact phone number">
+        </div>
+      </div>
+      <div>
+        <button type="submit" class="button small" ng-click="updateProfile('info')">
+          <span ng-hide="updating == 'info'">Save Changes</span>
+          <span ng-show="updating == 'info'">Saving....</span>
+        </button>
+      </div>
+    </fieldset>
+  </form>
+  <div>
+    <div class="row">
+        <div class="large-3 small-6 columns">
+          My Addresses
+        </div>
+        <div class="large-3 large-offset-6 small-6 columns text-right">
+          <div ng-hide="addAddressView" class="i-plus pointer" ng-click="enableAddAddress()"></div>
+          <div ng-show="addAddressView" class="i-cancel-circled pointer" ng-click="cancel()"></div>
+        </div>
+        <error-dir msg="{{error}}"></error-dir>
+    </div>
+    <div class="row address-list" ng-repeat="address in addresses track by address.id">
+      <div class="large-1 small-1 columns" ng-click="makeDefault($index)">
+        <i ng-show="address.default" class="i-star"></i>
+        <i ng-show="!address.default" class="i-star-open"></i>
+      </div>
+      <div class="large-5 small-6 columns">{{address.name}}</div>
+      <div class="large-3 large-offset-3 small-5 columns">
+        <a class="address-edit-link" ng-click="selectAddress($index)">Edit</a>|
+        <a class="address-edit-link" ng-click="removeAddress($index)">Delete</a>
+      </div>
+    </div> 
+    <div ng-if="loadingAddresses" class="loader locations-loading">Loading...</div>
+    <form ng-show="addAddressView || editAddressView" novalidate>
+      <fieldset>
+        <div>
+            <input type="text" ng-model="addressname" placeholder="Address Name"/>
+        </div>
+        <div>
+            <input type="text" ng-model="address1" placeholder="Street Address"/>
+        </div>
+        <div>
+            <input type="text" ng-model="address2" placeholder="Suite # (If relevant)"/>
+        </div>
+        <div>
+            <input type="text" ng-model="city" placeholder="City"/>
+        </div>
+        <div>
+            <input type="text" ng-model="state" placeholder="State"/>
+        </div>
+        <div>
+            <input type="text" ng-model="zip" placeholder="Zip"/>
+        </div>
+        <hr>
+        <div>
+            <input type="text" ng-model="addressphone" placeholder="Contact phone number"/>
+        </div>
+        <div>
+            <input type="text" ng-model="addressemail" placeholder="Contact email address"/>
+        </div>
+        <div ng-show="isYLIFT">
+          <label>Check if this location is a Y LIFT Network practice
+            <input type="checkbox" ng-model="yliftInd" ng-true-value="Y" ng-false-value="N">
+          </label>
+        </div>
+          <button type="submit" class="button small" ng-click="submitAddress()">
+            <span ng-show="adding">Adding...</span>
+            <span ng-hide="adding || editAddressView">Add</span>
+            <span ng-show="updating">Updating...</span>
+            <span ng-hide="updating || addAddressView">Update</span>
+          </button>
+          <button class="button secondary small" ng-click="cancel()"/>Cancel</button>
+      </fieldset>
+    </form>
+  </div>
+</div>

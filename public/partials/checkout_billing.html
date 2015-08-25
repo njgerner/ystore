@@ -1,0 +1,75 @@
+<div class="row">
+	<div style="text-align: center;padding-top:15px;">
+		<!-- <i class="fa fa-truck fa-3x"></i> -->
+		<h3><strong>Billing<strong></h3>
+	</div>	
+</div>
+<div class="row">
+    <div class="large-8 columns"><h5>Select a payment method</h5></div>
+    <div ng-show="addAddressView" class="large-4 columns text-right" ng-click="toggleAddPayment()"><i class="i-cancel-circled"></i></div>
+    <div style="padding:0" ng-hide="addAddressView" class="large-4 columns text-right" ng-click="toggleAddPayment()"><i class="i-plus"></i></div>
+</div>
+<div class="row">
+    <div class="row address-list thin" ng-repeat="card in cards" ng-click="selectPayment($index)">
+      <div class="large-2 small-2 columns check-it">
+        <i ng-show="isCardSelected($index)" class="i-checked"></i>
+        <i ng-hide="isCardSelected($index)" class="i-unchecked"></i>
+      </div>
+      <div class="large-10 small-10 columns text-left"><i class="i-credit"></i> {{card.brand}}   ending in <strong>{{card.last4}}</strong></div>
+    </div> 
+</div>
+<div ng-show="addPaymentView" class="row">
+	<error-dir msg="{{error}}"></error-dir>
+	<form name="ccForm">
+		<fieldset>
+			<legend>Credit Card Info</legend>
+			<div class="input-wrapper">
+		        <input type="text" name="namecard" ng-model="namecard" placeholder="Name on Card" ng-minlength="2" required/>
+		    </div>
+		    <div class="input-wrapper">
+		        <input ng-class="{'trd-invalid':!validCCNum()}" type="text" name="ccnum" ng-model="ccnum" placeholder="Credit Card Number" required/>
+		    </div>
+		    <div class="input-wrapper">
+		        <input ng-class="{'trd-invalid':!validCVC()}" type="text" name="cvc" ng-model="cvc" placeholder="CVC Code" required/>
+		    </div>
+		    <div class="input-wrapper">
+		        <input ng-class="{'trd-invalid':!validExpDate()}" type="text" name="exp" ng-model="exp" placeholder="Expiration (MM/YYYY)" ng-keyup="formatExp(exp)" required/>
+		    </div>
+		</fieldset>
+	</form>
+	<form name="billingForm" ng-show="creditCardFieldsComplete()">
+		<fieldset>
+			<legend>Billing Address Info</legend>
+		    <div class="input-wrapper">
+		    	<input type="text" name="billingname" ng-model="billingname" placeholder="Name" ng-minlength="2" required/>
+		    </div>
+		    <div class="input-wrapper">
+		        <input type="text" name="billingaddress1" ng-model="billingaddress1" placeholder="Address" ng-minlength="2" required/>
+		    </div>
+		    <div class="input-wrapper">
+		        <input type="text" name="billingaddress2" ng-model="billingaddress2" placeholder="Suite # (If relevant)"/>
+		    </div>
+		    <div class="input-wrapper">
+		        <input type="text" name="billingcity" ng-model="billingcity" placeholder="City" ng-minlength="2" required/>
+		    </div>
+		    <div class="input-wrapper">
+		        <input type="text" name="billingstate" ng-model="billingstate" placeholder="State" ng-minlength="2" required/>
+		    </div>
+		    <div class="input-wrapper">
+		        <input type="text" name="billingzip" ng-model="billingzip" placeholder="Zip" ng-minlength="5" ng-maxlength="5" ng-pattern="/^(\d{5}(-\d{4})?|[A-Z]\d[A-Z] *\d[A-Z]\d)$/" required/>
+		    </div>
+		    <div>
+	          <button ng-show="addPaymentView" type="submit" class="button small" value="Add Payment Option" ng-disabled="!creditCardFieldsComplete() || !billingFieldsComplete()" ng-click="addPayment()"/>
+	            <span ng-hide="customerUpdating">Add Payment Option</span>
+	            <span ng-show="customerUpdating">Adding..</span>
+	          </button>
+	      	</div>
+		</fieldset>
+  	</form>
+</div>
+<div ng-show="checkoutState == 'billing' || checkoutState == 'review'" class="row">
+	<button type="submit" ng-click="goToSummary()" class="button small expand" ng-disabled="!paymentMethod">
+		<span ng-show="checkoutState == 'billing'">Next</span>
+		<span ng-hide="checkoutState == 'billing'"> Done!</span>
+	</button>
+</div>

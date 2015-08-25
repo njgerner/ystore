@@ -1,0 +1,50 @@
+<div class="row">
+  <hr>
+  <div class="large-2 columns show-for-medium-up">
+    <img src="http://placehold.it/400x300&text=[img]">
+    <br>
+    <img src="http://placehold.it/400x300&text=[img]">
+    <br>
+    <img src="http://placehold.it/400x300&text=[img]">
+    <br>
+    <img src="http://placehold.it/400x300&text=[img]">
+  </div>
+  <div class="large-5 columns">
+    <div flow-init="{target: '/upload_image'}" flow-files-submitted="$flow.upload()"
+         flow-files-success="$file.msg = $message" flow-files-added="onFileAdded($files, $event, $flow)">
+      <img ng-hide="$flow.files.length" ng-src="{{product.img}}" />
+      <img ng-show="$flow.files.length > 0" flow-img="$flow.files[0]" />
+      <input ng-show="mode == 'edit'" type="file" flow-btn flow-attrs="{accept:'image/*'}"/>
+    </div>
+    <div class="row">
+      <div class="small-12 columns">
+        <span ng-show="mode == 'view' && product.isYLIFT">Y LIFT Network Product</span>
+        <label ng-show="mode == 'edit'">Is this a Y LIFT Network only product?
+          <input type="checkbox" ng-model="product.isYLIFT" ng-true-value="Y" ng-false-value="N">
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="large-5 columns">
+    <error-dir msg="{{error}}"></error-dir>
+    <!-- Edit name -->
+    <h4>{{product.name}}<small ng-click="mode = 'edit'" class="right"><i class="i-pencil"></i>Edit</small></h4>
+    <input ng-show="mode == 'edit'" type="text" ng-model="product.name"/>
+    <!-- Edit description -->
+    <p ng-show="mode == 'view'">{{product.description}}</p>
+    <textarea ng-show="mode == 'edit'" ng-model="product.description" rows="12"></textarea>
+    <!-- Edit price -->
+    <div class="panel">
+      <h5 ng-show="mode == 'view'">${{product.price}}</h5>
+      <input ng-show="mode == 'edit'" type="text" ng-model="product.price"/>
+    </div>
+    <!-- Save -->
+    <div ng-show="mode == 'edit'" class="clearfix">
+      <button class="small secondary right" ng-click="mode = 'view'">Cancel</button>
+      <button class="small primary right" ng-click="updateProduct()">
+        <span ng-hide="updating">Save</span>
+        <span ng-show="updating">Saving...</span>
+      </button>
+    </div>
+  </div>
+</div>

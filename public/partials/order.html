@@ -1,0 +1,35 @@
+<div ng-show="loading" class="i-spinner">
+
+</div>
+<div ng-hide="loading" class="container">
+	<div id="order-confirmation-table" class="row text-center">
+		<h3><strong>Order Details<strong></h3>
+		<error-dir msg="{{error}}"></error-dir>
+	</div>
+	<div style="margin-bottom:30px" class="row large-6 large-offset-3 columns">
+		<table style="margin:auto">
+		  <thead>
+		    <tr>
+		      <th>Date</th>
+		      <th>Order #</th>
+		      <th>Shipment</th>
+		      <th>Ship To</th>
+		      <th>Total</th>
+		      <th>Status</th>
+		      <th>Action</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <tr>
+		      <td>{{createdAt}}</td>
+		      <td>{{order.id}}</td>
+		      <td>{{order.trackingNum}}</td>
+		      <td>{{order.shipTo.name}}</td>
+		      <td>${{order.total}}</td>
+		      <td>{{order.status}}</td>
+		      <td></td>
+		    </tr>
+		  </tbody>
+		</table>
+	</div>
+</div>

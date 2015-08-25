@@ -1,0 +1,56 @@
+<top-bar class="mobile">
+
+  <top-bar-section>
+
+    <div class="row">
+      <div class="small-2 columns text-left">
+        <div class="cart" ng-click="openCart()">
+          <i ng-click="openCart()" class="i-cart"></i>({{itemCount}})
+        </div>
+      </div>
+
+      <div class="small-8 columns">
+
+        <form ng-submit="search(searchQuery)">
+          <div class="row collapse">
+              <input class="mobile" type="search" ng-model="searchQuery" typeahead="name for name in productNames | filter:$viewValue | limitTo:6" placeholder="Find Stuff">
+            <i class="i-search" ng-click="search(searchQuery)"> </i>
+          </div>
+        </form>
+
+      </div>
+      <div class="small-2 columns text-right menu">
+        <i href="menu-bar" class="right-off-canvas-toggle i-menu"></i>
+      </div>
+
+    </div>
+
+
+  </top-bar-section>
+</top-bar>
+
+<aside id="menu-bar" class="right-off-canvas-menu">
+  <ul class="off-canvas-list">
+    <li><label>YLIFT Store</label></li>
+    <li ng-hide="isYLIFT">
+      <a ui-sref="network">Network</a>
+    </li>
+    <li ng-hide="isYLIFT">
+      <a ui-sref="locations">Find A Provider</a>
+    </li>
+    <li><a ui-sref="store"><i class="i-store"></i>    Shop Now</a></li>
+    <li><a ui-sref="checkout"><i class="i-cart"></i>    Checkout</a></li>
+    <li><a ui-sref="profile"><i class="i-user"></i>    My Account</a></li>
+    <li><a ui-sref="settings.store"><i class="i-settings"></i>    Settings</a></li>
+    <li ng-if="isMerchant" class="divider"></li>
+    <li class="nav-sub-header" ng-if="isMerchant">Merchant</li>
+    <li ng-if="isMerchant"><a ui-sref="merchant_orders">View Orders</a></li>
+    <li ng-if="isMerchant"><a ui-sref="merchant_inventory.view">Manage</a></li>
+    <li ng-if="isMerchant"><a ui-sref="settings.merchant">Settings</a></li>
+    <li class="divider"></li>
+    <li><a ui-sref="support"><i class="i-support"></i>    Help</a></li>
+    <li class="divider"></li>
+    <li ng-if="isAdmin"><a ui-sref="admin.users">Admin</a></li>
+    <li ng-if="isMerchant"><a ui-sref="merchant_inventory.view">Manage Merchant</a></li>
+  </ul>
+</aside>

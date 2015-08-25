@@ -1,0 +1,49 @@
+<div class="nav-links">
+	<ul class="inline-list">
+		<li>
+			<a ui-sref="about">About</a>
+		</li>
+		<li ng-hide="isYLIFT">
+			<a ui-sref="network">Network</a>
+		</li>
+		<li ng-hide="isYLIFT">
+			<a dropdown-toggle="#techniquesdrop">Techniques</a>
+			<ul style="width:20%!important" id="techniquesdrop" class="f-dropdown" data-dropdown-content aria-hidden="true" tabindex="-1">
+				<li><a ui-sref="techniques.ylift">Y LIFT&#174;</a></li>
+				<li><a ui-sref="techniques.yeye">Y EYE&#174;</a></li>
+				<li><a ui-sref="techniques.botox">Botox</a></li>
+				<li><a ui-sref="techniques.skynjection">skYnjection&#8482;</a></li>
+				<li><a ui-sref="techniques.chynjection">chYnjection&#8482;</a></li>
+				<li><a ui-sref="techniques.hands">Hands</a></li>
+				<li><a ui-sref="techniques.injectables">Non Surgical Rejevenation</a></li>
+				<li><a ui-sref="techniques.laser">Laser Skin Rejevenation</a></li>
+				<li><a ui-sref="techniques.veins">Veins</a></li>
+			</ul>
+		</li>
+		<li ng-hide="isYLIFT">
+			<a dropdown-toggle="#zonesdrop">Zones</a>
+			<ul style="width:20%!important" id="zonesdrop" class="f-dropdown" data-dropdown-content aria-hidden="true" tabindex="-1">
+				<li><a ui-sref="zones.eyes({'zone':'eyes', 'procedure':'eyebrowlift'})">Eyes</a></li>
+				<li><a ui-sref="zones.face({'zone':'face', 'procedure':'cheekchin'})">Face</a></li>
+				<li><a ui-sref="zones.hair({'zone':'hair', 'procedure':'laser'})">Hair</a></li>
+				<li><a ui-sref="zones.hands({'zone':'hands', 'procedure':'hand-rejuvination'})">Hands</a></li>
+				<li><a ui-sref="zones.lips({'zone':'lips', 'procedure':'lip-augmentation'})">Lips</a></li>
+			</ul>
+		</li>
+		<li>
+			<a ui-sref="before_after">Before/After </a>
+		</li>
+		<li>
+			<a href="http://www.ylift.com/press-and-media/">News</a>
+		</li>
+		<li ng-hide="isYLIFT">
+			<a ui-sref="locations">Find A Provider</a>
+		</li>
+<!-- 		<li>
+			<a ui-sref="appt_booking">Book an Appointment</a>
+		</li> -->
+		<li>
+			<a ui-sref="support">Contact Us</a>
+		</li>
+	</ul>
+</div>

@@ -1,0 +1,73 @@
+<div class="row">
+  <hr>
+<!--   <div class="large-2 columns show-for-medium-up">
+    <img src="https://placehold.it/400x300&text=[img]">
+    <br>
+    <img src="https://placehold.it/400x300&text=[img]">
+    <br>
+    <img src="https://placehold.it/400x300&text=[img]">
+    <br>
+    <img src="https://placehold.it/400x300&text=[img]">
+    <img ng-src="{{product.altImg[0]}} ? {{product.altImg[0]}} : https://placehold.it/400x300&text=[img]">
+    <br>
+    <img ng-src="{{product.altImg[1]}} ? {{product.altImg[1]}} : https://placehold.it/400x300&text=[img]">
+    <br>
+    <img ng-src="{{product.altImg[2]}} ? {{product.altImg[2]}} : https://placehold.it/400x300&text=[img]">
+    <br>
+    <img ng-src="{{product.altImg[3]}} ? {{product.altImg[3]}} : https://placehold.it/400x300&text=[img]">
+  </div> -->
+  <div class="large-5 large-offset-1 columns">
+    <img ng-src="{{product.img || product.remote_img}}" ng-error="defaultImage()">
+  </div>
+  <div class="large-5 end columns">
+    <div ng-hide="ratingLoading" class="review-stars">
+      <i ng-class="{'i-star':rating >= 1, 'i-star-open':rating < 1}"></i>
+      <i ng-class="{'i-star':rating >= 2, 'i-star-open':rating < 2}"></i>
+      <i ng-class="{'i-star':rating >= 3, 'i-star-open':rating < 3}"></i>
+      <i ng-class="{'i-star':rating >= 4, 'i-star-open':rating < 4}"></i>
+      <i ng-class="{'i-star':rating == 5, 'i-star-open':rating < 5}"></i>
+      <a ng-click="goToLeaveReview()">Leave review</a>
+    </div>
+    <h4>{{product.name}}</h4>
+    <p>{{product.description}}</p>
+    <div class="panel">
+      <h5>${{product.price}} <br><small ng-show="note">{{note}}</small></h5>
+      <div ng-if="added" data-alert class="alert-box success radius">
+        <strong>Item Added!</strong> View it and the rest of your items from the cart icon above.
+        <a class="close" ng-click="reset()">&times;</a>
+      </div>
+      <div ng-if="error" data-alert class="alert-box info radius">
+        {{error}}
+        <a class="close" ng-click="reset()">&times;</a>
+      </div>
+      <div ng-hide="added">
+        <div class="quantity">
+          <input ng-show="product.attributes.increment > 1" type="text" ng-model="quantity" placeholder="Qty (multiple of {{product.attributes.increment}})" style="padding-right: 15px" required/>
+          <input ng-hide="product.attributes.increment > 1" type="text" ng-model="quantity" placeholder="Qty" style="padding-right: 15px" required/>
+        </div>
+      </div>
+      <a class="small button" ng-click="addToCart()">
+        <span ng-hide="adding">Add to Cart</span>
+        <span ng-show="adding">Adding...</span>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<div class="row">
+  <hr>
+  <div ng-hide="relatedProductsLoading" class="large-12 columns">
+    <h4>You might also like:</h4>
+    <suggested-product-dir pn="p.productnumber" ng-repeat="p in relatedProducts"></suggested-product-dir>
+  </div>
+</div>
+
+<div class="row">
+  <hr>
+  <div ng-hide="reviewsLoading" class="large-12 columns">
+    <h4>Helpful Customer Reviews</h4><br>
+    <product-review-dir review="r" ng-repeat="r in reviews"></product-review-dir>
+    <p ng-show="reviews.length <= 0">No reviews yet, <a ng-click="goToLeaveReview()">leave one!</a></p>
+  </div>
+</div>

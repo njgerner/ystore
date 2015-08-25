@@ -1,0 +1,102 @@
+<div ng-hide="merchantLoading || merchantLoaded" class="row">
+  <legend>Verify account</legend>
+  <span class="merchant-note" ng-hide="verifying" ng-if="!keyStatus">Before we can set up a corporate merchant account we need you to verify the registration key provided to you.</span>
+  <span class="alert-box success" ng-hide="verifying" ng-if="keyStatus == 'verified'">Success! Please register your company merchant account below.</span>
+  <span class="alert-box info" ng-hide="verifying" ng-if="keyStatus == 'unverified' || keyStatus == 'invalid'">That key is invalid or not verified, please make sure you are using the correct key.</span>
+  <div class="panel" ng-hide="verifying" ng-if="keyStatus == 'can_add'">
+    <h5>Registration key verified, please either add yourself to the account or cancel.</h5>
+    <div>
+      <button class="primary small" ng-click="addProfileToMerchant()">
+        <span ng-hide="adding">Add Me</span>
+        <span ng-show="adding">Adding...</span>
+        </button>
+      <button class="secondary small" ng-click="cancel()">Cancel</button>
+    </div>
+  </div>
+  <form ng-hide="showSignUp">
+    <fieldset>
+      <div>
+        <label for="regkey">Registration Key</label>
+        <div>
+          <input type="text" name="regkey" ng-model="regkey" placeholder="Enter the registration key provided to you" required/>
+        </div>
+      </div>
+      <button class="button small" ng-click="verifyRegKey()">
+        <span ng-hide="verifying">Verify Account</span>
+        <span ng-show="verifying">Verifying...</span>
+      </button>
+    </fieldset>
+  </form>
+</div>
+<div class="row" ng-show="showSignUp && !merchantLoaded">
+  <legend>Create a new merchant account</legend>
+    <!-- errors go here -->
+  <form>
+    <fieldset>
+      <div>
+        <label for="merchantname">Legal Name</label>
+        <div>
+          <input type="text" name="merchantname" ng-model="merchantname" placeholder="Enter the corporate merchant name" required/>
+        </div>
+      </div>
+      <div>
+        <label for="category">Category</label>
+        <div>
+          <select name="name" ng-model="category" placeholder="Select the category that best represents you">
+            <option value="cosmetics">Cosmetics</option>
+            <option value="fitness">Fitness</option>
+            <option value="skin">Skin Care</option>
+            <option value="pharmaceuticals">Pharmaceuticals</option>
+            <option value="general">General Health</option>
+          </select>
+        </div>
+      </div>
+      <button class="button small" ng-click="addMerchantAccount()">
+        <span ng-hide="registering">Register Account</span>
+        <span ng-show="registering">Registering...</span>
+      </button>
+      <button class="button secondary small" ng-click="cancel()">Cancel</button>
+    </fieldset>
+  </form>
+</div>
+<div ng-if="merchantLoaded">
+  <legend>{{merchantProfile.name}} Settings</legend>
+  <span class="alert-box info" ng-if="error">{{error}}</span>
+  <form>
+    <fieldset>
+      <div class="row">
+        <label for="merchantname">Name</label>
+        <div>
+          <input type="text" name="merchantname" ng-model="merchantProfile.name" placeholder="Enter the merchant account name">
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <label for="merchanturl">Website</label>
+        <div>
+          <input type="text" name="merchanturl" ng-model="merchantProfile.website" placeholder="Enter the company website url">
+        </div>
+      </div>
+      <div class="row">
+        <label for="merchantemail">Contact Email</label>
+        <div>
+          <input type="email" name="merchantemail" ng-model="merchantProfile.email" placeholder="Enter a contact email address">
+        </div>
+      </div>
+      <div class="row">
+        <label for="merchantphone">Contact Phone Number</label>
+        <div>
+          <input type="tel" name="merchantphone" ng-model="merchantProfile.phone" placeholder="Enter a phone number in case we need to contact you">
+        </div>
+      </div>
+      <button class="button small" ng-click="updateMerchantAccount()">
+        <span ng-hide="updating">Update Account</span>
+        <span ng-show="updating">Updating...</span>
+      </button>
+<!--       <button class="button small alert right" ng-click="deleteMerchantAccount()">
+        <span ng-hide="deleting">Delete Account</span>
+        <span ng-show="deleting">Deleting...</span>
+      </button> -->
+    </fieldset>
+  </form>
+</div>

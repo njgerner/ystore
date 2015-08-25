@@ -1,0 +1,4 @@
+<div ng-show="msg || htmlMsg">
+	<p class='error' ng-if="msg">{{msg}}</p>
+	<p class='error' ng-if="htmlMsg" ng-bind-html="htmlMsg | unsafe"></p>
+</div>

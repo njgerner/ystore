@@ -1,0 +1,62 @@
+<top-bar class="nav-bar-dir">
+  <ul class="title-area">
+    <li class="name">
+      <h1>
+        <img class="logo pointer" src="/img/logo.png" ui-sref="store"/>
+      </h1>
+    </li>
+  </ul>
+
+  <top-bar-section>
+    <ul class="search">
+      <li class="show-for-medium-up category" has-dropdown ng-click="checkProductsLoaded($event)">
+        <a class="nav-text visible-for-large-up">Shop by <strong>Category</strong></a>
+        <ul top-bar-dropdown class="box-drop">
+          <li ng-repeat="(cat, count) in productCategories | orderBy: 'count'"><a ng-click="search(cat)">{{toTitleCase(cat)}}</a></li>
+        </ul>
+      <li id="search-wrapper" class="has-form" ng-click="checkProductsLoaded($event)">
+        <form style="height:100%" ng-submit="search(searchQuery)">
+          <input id="searchbar" type="text" ng-model="searchQuery" typeahead="name for name in productNames.length ? [$viewValue].concat(productNames) : [] | filter:$viewValue | limitTo:6" typeahead-on-select="search(searchQuery)" class="nav-text" placeholder="Search for anything" autoselect>
+          <i ng-click="search(searchQuery)" class="i-search pointer"> </i>
+        </form>
+      </li>
+    </ul>
+
+    <ul class="right">
+      <li class="cart">
+        <a ng-show="itemCount" class="nav-text" ng-click="openCart()">
+        <div style="padding-top:1px" class="i-cart"></div>
+        <span class="visible-for-large-up">My Cart</span> ({{itemCount}})
+        </a>
+      </li>
+      <li class="divider"></li>
+      <li ng-hide="profileid">
+        <a class="nav-text" ui-sref="login">Login or Signup</a>
+      </li>
+      <li ng-show="profileid" has-dropdown>
+        <a class="nav-text">
+          {{name || 'My Account'}}
+        </a>
+        <ul top-bar-dropdown class="box-drop">
+          <li ng-if="isAdmin" class="divider"></li>
+          <li ng-if="isAdmin"><a ui-sref="admin.users">Admin</a></li>
+          <li ng-if="isAdmin" class="divider"></li>
+          <li><a ui-sref="profile">Profile</a></li>
+          <li><a ui-sref="settings.profile">Settings</a></li>
+          <li ng-if="isYLIFT" class="divider"></li>
+          <li class="nav-sub-header" ng-if="isYLIFT">Office</li>
+          <li ng-if="isYLIFT"><a ui-sref="office_scheduling">Scheduling</a></li>
+          <li class="divider"></li>
+          <li ng-if="isMerchant" class="divider"></li>
+          <li class="nav-sub-header" ng-if="isMerchant">Merchant</li>
+          <li ng-if="isMerchant"><a ui-sref="merchant_orders">View Orders</a></li>
+          <li ng-if="isMerchant"><a ui-sref="merchant_inventory.view">Manage</a></li>
+          <li ng-if="isMerchant"><a ui-sref="settings.merchant">Settings</a></li>
+          <li class="divider"></li>
+          <li><a ng-click="logoutNow()">Log Out</a></li>
+        </ul>
+      </li>
+      <li class="divider"></li>
+    </ul>
+  </top-bar-section>
+</top-bar>

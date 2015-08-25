@@ -1,0 +1,57 @@
+<div class="small-12 columns text-center logo-container">
+  <img width="150px" src="img/logo.png" />
+</div>
+
+<div class="row">
+  <div ng-show="loginState == 'signin'"class="small-12 large-4 small-centered columns">
+    <form ng-submit="login()">
+      <fieldset>
+        <legend>Sign In</legend>
+        <div ng-if="pass_reset">
+          <p> Please check your email for instructions on resetting your password. </p>
+        </div>
+        <div class="email-field">
+          <label>Email
+            <input type="text" placeholder="Enter your email" ng-model="email" required>
+          </label>
+        </div>
+        <label>Password
+          <div class="row collapse postfix-round">
+            <div class="small-10 columns">
+              <input type="password" ng-model="password" placeholder="Enter your password">
+              <small ng-show="failedMessage" class="error">{{failedMessage}}</small>
+            </div>
+            <div class="small-2 columns">
+              <a ng-click="showForgotPass()" class="button postfix"><span data-tooltip aria-haspopup="true" class="has-tip" title="Click here if you forgot your password">?</span></a>
+            </div>
+          </div>
+        </label>
+        <button class="button tiny left" type="submit">
+          <span ng-show="signingIn">Logging in...</span>
+          <div ng-hide="signingIn">Log me in</div>
+        </button>
+        <a ui-sref="register">
+            <button class="button tiny right">Register</button>
+        </a>
+      </fieldset>
+    </form>
+  </div>
+  <div ng-show="loginState == 'forgot_password'"class="small-8 large-4 small-centered columns">
+    <form>
+      <fieldset>
+        <legend>Password Assistance</legend>
+        <small ng-show="failedMessage" class="error"> {{failedMessage}} </small>
+        <div class="email-field">
+          <label>Email
+            <input type="text" placeholder="Enter your email" ng-model="email" required>
+          </label>
+        </div>
+        <button class="button tiny left" ng-click="requestPasswordReset()">
+          <span ng-hide="requestingReset">Continue</span>
+          <span ng-show="requestingReset">Requesting...</span>
+        </button>
+        <button class="button tiny right" ng-click="showSignin()">Go Back</button>
+      </fieldset>
+    </form>
+  </div>
+</div>
